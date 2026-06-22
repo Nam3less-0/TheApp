@@ -10,7 +10,7 @@ export default function CodewordSetupScreen() {
 
   return (
     <CodewordPageWrap>
-      <h1 className="mb-1.5 font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi">
+      <h1 className="mb-1.5 font-display text-[22px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[26px]">
         Your codeword card
       </h1>
       <p className="mb-5 font-body text-sm text-text-mid">

@@ -10,7 +10,7 @@ export default function DiscussScreen() {
       <p className="mb-2 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-ember">
         Round {state.currentRound} of {state.totalRounds}
       </p>
-      <h1 className="mb-6 text-center font-display text-[28px] font-extrabold leading-tight text-text-hi">
+      <h1 className="mb-6 text-center font-display text-2xl font-extrabold leading-tight text-text-hi sm:text-[28px]">
         Discuss it out loud
       </h1>
 

@@ -51,7 +51,7 @@ export default function ImposterSetupScreen() {
 
   return (
     <ImposterPageWrap>
-      <h1 className="mb-2 font-display text-[30px] font-extrabold tracking-[-0.5px] text-text-hi">
+      <h1 className="mb-2 font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">
         New game
       </h1>
       <p className="mb-8 font-body text-sm text-text-mid">

@@ -19,7 +19,7 @@ export default function DealerHandoffScreen() {
 
   return (
     <Top100PageWrap>
-      <h1 className="mb-2 font-display text-[30px] font-extrabold tracking-[-0.5px] text-text-hi">
+      <h1 className="mb-2 break-words font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">
         {nextDealer?.name}&apos;s turn
       </h1>
       <p className="mb-8 font-body text-sm text-text-mid">

@@ -32,7 +32,7 @@ function ResultPanel() {
         className="text-center"
       >
         <div
-          className="-m-[18px] mb-4 rounded-t-[16px] px-5 py-6"
+          className="-m-4 mb-4 rounded-t-[16px] px-5 py-6 sm:-m-[18px] sm:mb-4"
           style={{
             background: caught
               ? 'radial-gradient(circle at 50% 0%, rgba(126,217,164,0.18), transparent 70%)'
@@ -45,7 +45,7 @@ function ResultPanel() {
           >
             {caught ? 'Imposter caught' : 'Imposter evaded'}
           </p>
-          <h1 className="font-display text-[26px] font-extrabold leading-tight text-text-hi">
+          <h1 className="font-display text-[22px] font-extrabold leading-tight text-text-hi sm:text-[26px]">
             {caught ? 'Good read!' : 'They slipped away'}
           </h1>
         </div>
@@ -119,7 +119,7 @@ function VotePanel() {
       <p className="mb-2 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-ember">
         Round {state.currentRound} of {state.totalRounds}
       </p>
-      <h1 className="mb-1 text-center font-display text-[28px] font-extrabold leading-tight text-text-hi">
+      <h1 className="mb-1 text-center font-display text-2xl font-extrabold leading-tight text-text-hi sm:text-[28px]">
         Who's the imposter?
       </h1>
       <p className="mb-6 text-center font-body text-sm text-text-mid">

@@ -51,7 +51,7 @@ export default function RevealScreen() {
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-text-low">
             Pass the phone to
           </p>
-          <h1 className="font-display text-[26px] font-extrabold leading-tight text-text-hi">
+          <h1 className="max-w-full break-words font-display text-[22px] font-extrabold leading-tight text-text-hi sm:text-[26px]">
             {current.name}
           </h1>
         </div>

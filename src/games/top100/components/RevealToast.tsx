@@ -21,7 +21,7 @@ export default function RevealToast({ reveal, state, onDismiss }: RevealToastPro
   if (isCorrect) {
     return (
       <div
-        className="mt-4 flex items-center justify-between rounded-xl border border-good px-4 py-3.5"
+        className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-xl border border-good px-4 py-3.5"
         style={{
           background:
             'linear-gradient(165deg, color-mix(in srgb, #7ED9A4 14%, #1A1C20), #1A1C20)',
@@ -29,10 +29,10 @@ export default function RevealToast({ reveal, state, onDismiss }: RevealToastPro
         role="status"
         aria-live="polite"
       >
-        <span className="font-body text-sm font-bold text-good">
+        <span className="min-w-0 font-body text-sm font-bold text-good">
           Correct — {reveal.itemName}, rank {reveal.rank}
         </span>
-        <span className="font-mono text-[13px] text-good">
+        <span className="shrink-0 font-mono text-[13px] text-good">
           +{reveal.points} pts → {player?.name}
         </span>
       </div>
@@ -41,7 +41,7 @@ export default function RevealToast({ reveal, state, onDismiss }: RevealToastPro
 
   return (
     <div
-      className="mt-4 flex items-center justify-between rounded-xl border border-bad px-4 py-3.5"
+      className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-xl border border-bad px-4 py-3.5"
       style={{
         background:
           'linear-gradient(165deg, color-mix(in srgb, #E08B7A 14%, #1A1C20), #1A1C20)',
@@ -50,7 +50,7 @@ export default function RevealToast({ reveal, state, onDismiss }: RevealToastPro
       aria-live="polite"
     >
       <span className="font-body text-sm font-bold text-bad">Not on the list</span>
-      <span className="font-mono text-[13px] text-bad">0 pts → {player?.name}</span>
+      <span className="shrink-0 font-mono text-[13px] text-bad">0 pts → {player?.name}</span>
     </div>
   );
 }

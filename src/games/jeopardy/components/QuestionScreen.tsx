@@ -58,12 +58,12 @@ export default function QuestionScreen() {
         }}
       >
         <div
-          className="flex items-center justify-between gap-3 px-5 py-4"
+          className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 px-4 py-3.5 sm:px-5 sm:py-4"
           style={{
             background: `linear-gradient(135deg, ${COLORS.sapphire}, ${COLORS.sapphireDim})`,
           }}
         >
-          <div className="font-mono text-[11px] uppercase tracking-[1.5px] text-white/60">
+          <div className="min-w-0 truncate font-mono text-[11px] uppercase tracking-[1.5px] text-white/60">
             {topicName}
           </div>
           {cell.isDouble && (
@@ -87,7 +87,7 @@ export default function QuestionScreen() {
         </div>
 
         <div
-          className="px-[22px] py-7"
+          className="px-4 py-6 sm:px-[22px] sm:py-7"
           style={{ background: 'linear-gradient(180deg, #222428, #1A1C20)' }}
         >
           {!revealed && (
@@ -122,7 +122,7 @@ export default function QuestionScreen() {
         </div>
 
         {revealed && (
-          <div className="border-t border-line bg-surface px-[22px] py-[18px]">
+          <div className="border-t border-line bg-surface px-4 py-4 sm:px-[22px] sm:py-[18px]">
             <div className="mb-2 font-mono text-[10px] uppercase tracking-[1.5px] text-text-low">
               Answer
             </div>
@@ -132,11 +132,11 @@ export default function QuestionScreen() {
             >
               {cell.answer}
             </div>
-            <div className="flex gap-2.5">
+            <div className="flex flex-col gap-2.5 sm:flex-row">
               <button
                 type="button"
                 onClick={() => dispatch({ type: 'RESOLVE', correct: true })}
-                className="flex flex-1 items-center justify-center gap-[7px] rounded-[11px] border px-3 py-3 font-body text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-good"
+                className="flex flex-1 items-center justify-center gap-[7px] rounded-[11px] border px-3 py-3 text-center font-body text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-good"
                 style={{
                   background: `color-mix(in srgb, ${COLORS.good} 14%, #1A1C20)`,
                   borderColor: COLORS.good,

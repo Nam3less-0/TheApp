@@ -11,7 +11,7 @@ export default function JeopardyPanel({
 }: JeopardyPanelProps) {
   return (
     <div
-      className={`rounded-[18px] border border-line p-[22px] ${className}`}
+      className={`rounded-[18px] border border-line p-4 sm:p-[22px] ${className}`}
       style={{ background: 'linear-gradient(165deg, #222428, #1A1C20 75%)' }}
     >
       {children}
@@ -20,5 +20,9 @@ export default function JeopardyPanel({
 }
 
 export function JeopardyPageWrap({ children }: { children: ReactNode }) {
-  return <div className="mx-auto max-w-[720px] px-[18px] py-9">{children}</div>;
+  return (
+    <div className="mx-auto max-w-[720px] px-4 py-7 sm:px-[18px] sm:py-9">
+      {children}
+    </div>
+  );
 }

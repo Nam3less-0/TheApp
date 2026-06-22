@@ -93,7 +93,7 @@ export default function FinalResultsScreen() {
       <p className="mb-1 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-ember">
         Game over
       </p>
-      <h1 className="mb-2 text-center font-display text-[30px] font-extrabold tracking-[-0.5px] text-text-hi">
+      <h1 className="mb-2 text-center font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">
         Final standings
       </h1>
       {ranked[0] && (

@@ -12,7 +12,7 @@ export default function TurnRecapScreen() {
 
   return (
     <Top100PageWrap>
-      <h1 className="mb-2 text-center font-display text-[30px] font-extrabold tracking-[-0.5px] text-text-hi">
+      <h1 className="mb-2 break-words text-center font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">
         {dealer?.name}&apos;s turn recap
       </h1>
       <p className="mb-8 text-center font-body text-sm text-text-mid">
