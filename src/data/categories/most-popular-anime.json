@@ -1,0 +1,406 @@
+{
+  "id": "most-popular-anime",
+  "title": "Most Popular Anime",
+  "items": [
+    {
+      "rank": 1,
+      "name": "One Piece"
+    },
+    {
+      "rank": 2,
+      "name": "Naruto"
+    },
+    {
+      "rank": 3,
+      "name": "Attack on Titan"
+    },
+    {
+      "rank": 4,
+      "name": "Dragon Ball Z"
+    },
+    {
+      "rank": 5,
+      "name": "Death Note"
+    },
+    {
+      "rank": 6,
+      "name": "Demon Slayer: Kimetsu no Yaiba"
+    },
+    {
+      "rank": 7,
+      "name": "My Hero Academia"
+    },
+    {
+      "rank": 8,
+      "name": "Fullmetal Alchemist: Brotherhood"
+    },
+    {
+      "rank": 9,
+      "name": "Bleach"
+    },
+    {
+      "rank": 10,
+      "name": "Hunter x Hunter"
+    },
+    {
+      "rank": 11,
+      "name": "Jujutsu Kaisen"
+    },
+    {
+      "rank": 12,
+      "name": "Sword Art Online"
+    },
+    {
+      "rank": 13,
+      "name": "One Punch Man"
+    },
+    {
+      "rank": 14,
+      "name": "Code Geass"
+    },
+    {
+      "rank": 15,
+      "name": "Steins;Gate"
+    },
+    {
+      "rank": 16,
+      "name": "Fairy Tail"
+    },
+    {
+      "rank": 17,
+      "name": "Tokyo Ghoul"
+    },
+    {
+      "rank": 18,
+      "name": "Black Clover"
+    },
+    {
+      "rank": 19,
+      "name": "Haikyuu!!"
+    },
+    {
+      "rank": 20,
+      "name": "JoJo's Bizarre Adventure"
+    },
+    {
+      "rank": 21,
+      "name": "Mob Psycho 100"
+    },
+    {
+      "rank": 22,
+      "name": "Re:Zero"
+    },
+    {
+      "rank": 23,
+      "name": "Your Name"
+    },
+    {
+      "rank": 24,
+      "name": "Spirited Away"
+    },
+    {
+      "rank": 25,
+      "name": "Neon Genesis Evangelion"
+    },
+    {
+      "rank": 26,
+      "name": "Cowboy Bebop"
+    },
+    {
+      "rank": 27,
+      "name": "Chainsaw Man"
+    },
+    {
+      "rank": 28,
+      "name": "Vinland Saga"
+    },
+    {
+      "rank": 29,
+      "name": "Spy x Family"
+    },
+    {
+      "rank": 30,
+      "name": "Blue Lock"
+    },
+    {
+      "rank": 31,
+      "name": "Kuroko's Basketball"
+    },
+    {
+      "rank": 32,
+      "name": "Assassination Classroom"
+    },
+    {
+      "rank": 33,
+      "name": "The Promised Neverland"
+    },
+    {
+      "rank": 34,
+      "name": "Dr. Stone"
+    },
+    {
+      "rank": 35,
+      "name": "Fire Force"
+    },
+    {
+      "rank": 36,
+      "name": "Noragami"
+    },
+    {
+      "rank": 37,
+      "name": "Angel Beats!"
+    },
+    {
+      "rank": 38,
+      "name": "Clannad"
+    },
+    {
+      "rank": 39,
+      "name": "Your Lie in April"
+    },
+    {
+      "rank": 40,
+      "name": "A Silent Voice"
+    },
+    {
+      "rank": 41,
+      "name": "Weathering with You"
+    },
+    {
+      "rank": 42,
+      "name": "Suzume"
+    },
+    {
+      "rank": 43,
+      "name": "Akira"
+    },
+    {
+      "rank": 44,
+      "name": "Ghost in the Shell"
+    },
+    {
+      "rank": 45,
+      "name": "Pokémon"
+    },
+    {
+      "rank": 46,
+      "name": "Digimon Adventure"
+    },
+    {
+      "rank": 47,
+      "name": "Yu-Gi-Oh!"
+    },
+    {
+      "rank": 48,
+      "name": "Beyblade"
+    },
+    {
+      "rank": 49,
+      "name": "Sailor Moon"
+    },
+    {
+      "rank": 50,
+      "name": "Cardcaptor Sakura"
+    },
+    {
+      "rank": 51,
+      "name": "Inuyasha"
+    },
+    {
+      "rank": 52,
+      "name": "Rurouni Kenshin"
+    },
+    {
+      "rank": 53,
+      "name": "Samurai Champloo"
+    },
+    {
+      "rank": 54,
+      "name": "Trigun"
+    },
+    {
+      "rank": 55,
+      "name": "Hellsing Ultimate"
+    },
+    {
+      "rank": 56,
+      "name": "Parasyte: The Maxim"
+    },
+    {
+      "rank": 57,
+      "name": "Erased"
+    },
+    {
+      "rank": 58,
+      "name": "Made in Abyss"
+    },
+    {
+      "rank": 59,
+      "name": "Violet Evergarden"
+    },
+    {
+      "rank": 60,
+      "name": "March Comes in Like a Lion"
+    },
+    {
+      "rank": 61,
+      "name": "Banana Fish"
+    },
+    {
+      "rank": 62,
+      "name": "Horimiya"
+    },
+    {
+      "rank": 63,
+      "name": "Kaguya-sama: Love Is War"
+    },
+    {
+      "rank": 64,
+      "name": "Toradora!"
+    },
+    {
+      "rank": 65,
+      "name": "Oregairu"
+    },
+    {
+      "rank": 66,
+      "name": "Rent-a-Girlfriend"
+    },
+    {
+      "rank": 67,
+      "name": "Nisekoi"
+    },
+    {
+      "rank": 68,
+      "name": "Love Live!"
+    },
+    {
+      "rank": 69,
+      "name": "Free!"
+    },
+    {
+      "rank": 70,
+      "name": "Yuri!!! on Ice"
+    },
+    {
+      "rank": 71,
+      "name": "Slam Dunk"
+    },
+    {
+      "rank": 72,
+      "name": "Captain Tsubasa"
+    },
+    {
+      "rank": 73,
+      "name": "Initial D"
+    },
+    {
+      "rank": 74,
+      "name": "Hajime no Ippo"
+    },
+    {
+      "rank": 75,
+      "name": "Megalo Box"
+    },
+    {
+      "rank": 76,
+      "name": "Mobile Suit Gundam"
+    },
+    {
+      "rank": 77,
+      "name": "Gundam Wing"
+    },
+    {
+      "rank": 78,
+      "name": "Gundam SEED"
+    },
+    {
+      "rank": 79,
+      "name": "Gurren Lagann"
+    },
+    {
+      "rank": 80,
+      "name": "Kill la Kill"
+    },
+    {
+      "rank": 81,
+      "name": "FLCL"
+    },
+    {
+      "rank": 82,
+      "name": "Darling in the Franxx"
+    },
+    {
+      "rank": 83,
+      "name": "86"
+    },
+    {
+      "rank": 84,
+      "name": "Psycho-Pass"
+    },
+    {
+      "rank": 85,
+      "name": "Baccano!"
+    },
+    {
+      "rank": 86,
+      "name": "Durarara!!"
+    },
+    {
+      "rank": 87,
+      "name": "Monogatari Series"
+    },
+    {
+      "rank": 88,
+      "name": "Bungo Stray Dogs"
+    },
+    {
+      "rank": 89,
+      "name": "The Melancholy of Haruhi Suzumiya"
+    },
+    {
+      "rank": 90,
+      "name": "Lucky Star"
+    },
+    {
+      "rank": 91,
+      "name": "Konosuba"
+    },
+    {
+      "rank": 92,
+      "name": "Overlord"
+    },
+    {
+      "rank": 93,
+      "name": "That Time I Got Reincarnated as a Slime"
+    },
+    {
+      "rank": 94,
+      "name": "Mushoku Tensei"
+    },
+    {
+      "rank": 95,
+      "name": "The Rising of the Shield Hero"
+    },
+    {
+      "rank": 96,
+      "name": "No Game No Life"
+    },
+    {
+      "rank": 97,
+      "name": "Log Horizon"
+    },
+    {
+      "rank": 98,
+      "name": "The Devil Is a Part-Timer!"
+    },
+    {
+      "rank": 99,
+      "name": "Miss Kobayashi's Dragon Maid"
+    },
+    {
+      "rank": 100,
+      "name": "Fruits Basket"
+    }
+  ]
+}

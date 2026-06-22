@@ -1,0 +1,406 @@
+{
+  "id": "iconic-comic-locations",
+  "title": "Iconic Comic Locations",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Gotham City"
+    },
+    {
+      "rank": 2,
+      "name": "Metropolis"
+    },
+    {
+      "rank": 3,
+      "name": "Central City"
+    },
+    {
+      "rank": 4,
+      "name": "Star City"
+    },
+    {
+      "rank": 5,
+      "name": "Coast City"
+    },
+    {
+      "rank": 6,
+      "name": "Blüdhaven"
+    },
+    {
+      "rank": 7,
+      "name": "Hub City"
+    },
+    {
+      "rank": 8,
+      "name": "Fawcett City"
+    },
+    {
+      "rank": 9,
+      "name": "Keystone City"
+    },
+    {
+      "rank": 10,
+      "name": "Smallville"
+    },
+    {
+      "rank": 11,
+      "name": "Themyscira"
+    },
+    {
+      "rank": 12,
+      "name": "Paradise Island"
+    },
+    {
+      "rank": 13,
+      "name": "Atlantis"
+    },
+    {
+      "rank": 14,
+      "name": "Poseidonis"
+    },
+    {
+      "rank": 15,
+      "name": "Tritonis"
+    },
+    {
+      "rank": 16,
+      "name": "Xebel"
+    },
+    {
+      "rank": 17,
+      "name": "Hidden City"
+    },
+    {
+      "rank": 18,
+      "name": "Nanda Parbat"
+    },
+    {
+      "rank": 19,
+      "name": "Nanda Parbat (Ra's)"
+    },
+    {
+      "rank": 20,
+      "name": "Kamar-Taj"
+    },
+    {
+      "rank": 21,
+      "name": "Sanctum Sanctorum"
+    },
+    {
+      "rank": 22,
+      "name": "New York Sanctum"
+    },
+    {
+      "rank": 23,
+      "name": "London Sanctum"
+    },
+    {
+      "rank": 24,
+      "name": "Hong Kong Sanctum"
+    },
+    {
+      "rank": 25,
+      "name": "Dark Dimension"
+    },
+    {
+      "rank": 26,
+      "name": "Limbo"
+    },
+    {
+      "rank": 27,
+      "name": "Otherplace"
+    },
+    {
+      "rank": 28,
+      "name": "Krakoa"
+    },
+    {
+      "rank": 29,
+      "name": "Arakko"
+    },
+    {
+      "rank": 30,
+      "name": "Avalon"
+    },
+    {
+      "rank": 31,
+      "name": "Otherworld"
+    },
+    {
+      "rank": 32,
+      "name": "Starlight Citadel"
+    },
+    {
+      "rank": 33,
+      "name": "Siege Perilous"
+    },
+    {
+      "rank": 34,
+      "name": "Hellfire Club Mansion"
+    },
+    {
+      "rank": 35,
+      "name": "Xavier Institute"
+    },
+    {
+      "rank": 36,
+      "name": "X-Mansion"
+    },
+    {
+      "rank": 37,
+      "name": "Graymalkin Lane"
+    },
+    {
+      "rank": 38,
+      "name": "Westchester"
+    },
+    {
+      "rank": 39,
+      "name": "Muir Island"
+    },
+    {
+      "rank": 40,
+      "name": "Genosha"
+    },
+    {
+      "rank": 41,
+      "name": "Utopia"
+    },
+    {
+      "rank": 42,
+      "name": "Asteroid M"
+    },
+    {
+      "rank": 43,
+      "name": "Savage Land"
+    },
+    {
+      "rank": 44,
+      "name": "Madripoor"
+    },
+    {
+      "rank": 45,
+      "name": "Latveria"
+    },
+    {
+      "rank": 46,
+      "name": "Doomstadt"
+    },
+    {
+      "rank": 47,
+      "name": "Castle Doom"
+    },
+    {
+      "rank": 48,
+      "name": "Wakanda"
+    },
+    {
+      "rank": 49,
+      "name": "Birnin Zana"
+    },
+    {
+      "rank": 50,
+      "name": "Golden City"
+    },
+    {
+      "rank": 51,
+      "name": "Wakandan Border"
+    },
+    {
+      "rank": 52,
+      "name": "Necropolis"
+    },
+    {
+      "rank": 53,
+      "name": "City of the Dead"
+    },
+    {
+      "rank": 54,
+      "name": "Attilan"
+    },
+    {
+      "rank": 55,
+      "name": "Great Refuge"
+    },
+    {
+      "rank": 56,
+      "name": "Inhuman City"
+    },
+    {
+      "rank": 57,
+      "name": "New Attilan"
+    },
+    {
+      "rank": 58,
+      "name": "New York City (Marvel)"
+    },
+    {
+      "rank": 59,
+      "name": "Hell's Kitchen"
+    },
+    {
+      "rank": 60,
+      "name": "Harlem"
+    },
+    {
+      "rank": 61,
+      "name": "Brooklyn"
+    },
+    {
+      "rank": 62,
+      "name": "Queens"
+    },
+    {
+      "rank": 63,
+      "name": "Spider-Man Neighborhood"
+    },
+    {
+      "rank": 64,
+      "name": "Daily Bugle"
+    },
+    {
+      "rank": 65,
+      "name": "Empire State University"
+    },
+    {
+      "rank": 66,
+      "name": "Avengers Mansion"
+    },
+    {
+      "rank": 67,
+      "name": "Stark Tower"
+    },
+    {
+      "rank": 68,
+      "name": "Avengers Tower"
+    },
+    {
+      "rank": 69,
+      "name": "Baxter Building"
+    },
+    {
+      "rank": 70,
+      "name": "Four Freedoms Plaza"
+    },
+    {
+      "rank": 71,
+      "name": "Yancy Street"
+    },
+    {
+      "rank": 72,
+      "name": "Negative Zone"
+    },
+    {
+      "rank": 73,
+      "name": "Blue Area of the Moon"
+    },
+    {
+      "rank": 74,
+      "name": "Attilan (Moon)"
+    },
+    {
+      "rank": 75,
+      "name": "S.W.O.R.D. Peak"
+    },
+    {
+      "rank": 76,
+      "name": "Alpha Flight Space Station"
+    },
+    {
+      "rank": 77,
+      "name": "Knowhere"
+    },
+    {
+      "rank": 78,
+      "name": "Contraxia"
+    },
+    {
+      "rank": 79,
+      "name": "Sakaar"
+    },
+    {
+      "rank": 80,
+      "name": "Planet Hulk Sakaar"
+    },
+    {
+      "rank": 81,
+      "name": "Asgard"
+    },
+    {
+      "rank": 82,
+      "name": "Valhalla"
+    },
+    {
+      "rank": 83,
+      "name": "Bifrost Bridge"
+    },
+    {
+      "rank": 84,
+      "name": "Rainbow Bridge"
+    },
+    {
+      "rank": 85,
+      "name": "Hel"
+    },
+    {
+      "rank": 86,
+      "name": "Jotunheim"
+    },
+    {
+      "rank": 87,
+      "name": "Muspelheim"
+    },
+    {
+      "rank": 88,
+      "name": "Vanaheim"
+    },
+    {
+      "rank": 89,
+      "name": "Alfheim"
+    },
+    {
+      "rank": 90,
+      "name": "Nidavellir"
+    },
+    {
+      "rank": 91,
+      "name": "Svartalfheim"
+    },
+    {
+      "rank": 92,
+      "name": "Olympus"
+    },
+    {
+      "rank": 93,
+      "name": "Hades (Marvel)"
+    },
+    {
+      "rank": 94,
+      "name": "Elysium"
+    },
+    {
+      "rank": 95,
+      "name": "Tower of Olympus"
+    },
+    {
+      "rank": 96,
+      "name": "Olympus (Marvel)"
+    },
+    {
+      "rank": 97,
+      "name": "Eternal City"
+    },
+    {
+      "rank": 98,
+      "name": "Titan (Moon of Saturn)"
+    },
+    {
+      "rank": 99,
+      "name": "Titan (Eternals)"
+    },
+    {
+      "rank": 100,
+      "name": "Knowhere (Head)"
+    }
+  ]
+}

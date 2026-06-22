@@ -1,0 +1,406 @@
+{
+  "id": "most-popular-k-pop-groups",
+  "title": "Most Popular K-Pop Groups",
+  "items": [
+    {
+      "rank": 1,
+      "name": "BTS"
+    },
+    {
+      "rank": 2,
+      "name": "BLACKPINK"
+    },
+    {
+      "rank": 3,
+      "name": "EXO"
+    },
+    {
+      "rank": 4,
+      "name": "TWICE"
+    },
+    {
+      "rank": 5,
+      "name": "Stray Kids"
+    },
+    {
+      "rank": 6,
+      "name": "SEVENTEEN"
+    },
+    {
+      "rank": 7,
+      "name": "NewJeans"
+    },
+    {
+      "rank": 8,
+      "name": "aespa"
+    },
+    {
+      "rank": 9,
+      "name": "ITZY"
+    },
+    {
+      "rank": 10,
+      "name": "(G)I-DLE"
+    },
+    {
+      "rank": 11,
+      "name": "NCT"
+    },
+    {
+      "rank": 12,
+      "name": "NCT 127"
+    },
+    {
+      "rank": 13,
+      "name": "NCT Dream"
+    },
+    {
+      "rank": 14,
+      "name": "WayV"
+    },
+    {
+      "rank": 15,
+      "name": "Red Velvet"
+    },
+    {
+      "rank": 16,
+      "name": "Girls' Generation"
+    },
+    {
+      "rank": 17,
+      "name": "BIGBANG"
+    },
+    {
+      "rank": 18,
+      "name": "2NE1"
+    },
+    {
+      "rank": 19,
+      "name": "Super Junior"
+    },
+    {
+      "rank": 20,
+      "name": "SHINee"
+    },
+    {
+      "rank": 21,
+      "name": "TVXQ"
+    },
+    {
+      "rank": 22,
+      "name": "BoA"
+    },
+    {
+      "rank": 23,
+      "name": "Wonder Girls"
+    },
+    {
+      "rank": 24,
+      "name": "KARA"
+    },
+    {
+      "rank": 25,
+      "name": "T-ARA"
+    },
+    {
+      "rank": 26,
+      "name": "SISTAR"
+    },
+    {
+      "rank": 27,
+      "name": "Miss A"
+    },
+    {
+      "rank": 28,
+      "name": "f(x)"
+    },
+    {
+      "rank": 29,
+      "name": "Apink"
+    },
+    {
+      "rank": 30,
+      "name": "MAMAMOO"
+    },
+    {
+      "rank": 31,
+      "name": "GFRIEND"
+    },
+    {
+      "rank": 32,
+      "name": "IZ*ONE"
+    },
+    {
+      "rank": 33,
+      "name": "IOI"
+    },
+    {
+      "rank": 34,
+      "name": "Wanna One"
+    },
+    {
+      "rank": 35,
+      "name": "X1"
+    },
+    {
+      "rank": 36,
+      "name": "MONSTA X"
+    },
+    {
+      "rank": 37,
+      "name": "ATEEZ"
+    },
+    {
+      "rank": 38,
+      "name": "TOMORROW X TOGETHER"
+    },
+    {
+      "rank": 39,
+      "name": "ENHYPEN"
+    },
+    {
+      "rank": 40,
+      "name": "Enhypen"
+    },
+    {
+      "rank": 41,
+      "name": "TXT"
+    },
+    {
+      "rank": 42,
+      "name": "THE BOYZ"
+    },
+    {
+      "rank": 43,
+      "name": "GOT7"
+    },
+    {
+      "rank": 44,
+      "name": "B.A.P"
+    },
+    {
+      "rank": 45,
+      "name": "Block B"
+    },
+    {
+      "rank": 46,
+      "name": "VIXX"
+    },
+    {
+      "rank": 47,
+      "name": "Infinite"
+    },
+    {
+      "rank": 48,
+      "name": "B1A4"
+    },
+    {
+      "rank": 49,
+      "name": "BTOB"
+    },
+    {
+      "rank": 50,
+      "name": "Highlight"
+    },
+    {
+      "rank": 51,
+      "name": "BEAST"
+    },
+    {
+      "rank": 52,
+      "name": "2PM"
+    },
+    {
+      "rank": 53,
+      "name": "2AM"
+    },
+    {
+      "rank": 54,
+      "name": "SHINee (Reunion)"
+    },
+    {
+      "rank": 55,
+      "name": "SuperM"
+    },
+    {
+      "rank": 56,
+      "name": "K/DA"
+    },
+    {
+      "rank": 57,
+      "name": "LE SSERAFIM"
+    },
+    {
+      "rank": 58,
+      "name": "IVE"
+    },
+    {
+      "rank": 59,
+      "name": "NMIXX"
+    },
+    {
+      "rank": 60,
+      "name": "Kep1er"
+    },
+    {
+      "rank": 61,
+      "name": "fromis_9"
+    },
+    {
+      "rank": 62,
+      "name": "LOONA"
+    },
+    {
+      "rank": 63,
+      "name": "Dreamcatcher"
+    },
+    {
+      "rank": 64,
+      "name": "Everglow"
+    },
+    {
+      "rank": 65,
+      "name": "Weki Meki"
+    },
+    {
+      "rank": 66,
+      "name": "Oh My Girl"
+    },
+    {
+      "rank": 67,
+      "name": "Cosmic Girls"
+    },
+    {
+      "rank": 68,
+      "name": "WJSN"
+    },
+    {
+      "rank": 69,
+      "name": "Cherry Bullet"
+    },
+    {
+      "rank": 70,
+      "name": "Rocket Punch"
+    },
+    {
+      "rank": 71,
+      "name": "STAYC"
+    },
+    {
+      "rank": 72,
+      "name": "LIGHTSUM"
+    },
+    {
+      "rank": 73,
+      "name": "Billlie"
+    },
+    {
+      "rank": 74,
+      "name": "VIVIZ"
+    },
+    {
+      "rank": 75,
+      "name": "Gfriend (Reunion)"
+    },
+    {
+      "rank": 76,
+      "name": "TREASURE"
+    },
+    {
+      "rank": 77,
+      "name": "iKON"
+    },
+    {
+      "rank": 78,
+      "name": "WINNER"
+    },
+    {
+      "rank": 79,
+      "name": "AKMU"
+    },
+    {
+      "rank": 80,
+      "name": "Epik High"
+    },
+    {
+      "rank": 81,
+      "name": "Dynamic Duo"
+    },
+    {
+      "rank": 82,
+      "name": "Zico"
+    },
+    {
+      "rank": 83,
+      "name": "Crush"
+    },
+    {
+      "rank": 84,
+      "name": "Dean"
+    },
+    {
+      "rank": 85,
+      "name": "Heize"
+    },
+    {
+      "rank": 86,
+      "name": "IU"
+    },
+    {
+      "rank": 87,
+      "name": "Taeyeon"
+    },
+    {
+      "rank": 88,
+      "name": "Hyuna"
+    },
+    {
+      "rank": 89,
+      "name": "Sunmi"
+    },
+    {
+      "rank": 90,
+      "name": "Chungha"
+    },
+    {
+      "rank": 91,
+      "name": "SomI"
+    },
+    {
+      "rank": 92,
+      "name": "Soloists (K-Pop)"
+    },
+    {
+      "rank": 93,
+      "name": "Psy"
+    },
+    {
+      "rank": 94,
+      "name": "G-Dragon"
+    },
+    {
+      "rank": 95,
+      "name": "Taeyang"
+    },
+    {
+      "rank": 96,
+      "name": "Daesung"
+    },
+    {
+      "rank": 97,
+      "name": "TOP"
+    },
+    {
+      "rank": 98,
+      "name": "Seungri"
+    },
+    {
+      "rank": 99,
+      "name": "Jimin"
+    },
+    {
+      "rank": 100,
+      "name": "Jungkook"
+    }
+  ]
+}

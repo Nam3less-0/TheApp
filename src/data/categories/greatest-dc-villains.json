@@ -1,0 +1,406 @@
+{
+  "id": "greatest-dc-villains",
+  "title": "Greatest DC Villains",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Joker"
+    },
+    {
+      "rank": 2,
+      "name": "Lex Luthor"
+    },
+    {
+      "rank": 3,
+      "name": "Darkseid"
+    },
+    {
+      "rank": 4,
+      "name": "Brainiac"
+    },
+    {
+      "rank": 5,
+      "name": "Doomsday"
+    },
+    {
+      "rank": 6,
+      "name": "General Zod"
+    },
+    {
+      "rank": 7,
+      "name": "Bizarro"
+    },
+    {
+      "rank": 8,
+      "name": "Metallo"
+    },
+    {
+      "rank": 9,
+      "name": "Parasite"
+    },
+    {
+      "rank": 10,
+      "name": "Toyman"
+    },
+    {
+      "rank": 11,
+      "name": "Bloodsport"
+    },
+    {
+      "rank": 12,
+      "name": "Livewire"
+    },
+    {
+      "rank": 13,
+      "name": "Mongul"
+    },
+    {
+      "rank": 14,
+      "name": "Non"
+    },
+    {
+      "rank": 15,
+      "name": "Ursa"
+    },
+    {
+      "rank": 16,
+      "name": "Faora"
+    },
+    {
+      "rank": 17,
+      "name": "Mr. Mxyzptlk"
+    },
+    {
+      "rank": 18,
+      "name": "Bizarro (Opposite)"
+    },
+    {
+      "rank": 19,
+      "name": "Ultraman"
+    },
+    {
+      "rank": 20,
+      "name": "Superwoman (Crime Syndicate)"
+    },
+    {
+      "rank": 21,
+      "name": "Owlman"
+    },
+    {
+      "rank": 22,
+      "name": "Johnny Quick"
+    },
+    {
+      "rank": 23,
+      "name": "Power Ring"
+    },
+    {
+      "rank": 24,
+      "name": "Crime Syndicate"
+    },
+    {
+      "rank": 25,
+      "name": "Alexander Luthor"
+    },
+    {
+      "rank": 26,
+      "name": "Two-Face"
+    },
+    {
+      "rank": 27,
+      "name": "Penguin"
+    },
+    {
+      "rank": 28,
+      "name": "Riddler"
+    },
+    {
+      "rank": 29,
+      "name": "Scarecrow"
+    },
+    {
+      "rank": 30,
+      "name": "Poison Ivy"
+    },
+    {
+      "rank": 31,
+      "name": "Mr. Freeze"
+    },
+    {
+      "rank": 32,
+      "name": "Ra's al Ghul"
+    },
+    {
+      "rank": 33,
+      "name": "Talia al Ghul"
+    },
+    {
+      "rank": 34,
+      "name": "Bane"
+    },
+    {
+      "rank": 35,
+      "name": "Hush"
+    },
+    {
+      "rank": 36,
+      "name": "Black Mask"
+    },
+    {
+      "rank": 37,
+      "name": "Calendar Man"
+    },
+    {
+      "rank": 38,
+      "name": "Killer Croc"
+    },
+    {
+      "rank": 39,
+      "name": "Clayface"
+    },
+    {
+      "rank": 40,
+      "name": "Man-Bat"
+    },
+    {
+      "rank": 41,
+      "name": "Firefly"
+    },
+    {
+      "rank": 42,
+      "name": "Anarky"
+    },
+    {
+      "rank": 43,
+      "name": "Ventriloquist"
+    },
+    {
+      "rank": 44,
+      "name": "Scarface"
+    },
+    {
+      "rank": 45,
+      "name": "Mad Hatter"
+    },
+    {
+      "rank": 46,
+      "name": "Tweedledum and Tweedledee"
+    },
+    {
+      "rank": 47,
+      "name": "Great White Shark"
+    },
+    {
+      "rank": 48,
+      "name": "Lock-Up"
+    },
+    {
+      "rank": 49,
+      "name": "KGBeast"
+    },
+    {
+      "rank": 50,
+      "name": "Deathstroke"
+    },
+    {
+      "rank": 51,
+      "name": "Deathstroke (Slade Wilson)"
+    },
+    {
+      "rank": 52,
+      "name": "Ravager"
+    },
+    {
+      "rank": 53,
+      "name": "Terra (Judas Contract)"
+    },
+    {
+      "rank": 54,
+      "name": "Brother Blood"
+    },
+    {
+      "rank": 55,
+      "name": "Trigon"
+    },
+    {
+      "rank": 56,
+      "name": "Blackfire"
+    },
+    {
+      "rank": 57,
+      "name": "Sinestro"
+    },
+    {
+      "rank": 58,
+      "name": "Atrocitus"
+    },
+    {
+      "rank": 59,
+      "name": "Larfleeze"
+    },
+    {
+      "rank": 60,
+      "name": "Saint Walker"
+    },
+    {
+      "rank": 61,
+      "name": "Star Sapphire"
+    },
+    {
+      "rank": 62,
+      "name": "Indigo-1"
+    },
+    {
+      "rank": 63,
+      "name": "Black Hand"
+    },
+    {
+      "rank": 64,
+      "name": "Nekron"
+    },
+    {
+      "rank": 65,
+      "name": "Parallax"
+    },
+    {
+      "rank": 66,
+      "name": "Hal Jordan (Parallax Era)"
+    },
+    {
+      "rank": 67,
+      "name": "Hector Hammond"
+    },
+    {
+      "rank": 68,
+      "name": "Doctor Polaris"
+    },
+    {
+      "rank": 69,
+      "name": "Major Force"
+    },
+    {
+      "rank": 70,
+      "name": "Volcana"
+    },
+    {
+      "rank": 71,
+      "name": "Reverse-Flash"
+    },
+    {
+      "rank": 72,
+      "name": "Professor Zoom"
+    },
+    {
+      "rank": 73,
+      "name": "Zoom (Hunter Zolomon)"
+    },
+    {
+      "rank": 74,
+      "name": "Gorilla Grodd"
+    },
+    {
+      "rank": 75,
+      "name": "Captain Cold"
+    },
+    {
+      "rank": 76,
+      "name": "Heat Wave"
+    },
+    {
+      "rank": 77,
+      "name": "Mirror Master"
+    },
+    {
+      "rank": 78,
+      "name": "Trickster"
+    },
+    {
+      "rank": 79,
+      "name": "Weather Wizard"
+    },
+    {
+      "rank": 80,
+      "name": "Pied Piper"
+    },
+    {
+      "rank": 81,
+      "name": "Top"
+    },
+    {
+      "rank": 82,
+      "name": "Golden Glider"
+    },
+    {
+      "rank": 83,
+      "name": "Captain Boomerang"
+    },
+    {
+      "rank": 84,
+      "name": "Killer Frost"
+    },
+    {
+      "rank": 85,
+      "name": "Cheetah"
+    },
+    {
+      "rank": 86,
+      "name": "Cheetah (Barbara Minerva)"
+    },
+    {
+      "rank": 87,
+      "name": "Cheetah (Priscilla Rich)"
+    },
+    {
+      "rank": 88,
+      "name": "Ares"
+    },
+    {
+      "rank": 89,
+      "name": "Circe"
+    },
+    {
+      "rank": 90,
+      "name": "Doctor Poison"
+    },
+    {
+      "rank": 91,
+      "name": "Doctor Psycho"
+    },
+    {
+      "rank": 92,
+      "name": "Giganta"
+    },
+    {
+      "rank": 93,
+      "name": "Silver Swan"
+    },
+    {
+      "rank": 94,
+      "name": "Maxwell Lord"
+    },
+    {
+      "rank": 95,
+      "name": "Veronica Cale"
+    },
+    {
+      "rank": 96,
+      "name": "First Born"
+    },
+    {
+      "rank": 97,
+      "name": "Hades"
+    },
+    {
+      "rank": 98,
+      "name": "Medusa"
+    },
+    {
+      "rank": 99,
+      "name": "Decay"
+    },
+    {
+      "rank": 100,
+      "name": "Antiope (Villain Arc)"
+    }
+  ]
+}

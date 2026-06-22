@@ -1,0 +1,406 @@
+{
+  "id": "cult-classic-movies",
+  "title": "Cult Classic Movies (2000s–2010s)",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Mean Girls"
+    },
+    {
+      "rank": 2,
+      "name": "Superbad"
+    },
+    {
+      "rank": 3,
+      "name": "The Hangover"
+    },
+    {
+      "rank": 4,
+      "name": "Bridesmaids"
+    },
+    {
+      "rank": 5,
+      "name": "21 Jump Street"
+    },
+    {
+      "rank": 6,
+      "name": "22 Jump Street"
+    },
+    {
+      "rank": 7,
+      "name": "Pineapple Express"
+    },
+    {
+      "rank": 8,
+      "name": "This Is the End"
+    },
+    {
+      "rank": 9,
+      "name": "Knocked Up"
+    },
+    {
+      "rank": 10,
+      "name": "The 40-Year-Old Virgin"
+    },
+    {
+      "rank": 11,
+      "name": "Anchorman"
+    },
+    {
+      "rank": 12,
+      "name": "Step Brothers"
+    },
+    {
+      "rank": 13,
+      "name": "Talladega Nights"
+    },
+    {
+      "rank": 14,
+      "name": "Dodgeball"
+    },
+    {
+      "rank": 15,
+      "name": "Zoolander"
+    },
+    {
+      "rank": 16,
+      "name": "Zoolander 2"
+    },
+    {
+      "rank": 17,
+      "name": "Old School"
+    },
+    {
+      "rank": 18,
+      "name": "Wedding Crashers"
+    },
+    {
+      "rank": 19,
+      "name": "Horrible Bosses"
+    },
+    {
+      "rank": 20,
+      "name": "The Other Guys"
+    },
+    {
+      "rank": 21,
+      "name": "Hot Fuzz"
+    },
+    {
+      "rank": 22,
+      "name": "Shaun of the Dead"
+    },
+    {
+      "rank": 23,
+      "name": "Scott Pilgrim vs. the World"
+    },
+    {
+      "rank": 24,
+      "name": "Baby Driver"
+    },
+    {
+      "rank": 25,
+      "name": "Snatch"
+    },
+    {
+      "rank": 26,
+      "name": "Lock, Stock and Two Smoking Barrels"
+    },
+    {
+      "rank": 27,
+      "name": "Kick-Ass"
+    },
+    {
+      "rank": 28,
+      "name": "Kingsman: The Secret Service"
+    },
+    {
+      "rank": 29,
+      "name": "Deadpool"
+    },
+    {
+      "rank": 30,
+      "name": "Deadpool 2"
+    },
+    {
+      "rank": 31,
+      "name": "Guardians of the Galaxy"
+    },
+    {
+      "rank": 32,
+      "name": "Thor: Ragnarok"
+    },
+    {
+      "rank": 33,
+      "name": "Spider-Man: Into the Spider-Verse"
+    },
+    {
+      "rank": 34,
+      "name": "The Lego Movie"
+    },
+    {
+      "rank": 35,
+      "name": "Shrek"
+    },
+    {
+      "rank": 36,
+      "name": "Shrek 2"
+    },
+    {
+      "rank": 37,
+      "name": "Finding Nemo"
+    },
+    {
+      "rank": 38,
+      "name": "The Incredibles"
+    },
+    {
+      "rank": 39,
+      "name": "Ratatouille"
+    },
+    {
+      "rank": 40,
+      "name": "Up"
+    },
+    {
+      "rank": 41,
+      "name": "Wall-E"
+    },
+    {
+      "rank": 42,
+      "name": "Toy Story 3"
+    },
+    {
+      "rank": 43,
+      "name": "Inside Out"
+    },
+    {
+      "rank": 44,
+      "name": "Coco"
+    },
+    {
+      "rank": 45,
+      "name": "Moana"
+    },
+    {
+      "rank": 46,
+      "name": "Frozen"
+    },
+    {
+      "rank": 47,
+      "name": "Tangled"
+    },
+    {
+      "rank": 48,
+      "name": "Zootopia"
+    },
+    {
+      "rank": 49,
+      "name": "Big Hero 6"
+    },
+    {
+      "rank": 50,
+      "name": "How to Train Your Dragon"
+    },
+    {
+      "rank": 51,
+      "name": "Twilight"
+    },
+    {
+      "rank": 52,
+      "name": "The Hunger Games"
+    },
+    {
+      "rank": 53,
+      "name": "Divergent"
+    },
+    {
+      "rank": 54,
+      "name": "The Maze Runner"
+    },
+    {
+      "rank": 55,
+      "name": "Percy Jackson"
+    },
+    {
+      "rank": 56,
+      "name": "Harry Potter and the Sorcerer's Stone"
+    },
+    {
+      "rank": 57,
+      "name": "Harry Potter and the Prisoner of Azkaban"
+    },
+    {
+      "rank": 58,
+      "name": "Harry Potter and the Deathly Hallows"
+    },
+    {
+      "rank": 59,
+      "name": "Fantastic Beasts"
+    },
+    {
+      "rank": 60,
+      "name": "The Lord of the Rings"
+    },
+    {
+      "rank": 61,
+      "name": "The Hobbit"
+    },
+    {
+      "rank": 62,
+      "name": "Avatar"
+    },
+    {
+      "rank": 63,
+      "name": "Inception"
+    },
+    {
+      "rank": 64,
+      "name": "Interstellar"
+    },
+    {
+      "rank": 65,
+      "name": "The Dark Knight"
+    },
+    {
+      "rank": 66,
+      "name": "Joker (2019)"
+    },
+    {
+      "rank": 67,
+      "name": "Black Panther"
+    },
+    {
+      "rank": 68,
+      "name": "Avengers: Endgame"
+    },
+    {
+      "rank": 69,
+      "name": "Iron Man"
+    },
+    {
+      "rank": 70,
+      "name": "Captain America: The Winter Soldier"
+    },
+    {
+      "rank": 71,
+      "name": "Get Out"
+    },
+    {
+      "rank": 72,
+      "name": "Us"
+    },
+    {
+      "rank": 73,
+      "name": "Nope"
+    },
+    {
+      "rank": 74,
+      "name": "A Quiet Place"
+    },
+    {
+      "rank": 75,
+      "name": "It"
+    },
+    {
+      "rank": 76,
+      "name": "It Chapter Two"
+    },
+    {
+      "rank": 77,
+      "name": "The Conjuring"
+    },
+    {
+      "rank": 78,
+      "name": "Insidious"
+    },
+    {
+      "rank": 79,
+      "name": "Paranormal Activity"
+    },
+    {
+      "rank": 80,
+      "name": "Saw"
+    },
+    {
+      "rank": 81,
+      "name": "Final Destination"
+    },
+    {
+      "rank": 82,
+      "name": "Scream (2022)"
+    },
+    {
+      "rank": 83,
+      "name": "Scream VI"
+    },
+    {
+      "rank": 84,
+      "name": "Happy Death Day"
+    },
+    {
+      "rank": 85,
+      "name": "The Babysitter"
+    },
+    {
+      "rank": 86,
+      "name": "The Babysitter: Killer Queen"
+    },
+    {
+      "rank": 87,
+      "name": "Freaky"
+    },
+    {
+      "rank": 88,
+      "name": "Ready or Not"
+    },
+    {
+      "rank": 89,
+      "name": "Midsommar"
+    },
+    {
+      "rank": 90,
+      "name": "Hereditary"
+    },
+    {
+      "rank": 91,
+      "name": "Lady Bird"
+    },
+    {
+      "rank": 92,
+      "name": "Little Women (2019)"
+    },
+    {
+      "rank": 93,
+      "name": "Booksmart"
+    },
+    {
+      "rank": 94,
+      "name": "Eighth Grade"
+    },
+    {
+      "rank": 95,
+      "name": "The Edge of Seventeen"
+    },
+    {
+      "rank": 96,
+      "name": "Perks of Being a Wallflower"
+    },
+    {
+      "rank": 97,
+      "name": "The Fault in Our Stars"
+    },
+    {
+      "rank": 98,
+      "name": "Call Me by Your Name"
+    },
+    {
+      "rank": 99,
+      "name": "Moonlight"
+    },
+    {
+      "rank": 100,
+      "name": "La La Land"
+    }
+  ]
+}

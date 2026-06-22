@@ -1,0 +1,406 @@
+{
+  "id": "most-iconic-dc-heroes",
+  "title": "Most Iconic DC Heroes",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Superman"
+    },
+    {
+      "rank": 2,
+      "name": "Batman"
+    },
+    {
+      "rank": 3,
+      "name": "Wonder Woman"
+    },
+    {
+      "rank": 4,
+      "name": "The Flash"
+    },
+    {
+      "rank": 5,
+      "name": "Green Lantern"
+    },
+    {
+      "rank": 6,
+      "name": "Aquaman"
+    },
+    {
+      "rank": 7,
+      "name": "Martian Manhunter"
+    },
+    {
+      "rank": 8,
+      "name": "Cyborg"
+    },
+    {
+      "rank": 9,
+      "name": "Green Arrow"
+    },
+    {
+      "rank": 10,
+      "name": "Black Canary"
+    },
+    {
+      "rank": 11,
+      "name": "Shazam"
+    },
+    {
+      "rank": 12,
+      "name": "Black Adam"
+    },
+    {
+      "rank": 13,
+      "name": "Hawkman"
+    },
+    {
+      "rank": 14,
+      "name": "Hawkgirl"
+    },
+    {
+      "rank": 15,
+      "name": "Doctor Fate"
+    },
+    {
+      "rank": 16,
+      "name": "Zatanna"
+    },
+    {
+      "rank": 17,
+      "name": "Constantine"
+    },
+    {
+      "rank": 18,
+      "name": "Swamp Thing"
+    },
+    {
+      "rank": 19,
+      "name": "Deadman"
+    },
+    {
+      "rank": 20,
+      "name": "Spectre"
+    },
+    {
+      "rank": 21,
+      "name": "Nightwing"
+    },
+    {
+      "rank": 22,
+      "name": "Robin"
+    },
+    {
+      "rank": 23,
+      "name": "Red Hood"
+    },
+    {
+      "rank": 24,
+      "name": "Batgirl"
+    },
+    {
+      "rank": 25,
+      "name": "Oracle"
+    },
+    {
+      "rank": 26,
+      "name": "Batwoman"
+    },
+    {
+      "rank": 27,
+      "name": "Catwoman (Anti-Hero)"
+    },
+    {
+      "rank": 28,
+      "name": "Red Robin"
+    },
+    {
+      "rank": 29,
+      "name": "Damian Wayne"
+    },
+    {
+      "rank": 30,
+      "name": "Tim Drake"
+    },
+    {
+      "rank": 31,
+      "name": "Dick Grayson"
+    },
+    {
+      "rank": 32,
+      "name": "Jason Todd"
+    },
+    {
+      "rank": 33,
+      "name": "Barbara Gordon"
+    },
+    {
+      "rank": 34,
+      "name": "Cassandra Cain"
+    },
+    {
+      "rank": 35,
+      "name": "Stephanie Brown"
+    },
+    {
+      "rank": 36,
+      "name": "Supergirl"
+    },
+    {
+      "rank": 37,
+      "name": "Superboy"
+    },
+    {
+      "rank": 38,
+      "name": "Power Girl"
+    },
+    {
+      "rank": 39,
+      "name": "Steel"
+    },
+    {
+      "rank": 40,
+      "name": "Eradicator"
+    },
+    {
+      "rank": 41,
+      "name": "Nightwing (Dick Grayson)"
+    },
+    {
+      "rank": 42,
+      "name": "Wally West"
+    },
+    {
+      "rank": 43,
+      "name": "Barry Allen"
+    },
+    {
+      "rank": 44,
+      "name": "Jay Garrick"
+    },
+    {
+      "rank": 45,
+      "name": "Bart Allen"
+    },
+    {
+      "rank": 46,
+      "name": "Kyle Rayner"
+    },
+    {
+      "rank": 47,
+      "name": "Hal Jordan"
+    },
+    {
+      "rank": 48,
+      "name": "John Stewart"
+    },
+    {
+      "rank": 49,
+      "name": "Guy Gardner"
+    },
+    {
+      "rank": 50,
+      "name": "Simon Baz"
+    },
+    {
+      "rank": 51,
+      "name": "Jessica Cruz"
+    },
+    {
+      "rank": 52,
+      "name": "Alan Scott"
+    },
+    {
+      "rank": 53,
+      "name": "Blue Beetle"
+    },
+    {
+      "rank": 54,
+      "name": "Booster Gold"
+    },
+    {
+      "rank": 55,
+      "name": "Rocket Red"
+    },
+    {
+      "rank": 56,
+      "name": "Plastic Man"
+    },
+    {
+      "rank": 57,
+      "name": "The Atom"
+    },
+    {
+      "rank": 58,
+      "name": "Firestorm"
+    },
+    {
+      "rank": 59,
+      "name": "Captain Atom"
+    },
+    {
+      "rank": 60,
+      "name": "Blue Beetle (Jaime Reyes)"
+    },
+    {
+      "rank": 61,
+      "name": "Miss Martian"
+    },
+    {
+      "rank": 62,
+      "name": "Beast Boy"
+    },
+    {
+      "rank": 63,
+      "name": "Raven"
+    },
+    {
+      "rank": 64,
+      "name": "Starfire"
+    },
+    {
+      "rank": 65,
+      "name": "Robin (Tim Drake)"
+    },
+    {
+      "rank": 66,
+      "name": "Teen Titans"
+    },
+    {
+      "rank": 67,
+      "name": "Young Justice"
+    },
+    {
+      "rank": 68,
+      "name": "Static Shock"
+    },
+    {
+      "rank": 69,
+      "name": "Black Lightning"
+    },
+    {
+      "rank": 70,
+      "name": "Thunder"
+    },
+    {
+      "rank": 71,
+      "name": "Lightning"
+    },
+    {
+      "rank": 72,
+      "name": "Geo-Force"
+    },
+    {
+      "rank": 73,
+      "name": "Metamorpho"
+    },
+    {
+      "rank": 74,
+      "name": "Negative Man"
+    },
+    {
+      "rank": 75,
+      "name": "Robotman"
+    },
+    {
+      "rank": 76,
+      "name": "Doom Patrol"
+    },
+    {
+      "rank": 77,
+      "name": "Elasti-Girl"
+    },
+    {
+      "rank": 78,
+      "name": "Chief"
+    },
+    {
+      "rank": 79,
+      "name": "Crazy Jane"
+    },
+    {
+      "rank": 80,
+      "name": "Flex Mentallo"
+    },
+    {
+      "rank": 81,
+      "name": "Sandman (Wesley Dodds)"
+    },
+    {
+      "rank": 82,
+      "name": "Sandman (Dream)"
+    },
+    {
+      "rank": 83,
+      "name": "Death (Sandman)"
+    },
+    {
+      "rank": 84,
+      "name": "Lucifer Morningstar"
+    },
+    {
+      "rank": 85,
+      "name": "Dream of the Endless"
+    },
+    {
+      "rank": 86,
+      "name": "Animal Man"
+    },
+    {
+      "rank": 87,
+      "name": "Vibe"
+    },
+    {
+      "rank": 88,
+      "name": "Steel (John Henry Irons)"
+    },
+    {
+      "rank": 89,
+      "name": "Guardian"
+    },
+    {
+      "rank": 90,
+      "name": "Question"
+    },
+    {
+      "rank": 91,
+      "name": "Renee Montoya"
+    },
+    {
+      "rank": 92,
+      "name": "The Question (Vic Sage)"
+    },
+    {
+      "rank": 93,
+      "name": "Huntress"
+    },
+    {
+      "rank": 94,
+      "name": "Lady Blackhawk"
+    },
+    {
+      "rank": 95,
+      "name": "Black Alice"
+    },
+    {
+      "rank": 96,
+      "name": "Stargirl"
+    },
+    {
+      "rank": 97,
+      "name": "S.T.R.I.P.E."
+    },
+    {
+      "rank": 98,
+      "name": "Doctor Mid-Nite"
+    },
+    {
+      "rank": 99,
+      "name": "Hourman"
+    },
+    {
+      "rank": 100,
+      "name": "Wildcat"
+    }
+  ]
+}

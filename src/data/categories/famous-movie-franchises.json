@@ -1,0 +1,406 @@
+{
+  "id": "famous-movie-franchises",
+  "title": "Famous Movie Franchises",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Marvel Cinematic Universe"
+    },
+    {
+      "rank": 2,
+      "name": "Star Wars"
+    },
+    {
+      "rank": 3,
+      "name": "Harry Potter"
+    },
+    {
+      "rank": 4,
+      "name": "James Bond"
+    },
+    {
+      "rank": 5,
+      "name": "Fast & Furious"
+    },
+    {
+      "rank": 6,
+      "name": "Mission: Impossible"
+    },
+    {
+      "rank": 7,
+      "name": "Jurassic Park"
+    },
+    {
+      "rank": 8,
+      "name": "Indiana Jones"
+    },
+    {
+      "rank": 9,
+      "name": "The Lord of the Rings"
+    },
+    {
+      "rank": 10,
+      "name": "The Hobbit"
+    },
+    {
+      "rank": 11,
+      "name": "Pirates of the Caribbean"
+    },
+    {
+      "rank": 12,
+      "name": "Transformers"
+    },
+    {
+      "rank": 13,
+      "name": "X-Men"
+    },
+    {
+      "rank": 14,
+      "name": "Spider-Man"
+    },
+    {
+      "rank": 15,
+      "name": "Batman"
+    },
+    {
+      "rank": 16,
+      "name": "Superman"
+    },
+    {
+      "rank": 17,
+      "name": "DC Extended Universe"
+    },
+    {
+      "rank": 18,
+      "name": "Wonder Woman"
+    },
+    {
+      "rank": 19,
+      "name": "Aquaman"
+    },
+    {
+      "rank": 20,
+      "name": "The Dark Knight Trilogy"
+    },
+    {
+      "rank": 21,
+      "name": "The Matrix"
+    },
+    {
+      "rank": 22,
+      "name": "Terminator"
+    },
+    {
+      "rank": 23,
+      "name": "Alien"
+    },
+    {
+      "rank": 24,
+      "name": "Predator"
+    },
+    {
+      "rank": 25,
+      "name": "Alien vs. Predator"
+    },
+    {
+      "rank": 26,
+      "name": "Rocky"
+    },
+    {
+      "rank": 27,
+      "name": "Creed"
+    },
+    {
+      "rank": 28,
+      "name": "Rambo"
+    },
+    {
+      "rank": 29,
+      "name": "Die Hard"
+    },
+    {
+      "rank": 30,
+      "name": "Lethal Weapon"
+    },
+    {
+      "rank": 31,
+      "name": "Mad Max"
+    },
+    {
+      "rank": 32,
+      "name": "John Wick"
+    },
+    {
+      "rank": 33,
+      "name": "The Bourne Identity"
+    },
+    {
+      "rank": 34,
+      "name": "Taken"
+    },
+    {
+      "rank": 35,
+      "name": "Kingsman"
+    },
+    {
+      "rank": 36,
+      "name": "Men in Black"
+    },
+    {
+      "rank": 37,
+      "name": "Ghostbusters"
+    },
+    {
+      "rank": 38,
+      "name": "Back to the Future"
+    },
+    {
+      "rank": 39,
+      "name": "Jaws"
+    },
+    {
+      "rank": 40,
+      "name": "E.T."
+    },
+    {
+      "rank": 41,
+      "name": "Gremlins"
+    },
+    {
+      "rank": 42,
+      "name": "Beetlejuice"
+    },
+    {
+      "rank": 43,
+      "name": "Home Alone"
+    },
+    {
+      "rank": 44,
+      "name": "Night at the Museum"
+    },
+    {
+      "rank": 45,
+      "name": "Shrek"
+    },
+    {
+      "rank": 46,
+      "name": "Toy Story"
+    },
+    {
+      "rank": 47,
+      "name": "Monsters, Inc."
+    },
+    {
+      "rank": 48,
+      "name": "Finding Nemo"
+    },
+    {
+      "rank": 49,
+      "name": "The Incredibles"
+    },
+    {
+      "rank": 50,
+      "name": "Cars"
+    },
+    {
+      "rank": 51,
+      "name": "Frozen"
+    },
+    {
+      "rank": 52,
+      "name": "Moana"
+    },
+    {
+      "rank": 53,
+      "name": "Encanto"
+    },
+    {
+      "rank": 54,
+      "name": "Inside Out"
+    },
+    {
+      "rank": 55,
+      "name": "Zootopia"
+    },
+    {
+      "rank": 56,
+      "name": "Despicable Me"
+    },
+    {
+      "rank": 57,
+      "name": "Minions"
+    },
+    {
+      "rank": 58,
+      "name": "How to Train Your Dragon"
+    },
+    {
+      "rank": 59,
+      "name": "Kung Fu Panda"
+    },
+    {
+      "rank": 60,
+      "name": "Madagascar"
+    },
+    {
+      "rank": 61,
+      "name": "Ice Age"
+    },
+    {
+      "rank": 62,
+      "name": "Rio"
+    },
+    {
+      "rank": 63,
+      "name": "The Croods"
+    },
+    {
+      "rank": 64,
+      "name": "Trolls"
+    },
+    {
+      "rank": 65,
+      "name": "The Boss Baby"
+    },
+    {
+      "rank": 66,
+      "name": "Hotel Transylvania"
+    },
+    {
+      "rank": 67,
+      "name": "Cloudy with a Chance of Meatballs"
+    },
+    {
+      "rank": 68,
+      "name": "Spider-Verse"
+    },
+    {
+      "rank": 69,
+      "name": "The Lego Movie"
+    },
+    {
+      "rank": 70,
+      "name": "The Secret Life of Pets"
+    },
+    {
+      "rank": 71,
+      "name": "Sing"
+    },
+    {
+      "rank": 72,
+      "name": "The Bad Guys"
+    },
+    {
+      "rank": 73,
+      "name": "Puss in Boots"
+    },
+    {
+      "rank": 74,
+      "name": "Shrek (DreamWorks)"
+    },
+    {
+      "rank": 75,
+      "name": "Kung Fu Panda (Franchise)"
+    },
+    {
+      "rank": 76,
+      "name": "Star Trek"
+    },
+    {
+      "rank": 77,
+      "name": "Planet of the Apes"
+    },
+    {
+      "rank": 78,
+      "name": "Dune"
+    },
+    {
+      "rank": 79,
+      "name": "Blade Runner"
+    },
+    {
+      "rank": 80,
+      "name": "The Hunger Games"
+    },
+    {
+      "rank": 81,
+      "name": "Twilight"
+    },
+    {
+      "rank": 82,
+      "name": "The Maze Runner"
+    },
+    {
+      "rank": 83,
+      "name": "Divergent"
+    },
+    {
+      "rank": 84,
+      "name": "Percy Jackson"
+    },
+    {
+      "rank": 85,
+      "name": "Fantastic Beasts"
+    },
+    {
+      "rank": 86,
+      "name": "Wizarding World"
+    },
+    {
+      "rank": 87,
+      "name": "Chronicles of Narnia"
+    },
+    {
+      "rank": 88,
+      "name": "His Dark Materials"
+    },
+    {
+      "rank": 89,
+      "name": "Eragon"
+    },
+    {
+      "rank": 90,
+      "name": "The Golden Compass"
+    },
+    {
+      "rank": 91,
+      "name": "Godzilla"
+    },
+    {
+      "rank": 92,
+      "name": "King Kong"
+    },
+    {
+      "rank": 93,
+      "name": "MonsterVerse"
+    },
+    {
+      "rank": 94,
+      "name": "Pacific Rim"
+    },
+    {
+      "rank": 95,
+      "name": "Cloverfield"
+    },
+    {
+      "rank": 96,
+      "name": "Saw"
+    },
+    {
+      "rank": 97,
+      "name": "Paranormal Activity"
+    },
+    {
+      "rank": 98,
+      "name": "The Conjuring Universe"
+    },
+    {
+      "rank": 99,
+      "name": "Insidious"
+    },
+    {
+      "rank": 100,
+      "name": "Annabelle"
+    }
+  ]
+}

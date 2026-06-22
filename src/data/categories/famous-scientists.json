@@ -1,0 +1,406 @@
+{
+  "id": "famous-scientists",
+  "title": "Famous Scientists",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Albert Einstein"
+    },
+    {
+      "rank": 2,
+      "name": "Isaac Newton"
+    },
+    {
+      "rank": 3,
+      "name": "Marie Curie"
+    },
+    {
+      "rank": 4,
+      "name": "Charles Darwin"
+    },
+    {
+      "rank": 5,
+      "name": "Nikola Tesla"
+    },
+    {
+      "rank": 6,
+      "name": "Galileo Galilei"
+    },
+    {
+      "rank": 7,
+      "name": "Stephen Hawking"
+    },
+    {
+      "rank": 8,
+      "name": "Richard Feynman"
+    },
+    {
+      "rank": 9,
+      "name": "Carl Sagan"
+    },
+    {
+      "rank": 10,
+      "name": "Neil deGrasse Tyson"
+    },
+    {
+      "rank": 11,
+      "name": "Louis Pasteur"
+    },
+    {
+      "rank": 12,
+      "name": "Alexander Fleming"
+    },
+    {
+      "rank": 13,
+      "name": "Gregor Mendel"
+    },
+    {
+      "rank": 14,
+      "name": "James Watson"
+    },
+    {
+      "rank": 15,
+      "name": "Francis Crick"
+    },
+    {
+      "rank": 16,
+      "name": "Rosalind Franklin"
+    },
+    {
+      "rank": 17,
+      "name": "Jane Goodall"
+    },
+    {
+      "rank": 18,
+      "name": "Rachel Carson"
+    },
+    {
+      "rank": 19,
+      "name": "Linus Pauling"
+    },
+    {
+      "rank": 20,
+      "name": "Dmitri Mendeleev"
+    },
+    {
+      "rank": 21,
+      "name": "Michael Faraday"
+    },
+    {
+      "rank": 22,
+      "name": "James Clerk Maxwell"
+    },
+    {
+      "rank": 23,
+      "name": "Max Planck"
+    },
+    {
+      "rank": 24,
+      "name": "Niels Bohr"
+    },
+    {
+      "rank": 25,
+      "name": "Werner Heisenberg"
+    },
+    {
+      "rank": 26,
+      "name": "Erwin Schrödinger"
+    },
+    {
+      "rank": 27,
+      "name": "Paul Dirac"
+    },
+    {
+      "rank": 28,
+      "name": "Enrico Fermi"
+    },
+    {
+      "rank": 29,
+      "name": "Robert Oppenheimer"
+    },
+    {
+      "rank": 30,
+      "name": "Edward Teller"
+    },
+    {
+      "rank": 31,
+      "name": "Marie Curie (Radioactivity)"
+    },
+    {
+      "rank": 32,
+      "name": "Pierre Curie"
+    },
+    {
+      "rank": 33,
+      "name": "Irene Joliot-Curie"
+    },
+    {
+      "rank": 34,
+      "name": "Frederick Banting"
+    },
+    {
+      "rank": 35,
+      "name": "Jonas Salk"
+    },
+    {
+      "rank": 36,
+      "name": "Edward Jenner"
+    },
+    {
+      "rank": 37,
+      "name": "Louis Braille"
+    },
+    {
+      "rank": 38,
+      "name": "Alexander Graham Bell"
+    },
+    {
+      "rank": 39,
+      "name": "Thomas Edison"
+    },
+    {
+      "rank": 40,
+      "name": "Benjamin Franklin"
+    },
+    {
+      "rank": 41,
+      "name": "Leonardo da Vinci"
+    },
+    {
+      "rank": 42,
+      "name": "Archimedes"
+    },
+    {
+      "rank": 43,
+      "name": "Aristotle"
+    },
+    {
+      "rank": 44,
+      "name": "Plato"
+    },
+    {
+      "rank": 45,
+      "name": "Pythagoras"
+    },
+    {
+      "rank": 46,
+      "name": "Euclid"
+    },
+    {
+      "rank": 47,
+      "name": "Hippocrates"
+    },
+    {
+      "rank": 48,
+      "name": "Avicenna"
+    },
+    {
+      "rank": 49,
+      "name": "Alhazen"
+    },
+    {
+      "rank": 50,
+      "name": "Ibn al-Haytham"
+    },
+    {
+      "rank": 51,
+      "name": "Copernicus"
+    },
+    {
+      "rank": 52,
+      "name": "Johannes Kepler"
+    },
+    {
+      "rank": 53,
+      "name": "Tycho Brahe"
+    },
+    {
+      "rank": 54,
+      "name": "Edmond Halley"
+    },
+    {
+      "rank": 55,
+      "name": "Christiaan Huygens"
+    },
+    {
+      "rank": 56,
+      "name": "Antoine Lavoisier"
+    },
+    {
+      "rank": 57,
+      "name": "Joseph Priestley"
+    },
+    {
+      "rank": 58,
+      "name": "John Dalton"
+    },
+    {
+      "rank": 59,
+      "name": "Amedeo Avogadro"
+    },
+    {
+      "rank": 60,
+      "name": "Dmitri Ivanovich Mendeleev"
+    },
+    {
+      "rank": 61,
+      "name": "Alfred Nobel"
+    },
+    {
+      "rank": 62,
+      "name": "Ernest Rutherford"
+    },
+    {
+      "rank": 63,
+      "name": "J.J. Thomson"
+    },
+    {
+      "rank": 64,
+      "name": "James Chadwick"
+    },
+    {
+      "rank": 65,
+      "name": "Lise Meitner"
+    },
+    {
+      "rank": 66,
+      "name": "Otto Hahn"
+    },
+    {
+      "rank": 67,
+      "name": "Fritz Strassmann"
+    },
+    {
+      "rank": 68,
+      "name": "Hans Bethe"
+    },
+    {
+      "rank": 69,
+      "name": "Richard Dawkins"
+    },
+    {
+      "rank": 70,
+      "name": "E.O. Wilson"
+    },
+    {
+      "rank": 71,
+      "name": "Stephen Jay Gould"
+    },
+    {
+      "rank": 72,
+      "name": "Carl Linnaeus"
+    },
+    {
+      "rank": 73,
+      "name": "George Washington Carver"
+    },
+    {
+      "rank": 74,
+      "name": "Norman Borlaug"
+    },
+    {
+      "rank": 75,
+      "name": "Rachel Carson (Silent Spring)"
+    },
+    {
+      "rank": 76,
+      "name": "Barbara McClintock"
+    },
+    {
+      "rank": 77,
+      "name": "Gertrude Elion"
+    },
+    {
+      "rank": 78,
+      "name": "Tu Youyou"
+    },
+    {
+      "rank": 79,
+      "name": "Jennifer Doudna"
+    },
+    {
+      "rank": 80,
+      "name": "Emmanuelle Charpentier"
+    },
+    {
+      "rank": 81,
+      "name": "CRISPR Pioneers"
+    },
+    {
+      "rank": 82,
+      "name": "Katalin Karikó"
+    },
+    {
+      "rank": 83,
+      "name": "Drew Weissman"
+    },
+    {
+      "rank": 84,
+      "name": "Anthony Fauci"
+    },
+    {
+      "rank": 85,
+      "name": "Jonas Salk (Polio)"
+    },
+    {
+      "rank": 86,
+      "name": "Edward Jenner (Smallpox)"
+    },
+    {
+      "rank": 87,
+      "name": "Florence Nightingale (Statistics)"
+    },
+    {
+      "rank": 88,
+      "name": "Ada Lovelace"
+    },
+    {
+      "rank": 89,
+      "name": "Alan Turing"
+    },
+    {
+      "rank": 90,
+      "name": "Grace Hopper"
+    },
+    {
+      "rank": 91,
+      "name": "Katherine Johnson"
+    },
+    {
+      "rank": 92,
+      "name": "Dorothy Vaughan"
+    },
+    {
+      "rank": 93,
+      "name": "Mary Jackson"
+    },
+    {
+      "rank": 94,
+      "name": "Hidden Figures Team"
+    },
+    {
+      "rank": 95,
+      "name": "Margaret Hamilton"
+    },
+    {
+      "rank": 96,
+      "name": "Tim Berners-Lee"
+    },
+    {
+      "rank": 97,
+      "name": "Vint Cerf"
+    },
+    {
+      "rank": 98,
+      "name": "Bob Kahn"
+    },
+    {
+      "rank": 99,
+      "name": "Linus Torvalds"
+    },
+    {
+      "rank": 100,
+      "name": "Bill Gates (Early Microsoft)"
+    }
+  ]
+}

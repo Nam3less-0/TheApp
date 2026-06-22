@@ -1,0 +1,406 @@
+{
+  "id": "famous-fashion-brands",
+  "title": "Famous Fashion Brands",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Gucci"
+    },
+    {
+      "rank": 2,
+      "name": "Louis Vuitton"
+    },
+    {
+      "rank": 3,
+      "name": "Chanel"
+    },
+    {
+      "rank": 4,
+      "name": "Hermès"
+    },
+    {
+      "rank": 5,
+      "name": "Prada"
+    },
+    {
+      "rank": 6,
+      "name": "Dior"
+    },
+    {
+      "rank": 7,
+      "name": "Versace"
+    },
+    {
+      "rank": 8,
+      "name": "Balenciaga"
+    },
+    {
+      "rank": 9,
+      "name": "Burberry"
+    },
+    {
+      "rank": 10,
+      "name": "Fendi"
+    },
+    {
+      "rank": 11,
+      "name": "Givenchy"
+    },
+    {
+      "rank": 12,
+      "name": "Valentino"
+    },
+    {
+      "rank": 13,
+      "name": "Saint Laurent"
+    },
+    {
+      "rank": 14,
+      "name": "Bottega Veneta"
+    },
+    {
+      "rank": 15,
+      "name": "Celine"
+    },
+    {
+      "rank": 16,
+      "name": "Loewe"
+    },
+    {
+      "rank": 17,
+      "name": "Balmain"
+    },
+    {
+      "rank": 18,
+      "name": "Dolce & Gabbana"
+    },
+    {
+      "rank": 19,
+      "name": "Armani"
+    },
+    {
+      "rank": 20,
+      "name": "Moschino"
+    },
+    {
+      "rank": 21,
+      "name": "Tom Ford"
+    },
+    {
+      "rank": 22,
+      "name": "Alexander McQueen"
+    },
+    {
+      "rank": 23,
+      "name": "Off-White"
+    },
+    {
+      "rank": 24,
+      "name": "Moncler"
+    },
+    {
+      "rank": 25,
+      "name": "Kenzo"
+    },
+    {
+      "rank": 26,
+      "name": "Miu Miu"
+    },
+    {
+      "rank": 27,
+      "name": "Jacquemus"
+    },
+    {
+      "rank": 28,
+      "name": "Goyard"
+    },
+    {
+      "rank": 29,
+      "name": "Berluti"
+    },
+    {
+      "rank": 30,
+      "name": "Rimowa"
+    },
+    {
+      "rank": 31,
+      "name": "Nike"
+    },
+    {
+      "rank": 32,
+      "name": "Adidas"
+    },
+    {
+      "rank": 33,
+      "name": "Puma"
+    },
+    {
+      "rank": 34,
+      "name": "Reebok"
+    },
+    {
+      "rank": 35,
+      "name": "New Balance"
+    },
+    {
+      "rank": 36,
+      "name": "Converse"
+    },
+    {
+      "rank": 37,
+      "name": "Vans"
+    },
+    {
+      "rank": 38,
+      "name": "ASICS"
+    },
+    {
+      "rank": 39,
+      "name": "Under Armour"
+    },
+    {
+      "rank": 40,
+      "name": "Fila"
+    },
+    {
+      "rank": 41,
+      "name": "Champion"
+    },
+    {
+      "rank": 42,
+      "name": "The North Face"
+    },
+    {
+      "rank": 43,
+      "name": "Patagonia"
+    },
+    {
+      "rank": 44,
+      "name": "Columbia"
+    },
+    {
+      "rank": 45,
+      "name": "Arc'teryx"
+    },
+    {
+      "rank": 46,
+      "name": "Salomon"
+    },
+    {
+      "rank": 47,
+      "name": "Hoka"
+    },
+    {
+      "rank": 48,
+      "name": "On Running"
+    },
+    {
+      "rank": 49,
+      "name": "Skechers"
+    },
+    {
+      "rank": 50,
+      "name": "Crocs"
+    },
+    {
+      "rank": 51,
+      "name": "Birkenstock"
+    },
+    {
+      "rank": 52,
+      "name": "Dr. Martens"
+    },
+    {
+      "rank": 53,
+      "name": "Timberland"
+    },
+    {
+      "rank": 54,
+      "name": "UGG"
+    },
+    {
+      "rank": 55,
+      "name": "Clarks"
+    },
+    {
+      "rank": 56,
+      "name": "Zara"
+    },
+    {
+      "rank": 57,
+      "name": "H&M"
+    },
+    {
+      "rank": 58,
+      "name": "Uniqlo"
+    },
+    {
+      "rank": 59,
+      "name": "Mango"
+    },
+    {
+      "rank": 60,
+      "name": "Massimo Dutti"
+    },
+    {
+      "rank": 61,
+      "name": "COS"
+    },
+    {
+      "rank": 62,
+      "name": "Arket"
+    },
+    {
+      "rank": 63,
+      "name": "Weekday"
+    },
+    {
+      "rank": 64,
+      "name": "Monki"
+    },
+    {
+      "rank": 65,
+      "name": "Pull & Bear"
+    },
+    {
+      "rank": 66,
+      "name": "Bershka"
+    },
+    {
+      "rank": 67,
+      "name": "Stradivarius"
+    },
+    {
+      "rank": 68,
+      "name": "Oysho"
+    },
+    {
+      "rank": 69,
+      "name": "Reserved"
+    },
+    {
+      "rank": 70,
+      "name": "Sinsay"
+    },
+    {
+      "rank": 71,
+      "name": "Primark"
+    },
+    {
+      "rank": 72,
+      "name": "Topshop"
+    },
+    {
+      "rank": 73,
+      "name": "River Island"
+    },
+    {
+      "rank": 74,
+      "name": "Next"
+    },
+    {
+      "rank": 75,
+      "name": "Marks & Spencer"
+    },
+    {
+      "rank": 76,
+      "name": "Gap"
+    },
+    {
+      "rank": 77,
+      "name": "Old Navy"
+    },
+    {
+      "rank": 78,
+      "name": "Banana Republic"
+    },
+    {
+      "rank": 79,
+      "name": "American Eagle"
+    },
+    {
+      "rank": 80,
+      "name": "Abercrombie & Fitch"
+    },
+    {
+      "rank": 81,
+      "name": "Hollister"
+    },
+    {
+      "rank": 82,
+      "name": "Forever 21"
+    },
+    {
+      "rank": 83,
+      "name": "Urban Outfitters"
+    },
+    {
+      "rank": 84,
+      "name": "Anthropologie"
+    },
+    {
+      "rank": 85,
+      "name": "Free People"
+    },
+    {
+      "rank": 86,
+      "name": "J.Crew"
+    },
+    {
+      "rank": 87,
+      "name": "Madewell"
+    },
+    {
+      "rank": 88,
+      "name": "Everlane"
+    },
+    {
+      "rank": 89,
+      "name": "Reformation"
+    },
+    {
+      "rank": 90,
+      "name": "Aritzia"
+    },
+    {
+      "rank": 91,
+      "name": "Lululemon"
+    },
+    {
+      "rank": 92,
+      "name": "Gymshark"
+    },
+    {
+      "rank": 93,
+      "name": "Alo Yoga"
+    },
+    {
+      "rank": 94,
+      "name": "Outdoor Voices"
+    },
+    {
+      "rank": 95,
+      "name": "Fabletics"
+    },
+    {
+      "rank": 96,
+      "name": "Victoria's Secret"
+    },
+    {
+      "rank": 97,
+      "name": "Pink"
+    },
+    {
+      "rank": 98,
+      "name": "Savage X Fenty"
+    },
+    {
+      "rank": 99,
+      "name": "Skims"
+    },
+    {
+      "rank": 100,
+      "name": "Aerie"
+    }
+  ]
+}

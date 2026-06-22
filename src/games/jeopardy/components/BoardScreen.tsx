@@ -1,0 +1,84 @@
+import { useJeopardy } from '../context';
+import { COLORS, DIFFICULTIES, getCellByColumnAndDifficulty } from '../utils';
+import ScoreChips from './ScoreChips';
+import { JeopardyPageWrap } from './JeopardyPanel';
+
+export default function BoardScreen() {
+  const { state, dispatch } = useJeopardy();
+  const activePlayer = state.players[state.currentPlayerIndex];
+
+  return (
+    <JeopardyPageWrap>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2.5">
+        <div>
+          <div className="font-display text-[15px] font-bold text-text-hi">
+            {activePlayer?.name}&rsquo;s turn
+          </div>
+          <div className="mt-0.5 font-mono text-[11px] uppercase tracking-wider text-text-low">
+            Question {Math.min(state.questionsAnswered + 1, state.totalQuestions)} of{' '}
+            {state.totalQuestions}
+          </div>
+        </div>
+        <ScoreChips players={state.players} activePlayerId={activePlayer?.id ?? null} />
+      </div>
+
+      <div className="grid grid-cols-6 gap-1.5">
+        {state.columns.map((column) => (
+          <div
+            key={column.id}
+            className="flex min-h-[50px] items-center justify-center rounded-lg px-1 py-2.5 text-center font-display text-[9.5px] font-bold leading-tight tracking-[0.3px]"
+            style={{
+              background: `linear-gradient(180deg, ${COLORS.sapphire}, ${COLORS.sapphireDim})`,
+              color: '#F2F4F8',
+            }}
+          >
+            {column.name}
+          </div>
+        ))}
+
+        {DIFFICULTIES.map((difficulty) =>
+          state.columns.map((column, columnIndex) => {
+            const cell = getCellByColumnAndDifficulty(
+              state.cells,
+              columnIndex,
+              difficulty,
+            );
+            if (!cell) return null;
+
+            if (cell.used) {
+              return (
+                <div
+                  key={cell.id}
+                  className="flex aspect-[5/4] items-center justify-center rounded-lg border border-line font-display text-xs text-text-low"
+                  style={{ background: 'rgba(255,255,255,0.03)' }}
+                  aria-hidden="true"
+                >
+                  &mdash;
+                </div>
+              );
+            }
+
+            return (
+              <button
+                key={cell.id}
+                type="button"
+                onClick={() => dispatch({ type: 'SELECT_CELL', cellId: cell.id })}
+                className="relative flex aspect-[5/4] items-center justify-center rounded-lg border font-display text-sm font-extrabold tracking-[0.5px] transition-transform duration-150 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                style={{
+                  background: `linear-gradient(165deg, ${COLORS.sapphire}, ${COLORS.sapphireDim} 80%)`,
+                  borderColor: `color-mix(in srgb, ${COLORS.sapphireBright} 30%, transparent)`,
+                  color: COLORS.goldBright,
+                  boxShadow:
+                    '0 4px 12px -6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)',
+                }}
+                aria-label={`${column.name} for ${cell.value} points`}
+              >
+                {cell.value}
+              </button>
+            );
+          }),
+        )}
+      </div>
+    </JeopardyPageWrap>
+  );
+}

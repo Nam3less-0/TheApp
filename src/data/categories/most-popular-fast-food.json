@@ -1,0 +1,406 @@
+{
+  "id": "most-popular-fast-food",
+  "title": "Most Popular Fast Food Chains",
+  "items": [
+    {
+      "rank": 1,
+      "name": "McDonald's"
+    },
+    {
+      "rank": 2,
+      "name": "Subway"
+    },
+    {
+      "rank": 3,
+      "name": "Starbucks"
+    },
+    {
+      "rank": 4,
+      "name": "KFC"
+    },
+    {
+      "rank": 5,
+      "name": "Burger King"
+    },
+    {
+      "rank": 6,
+      "name": "Domino's"
+    },
+    {
+      "rank": 7,
+      "name": "Pizza Hut"
+    },
+    {
+      "rank": 8,
+      "name": "Dunkin'"
+    },
+    {
+      "rank": 9,
+      "name": "Taco Bell"
+    },
+    {
+      "rank": 10,
+      "name": "Wendy's"
+    },
+    {
+      "rank": 11,
+      "name": "Chipotle"
+    },
+    {
+      "rank": 12,
+      "name": "Panera Bread"
+    },
+    {
+      "rank": 13,
+      "name": "Chick-fil-A"
+    },
+    {
+      "rank": 14,
+      "name": "Popeyes"
+    },
+    {
+      "rank": 15,
+      "name": "Sonic Drive-In"
+    },
+    {
+      "rank": 16,
+      "name": "Arby's"
+    },
+    {
+      "rank": 17,
+      "name": "Jack in the Box"
+    },
+    {
+      "rank": 18,
+      "name": "Carl's Jr."
+    },
+    {
+      "rank": 19,
+      "name": "Hardee's"
+    },
+    {
+      "rank": 20,
+      "name": "Whataburger"
+    },
+    {
+      "rank": 21,
+      "name": "In-N-Out Burger"
+    },
+    {
+      "rank": 22,
+      "name": "Five Guys"
+    },
+    {
+      "rank": 23,
+      "name": "Shake Shack"
+    },
+    {
+      "rank": 24,
+      "name": "Culver's"
+    },
+    {
+      "rank": 25,
+      "name": "Raising Cane's"
+    },
+    {
+      "rank": 26,
+      "name": "Panda Express"
+    },
+    {
+      "rank": 27,
+      "name": "Jersey Mike's"
+    },
+    {
+      "rank": 28,
+      "name": "Jimmy John's"
+    },
+    {
+      "rank": 29,
+      "name": "Firehouse Subs"
+    },
+    {
+      "rank": 30,
+      "name": "Potbelly"
+    },
+    {
+      "rank": 31,
+      "name": "Qdoba"
+    },
+    {
+      "rank": 32,
+      "name": "Moe's Southwest Grill"
+    },
+    {
+      "rank": 33,
+      "name": "Del Taco"
+    },
+    {
+      "rank": 34,
+      "name": "Taco John's"
+    },
+    {
+      "rank": 35,
+      "name": "El Pollo Loco"
+    },
+    {
+      "rank": 36,
+      "name": "Church's Chicken"
+    },
+    {
+      "rank": 37,
+      "name": "Bojangles"
+    },
+    {
+      "rank": 38,
+      "name": "Zaxby's"
+    },
+    {
+      "rank": 39,
+      "name": "Wingstop"
+    },
+    {
+      "rank": 40,
+      "name": "Buffalo Wild Wings"
+    },
+    {
+      "rank": 41,
+      "name": "Hooters"
+    },
+    {
+      "rank": 42,
+      "name": "Applebee's Grill + Bar"
+    },
+    {
+      "rank": 43,
+      "name": "Chili's"
+    },
+    {
+      "rank": 44,
+      "name": "TGI Friday's"
+    },
+    {
+      "rank": 45,
+      "name": "Olive Garden"
+    },
+    {
+      "rank": 46,
+      "name": "Red Lobster"
+    },
+    {
+      "rank": 47,
+      "name": "Outback Steakhouse"
+    },
+    {
+      "rank": 48,
+      "name": "Texas Roadhouse"
+    },
+    {
+      "rank": 49,
+      "name": "Cracker Barrel"
+    },
+    {
+      "rank": 50,
+      "name": "IHOP"
+    },
+    {
+      "rank": 51,
+      "name": "Denny's"
+    },
+    {
+      "rank": 52,
+      "name": "Waffle House"
+    },
+    {
+      "rank": 53,
+      "name": "Bob Evans"
+    },
+    {
+      "rank": 54,
+      "name": "Perkins"
+    },
+    {
+      "rank": 55,
+      "name": "Golden Corral"
+    },
+    {
+      "rank": 56,
+      "name": "Sizzler"
+    },
+    {
+      "rank": 57,
+      "name": "Black Bear Diner"
+    },
+    {
+      "rank": 58,
+      "name": "First Watch"
+    },
+    {
+      "rank": 59,
+      "name": "Another Broken Egg Cafe"
+    },
+    {
+      "rank": 60,
+      "name": "The Original Pancake House"
+    },
+    {
+      "rank": 61,
+      "name": "Tim Hortons"
+    },
+    {
+      "rank": 62,
+      "name": "A&W Restaurants"
+    },
+    {
+      "rank": 63,
+      "name": "White Castle"
+    },
+    {
+      "rank": 64,
+      "name": "Krystal"
+    },
+    {
+      "rank": 65,
+      "name": "Checkers / Rally's"
+    },
+    {
+      "rank": 66,
+      "name": "Steak 'n Shake"
+    },
+    {
+      "rank": 67,
+      "name": "Freddy's Frozen Custard"
+    },
+    {
+      "rank": 68,
+      "name": "Smashburger"
+    },
+    {
+      "rank": 69,
+      "name": "Fatburger"
+    },
+    {
+      "rank": 70,
+      "name": "Johnny Rockets"
+    },
+    {
+      "rank": 71,
+      "name": "Fuddruckers"
+    },
+    {
+      "rank": 72,
+      "name": "Red Robin"
+    },
+    {
+      "rank": 73,
+      "name": "Bareburger"
+    },
+    {
+      "rank": 74,
+      "name": "BurgerFi"
+    },
+    {
+      "rank": 75,
+      "name": "Habit Burger Grill"
+    },
+    {
+      "rank": 76,
+      "name": "Cook Out"
+    },
+    {
+      "rank": 77,
+      "name": "Cook Out Tray"
+    },
+    {
+      "rank": 78,
+      "name": "Zaxby's (Wings)"
+    },
+    {
+      "rank": 79,
+      "name": "Wingstop (Lemon Pepper)"
+    },
+    {
+      "rank": 80,
+      "name": "Popeyes Chicken Sandwich"
+    },
+    {
+      "rank": 81,
+      "name": "Chick-fil-A Spicy Deluxe"
+    },
+    {
+      "rank": 82,
+      "name": "Raising Cane's Sauce"
+    },
+    {
+      "rank": 83,
+      "name": "In-N-Out Animal Style"
+    },
+    {
+      "rank": 84,
+      "name": "Five Guys Cajun Fries"
+    },
+    {
+      "rank": 85,
+      "name": "Shake Shack ShackBurger"
+    },
+    {
+      "rank": 86,
+      "name": "Portillo's"
+    },
+    {
+      "rank": 87,
+      "name": "Giordano's"
+    },
+    {
+      "rank": 88,
+      "name": "Lou Malnati's"
+    },
+    {
+      "rank": 89,
+      "name": "Giordano's Deep Dish"
+    },
+    {
+      "rank": 90,
+      "name": "Uno Pizzeria"
+    },
+    {
+      "rank": 91,
+      "name": "Blaze Pizza"
+    },
+    {
+      "rank": 92,
+      "name": "MOD Pizza"
+    },
+    {
+      "rank": 93,
+      "name": "Pieology"
+    },
+    {
+      "rank": 94,
+      "name": "Papa Murphy's"
+    },
+    {
+      "rank": 95,
+      "name": "Little Caesars"
+    },
+    {
+      "rank": 96,
+      "name": "Papa John's"
+    },
+    {
+      "rank": 97,
+      "name": "Marco's Pizza"
+    },
+    {
+      "rank": 98,
+      "name": "Hungry Howie's"
+    },
+    {
+      "rank": 99,
+      "name": "Round Table Pizza"
+    },
+    {
+      "rank": 100,
+      "name": "California Pizza Kitchen"
+    }
+  ]
+}

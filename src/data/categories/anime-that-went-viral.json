@@ -1,0 +1,406 @@
+{
+  "id": "anime-that-went-viral",
+  "title": "Anime That Went Viral",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Demon Slayer"
+    },
+    {
+      "rank": 2,
+      "name": "Jujutsu Kaisen"
+    },
+    {
+      "rank": 3,
+      "name": "Attack on Titan"
+    },
+    {
+      "rank": 4,
+      "name": "Chainsaw Man"
+    },
+    {
+      "rank": 5,
+      "name": "Spy x Family"
+    },
+    {
+      "rank": 6,
+      "name": "One Piece"
+    },
+    {
+      "rank": 7,
+      "name": "My Hero Academia"
+    },
+    {
+      "rank": 8,
+      "name": "Naruto"
+    },
+    {
+      "rank": 9,
+      "name": "Dragon Ball Z"
+    },
+    {
+      "rank": 10,
+      "name": "Death Note"
+    },
+    {
+      "rank": 11,
+      "name": "Sword Art Online"
+    },
+    {
+      "rank": 12,
+      "name": "Tokyo Ghoul"
+    },
+    {
+      "rank": 13,
+      "name": "Your Name"
+    },
+    {
+      "rank": 14,
+      "name": "Weathering with You"
+    },
+    {
+      "rank": 15,
+      "name": "Suzume"
+    },
+    {
+      "rank": 16,
+      "name": "A Silent Voice"
+    },
+    {
+      "rank": 17,
+      "name": "Spirited Away"
+    },
+    {
+      "rank": 18,
+      "name": "Howl's Moving Castle"
+    },
+    {
+      "rank": 19,
+      "name": "My Neighbor Totoro"
+    },
+    {
+      "rank": 20,
+      "name": "Princess Mononoke"
+    },
+    {
+      "rank": 21,
+      "name": "Neon Genesis Evangelion"
+    },
+    {
+      "rank": 22,
+      "name": "Cowboy Bebop"
+    },
+    {
+      "rank": 23,
+      "name": "Steins;Gate"
+    },
+    {
+      "rank": 24,
+      "name": "Re:Zero"
+    },
+    {
+      "rank": 25,
+      "name": "Konosuba"
+    },
+    {
+      "rank": 26,
+      "name": "That Time I Got Reincarnated as a Slime"
+    },
+    {
+      "rank": 27,
+      "name": "Overlord"
+    },
+    {
+      "rank": 28,
+      "name": "No Game No Life"
+    },
+    {
+      "rank": 29,
+      "name": "Log Horizon"
+    },
+    {
+      "rank": 30,
+      "name": "The Rising of the Shield Hero"
+    },
+    {
+      "rank": 31,
+      "name": "Mob Psycho 100"
+    },
+    {
+      "rank": 32,
+      "name": "One Punch Man"
+    },
+    {
+      "rank": 33,
+      "name": "Hunter x Hunter"
+    },
+    {
+      "rank": 34,
+      "name": "Fullmetal Alchemist: Brotherhood"
+    },
+    {
+      "rank": 35,
+      "name": "Bleach"
+    },
+    {
+      "rank": 36,
+      "name": "Blue Lock"
+    },
+    {
+      "rank": 37,
+      "name": "Haikyuu!!"
+    },
+    {
+      "rank": 38,
+      "name": "Kuroko's Basketball"
+    },
+    {
+      "rank": 39,
+      "name": "Free!"
+    },
+    {
+      "rank": 40,
+      "name": "Yuri!!! on Ice"
+    },
+    {
+      "rank": 41,
+      "name": "Given"
+    },
+    {
+      "rank": 42,
+      "name": "Banana Fish"
+    },
+    {
+      "rank": 43,
+      "name": "Horimiya"
+    },
+    {
+      "rank": 44,
+      "name": "Kaguya-sama: Love Is War"
+    },
+    {
+      "rank": 45,
+      "name": "Toradora!"
+    },
+    {
+      "rank": 46,
+      "name": "Oshi no Ko"
+    },
+    {
+      "rank": 47,
+      "name": "Frieren: Beyond Journey's End"
+    },
+    {
+      "rank": 48,
+      "name": "Bocchi the Rock!"
+    },
+    {
+      "rank": 49,
+      "name": "Lycoris Recoil"
+    },
+    {
+      "rank": 50,
+      "name": "Cyberpunk: Edgerunners"
+    },
+    {
+      "rank": 51,
+      "name": "Vinland Saga"
+    },
+    {
+      "rank": 52,
+      "name": "Ranking of Kings"
+    },
+    {
+      "rank": 53,
+      "name": "Mushoku Tensei"
+    },
+    {
+      "rank": 54,
+      "name": "The Eminence in Shadow"
+    },
+    {
+      "rank": 55,
+      "name": "Solo Leveling"
+    },
+    {
+      "rank": 56,
+      "name": "Tower of God"
+    },
+    {
+      "rank": 57,
+      "name": "The God of High School"
+    },
+    {
+      "rank": 58,
+      "name": "Lookism"
+    },
+    {
+      "rank": 59,
+      "name": "Wind Breaker"
+    },
+    {
+      "rank": 60,
+      "name": "Kaiju No. 8"
+    },
+    {
+      "rank": 61,
+      "name": "Dandadan"
+    },
+    {
+      "rank": 62,
+      "name": "Sakamoto Days"
+    },
+    {
+      "rank": 63,
+      "name": "Delicious in Dungeon"
+    },
+    {
+      "rank": 64,
+      "name": "Apothecary Diaries"
+    },
+    {
+      "rank": 65,
+      "name": "Shangri-La Frontier"
+    },
+    {
+      "rank": 66,
+      "name": "Hell's Paradise"
+    },
+    {
+      "rank": 67,
+      "name": "Undead Unluck"
+    },
+    {
+      "rank": 68,
+      "name": "Mashle"
+    },
+    {
+      "rank": 69,
+      "name": "Black Clover"
+    },
+    {
+      "rank": 70,
+      "name": "Fire Force"
+    },
+    {
+      "rank": 71,
+      "name": "Soul Eater"
+    },
+    {
+      "rank": 72,
+      "name": "Fairy Tail"
+    },
+    {
+      "rank": 73,
+      "name": "Seven Deadly Sins"
+    },
+    {
+      "rank": 74,
+      "name": "Blue Exorcist"
+    },
+    {
+      "rank": 75,
+      "name": "Seraph of the End"
+    },
+    {
+      "rank": 76,
+      "name": "Parasyte"
+    },
+    {
+      "rank": 77,
+      "name": "Erased"
+    },
+    {
+      "rank": 78,
+      "name": "Another"
+    },
+    {
+      "rank": 79,
+      "name": "Future Diary"
+    },
+    {
+      "rank": 80,
+      "name": "Death Parade"
+    },
+    {
+      "rank": 81,
+      "name": "Violet Evergarden"
+    },
+    {
+      "rank": 82,
+      "name": "Anohana"
+    },
+    {
+      "rank": 83,
+      "name": "Clannad"
+    },
+    {
+      "rank": 84,
+      "name": "Your Lie in April"
+    },
+    {
+      "rank": 85,
+      "name": "Angel Beats!"
+    },
+    {
+      "rank": 86,
+      "name": "March Comes in Like a Lion"
+    },
+    {
+      "rank": 87,
+      "name": "A Place Further Than the Universe"
+    },
+    {
+      "rank": 88,
+      "name": "Laid-Back Camp"
+    },
+    {
+      "rank": 89,
+      "name": "Yuru Camp"
+    },
+    {
+      "rank": 90,
+      "name": "K-On!"
+    },
+    {
+      "rank": 91,
+      "name": "Love Live!"
+    },
+    {
+      "rank": 92,
+      "name": "Idolmaster"
+    },
+    {
+      "rank": 93,
+      "name": "BanG Dream!"
+    },
+    {
+      "rank": 94,
+      "name": "Zom 100"
+    },
+    {
+      "rank": 95,
+      "name": "Summertime Rendering"
+    },
+    {
+      "rank": 96,
+      "name": "Odd Taxi"
+    },
+    {
+      "rank": 97,
+      "name": "Sonny Boy"
+    },
+    {
+      "rank": 98,
+      "name": "Terror in Resonance"
+    },
+    {
+      "rank": 99,
+      "name": "Psycho-Pass"
+    },
+    {
+      "rank": 100,
+      "name": "Baccano!"
+    }
+  ]
+}

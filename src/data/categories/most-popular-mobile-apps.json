@@ -1,0 +1,406 @@
+{
+  "id": "most-popular-mobile-apps",
+  "title": "Most Popular Mobile Apps",
+  "items": [
+    {
+      "rank": 1,
+      "name": "YouTube"
+    },
+    {
+      "rank": 2,
+      "name": "TikTok"
+    },
+    {
+      "rank": 3,
+      "name": "Instagram"
+    },
+    {
+      "rank": 4,
+      "name": "Facebook"
+    },
+    {
+      "rank": 5,
+      "name": "WhatsApp"
+    },
+    {
+      "rank": 6,
+      "name": "Messenger"
+    },
+    {
+      "rank": 7,
+      "name": "Snapchat"
+    },
+    {
+      "rank": 8,
+      "name": "Telegram"
+    },
+    {
+      "rank": 9,
+      "name": "Twitter/X"
+    },
+    {
+      "rank": 10,
+      "name": "Threads"
+    },
+    {
+      "rank": 11,
+      "name": "Reddit"
+    },
+    {
+      "rank": 12,
+      "name": "Pinterest"
+    },
+    {
+      "rank": 13,
+      "name": "LinkedIn"
+    },
+    {
+      "rank": 14,
+      "name": "Discord"
+    },
+    {
+      "rank": 15,
+      "name": "Twitch"
+    },
+    {
+      "rank": 16,
+      "name": "Spotify"
+    },
+    {
+      "rank": 17,
+      "name": "Apple Music"
+    },
+    {
+      "rank": 18,
+      "name": "YouTube Music"
+    },
+    {
+      "rank": 19,
+      "name": "Amazon Music"
+    },
+    {
+      "rank": 20,
+      "name": "SoundCloud"
+    },
+    {
+      "rank": 21,
+      "name": "Netflix"
+    },
+    {
+      "rank": 22,
+      "name": "Disney+"
+    },
+    {
+      "rank": 23,
+      "name": "HBO Max"
+    },
+    {
+      "rank": 24,
+      "name": "Max"
+    },
+    {
+      "rank": 25,
+      "name": "Amazon Prime Video"
+    },
+    {
+      "rank": 26,
+      "name": "Hulu"
+    },
+    {
+      "rank": 27,
+      "name": "Peacock"
+    },
+    {
+      "rank": 28,
+      "name": "Paramount+"
+    },
+    {
+      "rank": 29,
+      "name": "Apple TV+"
+    },
+    {
+      "rank": 30,
+      "name": "Crunchyroll"
+    },
+    {
+      "rank": 31,
+      "name": "Google Maps"
+    },
+    {
+      "rank": 32,
+      "name": "Waze"
+    },
+    {
+      "rank": 33,
+      "name": "Apple Maps"
+    },
+    {
+      "rank": 34,
+      "name": "Uber"
+    },
+    {
+      "rank": 35,
+      "name": "Lyft"
+    },
+    {
+      "rank": 36,
+      "name": "Google Chrome"
+    },
+    {
+      "rank": 37,
+      "name": "Safari"
+    },
+    {
+      "rank": 38,
+      "name": "Gmail"
+    },
+    {
+      "rank": 39,
+      "name": "Outlook"
+    },
+    {
+      "rank": 40,
+      "name": "Yahoo Mail"
+    },
+    {
+      "rank": 41,
+      "name": "Google Drive"
+    },
+    {
+      "rank": 42,
+      "name": "Dropbox"
+    },
+    {
+      "rank": 43,
+      "name": "OneDrive"
+    },
+    {
+      "rank": 44,
+      "name": "iCloud"
+    },
+    {
+      "rank": 45,
+      "name": "Google Photos"
+    },
+    {
+      "rank": 46,
+      "name": "Amazon"
+    },
+    {
+      "rank": 47,
+      "name": "eBay"
+    },
+    {
+      "rank": 48,
+      "name": "AliExpress"
+    },
+    {
+      "rank": 49,
+      "name": "Temu"
+    },
+    {
+      "rank": 50,
+      "name": "Shein"
+    },
+    {
+      "rank": 51,
+      "name": "Shopify"
+    },
+    {
+      "rank": 52,
+      "name": "Etsy"
+    },
+    {
+      "rank": 53,
+      "name": "Wish"
+    },
+    {
+      "rank": 54,
+      "name": "Target App"
+    },
+    {
+      "rank": 55,
+      "name": "Walmart App"
+    },
+    {
+      "rank": 56,
+      "name": "DoorDash"
+    },
+    {
+      "rank": 57,
+      "name": "Uber Eats"
+    },
+    {
+      "rank": 58,
+      "name": "Grubhub"
+    },
+    {
+      "rank": 59,
+      "name": "Deliveroo"
+    },
+    {
+      "rank": 60,
+      "name": "Just Eat"
+    },
+    {
+      "rank": 61,
+      "name": "Instacart"
+    },
+    {
+      "rank": 62,
+      "name": "Postmates"
+    },
+    {
+      "rank": 63,
+      "name": "Zomato"
+    },
+    {
+      "rank": 64,
+      "name": "Swiggy"
+    },
+    {
+      "rank": 65,
+      "name": "Grab"
+    },
+    {
+      "rank": 66,
+      "name": "PayPal"
+    },
+    {
+      "rank": 67,
+      "name": "Venmo"
+    },
+    {
+      "rank": 68,
+      "name": "Cash App"
+    },
+    {
+      "rank": 69,
+      "name": "Zelle"
+    },
+    {
+      "rank": 70,
+      "name": "Apple Pay"
+    },
+    {
+      "rank": 71,
+      "name": "Google Pay"
+    },
+    {
+      "rank": 72,
+      "name": "Samsung Pay"
+    },
+    {
+      "rank": 73,
+      "name": "Revolut"
+    },
+    {
+      "rank": 74,
+      "name": "Monzo"
+    },
+    {
+      "rank": 75,
+      "name": "Chase Mobile"
+    },
+    {
+      "rank": 76,
+      "name": "Bank of America App"
+    },
+    {
+      "rank": 77,
+      "name": "Robinhood"
+    },
+    {
+      "rank": 78,
+      "name": "Coinbase"
+    },
+    {
+      "rank": 79,
+      "name": "Binance"
+    },
+    {
+      "rank": 80,
+      "name": "Revolut Trading"
+    },
+    {
+      "rank": 81,
+      "name": "Duolingo"
+    },
+    {
+      "rank": 82,
+      "name": "Khan Academy"
+    },
+    {
+      "rank": 83,
+      "name": "Coursera"
+    },
+    {
+      "rank": 84,
+      "name": "Udemy"
+    },
+    {
+      "rank": 85,
+      "name": "LinkedIn Learning"
+    },
+    {
+      "rank": 86,
+      "name": "Google Translate"
+    },
+    {
+      "rank": 87,
+      "name": "Microsoft Translator"
+    },
+    {
+      "rank": 88,
+      "name": "Grammarly"
+    },
+    {
+      "rank": 89,
+      "name": "Notion"
+    },
+    {
+      "rank": 90,
+      "name": "Evernote"
+    },
+    {
+      "rank": 91,
+      "name": "Microsoft Office"
+    },
+    {
+      "rank": 92,
+      "name": "Google Docs"
+    },
+    {
+      "rank": 93,
+      "name": "Google Sheets"
+    },
+    {
+      "rank": 94,
+      "name": "Google Slides"
+    },
+    {
+      "rank": 95,
+      "name": "Adobe Acrobat Reader"
+    },
+    {
+      "rank": 96,
+      "name": "Canva"
+    },
+    {
+      "rank": 97,
+      "name": "CapCut"
+    },
+    {
+      "rank": 98,
+      "name": "InShot"
+    },
+    {
+      "rank": 99,
+      "name": "VSCO"
+    },
+    {
+      "rank": 100,
+      "name": "Lightroom Mobile"
+    }
+  ]
+}

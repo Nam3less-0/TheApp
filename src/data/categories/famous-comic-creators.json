@@ -1,0 +1,406 @@
+{
+  "id": "famous-comic-creators",
+  "title": "Famous Comic Book Creators",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Stan Lee"
+    },
+    {
+      "rank": 2,
+      "name": "Jack Kirby"
+    },
+    {
+      "rank": 3,
+      "name": "Steve Ditko"
+    },
+    {
+      "rank": 4,
+      "name": "Will Eisner"
+    },
+    {
+      "rank": 5,
+      "name": "Bob Kane"
+    },
+    {
+      "rank": 6,
+      "name": "Bill Finger"
+    },
+    {
+      "rank": 7,
+      "name": "Jerry Siegel"
+    },
+    {
+      "rank": 8,
+      "name": "Joe Shuster"
+    },
+    {
+      "rank": 9,
+      "name": "Gardner Fox"
+    },
+    {
+      "rank": 10,
+      "name": "Bill Everett"
+    },
+    {
+      "rank": 11,
+      "name": "Carl Barks"
+    },
+    {
+      "rank": 12,
+      "name": "Harvey Kurtzman"
+    },
+    {
+      "rank": 13,
+      "name": "Robert Crumb"
+    },
+    {
+      "rank": 14,
+      "name": "Art Spiegelman"
+    },
+    {
+      "rank": 15,
+      "name": "Frank Miller"
+    },
+    {
+      "rank": 16,
+      "name": "Alan Moore"
+    },
+    {
+      "rank": 17,
+      "name": "Neil Gaiman"
+    },
+    {
+      "rank": 18,
+      "name": "Grant Morrison"
+    },
+    {
+      "rank": 19,
+      "name": "Warren Ellis"
+    },
+    {
+      "rank": 20,
+      "name": "Garth Ennis"
+    },
+    {
+      "rank": 21,
+      "name": "Mark Millar"
+    },
+    {
+      "rank": 22,
+      "name": "Brian Michael Bendis"
+    },
+    {
+      "rank": 23,
+      "name": "Jonathan Hickman"
+    },
+    {
+      "rank": 24,
+      "name": "Jason Aaron"
+    },
+    {
+      "rank": 25,
+      "name": "Donny Cates"
+    },
+    {
+      "rank": 26,
+      "name": "Al Ewing"
+    },
+    {
+      "rank": 27,
+      "name": "Kieron Gillen"
+    },
+    {
+      "rank": 28,
+      "name": "Matt Fraction"
+    },
+    {
+      "rank": 29,
+      "name": "Kelly Sue DeConnick"
+    },
+    {
+      "rank": 30,
+      "name": "G. Willow Wilson"
+    },
+    {
+      "rank": 31,
+      "name": "Ta-Nehisi Coates"
+    },
+    {
+      "rank": 32,
+      "name": "Saladin Ahmed"
+    },
+    {
+      "rank": 33,
+      "name": "Eve L. Ewing"
+    },
+    {
+      "rank": 34,
+      "name": "Roxane Gay"
+    },
+    {
+      "rank": 35,
+      "name": "Yehudi Mercado"
+    },
+    {
+      "rank": 36,
+      "name": "Chris Claremont"
+    },
+    {
+      "rank": 37,
+      "name": "John Byrne"
+    },
+    {
+      "rank": 38,
+      "name": "Jim Lee"
+    },
+    {
+      "rank": 39,
+      "name": "Rob Liefeld"
+    },
+    {
+      "rank": 40,
+      "name": "Todd McFarlane"
+    },
+    {
+      "rank": 41,
+      "name": "Marc Silvestri"
+    },
+    {
+      "rank": 42,
+      "name": "Erik Larsen"
+    },
+    {
+      "rank": 43,
+      "name": "Whilce Portacio"
+    },
+    {
+      "rank": 44,
+      "name": "Jim Valentino"
+    },
+    {
+      "rank": 45,
+      "name": "Image Founders"
+    },
+    {
+      "rank": 46,
+      "name": "Image Comics Founders"
+    },
+    {
+      "rank": 47,
+      "name": "Spawn (McFarlane)"
+    },
+    {
+      "rank": 48,
+      "name": "Savage Dragon (Larsen)"
+    },
+    {
+      "rank": 49,
+      "name": "Witchblade (Silvestri)"
+    },
+    {
+      "rank": 50,
+      "name": "Youngblood (Liefeld)"
+    },
+    {
+      "rank": 51,
+      "name": "Fabian Nicieza"
+    },
+    {
+      "rank": 52,
+      "name": "Rob Liefeld (Cable)"
+    },
+    {
+      "rank": 53,
+      "name": "Louise Simonson"
+    },
+    {
+      "rank": 54,
+      "name": "Walter Simonson"
+    },
+    {
+      "rank": 55,
+      "name": "Chris Claremont (X-Men)"
+    },
+    {
+      "rank": 56,
+      "name": "John Romita Sr."
+    },
+    {
+      "rank": 57,
+      "name": "John Romita Jr."
+    },
+    {
+      "rank": 58,
+      "name": "Marie Severin"
+    },
+    {
+      "rank": 59,
+      "name": "John Buscema"
+    },
+    {
+      "rank": 60,
+      "name": "Gene Colan"
+    },
+    {
+      "rank": 61,
+      "name": "Neal Adams"
+    },
+    {
+      "rank": 62,
+      "name": "Bernie Wrightson"
+    },
+    {
+      "rank": 63,
+      "name": "Mike Mignola"
+    },
+    {
+      "rank": 64,
+      "name": "Dave Gibbons"
+    },
+    {
+      "rank": 65,
+      "name": "Brian Bolland"
+    },
+    {
+      "rank": 66,
+      "name": "Jim Aparo"
+    },
+    {
+      "rank": 67,
+      "name": "Carmine Infantino"
+    },
+    {
+      "rank": 68,
+      "name": "Gil Kane"
+    },
+    {
+      "rank": 69,
+      "name": "Joe Kubert"
+    },
+    {
+      "rank": 70,
+      "name": "Wallace Wood"
+    },
+    {
+      "rank": 71,
+      "name": "Harvey Pekar"
+    },
+    {
+      "rank": 72,
+      "name": "Robert Kirkman"
+    },
+    {
+      "rank": 73,
+      "name": "Tony Moore"
+    },
+    {
+      "rank": 74,
+      "name": "Charlie Adlard"
+    },
+    {
+      "rank": 75,
+      "name": "Walking Dead Creators"
+    },
+    {
+      "rank": 76,
+      "name": "Eric Larsen"
+    },
+    {
+      "rank": 77,
+      "name": "Erik Larsen (Dragon)"
+    },
+    {
+      "rank": 78,
+      "name": "Robert Kirkman (Invincible)"
+    },
+    {
+      "rank": 79,
+      "name": "Ryan Ottley"
+    },
+    {
+      "rank": 80,
+      "name": "Invincible Artists"
+    },
+    {
+      "rank": 81,
+      "name": "Scott Snyder"
+    },
+    {
+      "rank": 82,
+      "name": "Greg Capullo"
+    },
+    {
+      "rank": 83,
+      "name": "Tom King"
+    },
+    {
+      "rank": 84,
+      "name": "Mitch Gerads"
+    },
+    {
+      "rank": 85,
+      "name": "David Mazzucchelli"
+    },
+    {
+      "rank": 86,
+      "name": "Frank Miller (DD)"
+    },
+    {
+      "rank": 87,
+      "name": "Klaus Janson"
+    },
+    {
+      "rank": 88,
+      "name": "David Mazzucchelli (Year One)"
+    },
+    {
+      "rank": 89,
+      "name": "Chip Zdarsky"
+    },
+    {
+      "rank": 90,
+      "name": "Marco Checchetto"
+    },
+    {
+      "rank": 91,
+      "name": "Dan Slott"
+    },
+    {
+      "rank": 92,
+      "name": "Humberto Ramos"
+    },
+    {
+      "rank": 93,
+      "name": "Nick Spencer"
+    },
+    {
+      "rank": 94,
+      "name": "Ryan Stegman"
+    },
+    {
+      "rank": 95,
+      "name": "Venom (Donny Cates)"
+    },
+    {
+      "rank": 96,
+      "name": "Pepe Larraz"
+    },
+    {
+      "rank": 97,
+      "name": "Luciano Vecchio"
+    },
+    {
+      "rank": 98,
+      "name": "Pepe Larraz (House of X)"
+    },
+    {
+      "rank": 99,
+      "name": "R.B. Silva"
+    },
+    {
+      "rank": 100,
+      "name": "House of X Artists"
+    }
+  ]
+}

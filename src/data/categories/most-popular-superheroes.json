@@ -1,0 +1,406 @@
+{
+  "id": "most-popular-superheroes",
+  "title": "Most Popular Superheroes",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Spider-Man"
+    },
+    {
+      "rank": 2,
+      "name": "Batman"
+    },
+    {
+      "rank": 3,
+      "name": "Superman"
+    },
+    {
+      "rank": 4,
+      "name": "Iron Man"
+    },
+    {
+      "rank": 5,
+      "name": "Wonder Woman"
+    },
+    {
+      "rank": 6,
+      "name": "Captain America"
+    },
+    {
+      "rank": 7,
+      "name": "Wolverine"
+    },
+    {
+      "rank": 8,
+      "name": "Deadpool"
+    },
+    {
+      "rank": 9,
+      "name": "Black Panther"
+    },
+    {
+      "rank": 10,
+      "name": "Thor"
+    },
+    {
+      "rank": 11,
+      "name": "Hulk"
+    },
+    {
+      "rank": 12,
+      "name": "Flash"
+    },
+    {
+      "rank": 13,
+      "name": "Aquaman"
+    },
+    {
+      "rank": 14,
+      "name": "Doctor Strange"
+    },
+    {
+      "rank": 15,
+      "name": "Black Widow"
+    },
+    {
+      "rank": 16,
+      "name": "Scarlet Witch"
+    },
+    {
+      "rank": 17,
+      "name": "Ant-Man"
+    },
+    {
+      "rank": 18,
+      "name": "Star-Lord"
+    },
+    {
+      "rank": 19,
+      "name": "Gamora"
+    },
+    {
+      "rank": 20,
+      "name": "Rocket Raccoon"
+    },
+    {
+      "rank": 21,
+      "name": "Groot"
+    },
+    {
+      "rank": 22,
+      "name": "Doctor Doom"
+    },
+    {
+      "rank": 23,
+      "name": "Green Lantern"
+    },
+    {
+      "rank": 24,
+      "name": "Green Arrow"
+    },
+    {
+      "rank": 25,
+      "name": "Nightwing"
+    },
+    {
+      "rank": 26,
+      "name": "Robin"
+    },
+    {
+      "rank": 27,
+      "name": "Batgirl"
+    },
+    {
+      "rank": 28,
+      "name": "Catwoman"
+    },
+    {
+      "rank": 29,
+      "name": "Joker"
+    },
+    {
+      "rank": 30,
+      "name": "Harley Quinn"
+    },
+    {
+      "rank": 31,
+      "name": "Poison Ivy"
+    },
+    {
+      "rank": 32,
+      "name": "Riddler"
+    },
+    {
+      "rank": 33,
+      "name": "Penguin"
+    },
+    {
+      "rank": 34,
+      "name": "Two-Face"
+    },
+    {
+      "rank": 35,
+      "name": "Bane"
+    },
+    {
+      "rank": 36,
+      "name": "Mr. Freeze"
+    },
+    {
+      "rank": 37,
+      "name": "Scarecrow"
+    },
+    {
+      "rank": 38,
+      "name": "Ra's al Ghul"
+    },
+    {
+      "rank": 39,
+      "name": "Darkseid"
+    },
+    {
+      "rank": 40,
+      "name": "Lex Luthor"
+    },
+    {
+      "rank": 41,
+      "name": "General Zod"
+    },
+    {
+      "rank": 42,
+      "name": "Brainiac"
+    },
+    {
+      "rank": 43,
+      "name": "Doomsday"
+    },
+    {
+      "rank": 44,
+      "name": "Supergirl"
+    },
+    {
+      "rank": 45,
+      "name": "Batwoman"
+    },
+    {
+      "rank": 46,
+      "name": "Red Hood"
+    },
+    {
+      "rank": 47,
+      "name": "Red Robin"
+    },
+    {
+      "rank": 48,
+      "name": "Damian Wayne"
+    },
+    {
+      "rank": 49,
+      "name": "Alfred Pennyworth"
+    },
+    {
+      "rank": 50,
+      "name": "Commissioner Gordon"
+    },
+    {
+      "rank": 51,
+      "name": "Lucius Fox"
+    },
+    {
+      "rank": 52,
+      "name": "Barbara Gordon (Oracle)"
+    },
+    {
+      "rank": 53,
+      "name": "Huntress"
+    },
+    {
+      "rank": 54,
+      "name": "Black Canary"
+    },
+    {
+      "rank": 55,
+      "name": "Zatanna"
+    },
+    {
+      "rank": 56,
+      "name": "Constantine"
+    },
+    {
+      "rank": 57,
+      "name": "Swamp Thing"
+    },
+    {
+      "rank": 58,
+      "name": "Doctor Fate"
+    },
+    {
+      "rank": 59,
+      "name": "Hawkman"
+    },
+    {
+      "rank": 60,
+      "name": "Hawkgirl"
+    },
+    {
+      "rank": 61,
+      "name": "Shazam"
+    },
+    {
+      "rank": 62,
+      "name": "Black Adam"
+    },
+    {
+      "rank": 63,
+      "name": "Martian Manhunter"
+    },
+    {
+      "rank": 64,
+      "name": "Cyborg"
+    },
+    {
+      "rank": 65,
+      "name": "Beast Boy"
+    },
+    {
+      "rank": 66,
+      "name": "Raven"
+    },
+    {
+      "rank": 67,
+      "name": "Starfire"
+    },
+    {
+      "rank": 68,
+      "name": "Robin (Tim Drake)"
+    },
+    {
+      "rank": 69,
+      "name": "Robin (Dick Grayson)"
+    },
+    {
+      "rank": 70,
+      "name": "Aqualad"
+    },
+    {
+      "rank": 71,
+      "name": "Kid Flash"
+    },
+    {
+      "rank": 72,
+      "name": "Superboy"
+    },
+    {
+      "rank": 73,
+      "name": "Miss Martian"
+    },
+    {
+      "rank": 74,
+      "name": "Blue Beetle"
+    },
+    {
+      "rank": 75,
+      "name": "Booster Gold"
+    },
+    {
+      "rank": 76,
+      "name": "Plastic Man"
+    },
+    {
+      "rank": 77,
+      "name": "The Atom"
+    },
+    {
+      "rank": 78,
+      "name": "Firestorm"
+    },
+    {
+      "rank": 79,
+      "name": "Captain Marvel (Mar-Vell)"
+    },
+    {
+      "rank": 80,
+      "name": "Ms. Marvel (Kamala Khan)"
+    },
+    {
+      "rank": 81,
+      "name": "She-Hulk"
+    },
+    {
+      "rank": 82,
+      "name": "Moon Knight"
+    },
+    {
+      "rank": 83,
+      "name": "Daredevil"
+    },
+    {
+      "rank": 84,
+      "name": "Punisher"
+    },
+    {
+      "rank": 85,
+      "name": "Jessica Jones"
+    },
+    {
+      "rank": 86,
+      "name": "Luke Cage"
+    },
+    {
+      "rank": 87,
+      "name": "Iron Fist"
+    },
+    {
+      "rank": 88,
+      "name": "Blade"
+    },
+    {
+      "rank": 89,
+      "name": "Ghost Rider"
+    },
+    {
+      "rank": 90,
+      "name": "Silver Surfer"
+    },
+    {
+      "rank": 91,
+      "name": "Galactus"
+    },
+    {
+      "rank": 92,
+      "name": "Thanos"
+    },
+    {
+      "rank": 93,
+      "name": "Loki"
+    },
+    {
+      "rank": 94,
+      "name": "Hela"
+    },
+    {
+      "rank": 95,
+      "name": "Venom"
+    },
+    {
+      "rank": 96,
+      "name": "Carnage"
+    },
+    {
+      "rank": 97,
+      "name": "Green Goblin"
+    },
+    {
+      "rank": 98,
+      "name": "Doctor Octopus"
+    },
+    {
+      "rank": 99,
+      "name": "Sandman"
+    },
+    {
+      "rank": 100,
+      "name": "Electro"
+    }
+  ]
+}

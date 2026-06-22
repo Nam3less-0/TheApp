@@ -1,0 +1,406 @@
+{
+  "id": "popular-esports-games",
+  "title": "Popular Esports Games",
+  "items": [
+    {
+      "rank": 1,
+      "name": "League of Legends"
+    },
+    {
+      "rank": 2,
+      "name": "Counter-Strike 2"
+    },
+    {
+      "rank": 3,
+      "name": "Dota 2"
+    },
+    {
+      "rank": 4,
+      "name": "Valorant"
+    },
+    {
+      "rank": 5,
+      "name": "Fortnite"
+    },
+    {
+      "rank": 6,
+      "name": "Apex Legends"
+    },
+    {
+      "rank": 7,
+      "name": "Call of Duty"
+    },
+    {
+      "rank": 8,
+      "name": "Call of Duty: Warzone"
+    },
+    {
+      "rank": 9,
+      "name": "Overwatch 2"
+    },
+    {
+      "rank": 10,
+      "name": "Rocket League"
+    },
+    {
+      "rank": 11,
+      "name": "Rainbow Six Siege"
+    },
+    {
+      "rank": 12,
+      "name": "PUBG"
+    },
+    {
+      "rank": 13,
+      "name": "PUBG: Battlegrounds"
+    },
+    {
+      "rank": 14,
+      "name": "Free Fire"
+    },
+    {
+      "rank": 15,
+      "name": "Mobile Legends: Bang Bang"
+    },
+    {
+      "rank": 16,
+      "name": "Arena of Valor"
+    },
+    {
+      "rank": 17,
+      "name": "Honor of Kings"
+    },
+    {
+      "rank": 18,
+      "name": "Clash Royale"
+    },
+    {
+      "rank": 19,
+      "name": "Brawl Stars"
+    },
+    {
+      "rank": 20,
+      "name": "Super Smash Bros. Ultimate"
+    },
+    {
+      "rank": 21,
+      "name": "Super Smash Bros. Melee"
+    },
+    {
+      "rank": 22,
+      "name": "Street Fighter 6"
+    },
+    {
+      "rank": 23,
+      "name": "Tekken 8"
+    },
+    {
+      "rank": 24,
+      "name": "Tekken 7"
+    },
+    {
+      "rank": 25,
+      "name": "Mortal Kombat 1"
+    },
+    {
+      "rank": 26,
+      "name": "Guilty Gear Strive"
+    },
+    {
+      "rank": 27,
+      "name": "King of Fighters XV"
+    },
+    {
+      "rank": 28,
+      "name": "Dragon Ball FighterZ"
+    },
+    {
+      "rank": 29,
+      "name": "Granblue Fantasy Versus"
+    },
+    {
+      "rank": 30,
+      "name": "Multiversus"
+    },
+    {
+      "rank": 31,
+      "name": "StarCraft II"
+    },
+    {
+      "rank": 32,
+      "name": "StarCraft: Brood War"
+    },
+    {
+      "rank": 33,
+      "name": "Warcraft III"
+    },
+    {
+      "rank": 34,
+      "name": "Age of Empires II"
+    },
+    {
+      "rank": 35,
+      "name": "Age of Empires IV"
+    },
+    {
+      "rank": 36,
+      "name": "Hearthstone"
+    },
+    {
+      "rank": 37,
+      "name": "Teamfight Tactics"
+    },
+    {
+      "rank": 38,
+      "name": "Legends of Runeterra"
+    },
+    {
+      "rank": 39,
+      "name": "Magic: The Gathering Arena"
+    },
+    {
+      "rank": 40,
+      "name": "Yu-Gi-Oh! Master Duel"
+    },
+    {
+      "rank": 41,
+      "name": "FIFA"
+    },
+    {
+      "rank": 42,
+      "name": "EA Sports FC"
+    },
+    {
+      "rank": 43,
+      "name": "NBA 2K"
+    },
+    {
+      "rank": 44,
+      "name": "Madden NFL"
+    },
+    {
+      "rank": 45,
+      "name": "Rocket League Sideswipe"
+    },
+    {
+      "rank": 46,
+      "name": "Trackmania"
+    },
+    {
+      "rank": 47,
+      "name": "iRacing"
+    },
+    {
+      "rank": 48,
+      "name": "F1 Esports"
+    },
+    {
+      "rank": 49,
+      "name": "Gran Turismo"
+    },
+    {
+      "rank": 50,
+      "name": "Forza Motorsport"
+    },
+    {
+      "rank": 51,
+      "name": "Halo Infinite"
+    },
+    {
+      "rank": 52,
+      "name": "Halo Championship Series"
+    },
+    {
+      "rank": 53,
+      "name": "Gears of War"
+    },
+    {
+      "rank": 54,
+      "name": "Smite"
+    },
+    {
+      "rank": 55,
+      "name": "Paladins"
+    },
+    {
+      "rank": 56,
+      "name": "Heroes of the Storm"
+    },
+    {
+      "rank": 57,
+      "name": "World of Warcraft Arena"
+    },
+    {
+      "rank": 58,
+      "name": "Final Fantasy XIV"
+    },
+    {
+      "rank": 59,
+      "name": "Lost Ark"
+    },
+    {
+      "rank": 60,
+      "name": "Diablo IV"
+    },
+    {
+      "rank": 61,
+      "name": "Path of Exile"
+    },
+    {
+      "rank": 62,
+      "name": "Escape from Tarkov"
+    },
+    {
+      "rank": 63,
+      "name": "Rust"
+    },
+    {
+      "rank": 64,
+      "name": "DayZ"
+    },
+    {
+      "rank": 65,
+      "name": "ARK: Survival Evolved"
+    },
+    {
+      "rank": 66,
+      "name": "Minecraft"
+    },
+    {
+      "rank": 67,
+      "name": "Roblox"
+    },
+    {
+      "rank": 68,
+      "name": "Fall Guys"
+    },
+    {
+      "rank": 69,
+      "name": "Among Us"
+    },
+    {
+      "rank": 70,
+      "name": "Genshin Impact"
+    },
+    {
+      "rank": 71,
+      "name": "Honkai: Star Rail"
+    },
+    {
+      "rank": 72,
+      "name": "Honkai Impact 3rd"
+    },
+    {
+      "rank": 73,
+      "name": "PUBG Mobile"
+    },
+    {
+      "rank": 74,
+      "name": "Free Fire MAX"
+    },
+    {
+      "rank": 75,
+      "name": "Call of Duty Mobile"
+    },
+    {
+      "rank": 76,
+      "name": "Clash of Clans"
+    },
+    {
+      "rank": 77,
+      "name": "Brawl Stars (Esports)"
+    },
+    {
+      "rank": 78,
+      "name": "Pokemon Unite"
+    },
+    {
+      "rank": 79,
+      "name": "Pokemon VGC"
+    },
+    {
+      "rank": 80,
+      "name": "Pokemon TCG Live"
+    },
+    {
+      "rank": 81,
+      "name": "Hearthstone Grandmasters"
+    },
+    {
+      "rank": 82,
+      "name": "Magic Pro Tour"
+    },
+    {
+      "rank": 83,
+      "name": "Chess.com"
+    },
+    {
+      "rank": 84,
+      "name": "Lichess"
+    },
+    {
+      "rank": 85,
+      "name": "Chess (Streaming)"
+    },
+    {
+      "rank": 86,
+      "name": "GeoGuessr"
+    },
+    {
+      "rank": 87,
+      "name": " osu!"
+    },
+    {
+      "rank": 88,
+      "name": "Beat Saber"
+    },
+    {
+      "rank": 89,
+      "name": "VRChat"
+    },
+    {
+      "rank": 90,
+      "name": "Rec Room"
+    },
+    {
+      "rank": 91,
+      "name": "FIFA eWorld Cup"
+    },
+    {
+      "rank": 92,
+      "name": "ePremier League"
+    },
+    {
+      "rank": 93,
+      "name": "NBA 2K League"
+    },
+    {
+      "rank": 94,
+      "name": "Formula E"
+    },
+    {
+      "rank": 95,
+      "name": "Drone Racing League"
+    },
+    {
+      "rank": 96,
+      "name": "League of Legends Worlds"
+    },
+    {
+      "rank": 97,
+      "name": "MSI (LoL)"
+    },
+    {
+      "rank": 98,
+      "name": "LCS"
+    },
+    {
+      "rank": 99,
+      "name": "LEC"
+    },
+    {
+      "rank": 100,
+      "name": "LCK"
+    }
+  ]
+}

@@ -1,0 +1,406 @@
+{
+  "id": "iconic-comic-artifacts",
+  "title": "Iconic Comic Artifacts",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Infinity Gauntlet"
+    },
+    {
+      "rank": 2,
+      "name": "Infinity Stones"
+    },
+    {
+      "rank": 3,
+      "name": "Power Stone"
+    },
+    {
+      "rank": 4,
+      "name": "Space Stone"
+    },
+    {
+      "rank": 5,
+      "name": "Mind Stone"
+    },
+    {
+      "rank": 6,
+      "name": "Reality Stone"
+    },
+    {
+      "rank": 7,
+      "name": "Soul Stone"
+    },
+    {
+      "rank": 8,
+      "name": "Time Stone"
+    },
+    {
+      "rank": 9,
+      "name": "Tesseract"
+    },
+    {
+      "rank": 10,
+      "name": "Cosmic Cube"
+    },
+    {
+      "rank": 11,
+      "name": "Mjolnir"
+    },
+    {
+      "rank": 12,
+      "name": "Stormbreaker"
+    },
+    {
+      "rank": 13,
+      "name": "Captain America's Shield"
+    },
+    {
+      "rank": 14,
+      "name": "Vibranium"
+    },
+    {
+      "rank": 15,
+      "name": "Adamantium"
+    },
+    {
+      "rank": 16,
+      "name": "Wolverine's Claws"
+    },
+    {
+      "rank": 17,
+      "name": "Iron Man Armor"
+    },
+    {
+      "rank": 18,
+      "name": "Arc Reactor"
+    },
+    {
+      "rank": 19,
+      "name": "Repulsor Rays"
+    },
+    {
+      "rank": 20,
+      "name": "Hulkbuster Armor"
+    },
+    {
+      "rank": 21,
+      "name": "Bleeding Edge Armor"
+    },
+    {
+      "rank": 22,
+      "name": "Extremis Armor"
+    },
+    {
+      "rank": 23,
+      "name": "War Machine Armor"
+    },
+    {
+      "rank": 24,
+      "name": "Rescue Armor"
+    },
+    {
+      "rank": 25,
+      "name": "Ironheart Armor"
+    },
+    {
+      "rank": 26,
+      "name": "Web-Shooters"
+    },
+    {
+      "rank": 27,
+      "name": "Spider-Man Suit"
+    },
+    {
+      "rank": 28,
+      "name": "Black Suit (Symbiote)"
+    },
+    {
+      "rank": 29,
+      "name": "Iron Spider Armor"
+    },
+    {
+      "rank": 30,
+      "name": "Spider-Armor MK IV"
+    },
+    {
+      "rank": 31,
+      "name": "Green Goblin Glider"
+    },
+    {
+      "rank": 32,
+      "name": "Pumpkin Bombs"
+    },
+    {
+      "rank": 33,
+      "name": "Doc Ock Tentacles"
+    },
+    {
+      "rank": 34,
+      "name": "Rhino Suit"
+    },
+    {
+      "rank": 35,
+      "name": "Vulture Wings"
+    },
+    {
+      "rank": 36,
+      "name": "Ant-Man Suit"
+    },
+    {
+      "rank": 37,
+      "name": "Pym Particles"
+    },
+    {
+      "rank": 38,
+      "name": "Wasp Suit"
+    },
+    {
+      "rank": 39,
+      "name": "Yellowjacket Suit"
+    },
+    {
+      "rank": 40,
+      "name": "Giant-Man Suit"
+    },
+    {
+      "rank": 41,
+      "name": "Eye of Agamotto"
+    },
+    {
+      "rank": 42,
+      "name": "Cloak of Levitation"
+    },
+    {
+      "rank": 43,
+      "name": "Book of Vishanti"
+    },
+    {
+      "rank": 44,
+      "name": "Darkhold"
+    },
+    {
+      "rank": 45,
+      "name": "Sanctum Sanctorum"
+    },
+    {
+      "rank": 46,
+      "name": "Wand of Watoomb"
+    },
+    {
+      "rank": 47,
+      "name": "Orb of Agamotto"
+    },
+    {
+      "rank": 48,
+      "name": "Vishanti Talisman"
+    },
+    {
+      "rank": 49,
+      "name": "Staff of One"
+    },
+    {
+      "rank": 50,
+      "name": "Nico Minoru Staff"
+    },
+    {
+      "rank": 51,
+      "name": "Black Panther Suit"
+    },
+    {
+      "rank": 52,
+      "name": "Kimoyo Beads"
+    },
+    {
+      "rank": 53,
+      "name": "Heart-Shaped Herb"
+    },
+    {
+      "rank": 54,
+      "name": "Vibranium Claws"
+    },
+    {
+      "rank": 55,
+      "name": "Panther Habit"
+    },
+    {
+      "rank": 56,
+      "name": "Captain Marvel Binary Form"
+    },
+    {
+      "rank": 57,
+      "name": "Nega-Bands"
+    },
+    {
+      "rank": 58,
+      "name": "Quantum Bands"
+    },
+    {
+      "rank": 59,
+      "name": "Ultimate Nullifier"
+    },
+    {
+      "rank": 60,
+      "name": "Galactus Helmet"
+    },
+    {
+      "rank": 61,
+      "name": "Herald Staff"
+    },
+    {
+      "rank": 62,
+      "name": "Surfer Board"
+    },
+    {
+      "rank": 63,
+      "name": "Power Cosmic"
+    },
+    {
+      "rank": 64,
+      "name": "Ultimate Nullifier (Weapon)"
+    },
+    {
+      "rank": 65,
+      "name": "Cosmic Control Rod"
+    },
+    {
+      "rank": 66,
+      "name": "Green Lantern Ring"
+    },
+    {
+      "rank": 67,
+      "name": "Power Ring (Crime Syndicate)"
+    },
+    {
+      "rank": 68,
+      "name": "Yellow Power Ring"
+    },
+    {
+      "rank": 69,
+      "name": "Red Power Ring"
+    },
+    {
+      "rank": 70,
+      "name": "Blue Power Ring"
+    },
+    {
+      "rank": 71,
+      "name": "Orange Power Ring"
+    },
+    {
+      "rank": 72,
+      "name": "Indigo Power Ring"
+    },
+    {
+      "rank": 73,
+      "name": "Violet Power Ring"
+    },
+    {
+      "rank": 74,
+      "name": "Black Power Ring"
+    },
+    {
+      "rank": 75,
+      "name": "White Power Ring"
+    },
+    {
+      "rank": 76,
+      "name": "Power Battery"
+    },
+    {
+      "rank": 77,
+      "name": "Central Power Battery"
+    },
+    {
+      "rank": 78,
+      "name": "Green Lantern Battery"
+    },
+    {
+      "rank": 79,
+      "name": "Star Sapphire Ring"
+    },
+    {
+      "rank": 80,
+      "name": "Star Heart"
+    },
+    {
+      "rank": 81,
+      "name": "Lasso of Truth"
+    },
+    {
+      "rank": 82,
+      "name": "Bracelets of Submission"
+    },
+    {
+      "rank": 83,
+      "name": "Tiara (Wonder Woman)"
+    },
+    {
+      "rank": 84,
+      "name": "Sword of Athena"
+    },
+    {
+      "rank": 85,
+      "name": "God Killer Sword"
+    },
+    {
+      "rank": 86,
+      "name": "Invisible Jet"
+    },
+    {
+      "rank": 87,
+      "name": "Wonder Woman Shield"
+    },
+    {
+      "rank": 88,
+      "name": "Eagle Armor"
+    },
+    {
+      "rank": 89,
+      "name": "Golden Eagle Armor"
+    },
+    {
+      "rank": 90,
+      "name": "Robes of Hippolyta"
+    },
+    {
+      "rank": 91,
+      "name": "Batarang"
+    },
+    {
+      "rank": 92,
+      "name": "Batmobile"
+    },
+    {
+      "rank": 93,
+      "name": "Batwing"
+    },
+    {
+      "rank": 94,
+      "name": "Batcycle"
+    },
+    {
+      "rank": 95,
+      "name": "Utility Belt"
+    },
+    {
+      "rank": 96,
+      "name": "Kryptonite"
+    },
+    {
+      "rank": 97,
+      "name": "Green Kryptonite"
+    },
+    {
+      "rank": 98,
+      "name": "Red Kryptonite"
+    },
+    {
+      "rank": 99,
+      "name": "Gold Kryptonite"
+    },
+    {
+      "rank": 100,
+      "name": "Blue Kryptonite"
+    }
+  ]
+}

@@ -1,0 +1,406 @@
+{
+  "id": "greatest-marvel-villains",
+  "title": "Greatest Marvel Villains",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Thanos"
+    },
+    {
+      "rank": 2,
+      "name": "Loki"
+    },
+    {
+      "rank": 3,
+      "name": "Ultron"
+    },
+    {
+      "rank": 4,
+      "name": "Red Skull"
+    },
+    {
+      "rank": 5,
+      "name": "Doctor Doom"
+    },
+    {
+      "rank": 6,
+      "name": "Green Goblin"
+    },
+    {
+      "rank": 7,
+      "name": "Doctor Octopus"
+    },
+    {
+      "rank": 8,
+      "name": "Venom"
+    },
+    {
+      "rank": 9,
+      "name": "Carnage"
+    },
+    {
+      "rank": 10,
+      "name": "Kingpin"
+    },
+    {
+      "rank": 11,
+      "name": "Magneto"
+    },
+    {
+      "rank": 12,
+      "name": "Apocalypse"
+    },
+    {
+      "rank": 13,
+      "name": "Mister Sinister"
+    },
+    {
+      "rank": 14,
+      "name": "Sabretooth"
+    },
+    {
+      "rank": 15,
+      "name": "Mystique"
+    },
+    {
+      "rank": 16,
+      "name": "Juggernaut"
+    },
+    {
+      "rank": 17,
+      "name": "Blob"
+    },
+    {
+      "rank": 18,
+      "name": "Toad"
+    },
+    {
+      "rank": 19,
+      "name": "Pyro"
+    },
+    {
+      "rank": 20,
+      "name": "Omega Red"
+    },
+    {
+      "rank": 21,
+      "name": "Sentinel"
+    },
+    {
+      "rank": 22,
+      "name": "Bolivar Trask"
+    },
+    {
+      "rank": 23,
+      "name": "Nimrod"
+    },
+    {
+      "rank": 24,
+      "name": "Master Mold"
+    },
+    {
+      "rank": 25,
+      "name": "Bastion"
+    },
+    {
+      "rank": 26,
+      "name": "Galactus"
+    },
+    {
+      "rank": 27,
+      "name": "Silver Surfer (Herald Era)"
+    },
+    {
+      "rank": 28,
+      "name": "Doctor Doom (Latveria)"
+    },
+    {
+      "rank": 29,
+      "name": "Annihilus"
+    },
+    {
+      "rank": 30,
+      "name": "Blastaar"
+    },
+    {
+      "rank": 31,
+      "name": "Dormammu"
+    },
+    {
+      "rank": 32,
+      "name": "Mephisto"
+    },
+    {
+      "rank": 33,
+      "name": "Nightmare"
+    },
+    {
+      "rank": 34,
+      "name": "Shuma-Gorath"
+    },
+    {
+      "rank": 35,
+      "name": "Baron Mordo"
+    },
+    {
+      "rank": 36,
+      "name": "Kaecilius"
+    },
+    {
+      "rank": 37,
+      "name": "Eternity (Cosmic)"
+    },
+    {
+      "rank": 38,
+      "name": "Death (Cosmic Entity)"
+    },
+    {
+      "rank": 39,
+      "name": "Living Tribunal"
+    },
+    {
+      "rank": 40,
+      "name": "Kang the Conqueror"
+    },
+    {
+      "rank": 41,
+      "name": "Immortus"
+    },
+    {
+      "rank": 42,
+      "name": "Rama-Tut"
+    },
+    {
+      "rank": 43,
+      "name": "Scarlet Centurion"
+    },
+    {
+      "rank": 44,
+      "name": "Nebula (Villain)"
+    },
+    {
+      "rank": 45,
+      "name": "Ronan the Accuser"
+    },
+    {
+      "rank": 46,
+      "name": "Supreme Intelligence"
+    },
+    {
+      "rank": 47,
+      "name": "Kree Empire"
+    },
+    {
+      "rank": 48,
+      "name": "Skrulls"
+    },
+    {
+      "rank": 49,
+      "name": "Super-Skrull"
+    },
+    {
+      "rank": 50,
+      "name": "Queen Veranke"
+    },
+    {
+      "rank": 51,
+      "name": "Norman Osborn"
+    },
+    {
+      "rank": 52,
+      "name": "Hobgoblin"
+    },
+    {
+      "rank": 53,
+      "name": "Vulture"
+    },
+    {
+      "rank": 54,
+      "name": "Electro"
+    },
+    {
+      "rank": 55,
+      "name": "Sandman"
+    },
+    {
+      "rank": 56,
+      "name": "Mysterio"
+    },
+    {
+      "rank": 57,
+      "name": "Kraven the Hunter"
+    },
+    {
+      "rank": 58,
+      "name": "Chameleon"
+    },
+    {
+      "rank": 59,
+      "name": "Scorpion"
+    },
+    {
+      "rank": 60,
+      "name": "Rhino"
+    },
+    {
+      "rank": 61,
+      "name": "Shocker"
+    },
+    {
+      "rank": 62,
+      "name": "Beetle"
+    },
+    {
+      "rank": 63,
+      "name": "Tinkerer"
+    },
+    {
+      "rank": 64,
+      "name": "Hammerhead"
+    },
+    {
+      "rank": 65,
+      "name": "Tombstone"
+    },
+    {
+      "rank": 66,
+      "name": "Bullseye"
+    },
+    {
+      "rank": 67,
+      "name": "Taskmaster"
+    },
+    {
+      "rank": 68,
+      "name": "Lady Bullseye"
+    },
+    {
+      "rank": 69,
+      "name": "Typhoid Mary"
+    },
+    {
+      "rank": 70,
+      "name": "Nuke"
+    },
+    {
+      "rank": 71,
+      "name": "Wilson Fisk"
+    },
+    {
+      "rank": 72,
+      "name": "Owl"
+    },
+    {
+      "rank": 73,
+      "name": "Hammerhead (Crime)"
+    },
+    {
+      "rank": 74,
+      "name": "Black Mariah"
+    },
+    {
+      "rank": 75,
+      "name": "Stilt-Man"
+    },
+    {
+      "rank": 76,
+      "name": "Purple Man"
+    },
+    {
+      "rank": 77,
+      "name": "Killgrave"
+    },
+    {
+      "rank": 78,
+      "name": "Zebediah Killgrave"
+    },
+    {
+      "rank": 79,
+      "name": "MODOK"
+    },
+    {
+      "rank": 80,
+      "name": "AIM"
+    },
+    {
+      "rank": 81,
+      "name": "Leader"
+    },
+    {
+      "rank": 82,
+      "name": "Abomination"
+    },
+    {
+      "rank": 83,
+      "name": "Absorbing Man"
+    },
+    {
+      "rank": 84,
+      "name": "Titania"
+    },
+    {
+      "rank": 85,
+      "name": "Wrecking Crew"
+    },
+    {
+      "rank": 86,
+      "name": "Absorbing Man (Carl Creel)"
+    },
+    {
+      "rank": 87,
+      "name": "Titania (Mary MacPherran)"
+    },
+    {
+      "rank": 88,
+      "name": "Thunderball"
+    },
+    {
+      "rank": 89,
+      "name": "Piledriver"
+    },
+    {
+      "rank": 90,
+      "name": "Wrecker"
+    },
+    {
+      "rank": 91,
+      "name": "Enchantress"
+    },
+    {
+      "rank": 92,
+      "name": "Executioner"
+    },
+    {
+      "rank": 93,
+      "name": "Malekith"
+    },
+    {
+      "rank": 94,
+      "name": "Kurse"
+    },
+    {
+      "rank": 95,
+      "name": "Dark Elves"
+    },
+    {
+      "rank": 96,
+      "name": "Hela"
+    },
+    {
+      "rank": 97,
+      "name": "Surtur"
+    },
+    {
+      "rank": 98,
+      "name": "Fenris Wolf"
+    },
+    {
+      "rank": 99,
+      "name": "Ymir"
+    },
+    {
+      "rank": 100,
+      "name": "Laufey"
+    }
+  ]
+}

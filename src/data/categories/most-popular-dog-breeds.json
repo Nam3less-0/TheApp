@@ -1,0 +1,406 @@
+{
+  "id": "most-popular-dog-breeds",
+  "title": "Most Popular Dog Breeds",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Labrador Retriever"
+    },
+    {
+      "rank": 2,
+      "name": "French Bulldog"
+    },
+    {
+      "rank": 3,
+      "name": "Golden Retriever"
+    },
+    {
+      "rank": 4,
+      "name": "German Shepherd"
+    },
+    {
+      "rank": 5,
+      "name": "Poodle"
+    },
+    {
+      "rank": 6,
+      "name": "Bulldog"
+    },
+    {
+      "rank": 7,
+      "name": "Beagle"
+    },
+    {
+      "rank": 8,
+      "name": "Rottweiler"
+    },
+    {
+      "rank": 9,
+      "name": "German Shorthaired Pointer"
+    },
+    {
+      "rank": 10,
+      "name": "Dachshund"
+    },
+    {
+      "rank": 11,
+      "name": "Pembroke Welsh Corgi"
+    },
+    {
+      "rank": 12,
+      "name": "Australian Shepherd"
+    },
+    {
+      "rank": 13,
+      "name": "Yorkshire Terrier"
+    },
+    {
+      "rank": 14,
+      "name": "Boxer"
+    },
+    {
+      "rank": 15,
+      "name": "Cavalier King Charles Spaniel"
+    },
+    {
+      "rank": 16,
+      "name": "Doberman Pinscher"
+    },
+    {
+      "rank": 17,
+      "name": "Miniature Schnauzer"
+    },
+    {
+      "rank": 18,
+      "name": "Cane Corso"
+    },
+    {
+      "rank": 19,
+      "name": "Great Dane"
+    },
+    {
+      "rank": 20,
+      "name": "Siberian Husky"
+    },
+    {
+      "rank": 21,
+      "name": "Shetland Sheepdog"
+    },
+    {
+      "rank": 22,
+      "name": "Bernese Mountain Dog"
+    },
+    {
+      "rank": 23,
+      "name": "Pomeranian"
+    },
+    {
+      "rank": 24,
+      "name": "Boston Terrier"
+    },
+    {
+      "rank": 25,
+      "name": "Havanese"
+    },
+    {
+      "rank": 26,
+      "name": "English Springer Spaniel"
+    },
+    {
+      "rank": 27,
+      "name": "Shih Tzu"
+    },
+    {
+      "rank": 28,
+      "name": "Brittany"
+    },
+    {
+      "rank": 29,
+      "name": "Miniature American Shepherd"
+    },
+    {
+      "rank": 30,
+      "name": "Cocker Spaniel"
+    },
+    {
+      "rank": 31,
+      "name": "Border Collie"
+    },
+    {
+      "rank": 32,
+      "name": "Chihuahua"
+    },
+    {
+      "rank": 33,
+      "name": "Maltese"
+    },
+    {
+      "rank": 34,
+      "name": "Vizsla"
+    },
+    {
+      "rank": 35,
+      "name": "Weimaraner"
+    },
+    {
+      "rank": 36,
+      "name": "Collie"
+    },
+    {
+      "rank": 37,
+      "name": "Basset Hound"
+    },
+    {
+      "rank": 38,
+      "name": "Newfoundland"
+    },
+    {
+      "rank": 39,
+      "name": "Rhodesian Ridgeback"
+    },
+    {
+      "rank": 40,
+      "name": "West Highland White Terrier"
+    },
+    {
+      "rank": 41,
+      "name": "Belgian Malinois"
+    },
+    {
+      "rank": 42,
+      "name": "Shiba Inu"
+    },
+    {
+      "rank": 43,
+      "name": "Akita"
+    },
+    {
+      "rank": 44,
+      "name": "Alaskan Malamute"
+    },
+    {
+      "rank": 45,
+      "name": "Samoyed"
+    },
+    {
+      "rank": 46,
+      "name": "Bloodhound"
+    },
+    {
+      "rank": 47,
+      "name": "Bull Terrier"
+    },
+    {
+      "rank": 48,
+      "name": "Staffordshire Bull Terrier"
+    },
+    {
+      "rank": 49,
+      "name": "American Staffordshire Terrier"
+    },
+    {
+      "rank": 50,
+      "name": "Pit Bull Terrier"
+    },
+    {
+      "rank": 51,
+      "name": "Mastiff"
+    },
+    {
+      "rank": 52,
+      "name": "Neapolitan Mastiff"
+    },
+    {
+      "rank": 53,
+      "name": "Bullmastiff"
+    },
+    {
+      "rank": 54,
+      "name": "Saint Bernard"
+    },
+    {
+      "rank": 55,
+      "name": "Irish Wolfhound"
+    },
+    {
+      "rank": 56,
+      "name": "Scottish Deerhound"
+    },
+    {
+      "rank": 57,
+      "name": "Greyhound"
+    },
+    {
+      "rank": 58,
+      "name": "Whippet"
+    },
+    {
+      "rank": 59,
+      "name": "Italian Greyhound"
+    },
+    {
+      "rank": 60,
+      "name": "Saluki"
+    },
+    {
+      "rank": 61,
+      "name": "Afghan Hound"
+    },
+    {
+      "rank": 62,
+      "name": "Basenji"
+    },
+    {
+      "rank": 63,
+      "name": "Airedale Terrier"
+    },
+    {
+      "rank": 64,
+      "name": "Welsh Terrier"
+    },
+    {
+      "rank": 65,
+      "name": "Irish Terrier"
+    },
+    {
+      "rank": 66,
+      "name": "Scottish Terrier"
+    },
+    {
+      "rank": 67,
+      "name": "Cairn Terrier"
+    },
+    {
+      "rank": 68,
+      "name": "Norwich Terrier"
+    },
+    {
+      "rank": 69,
+      "name": "Norfolk Terrier"
+    },
+    {
+      "rank": 70,
+      "name": "Border Terrier"
+    },
+    {
+      "rank": 71,
+      "name": "Lakeland Terrier"
+    },
+    {
+      "rank": 72,
+      "name": "Fox Terrier (Smooth)"
+    },
+    {
+      "rank": 73,
+      "name": "Fox Terrier (Wire)"
+    },
+    {
+      "rank": 74,
+      "name": "Bedlington Terrier"
+    },
+    {
+      "rank": 75,
+      "name": "Dandie Dinmont Terrier"
+    },
+    {
+      "rank": 76,
+      "name": "Soft Coated Wheaten Terrier"
+    },
+    {
+      "rank": 77,
+      "name": "Kerry Blue Terrier"
+    },
+    {
+      "rank": 78,
+      "name": "Irish Soft Coated Wheaten Terrier"
+    },
+    {
+      "rank": 79,
+      "name": "Glen of Imaal Terrier"
+    },
+    {
+      "rank": 80,
+      "name": "Sealyham Terrier"
+    },
+    {
+      "rank": 81,
+      "name": "Skye Terrier"
+    },
+    {
+      "rank": 82,
+      "name": "Parson Russell Terrier"
+    },
+    {
+      "rank": 83,
+      "name": "Jack Russell Terrier"
+    },
+    {
+      "rank": 84,
+      "name": "Rat Terrier"
+    },
+    {
+      "rank": 85,
+      "name": "American Hairless Terrier"
+    },
+    {
+      "rank": 86,
+      "name": "Toy Fox Terrier"
+    },
+    {
+      "rank": 87,
+      "name": "Miniature Pinscher"
+    },
+    {
+      "rank": 88,
+      "name": "Affenpinscher"
+    },
+    {
+      "rank": 89,
+      "name": "Brussels Griffon"
+    },
+    {
+      "rank": 90,
+      "name": "English Toy Spaniel"
+    },
+    {
+      "rank": 91,
+      "name": "Japanese Chin"
+    },
+    {
+      "rank": 92,
+      "name": "Pekingese"
+    },
+    {
+      "rank": 93,
+      "name": "Pug"
+    },
+    {
+      "rank": 94,
+      "name": "French Bulldog (Companion)"
+    },
+    {
+      "rank": 95,
+      "name": "Boston Terrier (American Gentleman)"
+    },
+    {
+      "rank": 96,
+      "name": "English Bulldog"
+    },
+    {
+      "rank": 97,
+      "name": "Olde English Bulldogge"
+    },
+    {
+      "rank": 98,
+      "name": "American Bulldog"
+    },
+    {
+      "rank": 99,
+      "name": "Alapaha Blue Blood Bulldog"
+    },
+    {
+      "rank": 100,
+      "name": "Catahoula Leopard Dog"
+    }
+  ]
+}

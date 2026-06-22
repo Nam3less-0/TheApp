@@ -1,0 +1,406 @@
+{
+  "id": "highest-grossing-artists",
+  "title": "Highest-Grossing Music Artists",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Taylor Swift"
+    },
+    {
+      "rank": 2,
+      "name": "Beyoncé"
+    },
+    {
+      "rank": 3,
+      "name": "Ed Sheeran"
+    },
+    {
+      "rank": 4,
+      "name": "Drake"
+    },
+    {
+      "rank": 5,
+      "name": "The Weeknd"
+    },
+    {
+      "rank": 6,
+      "name": "Bad Bunny"
+    },
+    {
+      "rank": 7,
+      "name": "BTS"
+    },
+    {
+      "rank": 8,
+      "name": "Coldplay"
+    },
+    {
+      "rank": 9,
+      "name": "Harry Styles"
+    },
+    {
+      "rank": 10,
+      "name": "Adele"
+    },
+    {
+      "rank": 11,
+      "name": "Eminem"
+    },
+    {
+      "rank": 12,
+      "name": "Justin Bieber"
+    },
+    {
+      "rank": 13,
+      "name": "Rihanna"
+    },
+    {
+      "rank": 14,
+      "name": "Kanye West"
+    },
+    {
+      "rank": 15,
+      "name": "Jay-Z"
+    },
+    {
+      "rank": 16,
+      "name": "Post Malone"
+    },
+    {
+      "rank": 17,
+      "name": "Bruno Mars"
+    },
+    {
+      "rank": 18,
+      "name": "Ariana Grande"
+    },
+    {
+      "rank": 19,
+      "name": "Billie Eilish"
+    },
+    {
+      "rank": 20,
+      "name": "Travis Scott"
+    },
+    {
+      "rank": 21,
+      "name": "Kendrick Lamar"
+    },
+    {
+      "rank": 22,
+      "name": "Lady Gaga"
+    },
+    {
+      "rank": 23,
+      "name": "Shakira"
+    },
+    {
+      "rank": 24,
+      "name": "P!nk"
+    },
+    {
+      "rank": 25,
+      "name": "Katy Perry"
+    },
+    {
+      "rank": 26,
+      "name": "Maroon 5"
+    },
+    {
+      "rank": 27,
+      "name": "Imagine Dragons"
+    },
+    {
+      "rank": 28,
+      "name": "Twenty One Pilots"
+    },
+    {
+      "rank": 29,
+      "name": "Metallica"
+    },
+    {
+      "rank": 30,
+      "name": "U2"
+    },
+    {
+      "rank": 31,
+      "name": "The Rolling Stones"
+    },
+    {
+      "rank": 32,
+      "name": "Elton John"
+    },
+    {
+      "rank": 33,
+      "name": "Paul McCartney"
+    },
+    {
+      "rank": 34,
+      "name": "Madonna"
+    },
+    {
+      "rank": 35,
+      "name": "Michael Jackson"
+    },
+    {
+      "rank": 36,
+      "name": "Prince"
+    },
+    {
+      "rank": 37,
+      "name": "Whitney Houston"
+    },
+    {
+      "rank": 38,
+      "name": "Mariah Carey"
+    },
+    {
+      "rank": 39,
+      "name": "Celine Dion"
+    },
+    {
+      "rank": 40,
+      "name": "Bruce Springsteen"
+    },
+    {
+      "rank": 41,
+      "name": "Bon Jovi"
+    },
+    {
+      "rank": 42,
+      "name": "Aerosmith"
+    },
+    {
+      "rank": 43,
+      "name": "Guns N' Roses"
+    },
+    {
+      "rank": 44,
+      "name": "AC/DC"
+    },
+    {
+      "rank": 45,
+      "name": "Queen"
+    },
+    {
+      "rank": 46,
+      "name": "Led Zeppelin"
+    },
+    {
+      "rank": 47,
+      "name": "Pink Floyd"
+    },
+    {
+      "rank": 48,
+      "name": "The Beatles"
+    },
+    {
+      "rank": 49,
+      "name": "The Who"
+    },
+    {
+      "rank": 50,
+      "name": "Fleetwood Mac"
+    },
+    {
+      "rank": 51,
+      "name": "Eagles"
+    },
+    {
+      "rank": 52,
+      "name": "Billy Joel"
+    },
+    {
+      "rank": 53,
+      "name": "Phil Collins"
+    },
+    {
+      "rank": 54,
+      "name": "Genesis"
+    },
+    {
+      "rank": 55,
+      "name": "Sting"
+    },
+    {
+      "rank": 56,
+      "name": "Radiohead"
+    },
+    {
+      "rank": 57,
+      "name": "Oasis"
+    },
+    {
+      "rank": 58,
+      "name": "Blur"
+    },
+    {
+      "rank": 59,
+      "name": "Arctic Monkeys"
+    },
+    {
+      "rank": 60,
+      "name": "The Killers"
+    },
+    {
+      "rank": 61,
+      "name": "Muse"
+    },
+    {
+      "rank": 62,
+      "name": "Foo Fighters"
+    },
+    {
+      "rank": 63,
+      "name": "Nirvana"
+    },
+    {
+      "rank": 64,
+      "name": "Pearl Jam"
+    },
+    {
+      "rank": 65,
+      "name": "Red Hot Chili Peppers"
+    },
+    {
+      "rank": 66,
+      "name": "Green Day"
+    },
+    {
+      "rank": 67,
+      "name": "Blink-182"
+    },
+    {
+      "rank": 68,
+      "name": "Linkin Park"
+    },
+    {
+      "rank": 69,
+      "name": "Fall Out Boy"
+    },
+    {
+      "rank": 70,
+      "name": "Panic! at the Disco"
+    },
+    {
+      "rank": 71,
+      "name": "My Chemical Romance"
+    },
+    {
+      "rank": 72,
+      "name": "Paramore"
+    },
+    {
+      "rank": 73,
+      "name": "Avril Lavigne"
+    },
+    {
+      "rank": 74,
+      "name": "Kelly Clarkson"
+    },
+    {
+      "rank": 75,
+      "name": "Christina Aguilera"
+    },
+    {
+      "rank": 76,
+      "name": "Britney Spears"
+    },
+    {
+      "rank": 77,
+      "name": "NSYNC"
+    },
+    {
+      "rank": 78,
+      "name": "Backstreet Boys"
+    },
+    {
+      "rank": 79,
+      "name": "One Direction"
+    },
+    {
+      "rank": 80,
+      "name": "Justin Timberlake"
+    },
+    {
+      "rank": 81,
+      "name": "Usher"
+    },
+    {
+      "rank": 82,
+      "name": "Chris Brown"
+    },
+    {
+      "rank": 83,
+      "name": "Ne-Yo"
+    },
+    {
+      "rank": 84,
+      "name": "Alicia Keys"
+    },
+    {
+      "rank": 85,
+      "name": "John Legend"
+    },
+    {
+      "rank": 86,
+      "name": "Pharrell Williams"
+    },
+    {
+      "rank": 87,
+      "name": "J. Cole"
+    },
+    {
+      "rank": 88,
+      "name": "Nicki Minaj"
+    },
+    {
+      "rank": 89,
+      "name": "Cardi B"
+    },
+    {
+      "rank": 90,
+      "name": "Megan Thee Stallion"
+    },
+    {
+      "rank": 91,
+      "name": "Doja Cat"
+    },
+    {
+      "rank": 92,
+      "name": "SZA"
+    },
+    {
+      "rank": 93,
+      "name": "Frank Ocean"
+    },
+    {
+      "rank": 94,
+      "name": "Tyler, the Creator"
+    },
+    {
+      "rank": 95,
+      "name": "Childish Gambino"
+    },
+    {
+      "rank": 96,
+      "name": "Anderson .Paak"
+    },
+    {
+      "rank": 97,
+      "name": "Lizzo"
+    },
+    {
+      "rank": 98,
+      "name": "Dua Lipa"
+    },
+    {
+      "rank": 99,
+      "name": "Olivia Rodrigo"
+    },
+    {
+      "rank": 100,
+      "name": "Sabrina Carpenter"
+    }
+  ]
+}

@@ -1,0 +1,406 @@
+{
+  "id": "beloved-childhood-cartoons",
+  "title": "Beloved Childhood Cartoons",
+  "items": [
+    {
+      "rank": 1,
+      "name": "SpongeBob SquarePants"
+    },
+    {
+      "rank": 2,
+      "name": "The Fairly OddParents"
+    },
+    {
+      "rank": 3,
+      "name": "Avatar: The Last Airbender"
+    },
+    {
+      "rank": 4,
+      "name": "Teen Titans"
+    },
+    {
+      "rank": 5,
+      "name": "Ben 10"
+    },
+    {
+      "rank": 6,
+      "name": "Phineas and Ferb"
+    },
+    {
+      "rank": 7,
+      "name": "Kim Possible"
+    },
+    {
+      "rank": 8,
+      "name": "Danny Phantom"
+    },
+    {
+      "rank": 9,
+      "name": "Dexter's Laboratory"
+    },
+    {
+      "rank": 10,
+      "name": "The Powerpuff Girls"
+    },
+    {
+      "rank": 11,
+      "name": "Courage the Cowardly Dog"
+    },
+    {
+      "rank": 12,
+      "name": "Ed, Edd n Eddy"
+    },
+    {
+      "rank": 13,
+      "name": "Codename: Kids Next Door"
+    },
+    {
+      "rank": 14,
+      "name": "Foster's Home for Imaginary Friends"
+    },
+    {
+      "rank": 15,
+      "name": "Chowder"
+    },
+    {
+      "rank": 16,
+      "name": "Flapjack"
+    },
+    {
+      "rank": 17,
+      "name": "Adventure Time"
+    },
+    {
+      "rank": 18,
+      "name": "Regular Show"
+    },
+    {
+      "rank": 19,
+      "name": "Steven Universe"
+    },
+    {
+      "rank": 20,
+      "name": "Gravity Falls"
+    },
+    {
+      "rank": 21,
+      "name": "Amphibia"
+    },
+    {
+      "rank": 22,
+      "name": "The Owl House"
+    },
+    {
+      "rank": 23,
+      "name": "Bluey"
+    },
+    {
+      "rank": 24,
+      "name": "Peppa Pig"
+    },
+    {
+      "rank": 25,
+      "name": "Paw Patrol"
+    },
+    {
+      "rank": 26,
+      "name": "Dora the Explorer"
+    },
+    {
+      "rank": 27,
+      "name": "Go, Diego, Go!"
+    },
+    {
+      "rank": 28,
+      "name": "Blue's Clues"
+    },
+    {
+      "rank": 29,
+      "name": "Sesame Street"
+    },
+    {
+      "rank": 30,
+      "name": "The Wiggles"
+    },
+    {
+      "rank": 31,
+      "name": "Thomas & Friends"
+    },
+    {
+      "rank": 32,
+      "name": "Bob the Builder"
+    },
+    {
+      "rank": 33,
+      "name": "Postman Pat"
+    },
+    {
+      "rank": 34,
+      "name": "Fireman Sam"
+    },
+    {
+      "rank": 35,
+      "name": "Teletubbies"
+    },
+    {
+      "rank": 36,
+      "name": "Caillou"
+    },
+    {
+      "rank": 37,
+      "name": "Arthur"
+    },
+    {
+      "rank": 38,
+      "name": "Cyberchase"
+    },
+    {
+      "rank": 39,
+      "name": "WordGirl"
+    },
+    {
+      "rank": 40,
+      "name": "Wild Kratts"
+    },
+    {
+      "rank": 41,
+      "name": "Magic School Bus"
+    },
+    {
+      "rank": 42,
+      "name": "Magic School Bus Rides Again"
+    },
+    {
+      "rank": 43,
+      "name": "Sid the Science Kid"
+    },
+    {
+      "rank": 44,
+      "name": "Curious George"
+    },
+    {
+      "rank": 45,
+      "name": "Clifford the Big Red Dog"
+    },
+    {
+      "rank": 46,
+      "name": "Dragon Tales"
+    },
+    {
+      "rank": 47,
+      "name": "Franklin"
+    },
+    {
+      "rank": 48,
+      "name": "Little Bear"
+    },
+    {
+      "rank": 49,
+      "name": "Max and Ruby"
+    },
+    {
+      "rank": 50,
+      "name": "Blue's Clues & You"
+    },
+    {
+      "rank": 51,
+      "name": "Mickey Mouse Clubhouse"
+    },
+    {
+      "rank": 52,
+      "name": "Minnie's Bow-Toons"
+    },
+    {
+      "rank": 53,
+      "name": "Jake and the Never Land Pirates"
+    },
+    {
+      "rank": 54,
+      "name": "Doc McStuffins"
+    },
+    {
+      "rank": 55,
+      "name": "Sofia the First"
+    },
+    {
+      "rank": 56,
+      "name": "Elena of Avalor"
+    },
+    {
+      "rank": 57,
+      "name": "The Lion Guard"
+    },
+    {
+      "rank": 58,
+      "name": "Big Hero 6: The Series"
+    },
+    {
+      "rank": 59,
+      "name": "Rapunzel's Tangled Adventure"
+    },
+    {
+      "rank": 60,
+      "name": "Star vs. the Forces of Evil"
+    },
+    {
+      "rank": 61,
+      "name": "Miraculous Ladybug"
+    },
+    {
+      "rank": 62,
+      "name": "PJ Masks"
+    },
+    {
+      "rank": 63,
+      "name": "Peppa Pig (Global)"
+    },
+    {
+      "rank": 64,
+      "name": "Cocomelon"
+    },
+    {
+      "rank": 65,
+      "name": "Blippi"
+    },
+    {
+      "rank": 66,
+      "name": "Ryan's World (Animated)"
+    },
+    {
+      "rank": 67,
+      "name": "Odd Squad"
+    },
+    {
+      "rank": 68,
+      "name": "Ready Jet Go!"
+    },
+    {
+      "rank": 69,
+      "name": "Nature Cat"
+    },
+    {
+      "rank": 70,
+      "name": "Splash and Bubbles"
+    },
+    {
+      "rank": 71,
+      "name": "Scooby-Doo"
+    },
+    {
+      "rank": 72,
+      "name": "Looney Tunes"
+    },
+    {
+      "rank": 73,
+      "name": "Tom and Jerry"
+    },
+    {
+      "rank": 74,
+      "name": "The Flintstones"
+    },
+    {
+      "rank": 75,
+      "name": "The Jetsons"
+    },
+    {
+      "rank": 76,
+      "name": "Yogi Bear"
+    },
+    {
+      "rank": 77,
+      "name": "Huckleberry Hound"
+    },
+    {
+      "rank": 78,
+      "name": "Quick Draw McGraw"
+    },
+    {
+      "rank": 79,
+      "name": "Wacky Races"
+    },
+    {
+      "rank": 80,
+      "name": "Penelope Pitstop"
+    },
+    {
+      "rank": 81,
+      "name": "Inspector Gadget"
+    },
+    {
+      "rank": 82,
+      "name": "He-Man"
+    },
+    {
+      "rank": 83,
+      "name": "She-Ra"
+    },
+    {
+      "rank": 84,
+      "name": "ThunderCats"
+    },
+    {
+      "rank": 85,
+      "name": "Voltron"
+    },
+    {
+      "rank": 86,
+      "name": "Transformers"
+    },
+    {
+      "rank": 87,
+      "name": "G.I. Joe"
+    },
+    {
+      "rank": 88,
+      "name": "Teenage Mutant Ninja Turtles"
+    },
+    {
+      "rank": 89,
+      "name": "Power Rangers"
+    },
+    {
+      "rank": 90,
+      "name": "Beyblade"
+    },
+    {
+      "rank": 91,
+      "name": "Yu-Gi-Oh!"
+    },
+    {
+      "rank": 92,
+      "name": "Pokémon"
+    },
+    {
+      "rank": 93,
+      "name": "Digimon"
+    },
+    {
+      "rank": 94,
+      "name": "Sailor Moon"
+    },
+    {
+      "rank": 95,
+      "name": "Dragon Ball Z (Toonami)"
+    },
+    {
+      "rank": 96,
+      "name": "Naruto (Toonami)"
+    },
+    {
+      "rank": 97,
+      "name": "One Piece (4Kids)"
+    },
+    {
+      "rank": 98,
+      "name": "Inuyasha"
+    },
+    {
+      "rank": 99,
+      "name": "Yu Yu Hakusho"
+    },
+    {
+      "rank": 100,
+      "name": "Cowboy Bebop (Adult Swim)"
+    }
+  ]
+}

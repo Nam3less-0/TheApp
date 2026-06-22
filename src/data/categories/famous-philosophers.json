@@ -1,0 +1,406 @@
+{
+  "id": "famous-philosophers",
+  "title": "Famous Philosophers",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Socrates"
+    },
+    {
+      "rank": 2,
+      "name": "Plato"
+    },
+    {
+      "rank": 3,
+      "name": "Aristotle"
+    },
+    {
+      "rank": 4,
+      "name": "Confucius"
+    },
+    {
+      "rank": 5,
+      "name": "Laozi"
+    },
+    {
+      "rank": 6,
+      "name": "Buddha (Siddhartha Gautama)"
+    },
+    {
+      "rank": 7,
+      "name": "Epicurus"
+    },
+    {
+      "rank": 8,
+      "name": "Zeno of Citium"
+    },
+    {
+      "rank": 9,
+      "name": "Seneca"
+    },
+    {
+      "rank": 10,
+      "name": "Marcus Aurelius"
+    },
+    {
+      "rank": 11,
+      "name": "Epictetus"
+    },
+    {
+      "rank": 12,
+      "name": "Cicero"
+    },
+    {
+      "rank": 13,
+      "name": "Plotinus"
+    },
+    {
+      "rank": 14,
+      "name": "Augustine of Hippo"
+    },
+    {
+      "rank": 15,
+      "name": "Thomas Aquinas"
+    },
+    {
+      "rank": 16,
+      "name": "Avicenna"
+    },
+    {
+      "rank": 17,
+      "name": "Averroes"
+    },
+    {
+      "rank": 18,
+      "name": "Maimonides"
+    },
+    {
+      "rank": 19,
+      "name": "William of Ockham"
+    },
+    {
+      "rank": 20,
+      "name": "Duns Scotus"
+    },
+    {
+      "rank": 21,
+      "name": "René Descartes"
+    },
+    {
+      "rank": 22,
+      "name": "Baruch Spinoza"
+    },
+    {
+      "rank": 23,
+      "name": "Gottfried Wilhelm Leibniz"
+    },
+    {
+      "rank": 24,
+      "name": "John Locke"
+    },
+    {
+      "rank": 25,
+      "name": "David Hume"
+    },
+    {
+      "rank": 26,
+      "name": "George Berkeley"
+    },
+    {
+      "rank": 27,
+      "name": "Immanuel Kant"
+    },
+    {
+      "rank": 28,
+      "name": "Georg Wilhelm Friedrich Hegel"
+    },
+    {
+      "rank": 29,
+      "name": "Arthur Schopenhauer"
+    },
+    {
+      "rank": 30,
+      "name": "Søren Kierkegaard"
+    },
+    {
+      "rank": 31,
+      "name": "Friedrich Nietzsche"
+    },
+    {
+      "rank": 32,
+      "name": "Karl Marx"
+    },
+    {
+      "rank": 33,
+      "name": "Friedrich Engels"
+    },
+    {
+      "rank": 34,
+      "name": "John Stuart Mill"
+    },
+    {
+      "rank": 35,
+      "name": "Jeremy Bentham"
+    },
+    {
+      "rank": 36,
+      "name": "Jean-Jacques Rousseau"
+    },
+    {
+      "rank": 37,
+      "name": "Montesquieu"
+    },
+    {
+      "rank": 38,
+      "name": "Voltaire"
+    },
+    {
+      "rank": 39,
+      "name": "Denis Diderot"
+    },
+    {
+      "rank": 40,
+      "name": "Jean-Paul Sartre"
+    },
+    {
+      "rank": 41,
+      "name": "Simone de Beauvoir"
+    },
+    {
+      "rank": 42,
+      "name": "Albert Camus"
+    },
+    {
+      "rank": 43,
+      "name": "Martin Heidegger"
+    },
+    {
+      "rank": 44,
+      "name": "Edmund Husserl"
+    },
+    {
+      "rank": 45,
+      "name": "Ludwig Wittgenstein"
+    },
+    {
+      "rank": 46,
+      "name": "Bertrand Russell"
+    },
+    {
+      "rank": 47,
+      "name": "G.E. Moore"
+    },
+    {
+      "rank": 48,
+      "name": "A.J. Ayer"
+    },
+    {
+      "rank": 49,
+      "name": "Karl Popper"
+    },
+    {
+      "rank": 50,
+      "name": "Thomas Kuhn"
+    },
+    {
+      "rank": 51,
+      "name": "Michel Foucault"
+    },
+    {
+      "rank": 52,
+      "name": "Jacques Derrida"
+    },
+    {
+      "rank": 53,
+      "name": "Gilles Deleuze"
+    },
+    {
+      "rank": 54,
+      "name": "Judith Butler"
+    },
+    {
+      "rank": 55,
+      "name": "Slavoj Žižek"
+    },
+    {
+      "rank": 56,
+      "name": "Noam Chomsky"
+    },
+    {
+      "rank": 57,
+      "name": "John Rawls"
+    },
+    {
+      "rank": 58,
+      "name": "Robert Nozick"
+    },
+    {
+      "rank": 59,
+      "name": "Peter Singer"
+    },
+    {
+      "rank": 60,
+      "name": "Martha Nussbaum"
+    },
+    {
+      "rank": 61,
+      "name": "Amartya Sen"
+    },
+    {
+      "rank": 62,
+      "name": "Cornel West"
+    },
+    {
+      "rank": 63,
+      "name": "Angela Davis"
+    },
+    {
+      "rank": 64,
+      "name": "bell hooks"
+    },
+    {
+      "rank": 65,
+      "name": "Audre Lorde"
+    },
+    {
+      "rank": 66,
+      "name": "Hypatia"
+    },
+    {
+      "rank": 67,
+      "name": "Diogenes"
+    },
+    {
+      "rank": 68,
+      "name": "Heraclitus"
+    },
+    {
+      "rank": 69,
+      "name": "Parmenides"
+    },
+    {
+      "rank": 70,
+      "name": "Democritus"
+    },
+    {
+      "rank": 71,
+      "name": "Pythagoras (Philosopher)"
+    },
+    {
+      "rank": 72,
+      "name": "Thales"
+    },
+    {
+      "rank": 73,
+      "name": "Anaximander"
+    },
+    {
+      "rank": 74,
+      "name": "Anaximenes"
+    },
+    {
+      "rank": 75,
+      "name": "Empedocles"
+    },
+    {
+      "rank": 76,
+      "name": "Protagoras"
+    },
+    {
+      "rank": 77,
+      "name": "Gorgias"
+    },
+    {
+      "rank": 78,
+      "name": "Antisthenes"
+    },
+    {
+      "rank": 79,
+      "name": "Pyrrho"
+    },
+    {
+      "rank": 80,
+      "name": "Lucretius"
+    },
+    {
+      "rank": 81,
+      "name": "Boethius"
+    },
+    {
+      "rank": 82,
+      "name": "Al-Farabi"
+    },
+    {
+      "rank": 83,
+      "name": "Al-Ghazali"
+    },
+    {
+      "rank": 84,
+      "name": "Ibn Khaldun"
+    },
+    {
+      "rank": 85,
+      "name": "Ibn Rushd"
+    },
+    {
+      "rank": 86,
+      "name": "Mencius"
+    },
+    {
+      "rank": 87,
+      "name": "Xunzi"
+    },
+    {
+      "rank": 88,
+      "name": "Zhuangzi"
+    },
+    {
+      "rank": 89,
+      "name": "Mozi"
+    },
+    {
+      "rank": 90,
+      "name": "Han Fei"
+    },
+    {
+      "rank": 91,
+      "name": "Sun Tzu (Philosophy of War)"
+    },
+    {
+      "rank": 92,
+      "name": "Nagarjuna"
+    },
+    {
+      "rank": 93,
+      "name": "Dogen"
+    },
+    {
+      "rank": 94,
+      "name": "Shankara"
+    },
+    {
+      "rank": 95,
+      "name": "Ramakrishna"
+    },
+    {
+      "rank": 96,
+      "name": "Swami Vivekananda"
+    },
+    {
+      "rank": 97,
+      "name": "Mahatma Gandhi (Philosophy)"
+    },
+    {
+      "rank": 98,
+      "name": "Rabindranath Tagore"
+    },
+    {
+      "rank": 99,
+      "name": "Sarvepalli Radhakrishnan"
+    },
+    {
+      "rank": 100,
+      "name": "Amartya Sen (Ethics)"
+    }
+  ]
+}

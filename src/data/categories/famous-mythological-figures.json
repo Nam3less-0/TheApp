@@ -1,0 +1,406 @@
+{
+  "id": "famous-mythological-figures",
+  "title": "Famous Mythological Figures",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Zeus"
+    },
+    {
+      "rank": 2,
+      "name": "Hera"
+    },
+    {
+      "rank": 3,
+      "name": "Poseidon"
+    },
+    {
+      "rank": 4,
+      "name": "Hades"
+    },
+    {
+      "rank": 5,
+      "name": "Athena"
+    },
+    {
+      "rank": 6,
+      "name": "Apollo"
+    },
+    {
+      "rank": 7,
+      "name": "Artemis"
+    },
+    {
+      "rank": 8,
+      "name": "Ares"
+    },
+    {
+      "rank": 9,
+      "name": "Aphrodite"
+    },
+    {
+      "rank": 10,
+      "name": "Hermes"
+    },
+    {
+      "rank": 11,
+      "name": "Dionysus"
+    },
+    {
+      "rank": 12,
+      "name": "Hephaestus"
+    },
+    {
+      "rank": 13,
+      "name": "Demeter"
+    },
+    {
+      "rank": 14,
+      "name": "Hestia"
+    },
+    {
+      "rank": 15,
+      "name": "Persephone"
+    },
+    {
+      "rank": 16,
+      "name": "Hercules"
+    },
+    {
+      "rank": 17,
+      "name": "Achilles"
+    },
+    {
+      "rank": 18,
+      "name": "Odysseus"
+    },
+    {
+      "rank": 19,
+      "name": "Perseus"
+    },
+    {
+      "rank": 20,
+      "name": "Theseus"
+    },
+    {
+      "rank": 21,
+      "name": "Jason"
+    },
+    {
+      "rank": 22,
+      "name": "Medusa"
+    },
+    {
+      "rank": 23,
+      "name": "Minotaur"
+    },
+    {
+      "rank": 24,
+      "name": "Cyclops Polyphemus"
+    },
+    {
+      "rank": 25,
+      "name": "Pandora"
+    },
+    {
+      "rank": 26,
+      "name": "Prometheus"
+    },
+    {
+      "rank": 27,
+      "name": "Atlas"
+    },
+    {
+      "rank": 28,
+      "name": "Cronus"
+    },
+    {
+      "rank": 29,
+      "name": "Rhea"
+    },
+    {
+      "rank": 30,
+      "name": "Gaia"
+    },
+    {
+      "rank": 31,
+      "name": "Uranus"
+    },
+    {
+      "rank": 32,
+      "name": "Typhon"
+    },
+    {
+      "rank": 33,
+      "name": "Echidna"
+    },
+    {
+      "rank": 34,
+      "name": "Cerberus"
+    },
+    {
+      "rank": 35,
+      "name": "Hydra"
+    },
+    {
+      "rank": 36,
+      "name": "Chimera"
+    },
+    {
+      "rank": 37,
+      "name": "Pegasus"
+    },
+    {
+      "rank": 38,
+      "name": "Centaur"
+    },
+    {
+      "rank": 39,
+      "name": "Siren"
+    },
+    {
+      "rank": 40,
+      "name": "Harpy"
+    },
+    {
+      "rank": 41,
+      "name": "Gorgon"
+    },
+    {
+      "rank": 42,
+      "name": "Fury"
+    },
+    {
+      "rank": 43,
+      "name": "Nymph"
+    },
+    {
+      "rank": 44,
+      "name": "Satyr"
+    },
+    {
+      "rank": 45,
+      "name": "Pan"
+    },
+    {
+      "rank": 46,
+      "name": "Eros"
+    },
+    {
+      "rank": 47,
+      "name": "Psyche"
+    },
+    {
+      "rank": 48,
+      "name": "Orpheus"
+    },
+    {
+      "rank": 49,
+      "name": "Eurydice"
+    },
+    {
+      "rank": 50,
+      "name": "Icarus"
+    },
+    {
+      "rank": 51,
+      "name": "Daedalus"
+    },
+    {
+      "rank": 52,
+      "name": "King Midas"
+    },
+    {
+      "rank": 53,
+      "name": "King Minos"
+    },
+    {
+      "rank": 54,
+      "name": "Helen of Troy"
+    },
+    {
+      "rank": 55,
+      "name": "Paris of Troy"
+    },
+    {
+      "rank": 56,
+      "name": "Hector"
+    },
+    {
+      "rank": 57,
+      "name": "Agamemnon"
+    },
+    {
+      "rank": 58,
+      "name": "Menelaus"
+    },
+    {
+      "rank": 59,
+      "name": "Ajax"
+    },
+    {
+      "rank": 60,
+      "name": "Patroclus"
+    },
+    {
+      "rank": 61,
+      "name": "Thor"
+    },
+    {
+      "rank": 62,
+      "name": "Odin"
+    },
+    {
+      "rank": 63,
+      "name": "Loki"
+    },
+    {
+      "rank": 64,
+      "name": "Freya"
+    },
+    {
+      "rank": 65,
+      "name": "Frigg"
+    },
+    {
+      "rank": 66,
+      "name": "Baldr"
+    },
+    {
+      "rank": 67,
+      "name": "Tyr"
+    },
+    {
+      "rank": 68,
+      "name": "Heimdall"
+    },
+    {
+      "rank": 69,
+      "name": "Vidar"
+    },
+    {
+      "rank": 70,
+      "name": "Fenrir"
+    },
+    {
+      "rank": 71,
+      "name": "Jörmungandr"
+    },
+    {
+      "rank": 72,
+      "name": "Hel"
+    },
+    {
+      "rank": 73,
+      "name": "Surtur"
+    },
+    {
+      "rank": 74,
+      "name": "Yggdrasil"
+    },
+    {
+      "rank": 75,
+      "name": "Valhalla"
+    },
+    {
+      "rank": 76,
+      "name": "Valkyrie"
+    },
+    {
+      "rank": 77,
+      "name": "Einherjar"
+    },
+    {
+      "rank": 78,
+      "name": "Bifrost"
+    },
+    {
+      "rank": 79,
+      "name": "Mjölnir"
+    },
+    {
+      "rank": 80,
+      "name": "Ragnarök"
+    },
+    {
+      "rank": 81,
+      "name": "Ra"
+    },
+    {
+      "rank": 82,
+      "name": "Osiris"
+    },
+    {
+      "rank": 83,
+      "name": "Isis"
+    },
+    {
+      "rank": 84,
+      "name": "Horus"
+    },
+    {
+      "rank": 85,
+      "name": "Anubis"
+    },
+    {
+      "rank": 86,
+      "name": "Set"
+    },
+    {
+      "rank": 87,
+      "name": "Thoth"
+    },
+    {
+      "rank": 88,
+      "name": "Bastet"
+    },
+    {
+      "rank": 89,
+      "name": "Sekhmet"
+    },
+    {
+      "rank": 90,
+      "name": "Hathor"
+    },
+    {
+      "rank": 91,
+      "name": "Ptah"
+    },
+    {
+      "rank": 92,
+      "name": "Nut"
+    },
+    {
+      "rank": 93,
+      "name": "Geb"
+    },
+    {
+      "rank": 94,
+      "name": "Amun"
+    },
+    {
+      "rank": 95,
+      "name": "Amun-Ra"
+    },
+    {
+      "rank": 96,
+      "name": "Cleopatra (Mythic)"
+    },
+    {
+      "rank": 97,
+      "name": "Pharaoh Khufu"
+    },
+    {
+      "rank": 98,
+      "name": "Sphinx"
+    },
+    {
+      "rank": 99,
+      "name": "Scarab"
+    },
+    {
+      "rank": 100,
+      "name": "Book of the Dead"
+    }
+  ]
+}

@@ -1,0 +1,406 @@
+{
+  "id": "most-popular-candy-snacks",
+  "title": "Most Popular Candy & Snacks",
+  "items": [
+    {
+      "rank": 1,
+      "name": "M&M's"
+    },
+    {
+      "rank": 2,
+      "name": "Snickers"
+    },
+    {
+      "rank": 3,
+      "name": "Reese's Peanut Butter Cups"
+    },
+    {
+      "rank": 4,
+      "name": "KitKat"
+    },
+    {
+      "rank": 5,
+      "name": "Twix"
+    },
+    {
+      "rank": 6,
+      "name": "Milky Way"
+    },
+    {
+      "rank": 7,
+      "name": "3 Musketeers"
+    },
+    {
+      "rank": 8,
+      "name": "Butterfinger"
+    },
+    {
+      "rank": 9,
+      "name": "Baby Ruth"
+    },
+    {
+      "rank": 10,
+      "name": "100 Grand"
+    },
+    {
+      "rank": 11,
+      "name": "Almond Joy"
+    },
+    {
+      "rank": 12,
+      "name": "Mounds"
+    },
+    {
+      "rank": 13,
+      "name": "PayDay"
+    },
+    {
+      "rank": 14,
+      "name": "Whatchamacallit"
+    },
+    {
+      "rank": 15,
+      "name": "Zero Bar"
+    },
+    {
+      "rank": 16,
+      "name": "Take 5"
+    },
+    {
+      "rank": 17,
+      "name": "Fast Break"
+    },
+    {
+      "rank": 18,
+      "name": "Mr. Goodbar"
+    },
+    {
+      "rank": 19,
+      "name": "Hershey's Bar"
+    },
+    {
+      "rank": 20,
+      "name": "Hershey's Kisses"
+    },
+    {
+      "rank": 21,
+      "name": "Cookies 'n' Creme"
+    },
+    {
+      "rank": 22,
+      "name": "Symphony Bar"
+    },
+    {
+      "rank": 23,
+      "name": "York Peppermint Pattie"
+    },
+    {
+      "rank": 24,
+      "name": "Jolly Rancher"
+    },
+    {
+      "rank": 25,
+      "name": "Twizzlers"
+    },
+    {
+      "rank": 26,
+      "name": "Skittles"
+    },
+    {
+      "rank": 27,
+      "name": "Starburst"
+    },
+    {
+      "rank": 28,
+      "name": "Life Savers"
+    },
+    {
+      "rank": 29,
+      "name": "Swedish Fish"
+    },
+    {
+      "rank": 30,
+      "name": "Sour Patch Kids"
+    },
+    {
+      "rank": 31,
+      "name": "Haribo Goldbears"
+    },
+    {
+      "rank": 32,
+      "name": "Haribo Starmix"
+    },
+    {
+      "rank": 33,
+      "name": "Trolli Gummy Worms"
+    },
+    {
+      "rank": 34,
+      "name": "Airheads"
+    },
+    {
+      "rank": 35,
+      "name": "Nerds"
+    },
+    {
+      "rank": 36,
+      "name": "Runts"
+    },
+    {
+      "rank": 37,
+      "name": "Laffy Taffy"
+    },
+    {
+      "rank": 38,
+      "name": "Now and Later"
+    },
+    {
+      "rank": 39,
+      "name": "Smarties (US)"
+    },
+    {
+      "rank": 40,
+      "name": "Smarties (UK)"
+    },
+    {
+      "rank": 41,
+      "name": "Mike and Ike"
+    },
+    {
+      "rank": 42,
+      "name": "Hot Tamales"
+    },
+    {
+      "rank": 43,
+      "name": "Red Vines"
+    },
+    {
+      "rank": 44,
+      "name": "Black Licorice"
+    },
+    {
+      "rank": 45,
+      "name": "Good & Plenty"
+    },
+    {
+      "rank": 46,
+      "name": "Junior Mints"
+    },
+    {
+      "rank": 47,
+      "name": "Peppermint Pattie"
+    },
+    {
+      "rank": 48,
+      "name": "Rolo"
+    },
+    {
+      "rank": 49,
+      "name": "Cadbury Creme Egg"
+    },
+    {
+      "rank": 50,
+      "name": "Cadbury Dairy Milk"
+    },
+    {
+      "rank": 51,
+      "name": "Flake"
+    },
+    {
+      "rank": 52,
+      "name": "Crunchie"
+    },
+    {
+      "rank": 53,
+      "name": "Wispa"
+    },
+    {
+      "rank": 54,
+      "name": "Boost"
+    },
+    {
+      "rank": 55,
+      "name": "Double Decker"
+    },
+    {
+      "rank": 56,
+      "name": "Ferrero Rocher"
+    },
+    {
+      "rank": 57,
+      "name": "Kinder Bueno"
+    },
+    {
+      "rank": 58,
+      "name": "Kinder Surprise"
+    },
+    {
+      "rank": 59,
+      "name": "Nutella B-Ready"
+    },
+    {
+      "rank": 60,
+      "name": "Toblerone"
+    },
+    {
+      "rank": 61,
+      "name": "Milka"
+    },
+    {
+      "rank": 62,
+      "name": "Lindt"
+    },
+    {
+      "rank": 63,
+      "name": "Ghirardelli"
+    },
+    {
+      "rank": 64,
+      "name": "Godiva"
+    },
+    {
+      "rank": 65,
+      "name": "See's Candies"
+    },
+    {
+      "rank": 66,
+      "name": "Russell Stover"
+    },
+    {
+      "rank": 67,
+      "name": "Whitman's Sampler"
+    },
+    {
+      "rank": 68,
+      "name": "Fannie May"
+    },
+    {
+      "rank": 69,
+      "name": "Truffles"
+    },
+    {
+      "rank": 70,
+      "name": "Pralines"
+    },
+    {
+      "rank": 71,
+      "name": "Pop Rocks"
+    },
+    {
+      "rank": 72,
+      "name": "Fun Dip"
+    },
+    {
+      "rank": 73,
+      "name": "Pixy Stix"
+    },
+    {
+      "rank": 74,
+      "name": "Ring Pop"
+    },
+    {
+      "rank": 75,
+      "name": "Push Pop"
+    },
+    {
+      "rank": 76,
+      "name": "Blow Pop"
+    },
+    {
+      "rank": 77,
+      "name": "Charms"
+    },
+    {
+      "rank": 78,
+      "name": "Tootsie Roll"
+    },
+    {
+      "rank": 79,
+      "name": "Tootsie Pop"
+    },
+    {
+      "rank": 80,
+      "name": "Dots"
+    },
+    {
+      "rank": 81,
+      "name": "Charleston Chew"
+    },
+    {
+      "rank": 82,
+      "name": "Bit-O-Honey"
+    },
+    {
+      "rank": 83,
+      "name": "Milk Duds"
+    },
+    {
+      "rank": 84,
+      "name": "Raisinets"
+    },
+    {
+      "rank": 85,
+      "name": "Goobers"
+    },
+    {
+      "rank": 86,
+      "name": "Sno-Caps"
+    },
+    {
+      "rank": 87,
+      "name": "Whoppers"
+    },
+    {
+      "rank": 88,
+      "name": "Maltesers"
+    },
+    {
+      "rank": 89,
+      "name": "Aero"
+    },
+    {
+      "rank": 90,
+      "name": "Bounty"
+    },
+    {
+      "rank": 91,
+      "name": "Pringles"
+    },
+    {
+      "rank": 92,
+      "name": "Doritos"
+    },
+    {
+      "rank": 93,
+      "name": "Cheetos"
+    },
+    {
+      "rank": 94,
+      "name": "Lay's Classic"
+    },
+    {
+      "rank": 95,
+      "name": "Lay's Sour Cream & Onion"
+    },
+    {
+      "rank": 96,
+      "name": "Ruffles"
+    },
+    {
+      "rank": 97,
+      "name": "Fritos"
+    },
+    {
+      "rank": 98,
+      "name": "Tostitos"
+    },
+    {
+      "rank": 99,
+      "name": "SunChips"
+    },
+    {
+      "rank": 100,
+      "name": "Popchips"
+    }
+  ]
+}

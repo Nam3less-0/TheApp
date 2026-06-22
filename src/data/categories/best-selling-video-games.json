@@ -1,0 +1,406 @@
+{
+  "id": "best-selling-video-games",
+  "title": "Best-Selling Video Games",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Minecraft"
+    },
+    {
+      "rank": 2,
+      "name": "Grand Theft Auto V"
+    },
+    {
+      "rank": 3,
+      "name": "Tetris"
+    },
+    {
+      "rank": 4,
+      "name": "Wii Sports"
+    },
+    {
+      "rank": 5,
+      "name": "PUBG: Battlegrounds"
+    },
+    {
+      "rank": 6,
+      "name": "Mario Kart 8 Deluxe"
+    },
+    {
+      "rank": 7,
+      "name": "Super Mario Bros."
+    },
+    {
+      "rank": 8,
+      "name": "Red Dead Redemption 2"
+    },
+    {
+      "rank": 9,
+      "name": "Pokémon Red / Green / Blue / Yellow"
+    },
+    {
+      "rank": 10,
+      "name": "Overwatch"
+    },
+    {
+      "rank": 11,
+      "name": "The Witcher 3: Wild Hunt"
+    },
+    {
+      "rank": 12,
+      "name": "Animal Crossing: New Horizons"
+    },
+    {
+      "rank": 13,
+      "name": "Call of Duty: Modern Warfare"
+    },
+    {
+      "rank": 14,
+      "name": "Terraria"
+    },
+    {
+      "rank": 15,
+      "name": "The Legend of Zelda: Breath of the Wild"
+    },
+    {
+      "rank": 16,
+      "name": "Pac-Man"
+    },
+    {
+      "rank": 17,
+      "name": "New Super Mario Bros."
+    },
+    {
+      "rank": 18,
+      "name": "New Super Mario Bros. Wii"
+    },
+    {
+      "rank": 19,
+      "name": "Diablo III"
+    },
+    {
+      "rank": 20,
+      "name": "The Elder Scrolls V: Skyrim"
+    },
+    {
+      "rank": 21,
+      "name": "Super Mario Odyssey"
+    },
+    {
+      "rank": 22,
+      "name": "Human: Fall Flat"
+    },
+    {
+      "rank": 23,
+      "name": "The Last of Us"
+    },
+    {
+      "rank": 24,
+      "name": "Mario Kart Wii"
+    },
+    {
+      "rank": 25,
+      "name": "Wii Sports Resort"
+    },
+    {
+      "rank": 26,
+      "name": "Grand Theft Auto: San Andreas"
+    },
+    {
+      "rank": 27,
+      "name": "Super Smash Bros. Ultimate"
+    },
+    {
+      "rank": 28,
+      "name": "Call of Duty: Black Ops"
+    },
+    {
+      "rank": 29,
+      "name": "Call of Duty: Black Ops II"
+    },
+    {
+      "rank": 30,
+      "name": "Call of Duty: Modern Warfare 3"
+    },
+    {
+      "rank": 31,
+      "name": "Call of Duty: Ghosts"
+    },
+    {
+      "rank": 32,
+      "name": "Call of Duty: Advanced Warfare"
+    },
+    {
+      "rank": 33,
+      "name": "Call of Duty: WWII"
+    },
+    {
+      "rank": 34,
+      "name": "Call of Duty: Black Ops III"
+    },
+    {
+      "rank": 35,
+      "name": "Call of Duty: Infinite Warfare"
+    },
+    {
+      "rank": 36,
+      "name": "Call of Duty: Black Ops Cold War"
+    },
+    {
+      "rank": 37,
+      "name": "Call of Duty: Vanguard"
+    },
+    {
+      "rank": 38,
+      "name": "Call of Duty: Modern Warfare II"
+    },
+    {
+      "rank": 39,
+      "name": "Call of Duty: Modern Warfare III"
+    },
+    {
+      "rank": 40,
+      "name": "FIFA 18"
+    },
+    {
+      "rank": 41,
+      "name": "FIFA 19"
+    },
+    {
+      "rank": 42,
+      "name": "FIFA 20"
+    },
+    {
+      "rank": 43,
+      "name": "FIFA 21"
+    },
+    {
+      "rank": 44,
+      "name": "FIFA 22"
+    },
+    {
+      "rank": 45,
+      "name": "FIFA 23"
+    },
+    {
+      "rank": 46,
+      "name": "EA Sports FC 24"
+    },
+    {
+      "rank": 47,
+      "name": "NBA 2K19"
+    },
+    {
+      "rank": 48,
+      "name": "NBA 2K20"
+    },
+    {
+      "rank": 49,
+      "name": "NBA 2K21"
+    },
+    {
+      "rank": 50,
+      "name": "NBA 2K22"
+    },
+    {
+      "rank": 51,
+      "name": "NBA 2K23"
+    },
+    {
+      "rank": 52,
+      "name": "NBA 2K24"
+    },
+    {
+      "rank": 53,
+      "name": "Fortnite"
+    },
+    {
+      "rank": 54,
+      "name": "Roblox"
+    },
+    {
+      "rank": 55,
+      "name": "Among Us"
+    },
+    {
+      "rank": 56,
+      "name": "Fall Guys"
+    },
+    {
+      "rank": 57,
+      "name": "Genshin Impact"
+    },
+    {
+      "rank": 58,
+      "name": "Honkai: Star Rail"
+    },
+    {
+      "rank": 59,
+      "name": "Palworld"
+    },
+    {
+      "rank": 60,
+      "name": "Elden Ring"
+    },
+    {
+      "rank": 61,
+      "name": "Dark Souls III"
+    },
+    {
+      "rank": 62,
+      "name": "Bloodborne"
+    },
+    {
+      "rank": 63,
+      "name": "Sekiro: Shadows Die Twice"
+    },
+    {
+      "rank": 64,
+      "name": "God of War"
+    },
+    {
+      "rank": 65,
+      "name": "God of War Ragnarök"
+    },
+    {
+      "rank": 66,
+      "name": "Horizon Zero Dawn"
+    },
+    {
+      "rank": 67,
+      "name": "Horizon Forbidden West"
+    },
+    {
+      "rank": 68,
+      "name": "Marvel's Spider-Man"
+    },
+    {
+      "rank": 69,
+      "name": "Marvel's Spider-Man: Miles Morales"
+    },
+    {
+      "rank": 70,
+      "name": "Uncharted 4: A Thief's End"
+    },
+    {
+      "rank": 71,
+      "name": "The Last of Us Part II"
+    },
+    {
+      "rank": 72,
+      "name": "Ghost of Tsushima"
+    },
+    {
+      "rank": 73,
+      "name": "Ratchet & Clank: Rift Apart"
+    },
+    {
+      "rank": 74,
+      "name": "Gran Turismo 7"
+    },
+    {
+      "rank": 75,
+      "name": "Forza Horizon 5"
+    },
+    {
+      "rank": 76,
+      "name": "Forza Horizon 4"
+    },
+    {
+      "rank": 77,
+      "name": "Halo 3"
+    },
+    {
+      "rank": 78,
+      "name": "Halo: Combat Evolved"
+    },
+    {
+      "rank": 79,
+      "name": "Halo Infinite"
+    },
+    {
+      "rank": 80,
+      "name": "Gears of War 3"
+    },
+    {
+      "rank": 81,
+      "name": "Destiny 2"
+    },
+    {
+      "rank": 82,
+      "name": "Borderlands 2"
+    },
+    {
+      "rank": 83,
+      "name": "Borderlands 3"
+    },
+    {
+      "rank": 84,
+      "name": "Fallout 4"
+    },
+    {
+      "rank": 85,
+      "name": "Fallout: New Vegas"
+    },
+    {
+      "rank": 86,
+      "name": "The Elder Scrolls IV: Oblivion"
+    },
+    {
+      "rank": 87,
+      "name": "Mass Effect 2"
+    },
+    {
+      "rank": 88,
+      "name": "Mass Effect 3"
+    },
+    {
+      "rank": 89,
+      "name": "BioShock Infinite"
+    },
+    {
+      "rank": 90,
+      "name": "Resident Evil 4"
+    },
+    {
+      "rank": 91,
+      "name": "Resident Evil 2"
+    },
+    {
+      "rank": 92,
+      "name": "Resident Evil Village"
+    },
+    {
+      "rank": 93,
+      "name": "Monster Hunter: World"
+    },
+    {
+      "rank": 94,
+      "name": "Monster Hunter Rise"
+    },
+    {
+      "rank": 95,
+      "name": "Street Fighter II"
+    },
+    {
+      "rank": 96,
+      "name": "Street Fighter 6"
+    },
+    {
+      "rank": 97,
+      "name": "Tekken 7"
+    },
+    {
+      "rank": 98,
+      "name": "Tekken 8"
+    },
+    {
+      "rank": 99,
+      "name": "Mortal Kombat 11"
+    },
+    {
+      "rank": 100,
+      "name": "Super Smash Bros. Brawl"
+    }
+  ]
+}

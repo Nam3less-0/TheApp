@@ -1,0 +1,406 @@
+{
+  "id": "most-iconic-marvel-heroes",
+  "title": "Most Iconic Marvel Heroes",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Spider-Man"
+    },
+    {
+      "rank": 2,
+      "name": "Iron Man"
+    },
+    {
+      "rank": 3,
+      "name": "Captain America"
+    },
+    {
+      "rank": 4,
+      "name": "Thor"
+    },
+    {
+      "rank": 5,
+      "name": "Hulk"
+    },
+    {
+      "rank": 6,
+      "name": "Black Widow"
+    },
+    {
+      "rank": 7,
+      "name": "Hawkeye"
+    },
+    {
+      "rank": 8,
+      "name": "Black Panther"
+    },
+    {
+      "rank": 9,
+      "name": "Doctor Strange"
+    },
+    {
+      "rank": 10,
+      "name": "Scarlet Witch"
+    },
+    {
+      "rank": 11,
+      "name": "Vision"
+    },
+    {
+      "rank": 12,
+      "name": "Ant-Man"
+    },
+    {
+      "rank": 13,
+      "name": "Wasp"
+    },
+    {
+      "rank": 14,
+      "name": "Falcon"
+    },
+    {
+      "rank": 15,
+      "name": "Winter Soldier"
+    },
+    {
+      "rank": 16,
+      "name": "War Machine"
+    },
+    {
+      "rank": 17,
+      "name": "Captain Marvel"
+    },
+    {
+      "rank": 18,
+      "name": "Ms. Marvel"
+    },
+    {
+      "rank": 19,
+      "name": "She-Hulk"
+    },
+    {
+      "rank": 20,
+      "name": "Moon Knight"
+    },
+    {
+      "rank": 21,
+      "name": "Daredevil"
+    },
+    {
+      "rank": 22,
+      "name": "Jessica Jones"
+    },
+    {
+      "rank": 23,
+      "name": "Luke Cage"
+    },
+    {
+      "rank": 24,
+      "name": "Iron Fist"
+    },
+    {
+      "rank": 25,
+      "name": "Punisher"
+    },
+    {
+      "rank": 26,
+      "name": "Blade"
+    },
+    {
+      "rank": 27,
+      "name": "Ghost Rider"
+    },
+    {
+      "rank": 28,
+      "name": "Silver Surfer"
+    },
+    {
+      "rank": 29,
+      "name": "Nova"
+    },
+    {
+      "rank": 30,
+      "name": "Quasar"
+    },
+    {
+      "rank": 31,
+      "name": "Wolverine"
+    },
+    {
+      "rank": 32,
+      "name": "Cyclops"
+    },
+    {
+      "rank": 33,
+      "name": "Storm"
+    },
+    {
+      "rank": 34,
+      "name": "Jean Grey"
+    },
+    {
+      "rank": 35,
+      "name": "Professor X"
+    },
+    {
+      "rank": 36,
+      "name": "Magneto"
+    },
+    {
+      "rank": 37,
+      "name": "Rogue"
+    },
+    {
+      "rank": 38,
+      "name": "Gambit"
+    },
+    {
+      "rank": 39,
+      "name": "Nightcrawler"
+    },
+    {
+      "rank": 40,
+      "name": "Colossus"
+    },
+    {
+      "rank": 41,
+      "name": "Beast"
+    },
+    {
+      "rank": 42,
+      "name": "Iceman"
+    },
+    {
+      "rank": 43,
+      "name": "Angel"
+    },
+    {
+      "rank": 44,
+      "name": "Psylocke"
+    },
+    {
+      "rank": 45,
+      "name": "Kitty Pryde"
+    },
+    {
+      "rank": 46,
+      "name": "Jubilee"
+    },
+    {
+      "rank": 47,
+      "name": "Emma Frost"
+    },
+    {
+      "rank": 48,
+      "name": "Cable"
+    },
+    {
+      "rank": 49,
+      "name": "Deadpool"
+    },
+    {
+      "rank": 50,
+      "name": "X-23"
+    },
+    {
+      "rank": 51,
+      "name": "Star-Lord"
+    },
+    {
+      "rank": 52,
+      "name": "Gamora"
+    },
+    {
+      "rank": 53,
+      "name": "Drax"
+    },
+    {
+      "rank": 54,
+      "name": "Rocket Raccoon"
+    },
+    {
+      "rank": 55,
+      "name": "Groot"
+    },
+    {
+      "rank": 56,
+      "name": "Mantis"
+    },
+    {
+      "rank": 57,
+      "name": "Nebula"
+    },
+    {
+      "rank": 58,
+      "name": "Yondu"
+    },
+    {
+      "rank": 59,
+      "name": "Adam Warlock"
+    },
+    {
+      "rank": 60,
+      "name": "Cosmo the Spacedog"
+    },
+    {
+      "rank": 61,
+      "name": "Fantastic Four (Team)"
+    },
+    {
+      "rank": 62,
+      "name": "Mister Fantastic"
+    },
+    {
+      "rank": 63,
+      "name": "Invisible Woman"
+    },
+    {
+      "rank": 64,
+      "name": "Human Torch"
+    },
+    {
+      "rank": 65,
+      "name": "The Thing"
+    },
+    {
+      "rank": 66,
+      "name": "Silver Surfer (Herald)"
+    },
+    {
+      "rank": 67,
+      "name": "Namor"
+    },
+    {
+      "rank": 68,
+      "name": "Black Bolt"
+    },
+    {
+      "rank": 69,
+      "name": "Medusa"
+    },
+    {
+      "rank": 70,
+      "name": "Crystal"
+    },
+    {
+      "rank": 71,
+      "name": "Lockjaw"
+    },
+    {
+      "rank": 72,
+      "name": "Karnak"
+    },
+    {
+      "rank": 73,
+      "name": "Gorgon"
+    },
+    {
+      "rank": 74,
+      "name": "Triton"
+    },
+    {
+      "rank": 75,
+      "name": "Quicksilver"
+    },
+    {
+      "rank": 76,
+      "name": "Scarlet Spider"
+    },
+    {
+      "rank": 77,
+      "name": "Miles Morales"
+    },
+    {
+      "rank": 78,
+      "name": "Spider-Gwen"
+    },
+    {
+      "rank": 79,
+      "name": "Silk"
+    },
+    {
+      "rank": 80,
+      "name": "Spider-Woman"
+    },
+    {
+      "rank": 81,
+      "name": "Venom (Anti-Hero)"
+    },
+    {
+      "rank": 82,
+      "name": "Eddie Brock"
+    },
+    {
+      "rank": 83,
+      "name": "Morbius"
+    },
+    {
+      "rank": 84,
+      "name": "Man-Thing"
+    },
+    {
+      "rank": 85,
+      "name": "Howard the Duck"
+    },
+    {
+      "rank": 86,
+      "name": "Squirrel Girl"
+    },
+    {
+      "rank": 87,
+      "name": "America Chavez"
+    },
+    {
+      "rank": 88,
+      "name": "Ironheart"
+    },
+    {
+      "rank": 89,
+      "name": "Riri Williams"
+    },
+    {
+      "rank": 90,
+      "name": "Nova (Sam Alexander)"
+    },
+    {
+      "rank": 91,
+      "name": "Kid Loki"
+    },
+    {
+      "rank": 92,
+      "name": "Hercules (Marvel)"
+    },
+    {
+      "rank": 93,
+      "name": "Ares"
+    },
+    {
+      "rank": 94,
+      "name": "Sentry"
+    },
+    {
+      "rank": 95,
+      "name": "Blue Marvel"
+    },
+    {
+      "rank": 96,
+      "name": "Spectrum"
+    },
+    {
+      "rank": 97,
+      "name": "Photon"
+    },
+    {
+      "rank": 98,
+      "name": "Monica Rambeau"
+    },
+    {
+      "rank": 99,
+      "name": "Brooklyn Visions"
+    },
+    {
+      "rank": 100,
+      "name": "Patriot"
+    }
+  ]
+}

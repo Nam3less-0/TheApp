@@ -1,0 +1,406 @@
+{
+  "id": "iconic-superhero-teams",
+  "title": "Iconic Superhero Teams",
+  "items": [
+    {
+      "rank": 1,
+      "name": "The Avengers"
+    },
+    {
+      "rank": 2,
+      "name": "Justice League"
+    },
+    {
+      "rank": 3,
+      "name": "X-Men"
+    },
+    {
+      "rank": 4,
+      "name": "Fantastic Four"
+    },
+    {
+      "rank": 5,
+      "name": "Teen Titans"
+    },
+    {
+      "rank": 6,
+      "name": "Justice Society of America"
+    },
+    {
+      "rank": 7,
+      "name": "Legion of Super-Heroes"
+    },
+    {
+      "rank": 8,
+      "name": "Guardians of the Galaxy"
+    },
+    {
+      "rank": 9,
+      "name": "Defenders"
+    },
+    {
+      "rank": 10,
+      "name": "New Warriors"
+    },
+    {
+      "rank": 11,
+      "name": "Young Avengers"
+    },
+    {
+      "rank": 12,
+      "name": "Runaways"
+    },
+    {
+      "rank": 13,
+      "name": "Champions (Marvel)"
+    },
+    {
+      "rank": 14,
+      "name": "West Coast Avengers"
+    },
+    {
+      "rank": 15,
+      "name": "New Avengers"
+    },
+    {
+      "rank": 16,
+      "name": "Secret Avengers"
+    },
+    {
+      "rank": 17,
+      "name": "Dark Avengers"
+    },
+    {
+      "rank": 18,
+      "name": "Thunderbolts"
+    },
+    {
+      "rank": 19,
+      "name": "Squadron Supreme"
+    },
+    {
+      "rank": 20,
+      "name": "Alpha Flight"
+    },
+    {
+      "rank": 21,
+      "name": "Excalibur"
+    },
+    {
+      "rank": 22,
+      "name": "X-Force"
+    },
+    {
+      "rank": 23,
+      "name": "X-Factor"
+    },
+    {
+      "rank": 24,
+      "name": "New Mutants"
+    },
+    {
+      "rank": 25,
+      "name": "Generation X"
+    },
+    {
+      "rank": 26,
+      "name": "X-Men Blue"
+    },
+    {
+      "rank": 27,
+      "name": "X-Men Gold"
+    },
+    {
+      "rank": 28,
+      "name": "X-Men Red"
+    },
+    {
+      "rank": 29,
+      "name": "Krakoa Teams"
+    },
+    {
+      "rank": 30,
+      "name": "Marauders"
+    },
+    {
+      "rank": 31,
+      "name": "Hellions"
+    },
+    {
+      "rank": 32,
+      "name": "Excalibur (Krakoa)"
+    },
+    {
+      "rank": 33,
+      "name": "X-Men (Krakoa Era)"
+    },
+    {
+      "rank": 34,
+      "name": "Immortal X-Men"
+    },
+    {
+      "rank": 35,
+      "name": "Fall of X Teams"
+    },
+    {
+      "rank": 36,
+      "name": "Illuminati"
+    },
+    {
+      "rank": 37,
+      "name": "Cabinet of Doctor Doom"
+    },
+    {
+      "rank": 38,
+      "name": "Midnight Sons"
+    },
+    {
+      "rank": 39,
+      "name": "Marvel Knights"
+    },
+    {
+      "rank": 40,
+      "name": "Heroes for Hire"
+    },
+    {
+      "rank": 41,
+      "name": "Power Man and Iron Fist"
+    },
+    {
+      "rank": 42,
+      "name": "Daughters of the Dragon"
+    },
+    {
+      "rank": 43,
+      "name": "Valkyrior"
+    },
+    {
+      "rank": 44,
+      "name": "Warriors Three"
+    },
+    {
+      "rank": 45,
+      "name": "Lady Liberators"
+    },
+    {
+      "rank": 46,
+      "name": "Inhumans (Team)"
+    },
+    {
+      "rank": 47,
+      "name": "Attilan Royal Family"
+    },
+    {
+      "rank": 48,
+      "name": "Ultimates"
+    },
+    {
+      "rank": 49,
+      "name": "S.H.I.E.L.D."
+    },
+    {
+      "rank": 50,
+      "name": "Howling Commandos"
+    },
+    {
+      "rank": 51,
+      "name": "Invaders"
+    },
+    {
+      "rank": 52,
+      "name": "All-Winners Squad"
+    },
+    {
+      "rank": 53,
+      "name": "Liberty Legion"
+    },
+    {
+      "rank": 54,
+      "name": "Young Allies"
+    },
+    {
+      "rank": 55,
+      "name": "Kid Commandos"
+    },
+    {
+      "rank": 56,
+      "name": "Outlawed Champions"
+    },
+    {
+      "rank": 57,
+      "name": "A-Force"
+    },
+    {
+      "rank": 58,
+      "name": "Lady Liberators (Modern)"
+    },
+    {
+      "rank": 59,
+      "name": "Fearless Defenders"
+    },
+    {
+      "rank": 60,
+      "name": "Valkyries"
+    },
+    {
+      "rank": 61,
+      "name": "Justice League Dark"
+    },
+    {
+      "rank": 62,
+      "name": "Suicide Squad"
+    },
+    {
+      "rank": 63,
+      "name": "Task Force X"
+    },
+    {
+      "rank": 64,
+      "name": "Birds of Prey"
+    },
+    {
+      "rank": 65,
+      "name": "Outsiders"
+    },
+    {
+      "rank": 66,
+      "name": "Batman Incorporated"
+    },
+    {
+      "rank": 67,
+      "name": "Bat-Family"
+    },
+    {
+      "rank": 68,
+      "name": "Super-Family"
+    },
+    {
+      "rank": 69,
+      "name": "Flash Family"
+    },
+    {
+      "rank": 70,
+      "name": "Arrow Family"
+    },
+    {
+      "rank": 71,
+      "name": "Green Lantern Corps"
+    },
+    {
+      "rank": 72,
+      "name": "Blue Lantern Corps"
+    },
+    {
+      "rank": 73,
+      "name": "Red Lantern Corps"
+    },
+    {
+      "rank": 74,
+      "name": "Yellow Lantern Corps"
+    },
+    {
+      "rank": 75,
+      "name": "Orange Lantern Corps"
+    },
+    {
+      "rank": 76,
+      "name": "Indigo Tribe"
+    },
+    {
+      "rank": 77,
+      "name": "Star Sapphire Corps"
+    },
+    {
+      "rank": 78,
+      "name": "Black Lantern Corps"
+    },
+    {
+      "rank": 79,
+      "name": "White Lantern Corps"
+    },
+    {
+      "rank": 80,
+      "name": "Emotional Spectrum Corps"
+    },
+    {
+      "rank": 81,
+      "name": "Seven Lantern Corps"
+    },
+    {
+      "rank": 82,
+      "name": "Green Lantern Corps (Oa)"
+    },
+    {
+      "rank": 83,
+      "name": "Guardians of the Universe"
+    },
+    {
+      "rank": 84,
+      "name": "Zamarons"
+    },
+    {
+      "rank": 85,
+      "name": "Controllers"
+    },
+    {
+      "rank": 86,
+      "name": "Doom Patrol"
+    },
+    {
+      "rank": 87,
+      "name": "Metal Men"
+    },
+    {
+      "rank": 88,
+      "name": "Seven Soldiers of Victory"
+    },
+    {
+      "rank": 89,
+      "name": "Seven Soldiers (Morrison)"
+    },
+    {
+      "rank": 90,
+      "name": "Global Guardians"
+    },
+    {
+      "rank": 91,
+      "name": "International Heroes"
+    },
+    {
+      "rank": 92,
+      "name": "Great Ten"
+    },
+    {
+      "rank": 93,
+      "name": "Super Young Team"
+    },
+    {
+      "rank": 94,
+      "name": "Diversity Alliance"
+    },
+    {
+      "rank": 95,
+      "name": "Titans"
+    },
+    {
+      "rank": 96,
+      "name": "Titans (Rebirth)"
+    },
+    {
+      "rank": 97,
+      "name": "Nightwing and Titans"
+    },
+    {
+      "rank": 98,
+      "name": "Young Justice (Cartoon Team)"
+    },
+    {
+      "rank": 99,
+      "name": "Legion of Doom"
+    },
+    {
+      "rank": 100,
+      "name": "Injustice League"
+    }
+  ]
+}

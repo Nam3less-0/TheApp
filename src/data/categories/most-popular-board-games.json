@@ -1,0 +1,406 @@
+{
+  "id": "most-popular-board-games",
+  "title": "Most Popular Board Games",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Monopoly"
+    },
+    {
+      "rank": 2,
+      "name": "Scrabble"
+    },
+    {
+      "rank": 3,
+      "name": "Chess"
+    },
+    {
+      "rank": 4,
+      "name": "Checkers"
+    },
+    {
+      "rank": 5,
+      "name": "Clue"
+    },
+    {
+      "rank": 6,
+      "name": "Risk"
+    },
+    {
+      "rank": 7,
+      "name": "Battleship"
+    },
+    {
+      "rank": 8,
+      "name": "Connect Four"
+    },
+    {
+      "rank": 9,
+      "name": "Sorry!"
+    },
+    {
+      "rank": 10,
+      "name": "Life"
+    },
+    {
+      "rank": 11,
+      "name": "Trivial Pursuit"
+    },
+    {
+      "rank": 12,
+      "name": "Pictionary"
+    },
+    {
+      "rank": 13,
+      "name": "Taboo"
+    },
+    {
+      "rank": 14,
+      "name": "Uno"
+    },
+    {
+      "rank": 15,
+      "name": "Jenga"
+    },
+    {
+      "rank": 16,
+      "name": "Twister"
+    },
+    {
+      "rank": 17,
+      "name": "Operation"
+    },
+    {
+      "rank": 18,
+      "name": "Guess Who?"
+    },
+    {
+      "rank": 19,
+      "name": "Hungry Hungry Hippos"
+    },
+    {
+      "rank": 20,
+      "name": "Mouse Trap"
+    },
+    {
+      "rank": 21,
+      "name": "Candy Land"
+    },
+    {
+      "rank": 22,
+      "name": "Chutes and Ladders"
+    },
+    {
+      "rank": 23,
+      "name": "The Game of Life"
+    },
+    {
+      "rank": 24,
+      "name": "Pay Day"
+    },
+    {
+      "rank": 25,
+      "name": "Mastermind"
+    },
+    {
+      "rank": 26,
+      "name": "Backgammon"
+    },
+    {
+      "rank": 27,
+      "name": "Go"
+    },
+    {
+      "rank": 28,
+      "name": "Mahjong"
+    },
+    {
+      "rank": 29,
+      "name": "Dominoes"
+    },
+    {
+      "rank": 30,
+      "name": "Poker (Home Game Set)"
+    },
+    {
+      "rank": 31,
+      "name": "Yahtzee"
+    },
+    {
+      "rank": 32,
+      "name": "Boggle"
+    },
+    {
+      "rank": 33,
+      "name": "Scattergories"
+    },
+    {
+      "rank": 34,
+      "name": "Balderdash"
+    },
+    {
+      "rank": 35,
+      "name": "Apples to Apples"
+    },
+    {
+      "rank": 36,
+      "name": "Cards Against Humanity"
+    },
+    {
+      "rank": 37,
+      "name": "Exploding Kittens"
+    },
+    {
+      "rank": 38,
+      "name": "Codenames"
+    },
+    {
+      "rank": 39,
+      "name": "Telestrations"
+    },
+    {
+      "rank": 40,
+      "name": "Wavelength"
+    },
+    {
+      "rank": 41,
+      "name": "Just One"
+    },
+    {
+      "rank": 42,
+      "name": "Dixit"
+    },
+    {
+      "rank": 43,
+      "name": "Mysterium"
+    },
+    {
+      "rank": 44,
+      "name": "Azul"
+    },
+    {
+      "rank": 45,
+      "name": "Splendor"
+    },
+    {
+      "rank": 46,
+      "name": "Ticket to Ride"
+    },
+    {
+      "rank": 47,
+      "name": "Catan"
+    },
+    {
+      "rank": 48,
+      "name": "Carcassonne"
+    },
+    {
+      "rank": 49,
+      "name": "Pandemic"
+    },
+    {
+      "rank": 50,
+      "name": "7 Wonders"
+    },
+    {
+      "rank": 51,
+      "name": "Dominion"
+    },
+    {
+      "rank": 52,
+      "name": "Race for the Galaxy"
+    },
+    {
+      "rank": 53,
+      "name": "Puerto Rico"
+    },
+    {
+      "rank": 54,
+      "name": "Agricola"
+    },
+    {
+      "rank": 55,
+      "name": "Power Grid"
+    },
+    {
+      "rank": 56,
+      "name": "Terraforming Mars"
+    },
+    {
+      "rank": 57,
+      "name": "Wingspan"
+    },
+    {
+      "rank": 58,
+      "name": "Everdell"
+    },
+    {
+      "rank": 59,
+      "name": "Root"
+    },
+    {
+      "rank": 60,
+      "name": "Scythe"
+    },
+    {
+      "rank": 61,
+      "name": "Gloomhaven"
+    },
+    {
+      "rank": 62,
+      "name": "Frosthaven"
+    },
+    {
+      "rank": 63,
+      "name": "Spirit Island"
+    },
+    {
+      "rank": 64,
+      "name": "Mage Knight"
+    },
+    {
+      "rank": 65,
+      "name": "Arkham Horror"
+    },
+    {
+      "rank": 66,
+      "name": "Eldritch Horror"
+    },
+    {
+      "rank": 67,
+      "name": "Betrayal at House on the Hill"
+    },
+    {
+      "rank": 68,
+      "name": "Dead of Winter"
+    },
+    {
+      "rank": 69,
+      "name": "Zombicide"
+    },
+    {
+      "rank": 70,
+      "name": "Last Friday"
+    },
+    {
+      "rank": 71,
+      "name": "King of Tokyo"
+    },
+    {
+      "rank": 72,
+      "name": "King of New York"
+    },
+    {
+      "rank": 73,
+      "name": "Sushi Go!"
+    },
+    {
+      "rank": 74,
+      "name": "Sushi Go Party!"
+    },
+    {
+      "rank": 75,
+      "name": "Love Letter"
+    },
+    {
+      "rank": 76,
+      "name": "The Resistance"
+    },
+    {
+      "rank": 77,
+      "name": "Avalon"
+    },
+    {
+      "rank": 78,
+      "name": "Secret Hitler"
+    },
+    {
+      "rank": 79,
+      "name": "One Night Ultimate Werewolf"
+    },
+    {
+      "rank": 80,
+      "name": "Werewolf"
+    },
+    {
+      "rank": 81,
+      "name": "Coup"
+    },
+    {
+      "rank": 82,
+      "name": "Lovecraft Letter"
+    },
+    {
+      "rank": 83,
+      "name": "Skull"
+    },
+    {
+      "rank": 84,
+      "name": "For Sale"
+    },
+    {
+      "rank": 85,
+      "name": "No Thanks!"
+    },
+    {
+      "rank": 86,
+      "name": "The Mind"
+    },
+    {
+      "rank": 87,
+      "name": "The Crew"
+    },
+    {
+      "rank": 88,
+      "name": "The Quest for El Dorado"
+    },
+    {
+      "rank": 89,
+      "name": "Camel Up"
+    },
+    {
+      "rank": 90,
+      "name": "Colt Express"
+    },
+    {
+      "rank": 91,
+      "name": "Mysterium (Board Game)"
+    },
+    {
+      "rank": 92,
+      "name": "Photosynthesis"
+    },
+    {
+      "rank": 93,
+      "name": "Planet"
+    },
+    {
+      "rank": 94,
+      "name": "Cascadia"
+    },
+    {
+      "rank": 95,
+      "name": "Calico"
+    },
+    {
+      "rank": 96,
+      "name": "Wingspan (Bird Game)"
+    },
+    {
+      "rank": 97,
+      "name": "Ark Nova"
+    },
+    {
+      "rank": 98,
+      "name": "Barrage"
+    },
+    {
+      "rank": 99,
+      "name": "Brass: Birmingham"
+    },
+    {
+      "rank": 100,
+      "name": "Great Western Trail"
+    }
+  ]
+}
