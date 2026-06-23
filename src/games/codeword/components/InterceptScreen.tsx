@@ -287,7 +287,8 @@ export default function InterceptScreen({
 
   return (
     <InterceptRoomBackdrop>
-      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_440px] lg:items-start lg:gap-6">
+      {/* Extra bottom space on mobile so the fixed Case notes button doesn't cover Missed */}
+      <div className="pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] lg:pb-0 lg:grid lg:grid-cols-[minmax(0,1fr)_440px] lg:items-start lg:gap-6">
         <InterceptMainPanel
           round={round}
           draft={draft}
@@ -305,7 +306,7 @@ export default function InterceptScreen({
       <button
         type="button"
         onClick={() => setIntelOpen(true)}
-        className="fixed bottom-5 right-5 z-30 flex items-center gap-2 rounded-full border border-copper/50 px-4 py-3 font-body text-sm font-bold text-text-hi shadow-[0_4px_20px_rgba(0,0,0,0.45)] transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper lg:hidden"
+        className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-5 z-30 flex items-center gap-2 rounded-full border border-copper/50 px-4 py-3 font-body text-sm font-bold text-text-hi shadow-[0_4px_20px_rgba(0,0,0,0.45)] transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper lg:hidden"
         style={{
           background: 'linear-gradient(165deg, #2A2520, #1A1C20)',
         }}
@@ -323,7 +324,7 @@ export default function InterceptScreen({
       <SideDrawer
         open={intelOpen}
         onClose={() => setIntelOpen(false)}
-        title="Prior intel"
+        title="Case notes"
       >
         <PriorIntel log={interceptLog} emptyMessage={INTEL_EMPTY} />
       </SideDrawer>
