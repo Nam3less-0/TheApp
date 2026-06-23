@@ -26,7 +26,7 @@ export default function BoardScreen() {
         {state.columns.map((column) => (
           <div
             key={column.id}
-            className="flex min-h-[50px] items-center justify-center rounded-lg px-1 py-2.5 text-center font-display text-[9.5px] font-bold leading-tight tracking-[0.3px]"
+            className="flex min-h-[50px] items-center justify-center overflow-hidden rounded-lg px-0.5 py-2 text-center font-display text-[8px] font-bold leading-tight tracking-normal hyphens-auto break-words sm:px-1 sm:py-2.5 sm:text-[9.5px] sm:tracking-[0.3px]"
             style={{
               background: `linear-gradient(180deg, ${COLORS.sapphire}, ${COLORS.sapphireDim})`,
               color: '#F2F4F8',
