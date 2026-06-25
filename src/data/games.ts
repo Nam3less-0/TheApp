@@ -1,5 +1,5 @@
 import type { GameEntry } from '../types/game';
-import { CodewordIcon, ImposterIcon, JeopardyIcon, Top100Icon } from '../icons/GameIcons';
+import { CodewordIcon, ImposterIcon, JeopardyIcon, TheBetIcon, Top100Icon } from '../icons/GameIcons';
 
 export const games: GameEntry[] = [
   {
@@ -33,6 +33,14 @@ export const games: GameEntry[] = [
     metal: 'steel-blue',
     status: 'playable',
     icon: JeopardyIcon,
+  },
+  {
+    id: 'the-bet',
+    title: 'The Bet',
+    description: 'Bet big. Back it up.',
+    metal: 'gold',
+    status: 'playable',
+    icon: TheBetIcon,
   },
 ];
 

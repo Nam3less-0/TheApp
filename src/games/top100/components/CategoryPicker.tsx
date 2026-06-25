@@ -137,7 +137,7 @@ export default function CategoryPicker({
         })}
       </div>
 
-      <div className="max-h-[min(52vh,420px)] overflow-y-auto rounded-xl border border-line bg-deep/40">
+      <div className="max-h-[min(46vh,380px)] overflow-y-auto rounded-xl border border-line bg-deep/40">
         {filteredCategories.length === 0 ? (
           <p className="px-4 py-8 text-center font-body text-sm text-text-mid">
             No categories match your search.

@@ -9,7 +9,15 @@ import TurnRecapScreen from './components/TurnRecapScreen';
 function Top100Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative z-[2] min-h-svh">
-      <div className="border-b border-line bg-void/60 backdrop-blur-[12px]">
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(ellipse 70% 45% at 50% -5%, rgba(111,168,220,0.08) 0%, transparent 55%)',
+        }}
+        aria-hidden="true"
+      />
+      <div className="relative border-b border-line bg-void/60 backdrop-blur-[12px]">
         <div className="mx-auto flex max-w-[900px] items-center justify-between gap-4 px-6 py-3">
           <Link
             to="/"
@@ -21,7 +29,7 @@ function Top100Shell({ children }: { children: React.ReactNode }) {
           <span className="w-12" aria-hidden="true" />
         </div>
       </div>
-      {children}
+      <div className="relative">{children}</div>
     </div>
   );
 }

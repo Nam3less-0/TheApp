@@ -54,4 +54,147 @@
       }
     }
   }
+
+  /* The Bet — animations */
+  @keyframes timerPulse {
+    0% {
+      transform: scale(0.9);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1.15);
+      opacity: 0;
+    }
+  }
+
+  @keyframes countPulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.85;
+    }
+  }
+
+  @keyframes betGoFlash {
+    0% {
+      transform: scale(0.6);
+    }
+    60% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes betShimmerSweep {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes categoryShimmer {
+    0% {
+      left: -30%;
+    }
+    100% {
+      left: 130%;
+    }
+  }
+
+  @keyframes verdictSlide {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes betBevelIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .bet-corner-brackets::before,
+  .bet-corner-brackets::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  .bet-corner-brackets::before {
+    top: 0;
+    left: 0;
+    border-top: 1px solid #c9a44a;
+    border-left: 1px solid #c9a44a;
+  }
+
+  .bet-corner-brackets::after {
+    bottom: 0;
+    right: 0;
+    border-bottom: 1px solid #c9a44a;
+    border-right: 1px solid #c9a44a;
+  }
+
+  .bet-shimmer-sweep::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(234, 200, 112, 0.25),
+      transparent
+    );
+    animation: betShimmerSweep 0.3s ease forwards;
+  }
+
+  .bet-category-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -30%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(234, 200, 112, 0.35),
+      transparent
+    );
+    animation: categoryShimmer 4s linear infinite;
+  }
+
+  .bet-go-flash {
+    animation: betGoFlash 0.4s ease forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bet-reel-track,
+    .bet-shimmer-sweep::before,
+    .bet-category-shimmer::after,
+    .bet-go-flash,
+    .bet-timer-pulse,
+    .bet-verdict-badge {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
 }

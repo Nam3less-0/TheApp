@@ -21,7 +21,7 @@ export default function RevealToast({ reveal, state, onDismiss }: RevealToastPro
   if (isCorrect) {
     return (
       <div
-        className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-xl border border-good px-4 py-3.5"
+        className="pointer-events-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-xl border border-good px-4 py-3.5 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.65)]"
         style={{
           background:
             'linear-gradient(165deg, color-mix(in srgb, #7ED9A4 14%, #1A1C20), #1A1C20)',
@@ -41,7 +41,7 @@ export default function RevealToast({ reveal, state, onDismiss }: RevealToastPro
 
   return (
     <div
-      className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-xl border border-bad px-4 py-3.5"
+      className="pointer-events-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-xl border border-bad px-4 py-3.5 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.65)]"
       style={{
         background:
           'linear-gradient(165deg, color-mix(in srgb, #E08B7A 14%, #1A1C20), #1A1C20)',

@@ -10,6 +10,7 @@ import { ImposterProvider } from '../games/imposter/context';
 import ImposterGame from '../games/imposter/ImposterGame';
 import { JeopardyProvider } from '../games/jeopardy/context';
 import JeopardyGame from '../games/jeopardy/JeopardyGame';
+import TheBet from '../games/the-bet/TheBet';
 
 export default function GamePage() {
   const { gameId } = useParams<{ gameId: string }>();
@@ -45,6 +46,10 @@ export default function GamePage() {
         <JeopardyGame />
       </JeopardyProvider>
     );
+  }
+
+  if (gameId === 'the-bet') {
+    return <TheBet />;
   }
 
   return (
