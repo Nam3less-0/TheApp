@@ -173,13 +173,9 @@ export function buildBoard(): BuiltBoard {
   return { columns, cells };
 }
 
-/**
- * Largest number of questions that splits evenly across players, capped to the
- * board size — so everyone takes the same number of turns (e.g. 4 players → 28).
- */
-export function computeTotalQuestions(playerCount: number): number {
-  if (playerCount <= 0) return BOARD_SIZE;
-  return Math.floor(BOARD_SIZE / playerCount) * playerCount;
+/** Clues still available on the board. */
+export function countRemainingCells(cells: BoardCell[]): number {
+  return cells.filter((c) => !c.used).length;
 }
 
 export function getCellByColumnAndDifficulty(

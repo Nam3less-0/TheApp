@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useBet } from '../context';
 import ReelTrack from '../components/ReelTrack';
+import BetTeamsPanel from '../components/BetTeamsPanel';
 import { BetGoldButton, BetPageWrap } from '../components/BetLayout';
 
 export default function BetCategories() {
@@ -35,6 +36,8 @@ export default function BetCategories() {
       <p className="mb-6 font-body text-sm text-text-mid">
         Three reels — tap one when they stop, or respin for a fresh draw.
       </p>
+
+      <BetTeamsPanel />
 
       {categories ? (
         <div className="grid grid-cols-3 gap-2 sm:gap-4">

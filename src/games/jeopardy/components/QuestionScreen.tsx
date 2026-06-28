@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useJeopardy } from '../context';
 import { COLORS, SILVER_BUTTON, formatScore } from '../utils';
 import { JeopardyPageWrap } from './JeopardyPanel';
@@ -78,6 +78,10 @@ export default function QuestionScreen() {
   const { state, dispatch } = useJeopardy();
   const [pickerOpen, setPickerOpen] = useState(false);
 
+  useEffect(() => {
+    setPickerOpen(false);
+  }, [state.activeCellId]);
+
   const cell = state.cells.find((c) => c.id === state.activeCellId);
   const player = state.players[state.currentPlayerIndex];
 
@@ -98,14 +102,14 @@ export default function QuestionScreen() {
   return (
     <JeopardyPageWrap>
       <div
-        className="overflow-hidden rounded-[18px] border"
+        className="rounded-[18px] border"
         style={{
           borderColor: `color-mix(in srgb, ${COLORS.sapphireBright} 40%, transparent)`,
           boxShadow: `0 0 40px -20px ${COLORS.sapphireBright}`,
         }}
       >
         <div
-          className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 px-4 py-3.5 sm:px-5 sm:py-4"
+          className="overflow-hidden rounded-t-[18px] flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 px-4 py-3.5 sm:px-5 sm:py-4"
           style={{
             background: `linear-gradient(135deg, ${COLORS.sapphire}, ${COLORS.sapphireDim})`,
           }}
@@ -134,7 +138,7 @@ export default function QuestionScreen() {
         </div>
 
         <div
-          className="px-4 py-6 sm:px-[22px] sm:py-7"
+          className={`px-4 py-6 sm:px-[22px] sm:py-7${revealed ? '' : ' rounded-b-[18px]'}`}
           style={{ background: 'linear-gradient(180deg, #222428, #1A1C20)' }}
         >
           {!revealed && (
@@ -214,7 +218,10 @@ export default function QuestionScreen() {
                 <div className="flex flex-col gap-2 sm:flex-row">
                   <button
                     type="button"
-                    onClick={() => dispatch({ type: 'USE_WHAT_CHOICES' })}
+                    onClick={() => {
+                      setPickerOpen(false);
+                      dispatch({ type: 'USE_WHAT_CHOICES' });
+                    }}
                     disabled={!lifelines.whatChoices || choices !== null}
                     className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 font-body text-[12.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-35"
                     style={{
@@ -230,61 +237,64 @@ export default function QuestionScreen() {
                     )}
                   </button>
 
-                  <div className="relative flex-1">
-                    <button
-                      type="button"
-                      onClick={() => setPickerOpen((o) => !o)}
-                      disabled={!lifelines.phoneAFriend || helper !== null}
-                      className="flex w-full items-center justify-center gap-2 rounded-xl border px-3 py-2.5 font-body text-[12.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-35"
-                      style={{
-                        background: `color-mix(in srgb, ${COLORS.gold} 10%, #1A1C20)`,
-                        borderColor: `color-mix(in srgb, ${COLORS.goldBright} 38%, transparent)`,
-                        color: COLORS.goldBright,
-                      }}
-                    >
-                      <PhoneIcon />
-                      Phone a Friend
-                      {!lifelines.phoneAFriend && (
-                        <span className="font-mono text-[10px] opacity-70">· used</span>
-                      )}
-                    </button>
-
-                    {pickerOpen && lifelines.phoneAFriend && !helper && (
-                      <div
-                        className="absolute left-0 right-0 top-[calc(100%+6px)] z-10 rounded-xl border border-line bg-surface p-2 shadow-lg"
-                        style={{ boxShadow: '0 12px 30px -12px rgba(0,0,0,0.8)' }}
-                      >
-                        <div className="mb-1.5 px-1 font-mono text-[10px] uppercase tracking-wider text-text-low">
-                          Call who?
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          {others.map((p) => (
-                            <button
-                              key={p.id}
-                              type="button"
-                              onClick={() => {
-                                dispatch({
-                                  type: 'USE_PHONE_A_FRIEND',
-                                  helperId: p.id,
-                                });
-                                setPickerOpen(false);
-                              }}
-                              className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-left font-body text-[13px] font-semibold text-text-hi transition-colors hover:bg-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
-                            >
-                              <PlayerAvatar name={p.name} size="xs" />
-                              {p.name}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+                  <button
+                    type="button"
+                    onClick={() => setPickerOpen((o) => !o)}
+                    disabled={!lifelines.phoneAFriend || helper !== null}
+                    className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 font-body text-[12.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-35"
+                    style={{
+                      background: pickerOpen
+                        ? `color-mix(in srgb, ${COLORS.goldBright} 18%, #1A1C20)`
+                        : `color-mix(in srgb, ${COLORS.gold} 10%, #1A1C20)`,
+                      borderColor: `color-mix(in srgb, ${COLORS.goldBright} 38%, transparent)`,
+                      color: COLORS.goldBright,
+                    }}
+                  >
+                    <PhoneIcon />
+                    Phone a Friend
+                    {!lifelines.phoneAFriend && (
+                      <span className="font-mono text-[10px] opacity-70">· used</span>
                     )}
-                  </div>
+                  </button>
                 </div>
+
+                {pickerOpen && lifelines.phoneAFriend && !helper && (
+                  <div
+                    className="mt-2.5 rounded-xl border border-line bg-surface p-2.5"
+                    style={{ boxShadow: '0 8px 24px -12px rgba(0,0,0,0.65)' }}
+                  >
+                    <div className="mb-2 px-1 font-mono text-[10px] uppercase tracking-wider text-text-low">
+                      Call who?
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      {others.map((p) => (
+                        <button
+                          key={p.id}
+                          type="button"
+                          onClick={() => {
+                            dispatch({
+                              type: 'USE_PHONE_A_FRIEND',
+                              helperId: p.id,
+                            });
+                            setPickerOpen(false);
+                          }}
+                          className="flex min-h-11 items-center gap-2.5 rounded-lg px-2.5 py-2 text-left font-body text-[13px] font-semibold text-text-hi transition-colors hover:bg-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                        >
+                          <PlayerAvatar name={p.name} size="xs" />
+                          {p.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <button
                 type="button"
-                onClick={() => dispatch({ type: 'REVEAL_ANSWER' })}
+                onClick={() => {
+                  setPickerOpen(false);
+                  dispatch({ type: 'REVEAL_ANSWER' });
+                }}
                 className="w-full rounded-xl border-none px-4 py-3.5 font-body text-sm font-bold text-void focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
                 style={{ background: SILVER_BUTTON }}
               >
@@ -295,7 +305,7 @@ export default function QuestionScreen() {
         </div>
 
         {revealed && (
-          <div className="border-t border-line bg-surface px-4 py-4 sm:px-[22px] sm:py-[18px]">
+          <div className="overflow-hidden rounded-b-[18px] border-t border-line bg-surface px-4 py-4 sm:px-[22px] sm:py-[18px]">
             <div className="mb-2 font-mono text-[10px] uppercase tracking-[1.5px] text-text-low">
               Answer
             </div>

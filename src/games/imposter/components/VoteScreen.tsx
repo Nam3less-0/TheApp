@@ -1,5 +1,5 @@
 import { useImposter } from '../context';
-import { getPlayerById } from '../utils';
+import { getPlayerById, roundScoreDeltas } from '../utils';
 import ImposterPanel, { ImposterPageWrap } from './ImposterPanel';
 import PlayerAvatar from './PlayerAvatar';
 import Scoreboard from './Scoreboard';
@@ -10,20 +10,39 @@ function ResultPanel() {
   if (!record) return null;
 
   const caught = record.outcome === 'caught';
+  const isBlank = record.mode === 'blank';
+  const redeemed = isBlank && caught && record.redemptionCorrect;
   const imposter = getPlayerById(state.players, record.imposterPlayerId);
   const voted = getPlayerById(state.players, record.votedPlayerId);
   const isLastRound = state.currentRound >= state.totalRounds;
 
-  const accent = caught ? '#7ED9A4' : '#E08B7A';
+  const deltas = roundScoreDeltas(record, state.players);
+  const imposterScored = (deltas[record.imposterPlayerId] ?? 0) > 0;
   const nonImposterCount = state.players.length - 1;
 
-  const deltas: Record<string, number> = {};
-  for (const player of state.players) {
-    if (caught) {
-      if (player.id !== record.imposterPlayerId) deltas[player.id] = 1;
-    } else if (player.id === record.imposterPlayerId) {
-      deltas[player.id] = 2;
-    }
+  // Green when the table denied the imposter any points, red when they scored.
+  const accent = imposterScored ? '#E08B7A' : '#7ED9A4';
+
+  const label = caught
+    ? redeemed
+      ? 'Caught — redeemed'
+      : 'Imposter caught'
+    : 'Imposter evaded';
+  const headline = caught
+    ? redeemed
+      ? 'Stole it back!'
+      : 'Good read!'
+    : 'They slipped away';
+
+  let scoringText: string;
+  if (isBlank && !caught) {
+    scoringText = `Blank round — +3 points to ${imposter?.name}`;
+  } else if (redeemed) {
+    scoringText = `${imposter?.name} guessed the word — +1 point, everyone else gets nothing`;
+  } else if (caught) {
+    scoringText = `+1 point to all ${nonImposterCount} non-imposters`;
+  } else {
+    scoringText = `+2 points to ${imposter?.name}`;
   }
 
   return (
@@ -34,19 +53,24 @@ function ResultPanel() {
         <div
           className="-m-4 mb-4 rounded-t-[16px] px-5 py-6 sm:-m-[18px] sm:mb-4"
           style={{
-            background: caught
-              ? 'radial-gradient(circle at 50% 0%, rgba(126,217,164,0.18), transparent 70%)'
-              : 'radial-gradient(circle at 50% 0%, rgba(224,139,122,0.2), transparent 70%)',
+            background: imposterScored
+              ? 'radial-gradient(circle at 50% 0%, rgba(224,139,122,0.2), transparent 70%)'
+              : 'radial-gradient(circle at 50% 0%, rgba(126,217,164,0.18), transparent 70%)',
           }}
         >
+          {isBlank && (
+            <span className="mb-2 inline-block rounded-full border border-ember/40 bg-ember/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-ember-bright">
+              Blank round
+            </span>
+          )}
           <p
             className="mb-1 font-mono text-[11px] uppercase tracking-[0.18em]"
             style={{ color: accent }}
           >
-            {caught ? 'Imposter caught' : 'Imposter evaded'}
+            {label}
           </p>
           <h1 className="font-display text-[22px] font-extrabold leading-tight text-text-hi sm:text-[26px]">
-            {caught ? 'Good read!' : 'They slipped away'}
+            {headline}
           </h1>
         </div>
 
@@ -77,21 +101,33 @@ function ResultPanel() {
             style={{ borderColor: 'rgba(194,83,59,0.45)', background: 'rgba(194,83,59,0.1)' }}
           >
             <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-ember-bright">
-              Imposter word
+              {isBlank ? 'Imposter' : 'Imposter word'}
             </p>
             <p className="font-display text-lg font-bold text-ember-bright">
-              {record.imposterWord}
+              {isBlank ? 'No word' : record.imposterWord}
             </p>
           </div>
         </div>
+
+        {isBlank && caught && record.redemptionGuess && (
+          <div
+            className="mb-4 rounded-xl border px-4 py-3 font-body text-sm"
+            style={{
+              borderColor: redeemed ? 'rgba(224,139,122,0.45)' : 'rgba(126,217,164,0.45)',
+              background: redeemed ? 'rgba(224,139,122,0.1)' : 'rgba(126,217,164,0.1)',
+            }}
+          >
+            Redemption guess:{' '}
+            <span className="font-bold text-text-hi">{record.redemptionGuess}</span>{' '}
+            {redeemed ? '✓ correct' : '✗ wrong'}
+          </div>
+        )}
 
         <div
           className="mb-5 rounded-xl border px-4 py-3 font-body text-sm"
           style={{ borderColor: `${accent}55`, background: `${accent}14`, color: accent }}
         >
-          {caught
-            ? `+1 point to all ${nonImposterCount} non-imposters`
-            : `+2 points to ${imposter?.name}`}
+          {scoringText}
         </div>
 
         <div className="mb-5 text-left">

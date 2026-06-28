@@ -64,7 +64,6 @@ export interface JeopardySession {
   currentPlayerIndex: number;
   activeCellId: string | null;
   questionsAnswered: number;
-  totalQuestions: number;
   history: AnswerRecord[];
   /**
    * Shuffled multiple-choice options shown for the current clue once the

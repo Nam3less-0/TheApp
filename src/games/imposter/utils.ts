@@ -1,9 +1,14 @@
 import { IMPOSTER_PAIRS } from '../../data/imposter-pairs';
-import type { Player, WordPair } from './types';
+import type { Player, RoundMode, RoundRecord, WordPair } from './types';
 
 export const ROUND_OPTIONS = [3, 5, 7, 10] as const;
 export const MIN_PLAYERS = 3;
 export const MAX_PLAYERS = 10;
+
+/** Chance any given round is a "blank imposter" round instead of standard. */
+export const BLANK_ROUND_CHANCE = 0.3;
+/** Number of word choices (1 correct + decoys) shown during redemption. */
+export const REDEMPTION_OPTION_COUNT = 4;
 
 const DEFAULT_PLAYER_NAMES = ['Belford', 'Joshua', 'Matthew', 'Kai Jie'];
 
@@ -50,8 +55,93 @@ export function buildPairPool(): WordPair[] {
   }));
 }
 
+/** Flat list of every distinct word across all pairs (decoy source). */
+function allWords(): string[] {
+  const set = new Set<string>();
+  for (const pair of IMPOSTER_PAIRS) {
+    set.add(pair.wordA);
+    set.add(pair.wordB);
+  }
+  return [...set];
+}
+
+function normalizeWord(word: string): string {
+  return word.trim().toLowerCase();
+}
+
+/**
+ * Multiple-choice options for a caught blank-round imposter's redemption guess:
+ * the real majority word plus random decoys, all shuffled.
+ */
+export function buildRedemptionOptions(
+  correctWord: string,
+  count = REDEMPTION_OPTION_COUNT,
+): string[] {
+  const correctKey = normalizeWord(correctWord);
+  const decoys: string[] = [];
+  const seen = new Set<string>([correctKey]);
+  for (const candidate of shuffle(allWords())) {
+    if (decoys.length >= count - 1) break;
+    const key = normalizeWord(candidate);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    decoys.push(candidate);
+  }
+  return shuffle([correctWord, ...decoys]);
+}
+
+/** True when a redemption guess matches the round's majority word. */
+export function isRedemptionCorrect(guess: string, majorityWord: string): boolean {
+  return normalizeWord(guess) === normalizeWord(majorityWord);
+}
+
+/**
+ * Per-player point changes for a finished round. Centralizes scoring so the
+ * reducer and the result screen never disagree.
+ *
+ * Standard: caught → +1 each non-imposter; evaded → +2 imposter.
+ * Blank:    evaded → +3 imposter; caught + correct redemption → +1 imposter;
+ *           caught + wrong redemption → +1 each non-imposter.
+ */
+export function roundScoreDeltas(
+  record: RoundRecord,
+  players: Player[],
+): Record<string, number> {
+  const deltas: Record<string, number> = {};
+  const isImposter = (id: string) => id === record.imposterPlayerId;
+
+  if (record.mode === 'blank') {
+    if (record.outcome === 'evaded') {
+      deltas[record.imposterPlayerId] = 3;
+    } else if (record.redemptionCorrect) {
+      deltas[record.imposterPlayerId] = 1;
+    } else {
+      for (const p of players) if (!isImposter(p.id)) deltas[p.id] = 1;
+    }
+    return deltas;
+  }
+
+  if (record.outcome === 'caught') {
+    for (const p of players) if (!isImposter(p.id)) deltas[p.id] = 1;
+  } else {
+    deltas[record.imposterPlayerId] = 2;
+  }
+  return deltas;
+}
+
+/** Apply per-player point deltas, returning a new players array. */
+export function applyDeltas(
+  players: Player[],
+  deltas: Record<string, number>,
+): Player[] {
+  return players.map((p) =>
+    deltas[p.id] ? { ...p, score: p.score + deltas[p.id] } : p,
+  );
+}
+
 export interface RoundDraw {
   pair: WordPair;
+  mode: RoundMode;
   imposterWord: string;
   majorityWord: string;
   imposterPlayerId: string;
@@ -61,8 +151,9 @@ export interface RoundDraw {
 
 /**
  * Draw a pair (reshuffling the pool when exhausted), avoiding the same pair
- * twice in a row, then re-randomize the imposter, the imposter word (coin flip)
- * and the pass-around reveal order.
+ * twice in a row, then re-randomize the round mode, the imposter, the imposter
+ * word (coin flip) and the pass-around reveal order. In a blank round the
+ * imposter gets no word.
  */
 export function drawRound(
   players: Player[],
@@ -76,9 +167,11 @@ export function drawRound(
   const pair = pool[index];
   pool = pool.filter((_, i) => i !== index);
 
+  const mode: RoundMode = Math.random() < BLANK_ROUND_CHANCE ? 'blank' : 'standard';
+
   const imposterFirst = Math.random() < 0.5;
-  const imposterWord = imposterFirst ? pair.wordA : pair.wordB;
   const majorityWord = imposterFirst ? pair.wordB : pair.wordA;
+  const imposterWord = mode === 'blank' ? '' : imposterFirst ? pair.wordA : pair.wordB;
 
   const playerIds = players.map((p) => p.id);
   const imposterPlayerId = playerIds[Math.floor(Math.random() * playerIds.length)];
@@ -86,6 +179,7 @@ export function drawRound(
 
   return {
     pair,
+    mode,
     imposterWord,
     majorityWord,
     imposterPlayerId,

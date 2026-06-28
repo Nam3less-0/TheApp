@@ -34,4 +34,6 @@ export type BetAction =
   | { type: 'START_PLAY' }
   | { type: 'CANCEL_PLAY' }
   | { type: 'NEXT_ROUND' }
+  | { type: 'SET_ROSTER'; teams: [string[], string[]] }
+  | { type: 'RANDOMIZE_TEAMS' }
   | { type: 'RESET_GAME' };

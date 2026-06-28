@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
+import GameTools from '../components/gametools/GameTools';
 import { getGameById } from '../data/games';
 import { Top100Provider } from '../games/top100/context';
 import Top100Game from '../games/top100/Top100Game';
@@ -12,44 +13,51 @@ import { JeopardyProvider } from '../games/jeopardy/context';
 import JeopardyGame from '../games/jeopardy/JeopardyGame';
 import TheBet from '../games/the-bet/TheBet';
 
+function renderGame(gameId: string | undefined): React.ReactNode {
+  switch (gameId) {
+    case 'top-100':
+      return (
+        <Top100Provider>
+          <Top100Game />
+        </Top100Provider>
+      );
+    case 'codeword':
+      return (
+        <CodewordProvider>
+          <CodewordGame />
+        </CodewordProvider>
+      );
+    case 'imposter':
+      return (
+        <ImposterProvider>
+          <ImposterGame />
+        </ImposterProvider>
+      );
+    case 'jeopardy':
+      return (
+        <JeopardyProvider>
+          <JeopardyGame />
+        </JeopardyProvider>
+      );
+    case 'the-bet':
+      return <TheBet />;
+    default:
+      return null;
+  }
+}
+
 export default function GamePage() {
   const { gameId } = useParams<{ gameId: string }>();
   const game = gameId ? getGameById(gameId) : undefined;
+  const gameContent = renderGame(gameId);
 
-  if (gameId === 'top-100') {
+  if (gameContent) {
     return (
-      <Top100Provider>
-        <Top100Game />
-      </Top100Provider>
+      <>
+        {gameContent}
+        <GameTools />
+      </>
     );
-  }
-
-  if (gameId === 'codeword') {
-    return (
-      <CodewordProvider>
-        <CodewordGame />
-      </CodewordProvider>
-    );
-  }
-
-  if (gameId === 'imposter') {
-    return (
-      <ImposterProvider>
-        <ImposterGame />
-      </ImposterProvider>
-    );
-  }
-
-  if (gameId === 'jeopardy') {
-    return (
-      <JeopardyProvider>
-        <JeopardyGame />
-      </JeopardyProvider>
-    );
-  }
-
-  if (gameId === 'the-bet') {
-    return <TheBet />;
   }
 
   return (

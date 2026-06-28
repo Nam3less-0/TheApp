@@ -167,7 +167,9 @@ export default function FinalResultsScreen() {
                 <p className="mt-1 font-body text-[13px] text-text-mid">
                   <span className="text-text-hi">{record.majorityWord}</span>
                   {' / '}
-                  <span className="text-ember-bright">{record.imposterWord}</span>
+                  <span className="text-ember-bright">
+                    {record.mode === 'blank' ? 'blank' : record.imposterWord}
+                  </span>
                   {' · imposter was '}
                   <span className="text-text-hi">{imposter?.name}</span>
                 </p>

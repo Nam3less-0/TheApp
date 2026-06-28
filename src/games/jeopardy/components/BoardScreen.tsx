@@ -1,11 +1,12 @@
 import { useJeopardy } from '../context';
-import { COLORS, DIFFICULTIES, getCellByColumnAndDifficulty } from '../utils';
+import { COLORS, DIFFICULTIES, countRemainingCells, getCellByColumnAndDifficulty } from '../utils';
 import ScoreChips from './ScoreChips';
 import { JeopardyPageWrap } from './JeopardyPanel';
 
 export default function BoardScreen() {
   const { state, dispatch } = useJeopardy();
   const activePlayer = state.players[state.currentPlayerIndex];
+  const remaining = countRemainingCells(state.cells);
 
   return (
     <JeopardyPageWrap>
@@ -15,8 +16,7 @@ export default function BoardScreen() {
             {activePlayer?.name}&rsquo;s turn
           </div>
           <div className="mt-0.5 font-mono text-[11px] uppercase tracking-wider text-text-low">
-            Question {Math.min(state.questionsAnswered + 1, state.totalQuestions)} of{' '}
-            {state.totalQuestions}
+            {remaining} clue{remaining === 1 ? '' : 's'} left · get it right to pick again
           </div>
         </div>
         <ScoreChips players={state.players} activePlayerId={activePlayer?.id ?? null} />

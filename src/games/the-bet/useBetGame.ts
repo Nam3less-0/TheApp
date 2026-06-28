@@ -7,6 +7,15 @@ function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function shuffle<T>(input: T[]): T[] {
+  const arr = [...input];
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 function createDefaultTeams(): [Team, Team] {
   return [
     {
@@ -113,6 +122,32 @@ export function betReducer(state: BetState, action: BetAction): BetState {
 
     case 'CANCEL_PLAY':
       return { ...state, phase: 'categories' };
+
+    case 'SET_ROSTER': {
+      const [a, b] = action.teams;
+      return {
+        ...state,
+        teams: [
+          { ...state.teams[0], players: a, bettorIndex: 0 },
+          { ...state.teams[1], players: b, bettorIndex: 0 },
+        ],
+      };
+    }
+
+    case 'RANDOMIZE_TEAMS': {
+      const pool = shuffle([
+        ...state.teams[0].players,
+        ...state.teams[1].players,
+      ]);
+      const half = Math.ceil(pool.length / 2);
+      return {
+        ...state,
+        teams: [
+          { ...state.teams[0], players: pool.slice(0, half), bettorIndex: 0 },
+          { ...state.teams[1], players: pool.slice(half), bettorIndex: 0 },
+        ],
+      };
+    }
 
     case 'NEXT_ROUND': {
       const rounds = state.currentRound

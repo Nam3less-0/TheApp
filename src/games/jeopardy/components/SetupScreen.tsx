@@ -3,12 +3,12 @@ import { useJeopardy } from '../context';
 import type { Player } from '../types';
 import {
   BOARD_COLUMNS,
+  BOARD_SIZE,
   DIFFICULTIES,
   DOUBLE_TROUBLE_COUNT,
   MAX_PLAYERS,
   MIN_PLAYERS,
   SILVER_BUTTON,
-  computeTotalQuestions,
   createDefaultPlayers,
   freshLifelines,
 } from '../utils';
@@ -23,8 +23,6 @@ export default function SetupScreen() {
 
   const canStart =
     players.length >= MIN_PLAYERS && players.every((p) => p.name.trim().length > 0);
-  const totalQuestions = computeTotalQuestions(players.length);
-  const perPlayer = players.length > 0 ? totalQuestions / players.length : 0;
 
   function handleNameChange(id: string, name: string) {
     setPlayers((prev) => prev.map((p) => (p.id === id ? { ...p, name } : p)));
@@ -69,15 +67,15 @@ export default function SetupScreen() {
         New game
       </h1>
       <p className="mb-8 font-body text-sm text-text-mid">
-        Add players, then build a fresh board. Pass the phone around — pick a tile,
-        read the clue aloud, and tap whether the answer was right.
+        Add players, then build a fresh board. Play until every tile is cleared — answer
+        correctly and you pick again on the same turn.
       </p>
 
       <JeopardyPanel>
         <section>
           <p className="mb-1 font-body text-sm font-bold text-text-hi">Players</p>
           <p className="mb-3 font-body text-[13px] text-text-mid">
-            At least {MIN_PLAYERS} players take turns choosing tiles.
+            At least {MIN_PLAYERS} players take turns picking tiles.
           </p>
           <ul className="flex flex-col gap-2.5">
             {players.map((player, index) => (
@@ -122,8 +120,8 @@ export default function SetupScreen() {
 
         <p className="mt-5 font-mono text-[11px] leading-relaxed text-text-low">
           {BOARD_COLUMNS} random topics · {DIFFICULTIES.length} clues each ·{' '}
-          {DOUBLE_TROUBLE_COUNT} double-trouble tiles · {totalQuestions} clues total
-          {players.length > 0 ? ` (${perPlayer} each)` : ''}
+          {DOUBLE_TROUBLE_COUNT} double-trouble tiles · {BOARD_SIZE} clues total · play until
+          the board is clear
         </p>
 
         <button

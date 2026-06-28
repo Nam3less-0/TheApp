@@ -1,5 +1,13 @@
 import type { ImposterAction, ImposterSession, RoundRecord } from './types';
-import { drawRound, shuffle, buildPairPool } from './utils';
+import {
+  drawRound,
+  shuffle,
+  buildPairPool,
+  buildRedemptionOptions,
+  isRedemptionCorrect,
+  roundScoreDeltas,
+  applyDeltas,
+} from './utils';
 
 const EMPTY_PAIR = { id: '', wordA: '', wordB: '' };
 
@@ -9,12 +17,14 @@ export const initialImposterState: ImposterSession = {
   currentRound: 0,
   remainingPairs: [],
   currentPair: EMPTY_PAIR,
+  currentMode: 'standard',
   currentImposterWord: '',
   currentMajorityWord: '',
   currentImposterPlayerId: '',
   revealOrder: [],
   revealIndex: 0,
   votedPlayerId: null,
+  redemptionOptions: [],
   phase: 'setup',
   history: [],
 };
@@ -35,12 +45,14 @@ export function imposterReducer(
         currentRound: 1,
         remainingPairs: draw.remainingPairs,
         currentPair: draw.pair,
+        currentMode: draw.mode,
         currentImposterWord: draw.imposterWord,
         currentMajorityWord: draw.majorityWord,
         currentImposterPlayerId: draw.imposterPlayerId,
         revealOrder: draw.revealOrder,
         revealIndex: 0,
         votedPlayerId: null,
+        redemptionOptions: [],
         phase: 'reveal',
         history: [],
       };
@@ -71,30 +83,60 @@ export function imposterReducer(
       const outcome =
         state.votedPlayerId === state.currentImposterPlayerId ? 'caught' : 'evaded';
 
-      const players = state.players.map((p) => {
-        if (outcome === 'caught') {
-          return p.id === state.currentImposterPlayerId
-            ? p
-            : { ...p, score: p.score + 1 };
-        }
-        return p.id === state.currentImposterPlayerId
-          ? { ...p, score: p.score + 2 }
-          : p;
-      });
+      // A caught blank-round imposter earns a redemption guess before scoring.
+      if (state.currentMode === 'blank' && outcome === 'caught') {
+        return {
+          ...state,
+          phase: 'redeem',
+          redemptionOptions: buildRedemptionOptions(state.currentMajorityWord),
+        };
+      }
 
       const record: RoundRecord = {
         round: state.currentRound,
         pair: state.currentPair,
+        mode: state.currentMode,
         imposterWord: state.currentImposterWord,
         majorityWord: state.currentMajorityWord,
         imposterPlayerId: state.currentImposterPlayerId,
         votedPlayerId: state.votedPlayerId,
         outcome,
+        redemptionGuess: null,
+        redemptionCorrect: false,
       };
 
       return {
         ...state,
-        players,
+        players: applyDeltas(state.players, roundScoreDeltas(record, state.players)),
+        phase: 'result',
+        history: [...state.history, record],
+      };
+    }
+
+    case 'SUBMIT_REDEMPTION': {
+      if (state.phase !== 'redeem') return state;
+
+      const redemptionCorrect = isRedemptionCorrect(
+        action.word,
+        state.currentMajorityWord,
+      );
+
+      const record: RoundRecord = {
+        round: state.currentRound,
+        pair: state.currentPair,
+        mode: state.currentMode,
+        imposterWord: state.currentImposterWord,
+        majorityWord: state.currentMajorityWord,
+        imposterPlayerId: state.currentImposterPlayerId,
+        votedPlayerId: state.votedPlayerId,
+        outcome: 'caught',
+        redemptionGuess: action.word,
+        redemptionCorrect,
+      };
+
+      return {
+        ...state,
+        players: applyDeltas(state.players, roundScoreDeltas(record, state.players)),
         phase: 'result',
         history: [...state.history, record],
       };
@@ -114,12 +156,14 @@ export function imposterReducer(
         currentRound: state.currentRound + 1,
         remainingPairs: draw.remainingPairs,
         currentPair: draw.pair,
+        currentMode: draw.mode,
         currentImposterWord: draw.imposterWord,
         currentMajorityWord: draw.majorityWord,
         currentImposterPlayerId: draw.imposterPlayerId,
         revealOrder: draw.revealOrder,
         revealIndex: 0,
         votedPlayerId: null,
+        redemptionOptions: [],
         phase: 'reveal',
       };
     }

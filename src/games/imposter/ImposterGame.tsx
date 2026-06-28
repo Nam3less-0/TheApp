@@ -4,6 +4,7 @@ import ImposterSetupScreen from './components/ImposterSetupScreen';
 import RevealScreen from './components/RevealScreen';
 import DiscussScreen from './components/DiscussScreen';
 import VoteScreen from './components/VoteScreen';
+import RedeemScreen from './components/RedeemScreen';
 import FinalResultsScreen from './components/FinalResultsScreen';
 
 function ImposterShell({ children }: { children: React.ReactNode }) {
@@ -43,6 +44,9 @@ export default function ImposterGame() {
     case 'vote':
     case 'result':
       screen = <VoteScreen />;
+      break;
+    case 'redeem':
+      screen = <RedeemScreen />;
       break;
     case 'final':
       screen = <FinalResultsScreen />;

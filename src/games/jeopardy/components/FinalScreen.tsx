@@ -16,7 +16,7 @@ export default function FinalScreen() {
     <JeopardyPageWrap>
       <div className="mb-[22px] text-center">
         <div className="mb-2 font-mono text-[11px] uppercase tracking-[1px] text-text-low">
-          Game over · {state.questionsAnswered} clues
+          Game over · board cleared · {state.questionsAnswered} clues
         </div>
         <div className="font-display text-2xl font-black text-text-hi">
           {tie ? `${topScore.toLocaleString('en-US')}-point tie!` : `${ranked[0]?.name} wins!`}

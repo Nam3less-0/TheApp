@@ -1,5 +1,5 @@
 import type { AnswerRecord, JeopardyAction, JeopardySession } from './types';
-import { buildBoard, computeTotalQuestions, freshLifelines, shuffle } from './utils';
+import { buildBoard, freshLifelines, shuffle } from './utils';
 
 export const initialJeopardyState: JeopardySession = {
   players: [],
@@ -9,7 +9,6 @@ export const initialJeopardyState: JeopardySession = {
   currentPlayerIndex: 0,
   activeCellId: null,
   questionsAnswered: 0,
-  totalQuestions: 0,
   history: [],
   revealedChoices: null,
   phoneFriendId: null,
@@ -26,13 +25,19 @@ function freshPlayers(players: JeopardySession['players']) {
   }));
 }
 
+/** Reset stats and randomize turn order before each new game. */
+function preparePlayersForGame(players: JeopardySession['players']) {
+  const reset = freshPlayers(players);
+  return reset.length > 1 ? shuffle(reset) : reset;
+}
+
 export function jeopardyReducer(
   state: JeopardySession,
   action: JeopardyAction,
 ): JeopardySession {
   switch (action.type) {
     case 'START_GAME': {
-      const players = freshPlayers(action.players);
+      const players = preparePlayersForGame(action.players);
       const { columns, cells } = buildBoard();
 
       return {
@@ -43,7 +48,6 @@ export function jeopardyReducer(
         currentPlayerIndex: 0,
         activeCellId: null,
         questionsAnswered: 0,
-        totalQuestions: computeTotalQuestions(players.length),
         history: [],
         revealedChoices: null,
         phoneFriendId: null,
@@ -153,9 +157,10 @@ export function jeopardyReducer(
       };
 
       const questionsAnswered = state.questionsAnswered + 1;
-      const allUsed = cells.every((c) => c.used);
-      const reachedLimit = questionsAnswered >= state.totalQuestions;
-      const isOver = allUsed || reachedLimit;
+      const isOver = cells.every((c) => c.used);
+      const nextPlayerIndex = action.correct
+        ? state.currentPlayerIndex
+        : (state.currentPlayerIndex + 1) % state.players.length;
 
       return {
         ...state,
@@ -163,7 +168,7 @@ export function jeopardyReducer(
         cells,
         questionsAnswered,
         activeCellId: null,
-        currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
+        currentPlayerIndex: nextPlayerIndex,
         phase: isOver ? 'final' : 'board',
         history: [...state.history, record],
         revealedChoices: null,
@@ -172,7 +177,7 @@ export function jeopardyReducer(
     }
 
     case 'PLAY_AGAIN': {
-      const players = freshPlayers(state.players);
+      const players = preparePlayersForGame(state.players);
       const { columns, cells } = buildBoard();
       return {
         ...initialJeopardyState,
@@ -180,7 +185,6 @@ export function jeopardyReducer(
         columns,
         cells,
         phase: 'board',
-        totalQuestions: computeTotalQuestions(players.length),
       };
     }
 
