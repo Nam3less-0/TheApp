@@ -10,6 +10,7 @@ import {
   SILVER_BUTTON,
   computeTotalQuestions,
   createDefaultPlayers,
+  freshLifelines,
 } from '../utils';
 import JeopardyPanel, { JeopardyPageWrap } from './JeopardyPanel';
 import PlayerAvatar from './PlayerAvatar';
@@ -45,6 +46,7 @@ export default function SetupScreen() {
           correct: 0,
           missed: 0,
           doublesHit: 0,
+          lifelines: freshLifelines(),
         },
       ];
     });

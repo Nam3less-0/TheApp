@@ -1,5 +1,5 @@
 import { JEOPARDY_TOPICS, type Difficulty } from '../../data/jeopardy-questions';
-import type { BoardCell, BoardColumn, Player } from './types';
+import type { BoardCell, BoardColumn, Lifelines, Player } from './types';
 
 export const BOARD_COLUMNS = 6;
 export const DIFFICULTIES: Difficulty[] = [1, 2, 3, 4, 5];
@@ -48,6 +48,11 @@ export function getInitials(name: string): string {
   return trimmed.slice(0, 2).toUpperCase();
 }
 
+/** Fresh set of lifelines (both available) for a new game. */
+export function freshLifelines(): Lifelines {
+  return { phoneAFriend: true, whatChoices: true };
+}
+
 export function createDefaultPlayers(count = 4): Player[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `player-${i + 1}`,
@@ -56,6 +61,7 @@ export function createDefaultPlayers(count = 4): Player[] {
     correct: 0,
     missed: 0,
     doublesHit: 0,
+    lifelines: freshLifelines(),
   }));
 }
 
@@ -82,6 +88,45 @@ export interface BuiltBoard {
   cells: BoardCell[];
 }
 
+/** Normalize an answer for de-duping distractors (case/punctuation-insensitive). */
+function normalizeAnswer(answer: string): string {
+  return answer.toLowerCase().replace(/\s*\([^)]*\)\s*/g, ' ').replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+/**
+ * Build three multiple-choice options (correct first) for a clue. Authored
+ * choices win; otherwise we draw two plausible distractors from a pool of sibling
+ * answers in the same topic — real answers that "sound reasonable" but are wrong.
+ */
+export function buildChoices(
+  answer: string,
+  choices: [string, string, string] | undefined,
+  pool: string[],
+): [string, string, string] {
+  if (choices) return choices;
+
+  const correctKey = normalizeAnswer(answer);
+
+  // True/False clues can only ever have two sensible options.
+  if (correctKey === 'true' || correctKey === 'false') {
+    const opposite = correctKey === 'true' ? 'False' : 'True';
+    return [answer, opposite, "It's a myth"];
+  }
+
+  const seen = new Set<string>([correctKey]);
+  const distractors: string[] = [];
+  for (const candidate of shuffle(pool)) {
+    if (distractors.length >= 2) break;
+    const key = normalizeAnswer(candidate);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    distractors.push(candidate);
+  }
+  while (distractors.length < 2) distractors.push('None of these');
+
+  return [answer, distractors[0], distractors[1]];
+}
+
 /**
  * Build a fresh board: pick 6 random topics, then draw one random question per
  * difficulty for each topic, and flag 3 random cells as double-trouble.
@@ -93,9 +138,17 @@ export function buildBoard(): BuiltBoard {
   const cells: BoardCell[] = [];
 
   topics.forEach((topic, columnIndex) => {
+    const topicAnswers = topic.questions.map((q) => q.answer);
+
     DIFFICULTIES.forEach((difficulty) => {
       const candidates = topic.questions.filter((q) => q.difficulty === difficulty);
       const chosen = pickOne(candidates);
+
+      // Prefer same-difficulty siblings as distractors, widen to the whole topic
+      // if there aren't enough distinct ones.
+      const sameDiff = candidates.map((q) => q.answer);
+      const pool = sameDiff.length >= 3 ? sameDiff : topicAnswers;
+
       cells.push({
         id: `${columnIndex}-${difficulty}`,
         columnIndex,
@@ -103,6 +156,7 @@ export function buildBoard(): BuiltBoard {
         value: DIFFICULTY_VALUES[difficulty],
         question: chosen.question,
         answer: chosen.answer,
+        choices: buildChoices(chosen.answer, chosen.choices, pool),
         isDouble: false,
         used: false,
       });

@@ -15,10 +15,11 @@ export function createTopic(
         `Topic "${id}" difficulty ${difficulty} has ${entries.length} questions; expected ${QUESTIONS_PER_LEVEL}.`,
       );
     }
-    return entries.map(({ question, answer }) => ({
+    return entries.map(({ question, answer, choices }) => ({
       difficulty,
       question,
       answer,
+      choices,
     }));
   });
 

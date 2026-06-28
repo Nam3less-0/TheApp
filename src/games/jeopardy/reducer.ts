@@ -1,5 +1,5 @@
 import type { AnswerRecord, JeopardyAction, JeopardySession } from './types';
-import { buildBoard, computeTotalQuestions } from './utils';
+import { buildBoard, computeTotalQuestions, freshLifelines, shuffle } from './utils';
 
 export const initialJeopardyState: JeopardySession = {
   players: [],
@@ -11,6 +11,8 @@ export const initialJeopardyState: JeopardySession = {
   questionsAnswered: 0,
   totalQuestions: 0,
   history: [],
+  revealedChoices: null,
+  phoneFriendId: null,
 };
 
 function freshPlayers(players: JeopardySession['players']) {
@@ -20,6 +22,7 @@ function freshPlayers(players: JeopardySession['players']) {
     correct: 0,
     missed: 0,
     doublesHit: 0,
+    lifelines: freshLifelines(),
   }));
 }
 
@@ -42,6 +45,8 @@ export function jeopardyReducer(
         questionsAnswered: 0,
         totalQuestions: computeTotalQuestions(players.length),
         history: [],
+        revealedChoices: null,
+        phoneFriendId: null,
       };
     }
 
@@ -49,7 +54,48 @@ export function jeopardyReducer(
       if (state.phase !== 'board') return state;
       const cell = state.cells.find((c) => c.id === action.cellId);
       if (!cell || cell.used) return state;
-      return { ...state, phase: 'question', activeCellId: cell.id };
+      // Clear any lifeline state carried over from the previous clue.
+      return {
+        ...state,
+        phase: 'question',
+        activeCellId: cell.id,
+        revealedChoices: null,
+        phoneFriendId: null,
+      };
+    }
+
+    case 'USE_WHAT_CHOICES': {
+      if (state.phase !== 'question' && state.phase !== 'answer') return state;
+      if (state.revealedChoices) return state;
+      const cell = state.cells.find((c) => c.id === state.activeCellId);
+      if (!cell) return state;
+      const player = state.players[state.currentPlayerIndex];
+      if (!player?.lifelines.whatChoices) return state;
+
+      const players = state.players.map((p) =>
+        p.id === player.id
+          ? { ...p, lifelines: { ...p.lifelines, whatChoices: false } }
+          : p,
+      );
+      return { ...state, players, revealedChoices: shuffle(cell.choices) };
+    }
+
+    case 'USE_PHONE_A_FRIEND': {
+      if (state.phase !== 'question' && state.phase !== 'answer') return state;
+      if (state.phoneFriendId) return state;
+      const player = state.players[state.currentPlayerIndex];
+      if (!player?.lifelines.phoneAFriend) return state;
+      const helper = state.players.find(
+        (p) => p.id === action.helperId && p.id !== player.id,
+      );
+      if (!helper) return state;
+
+      const players = state.players.map((p) =>
+        p.id === player.id
+          ? { ...p, lifelines: { ...p.lifelines, phoneAFriend: false } }
+          : p,
+      );
+      return { ...state, players, phoneFriendId: helper.id };
     }
 
     case 'REVEAL_ANSWER': {
@@ -66,15 +112,27 @@ export function jeopardyReducer(
       const awarded = action.correct ? points : 0;
       const activePlayer = state.players[state.currentPlayerIndex];
 
+      // Phone a Friend splits a correct clue's points evenly between the active
+      // player and the helper they called.
+      const helperId = state.phoneFriendId;
+      const splitWithHelper = action.correct && helperId !== null;
+      const activeShare = splitWithHelper ? Math.round(awarded / 2) : awarded;
+      const helperShare = splitWithHelper ? awarded - activeShare : 0;
+
       const players = state.players.map((p) => {
-        if (p.id !== activePlayer.id) return p;
-        return {
-          ...p,
-          score: p.score + awarded,
-          correct: p.correct + (action.correct ? 1 : 0),
-          missed: p.missed + (action.correct ? 0 : 1),
-          doublesHit: p.doublesHit + (action.correct && cell.isDouble ? 1 : 0),
-        };
+        if (p.id === activePlayer.id) {
+          return {
+            ...p,
+            score: p.score + activeShare,
+            correct: p.correct + (action.correct ? 1 : 0),
+            missed: p.missed + (action.correct ? 0 : 1),
+            doublesHit: p.doublesHit + (action.correct && cell.isDouble ? 1 : 0),
+          };
+        }
+        if (splitWithHelper && p.id === helperId) {
+          return { ...p, score: p.score + helperShare };
+        }
+        return p;
       });
 
       const cells = state.cells.map((c) =>
@@ -90,7 +148,8 @@ export function jeopardyReducer(
         isDouble: cell.isDouble,
         playerId: activePlayer.id,
         correct: action.correct,
-        awarded,
+        awarded: activeShare,
+        helperId: state.phoneFriendId,
       };
 
       const questionsAnswered = state.questionsAnswered + 1;
@@ -107,6 +166,8 @@ export function jeopardyReducer(
         currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
         phase: isOver ? 'final' : 'board',
         history: [...state.history, record],
+        revealedChoices: null,
+        phoneFriendId: null,
       };
     }
 

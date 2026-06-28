@@ -20,8 +20,12 @@ import animals from './topics/animals';
 import anime from './topics/anime';
 import disney from './topics/disney';
 import boardGames from './topics/board-games';
+import digitalCreatures from './topics/digital-creatures';
+import neonOpenWorlds from './topics/neon-open-worlds';
+import opulenceOddities from './topics/opulence-oddities';
+import supesSatire from './topics/supes-satire';
 
-/** 21 topics × 50 questions (10 per difficulty) = 1,050 total clues. */
+/** 25 topics × 50 questions (10 per difficulty) = 1,250 total clues. */
 export const JEOPARDY_TOPICS: TopicData[] = [
   history,
   science,
@@ -44,6 +48,10 @@ export const JEOPARDY_TOPICS: TopicData[] = [
   anime,
   disney,
   boardGames,
+  digitalCreatures,
+  neonOpenWorlds,
+  opulenceOddities,
+  supesSatire,
 ];
 
 export type { Difficulty, RawQuestion, TopicData } from './types';
