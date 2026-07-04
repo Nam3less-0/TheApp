@@ -23,7 +23,7 @@ export default createTopic('technology', 'Technology', {
     { question: "What does the word 'app' short for?", answer: 'Application', choices: ['Application', 'Appliance', 'Applet'] },
     { question: 'Who co-founded Apple with Steve Jobs?', answer: 'Steve Wozniak', choices: ['Steve Wozniak', 'Ronald Wayne', 'Bill Gates'] },
     { question: 'Which Elon Musk company makes electric cars?', answer: 'Tesla', choices: ['Tesla', 'Rivian', 'Lucid Motors'] },
-    { question: 'What does tapping your phone at a checkout use to pay wirelessly?', answer: 'Contactless payment (NFC)', choices: ['NFC', 'Bluetooth', 'QR scanning'] },
+    { question: 'What does tapping your phone at a checkout use to pay wirelessly?', answer: 'Contactless payment (NFC)', choices: ['Contactless payment (NFC)', 'Bluetooth', 'QR scanning'] },
   ],
   3: [
     { question: "What does 'HTML' stand for?", answer: 'HyperText Markup Language', choices: ['HyperText Markup Language', 'HyperText Making Language', 'HighText Markup Language'] },
@@ -52,7 +52,7 @@ export default createTopic('technology', 'Technology', {
   5: [
     { question: 'Who is credited with inventing the World Wide Web while working at CERN?', answer: 'Tim Berners-Lee', choices: ['Tim Berners-Lee', 'Vint Cerf', 'Robert Kahn'] },
     { question: "Which IBM supercomputer defeated world chess champion Garry Kasparov in 1997?", answer: 'Deep Blue', choices: ['Deep Blue', 'Watson', 'AlphaGo'] },
-    { question: "What does Moore's Law predict about the number of transistors on a chip?", answer: 'It roughly doubles about every two years', choices: ['It doubles about every two years', 'It triples about every two years', 'It doubles about every ten years'] },
+    { question: "What does Moore's Law predict about the number of transistors on a chip?", answer: 'It roughly doubles about every two years', choices: ['It roughly doubles about every two years', 'It triples about every two years', 'It doubles about every ten years'] },
     { question: 'What distributed ledger technology underpins Bitcoin?', answer: 'Blockchain', choices: ['Blockchain', 'Hashgraph', 'A relational database'] },
     { question: 'In what year was the first SMS text message sent?', answer: '1992', choices: ['1992', '1990', '1994'] },
     { question: 'Which company introduced the first commercial microprocessor, the 4004, in 1971?', answer: 'Intel', choices: ['Intel', 'AMD', 'Motorola'] },

@@ -57,7 +57,7 @@ export default createTopic('opulence-oddities', 'Opulence & Oddities', {
     { question: 'What symbol appears on the clasp of many Rolex Oyster bracelets?', answer: 'The Rolex crown (coronet)', choices: ['The Rolex crown (coronet)', 'A laurel wreath', 'A shield'] },
     { question: 'What happens to a honeybee after it stings a mammal?', answer: 'It dies', choices: ['It dies', 'It heals and stings again', 'It loses only its venom'] },
     { question: 'What vintage Rolex Daytona reference carries the prized "Paul Newman" exotic dial?', answer: 'The Ref. 6239', choices: ['The Ref. 6239', 'The Ref. 16520', 'The Ref. 116500'] },
-    { question: 'True or false: sharks are older than trees.', answer: 'True', choices: ['True', 'False', 'They appeared at the same time'] },
+    { question: 'What mammal cannot jump?', answer: 'Elephants', choices: ['Elephants', 'Hippos', 'Rhinoceroses'] },
     { question: 'What full phrase has appeared on Rolex dials for decades alongside "Swiss Made"?', answer: 'Superlative Chronometer Officially Certified', choices: ['Superlative Chronometer Officially Certified', 'Geneva Seal Certified', 'Precision Timed Movement'] },
     { question: 'What U.S. state is the only one that grows coffee commercially?', answer: 'Hawaii', choices: ['Hawaii', 'Florida', 'California'] },
   ],

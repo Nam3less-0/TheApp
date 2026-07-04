@@ -1,0 +1,406 @@
+{
+  "id": "everyday-inventions",
+  "title": "Everyday Inventions We Use",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Smartphone"
+    },
+    {
+      "rank": 2,
+      "name": "Internet"
+    },
+    {
+      "rank": 3,
+      "name": "Refrigerator"
+    },
+    {
+      "rank": 4,
+      "name": "Toilet"
+    },
+    {
+      "rank": 5,
+      "name": "Light Bulb"
+    },
+    {
+      "rank": 6,
+      "name": "Running Water (Plumbing)"
+    },
+    {
+      "rank": 7,
+      "name": "Electricity"
+    },
+    {
+      "rank": 8,
+      "name": "Car"
+    },
+    {
+      "rank": 9,
+      "name": "Washing Machine"
+    },
+    {
+      "rank": 10,
+      "name": "Microwave Oven"
+    },
+    {
+      "rank": 11,
+      "name": "Television"
+    },
+    {
+      "rank": 12,
+      "name": "Air Conditioning"
+    },
+    {
+      "rank": 13,
+      "name": "Toothbrush"
+    },
+    {
+      "rank": 14,
+      "name": "Toothpaste"
+    },
+    {
+      "rank": 15,
+      "name": "Soap"
+    },
+    {
+      "rank": 16,
+      "name": "Shampoo"
+    },
+    {
+      "rank": 17,
+      "name": "Razor"
+    },
+    {
+      "rank": 18,
+      "name": "Deodorant"
+    },
+    {
+      "rank": 19,
+      "name": "Towel"
+    },
+    {
+      "rank": 20,
+      "name": "Bed"
+    },
+    {
+      "rank": 21,
+      "name": "Pillow"
+    },
+    {
+      "rank": 22,
+      "name": "Chair"
+    },
+    {
+      "rank": 23,
+      "name": "Table"
+    },
+    {
+      "rank": 24,
+      "name": "Fork"
+    },
+    {
+      "rank": 25,
+      "name": "Knife"
+    },
+    {
+      "rank": 26,
+      "name": "Spoon"
+    },
+    {
+      "rank": 27,
+      "name": "Plate"
+    },
+    {
+      "rank": 28,
+      "name": "Cup"
+    },
+    {
+      "rank": 29,
+      "name": "Glass"
+    },
+    {
+      "rank": 30,
+      "name": "Bottle"
+    },
+    {
+      "rank": 31,
+      "name": "Can Opener"
+    },
+    {
+      "rank": 32,
+      "name": "Kettle"
+    },
+    {
+      "rank": 33,
+      "name": "Coffee Maker"
+    },
+    {
+      "rank": 34,
+      "name": "Toaster"
+    },
+    {
+      "rank": 35,
+      "name": "Oven"
+    },
+    {
+      "rank": 36,
+      "name": "Stove"
+    },
+    {
+      "rank": 37,
+      "name": "Vacuum Cleaner"
+    },
+    {
+      "rank": 38,
+      "name": "Broom"
+    },
+    {
+      "rank": 39,
+      "name": "Mop"
+    },
+    {
+      "rank": 40,
+      "name": "Trash Bag"
+    },
+    {
+      "rank": 41,
+      "name": "Light Switch"
+    },
+    {
+      "rank": 42,
+      "name": "Door Lock"
+    },
+    {
+      "rank": 43,
+      "name": "Key"
+    },
+    {
+      "rank": 44,
+      "name": "Zipper"
+    },
+    {
+      "rank": 45,
+      "name": "Button"
+    },
+    {
+      "rank": 46,
+      "name": "Velcro"
+    },
+    {
+      "rank": 47,
+      "name": "Shoelaces"
+    },
+    {
+      "rank": 48,
+      "name": "Umbrella"
+    },
+    {
+      "rank": 49,
+      "name": "Sunglasses"
+    },
+    {
+      "rank": 50,
+      "name": "Wallet"
+    },
+    {
+      "rank": 51,
+      "name": "Watch"
+    },
+    {
+      "rank": 52,
+      "name": "Alarm Clock"
+    },
+    {
+      "rank": 53,
+      "name": "Calendar"
+    },
+    {
+      "rank": 54,
+      "name": "Pen"
+    },
+    {
+      "rank": 55,
+      "name": "Pencil"
+    },
+    {
+      "rank": 56,
+      "name": "Eraser"
+    },
+    {
+      "rank": 57,
+      "name": "Notebook"
+    },
+    {
+      "rank": 58,
+      "name": "Paper Clip"
+    },
+    {
+      "rank": 59,
+      "name": "Stapler"
+    },
+    {
+      "rank": 60,
+      "name": "Tape (Adhesive)"
+    },
+    {
+      "rank": 61,
+      "name": "Glue"
+    },
+    {
+      "rank": 62,
+      "name": "Scissors"
+    },
+    {
+      "rank": 63,
+      "name": "Hammer"
+    },
+    {
+      "rank": 64,
+      "name": "Screwdriver"
+    },
+    {
+      "rank": 65,
+      "name": "Nail"
+    },
+    {
+      "rank": 66,
+      "name": "Screw"
+    },
+    {
+      "rank": 67,
+      "name": "Elevator"
+    },
+    {
+      "rank": 68,
+      "name": "Escalator"
+    },
+    {
+      "rank": 69,
+      "name": "Bicycle"
+    },
+    {
+      "rank": 70,
+      "name": "Seat Belt"
+    },
+    {
+      "rank": 71,
+      "name": "Airbag"
+    },
+    {
+      "rank": 72,
+      "name": "GPS Navigation"
+    },
+    {
+      "rank": 73,
+      "name": "Traffic Light"
+    },
+    {
+      "rank": 74,
+      "name": "ATM"
+    },
+    {
+      "rank": 75,
+      "name": "Credit Card"
+    },
+    {
+      "rank": 76,
+      "name": "Contactless Payment"
+    },
+    {
+      "rank": 77,
+      "name": "Barcode"
+    },
+    {
+      "rank": 78,
+      "name": "QR Code"
+    },
+    {
+      "rank": 79,
+      "name": "Shopping Cart"
+    },
+    {
+      "rank": 80,
+      "name": "Receipt Printer"
+    },
+    {
+      "rank": 81,
+      "name": "Cash Register"
+    },
+    {
+      "rank": 82,
+      "name": "Smoke Detector"
+    },
+    {
+      "rank": 83,
+      "name": "Fire Extinguisher"
+    },
+    {
+      "rank": 84,
+      "name": "Security Camera"
+    },
+    {
+      "rank": 85,
+      "name": "Thermometer"
+    },
+    {
+      "rank": 86,
+      "name": "Band-Aid"
+    },
+    {
+      "rank": 87,
+      "name": "Glasses (Eyewear)"
+    },
+    {
+      "rank": 88,
+      "name": "Contact Lenses"
+    },
+    {
+      "rank": 89,
+      "name": "Dental Floss"
+    },
+    {
+      "rank": 90,
+      "name": "Tissue Paper"
+    },
+    {
+      "rank": 91,
+      "name": "Toilet Paper"
+    },
+    {
+      "rank": 92,
+      "name": "Paper Towel"
+    },
+    {
+      "rank": 93,
+      "name": "Napkin"
+    },
+    {
+      "rank": 94,
+      "name": "Diaper"
+    },
+    {
+      "rank": 95,
+      "name": "Baby Monitor"
+    },
+    {
+      "rank": 96,
+      "name": "Stroller"
+    },
+    {
+      "rank": 97,
+      "name": "Car Seat"
+    },
+    {
+      "rank": 98,
+      "name": "Helmet"
+    },
+    {
+      "rank": 99,
+      "name": "Sunscreen"
+    },
+    {
+      "rank": 100,
+      "name": "Mirror"
+    }
+  ]
+}

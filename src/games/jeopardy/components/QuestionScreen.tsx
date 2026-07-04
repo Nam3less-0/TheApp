@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useJeopardy } from '../context';
-import { COLORS, SILVER_BUTTON, formatScore } from '../utils';
+import { COLORS, SILVER_BUTTON, formatScore, isWhatChoicesAllowed } from '../utils';
 import { JeopardyPageWrap } from './JeopardyPanel';
 import PlayerAvatar from './PlayerAvatar';
 
@@ -88,6 +88,8 @@ export default function QuestionScreen() {
   if (!cell) return null;
 
   const topicName = state.columns[cell.columnIndex]?.name ?? '';
+  const topicId = state.columns[cell.columnIndex]?.id;
+  const whatChoicesAllowed = isWhatChoicesAllowed(topicId);
   const points = cell.value * (cell.isDouble ? 2 : 1);
   const revealed = state.phase === 'answer';
 
@@ -216,26 +218,32 @@ export default function QuestionScreen() {
                   Lifelines
                 </div>
                 <div className="flex flex-col gap-2 sm:flex-row">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPickerOpen(false);
-                      dispatch({ type: 'USE_WHAT_CHOICES' });
-                    }}
-                    disabled={!lifelines.whatChoices || choices !== null}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 font-body text-[12.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-35"
-                    style={{
-                      background: `color-mix(in srgb, ${COLORS.sapphireBright} 10%, #1A1C20)`,
-                      borderColor: `color-mix(in srgb, ${COLORS.sapphireBright} 35%, transparent)`,
-                      color: COLORS.sapphireBright,
-                    }}
-                  >
-                    <ChoicesIcon />
-                    What Choices
-                    {!lifelines.whatChoices && (
-                      <span className="font-mono text-[10px] opacity-70">· used</span>
-                    )}
-                  </button>
+                  {whatChoicesAllowed ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPickerOpen(false);
+                        dispatch({ type: 'USE_WHAT_CHOICES' });
+                      }}
+                      disabled={!lifelines.whatChoices || choices !== null}
+                      className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 font-body text-[12.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-35"
+                      style={{
+                        background: `color-mix(in srgb, ${COLORS.sapphireBright} 10%, #1A1C20)`,
+                        borderColor: `color-mix(in srgb, ${COLORS.sapphireBright} 35%, transparent)`,
+                        color: COLORS.sapphireBright,
+                      }}
+                    >
+                      <ChoicesIcon />
+                      What Choices
+                      {!lifelines.whatChoices && (
+                        <span className="font-mono text-[10px] opacity-70">· used</span>
+                      )}
+                    </button>
+                  ) : (
+                    <p className="flex flex-1 items-center justify-center rounded-xl border border-line bg-deep/60 px-3 py-2.5 text-center font-body text-[11.5px] text-text-low">
+                      What Choices isn&rsquo;t available on riddles
+                    </p>
+                  )}
 
                   <button
                     type="button"

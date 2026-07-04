@@ -24,8 +24,9 @@ import digitalCreatures from './topics/digital-creatures';
 import neonOpenWorlds from './topics/neon-open-worlds';
 import opulenceOddities from './topics/opulence-oddities';
 import supesSatire from './topics/supes-satire';
+import riddles from './topics/riddles';
 
-/** 25 topics × 50 questions (10 per difficulty) = 1,250 total clues. */
+/** 26 topics × 50 questions (10 per difficulty) = 1,300 total clues. */
 export const JEOPARDY_TOPICS: TopicData[] = [
   history,
   science,
@@ -52,6 +53,7 @@ export const JEOPARDY_TOPICS: TopicData[] = [
   neonOpenWorlds,
   opulenceOddities,
   supesSatire,
+  riddles,
 ];
 
 export type { Difficulty, RawQuestion, TopicData } from './types';

@@ -3,7 +3,7 @@ import { createTopic } from '../createTopic';
 export default createTopic('anime', 'Anime & Manga', {
   1: [
     { question: 'What yellow electric mouse Pokémon is the franchise mascot?', answer: 'Pikachu', choices: ['Pikachu', 'Raichu', 'Pichu'] },
-    { question: 'In Naruto, what village is the title character from?', answer: 'The Hidden Leaf Village (Konoha)', choices: ['The Hidden Leaf Village', 'The Hidden Sand Village', 'The Hidden Mist Village'] },
+    { question: 'In Naruto, what village is the title character from?', answer: 'The Hidden Leaf Village (Konoha)', choices: ['The Hidden Leaf Village (Konoha)', 'The Hidden Sand Village', 'The Hidden Mist Village'] },
     { question: 'What do you call Japanese animated TV shows and films?', answer: 'Anime', choices: ['Anime', 'Manga', 'Manhwa'] },
     { question: 'Which Studio Ghibli film features a girl named Chihiro in a spirit world?', answer: 'Spirited Away', choices: ['Spirited Away', 'My Neighbor Totoro', 'Princess Mononoke'] },
     { question: 'What is the name of Goku\u2019s son in Dragon Ball?', answer: 'Gohan', choices: ['Gohan', 'Goten', 'Trunks'] },
@@ -28,13 +28,13 @@ export default createTopic('anime', 'Anime & Manga', {
   3: [
     { question: 'Who created the manga series One Piece?', answer: 'Eiichiro Oda', choices: ['Eiichiro Oda', 'Masashi Kishimoto', 'Akira Toriyama'] },
     { question: 'What is the name of the main character in Attack on Titan?', answer: 'Eren Yeager', choices: ['Eren Yeager', 'Armin Arlert', 'Levi Ackerman'] },
-    { question: 'In Naruto, what tailed beast is sealed inside Naruto?', answer: 'The Nine-Tails (Kurama)', choices: ['The Nine-Tails', 'The Eight-Tails', 'The One-Tail'] },
+    { question: 'In Naruto, what tailed beast is sealed inside Naruto?', answer: 'The Nine-Tails (Kurama)', choices: ['The Nine-Tails (Kurama)', 'The Eight-Tails', 'The One-Tail'] },
     { question: 'Which studio made Spirited Away and Howl\u2019s Moving Castle?', answer: 'Studio Ghibli', choices: ['Studio Ghibli', 'Studio Trigger', 'Madhouse'] },
     { question: 'What is Deku\u2019s real name in My Hero Academia?', answer: 'Izuku Midoriya', choices: ['Izuku Midoriya', 'Katsuki Bakugo', 'Shoto Todoroki'] },
     { question: 'In Dragon Ball, what do you gather to summon Shenron?', answer: 'The Dragon Balls', choices: ['The Dragon Balls', 'The Dragon Scrolls', 'The Sacred Orbs'] },
     { question: 'Which anime features a boy named Light who finds a supernatural notebook?', answer: 'Death Note', choices: ['Death Note', 'Code Geass', 'Steins;Gate'] },
     { question: 'What is the name of the giant robot genre in anime?', answer: 'Mecha', choices: ['Mecha', 'Isekai', 'Shōnen'] },
-    { question: 'In One Piece, what fruit gave Luffy rubber powers?', answer: 'The Gum-Gum Fruit (Gomu Gomu no Mi)', choices: ['The Gum-Gum Fruit', 'The Flame-Flame Fruit', 'The Tremor-Tremor Fruit'] },
+    { question: 'In One Piece, what fruit gave Luffy rubber powers?', answer: 'The Gum-Gum Fruit (Gomu Gomu no Mi)', choices: ['The Gum-Gum Fruit (Gomu Gomu no Mi)', 'The Flame-Flame Fruit', 'The Tremor-Tremor Fruit'] },
     { question: 'Who directed Spirited Away?', answer: 'Hayao Miyazaki', choices: ['Hayao Miyazaki', 'Isao Takahata', 'Makoto Shinkai'] },
   ],
   4: [
@@ -55,7 +55,7 @@ export default createTopic('anime', 'Anime & Manga', {
     { question: 'In Neon Genesis Evangelion, what organization fights the Angels?', answer: 'NERV', choices: ['NERV', 'SEELE', 'WILLE'] },
     { question: 'In Fullmetal Alchemist, what is the name of Ed\u2019s automail mechanic?', answer: 'Winry Rockbell', choices: ['Winry Rockbell', 'Riza Hawkeye', 'Rose Thomas'] },
     { question: 'Which long-running manga began in 1997 and follows a rubber pirate?', answer: 'One Piece', choices: ['One Piece', 'Bleach', 'Naruto'] },
-    { question: 'What is the name of Levi Ackerman\u2019s squad in Attack on Titan?', answer: 'The Special Operations Squad (Levi Squad)', choices: ['The Special Operations Squad', 'The Survey Corps Vanguard', 'The Military Police Brigade'] },
+    { question: 'What is the name of Levi Ackerman\u2019s squad in Attack on Titan?', answer: 'The Special Operations Squad (Levi Squad)', choices: ['The Special Operations Squad (Levi Squad)', 'The Survey Corps Vanguard', 'The Military Police Brigade'] },
     { question: 'In Bleach, what is the name of the afterlife realm where soul reapers serve?', answer: 'The Soul Society', choices: ['The Soul Society', 'Hueco Mundo', 'The Seireitei Vale'] },
     { question: 'Who wrote and illustrated the manga Death Note?', answer: 'Tsugumi Ohba and Takeshi Obata', choices: ['Tsugumi Ohba and Takeshi Obata', 'Hiromu Arakawa', 'Kohei Horikoshi'] },
     { question: 'What is the name of the first Dragon Ball series before Z?', answer: 'Dragon Ball', choices: ['Dragon Ball', 'Dragon Ball GT', 'Dragon Ball Super'] },

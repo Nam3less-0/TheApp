@@ -1,0 +1,406 @@
+{
+  "id": "most-popular-anime-characters",
+  "title": "Most Popular Anime Characters",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Goku"
+    },
+    {
+      "rank": 2,
+      "name": "Naruto Uzumaki"
+    },
+    {
+      "rank": 3,
+      "name": "Luffy"
+    },
+    {
+      "rank": 4,
+      "name": "Ichigo Kurosaki"
+    },
+    {
+      "rank": 5,
+      "name": "Sailor Moon"
+    },
+    {
+      "rank": 6,
+      "name": "Pikachu"
+    },
+    {
+      "rank": 7,
+      "name": "Ash Ketchum"
+    },
+    {
+      "rank": 8,
+      "name": "Eren Yeager"
+    },
+    {
+      "rank": 9,
+      "name": "Levi Ackerman"
+    },
+    {
+      "rank": 10,
+      "name": "Mikasa Ackerman"
+    },
+    {
+      "rank": 11,
+      "name": "Light Yagami"
+    },
+    {
+      "rank": 12,
+      "name": "L (Death Note)"
+    },
+    {
+      "rank": 13,
+      "name": "Ryuk"
+    },
+    {
+      "rank": 14,
+      "name": "Edward Elric"
+    },
+    {
+      "rank": 15,
+      "name": "Alphonse Elric"
+    },
+    {
+      "rank": 16,
+      "name": "Saitama"
+    },
+    {
+      "rank": 17,
+      "name": "Genos"
+    },
+    {
+      "rank": 18,
+      "name": "Deku (Izuku Midoriya)"
+    },
+    {
+      "rank": 19,
+      "name": "Bakugo"
+    },
+    {
+      "rank": 20,
+      "name": "Todoroki"
+    },
+    {
+      "rank": 21,
+      "name": "Tanjiro Kamado"
+    },
+    {
+      "rank": 22,
+      "name": "Nezuko Kamado"
+    },
+    {
+      "rank": 23,
+      "name": "Zenitsu Agatsuma"
+    },
+    {
+      "rank": 24,
+      "name": "Inosuke Hashibira"
+    },
+    {
+      "rank": 25,
+      "name": "Gojo Satoru"
+    },
+    {
+      "rank": 26,
+      "name": "Itadori Yuji"
+    },
+    {
+      "rank": 27,
+      "name": "Megumi Fushiguro"
+    },
+    {
+      "rank": 28,
+      "name": "Nobara Kugisaki"
+    },
+    {
+      "rank": 29,
+      "name": "Sukuna"
+    },
+    {
+      "rank": 30,
+      "name": "Denji"
+    },
+    {
+      "rank": 31,
+      "name": "Power"
+    },
+    {
+      "rank": 32,
+      "name": "Makima"
+    },
+    {
+      "rank": 33,
+      "name": "Aki Hayakawa"
+    },
+    {
+      "rank": 34,
+      "name": "Spike Spiegel"
+    },
+    {
+      "rank": 35,
+      "name": "Faye Valentine"
+    },
+    {
+      "rank": 36,
+      "name": "Vicious"
+    },
+    {
+      "rank": 37,
+      "name": "Ein (Cowboy Bebop)"
+    },
+    {
+      "rank": 38,
+      "name": "Shinji Ikari"
+    },
+    {
+      "rank": 39,
+      "name": "Rei Ayanami"
+    },
+    {
+      "rank": 40,
+      "name": "Asuka Langley"
+    },
+    {
+      "rank": 41,
+      "name": "Kakashi Hatake"
+    },
+    {
+      "rank": 42,
+      "name": "Sasuke Uchiha"
+    },
+    {
+      "rank": 43,
+      "name": "Sakura Haruno"
+    },
+    {
+      "rank": 44,
+      "name": "Itachi Uchiha"
+    },
+    {
+      "rank": 45,
+      "name": "Jiraiya"
+    },
+    {
+      "rank": 46,
+      "name": "Zoro"
+    },
+    {
+      "rank": 47,
+      "name": "Sanji"
+    },
+    {
+      "rank": 48,
+      "name": "Nami"
+    },
+    {
+      "rank": 49,
+      "name": "Robin (One Piece)"
+    },
+    {
+      "rank": 50,
+      "name": "Chopper"
+    },
+    {
+      "rank": 51,
+      "name": "Ace (One Piece)"
+    },
+    {
+      "rank": 52,
+      "name": "Shanks"
+    },
+    {
+      "rank": 53,
+      "name": "Kaido"
+    },
+    {
+      "rank": 54,
+      "name": "L Lawliet"
+    },
+    {
+      "rank": 55,
+      "name": "Near (Death Note)"
+    },
+    {
+      "rank": 56,
+      "name": "Mello"
+    },
+    {
+      "rank": 57,
+      "name": "Rem"
+    },
+    {
+      "rank": 58,
+      "name": "Vegeta"
+    },
+    {
+      "rank": 59,
+      "name": "Piccolo"
+    },
+    {
+      "rank": 60,
+      "name": "Gohan"
+    },
+    {
+      "rank": 61,
+      "name": "Trunks"
+    },
+    {
+      "rank": 62,
+      "name": "Bulma"
+    },
+    {
+      "rank": 63,
+      "name": "Frieza"
+    },
+    {
+      "rank": 64,
+      "name": "Cell"
+    },
+    {
+      "rank": 65,
+      "name": "Majin Buu"
+    },
+    {
+      "rank": 66,
+      "name": "Broly"
+    },
+    {
+      "rank": 67,
+      "name": "Whis"
+    },
+    {
+      "rank": 68,
+      "name": "Beerus"
+    },
+    {
+      "rank": 69,
+      "name": "Killua Zoldyck"
+    },
+    {
+      "rank": 70,
+      "name": "Gon Freecss"
+    },
+    {
+      "rank": 71,
+      "name": "Hisoka"
+    },
+    {
+      "rank": 72,
+      "name": "Kurapika"
+    },
+    {
+      "rank": 73,
+      "name": "Leorio"
+    },
+    {
+      "rank": 74,
+      "name": "Meruem"
+    },
+    {
+      "rank": 75,
+      "name": "Netero"
+    },
+    {
+      "rank": 76,
+      "name": "Yusuke Urameshi"
+    },
+    {
+      "rank": 77,
+      "name": "Hiei"
+    },
+    {
+      "rank": 78,
+      "name": "Kurama"
+    },
+    {
+      "rank": 79,
+      "name": "Kuwabara"
+    },
+    {
+      "rank": 80,
+      "name": "Inuyasha"
+    },
+    {
+      "rank": 81,
+      "name": "Kagome"
+    },
+    {
+      "rank": 82,
+      "name": "Sesshomaru"
+    },
+    {
+      "rank": 83,
+      "name": "Kikyo"
+    },
+    {
+      "rank": 84,
+      "name": "Naraku"
+    },
+    {
+      "rank": 85,
+      "name": "Rukia Kuchiki"
+    },
+    {
+      "rank": 86,
+      "name": "Renji Abarai"
+    },
+    {
+      "rank": 87,
+      "name": "Byakuya Kuchiki"
+    },
+    {
+      "rank": 88,
+      "name": "Aizen"
+    },
+    {
+      "rank": 89,
+      "name": "Ulquiorra"
+    },
+    {
+      "rank": 90,
+      "name": "Grimmjow"
+    },
+    {
+      "rank": 91,
+      "name": "Natsu Dragneel"
+    },
+    {
+      "rank": 92,
+      "name": "Lucy Heartfilia"
+    },
+    {
+      "rank": 93,
+      "name": "Erza Scarlet"
+    },
+    {
+      "rank": 94,
+      "name": "Gray Fullbuster"
+    },
+    {
+      "rank": 95,
+      "name": "Happy (Fairy Tail)"
+    },
+    {
+      "rank": 96,
+      "name": "Meliodas"
+    },
+    {
+      "rank": 97,
+      "name": "Elizabeth (Seven Deadly Sins)"
+    },
+    {
+      "rank": 98,
+      "name": "Ban"
+    },
+    {
+      "rank": 99,
+      "name": "King (Seven Deadly Sins)"
+    },
+    {
+      "rank": 100,
+      "name": "Escanor"
+    }
+  ]
+}

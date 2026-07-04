@@ -12,6 +12,8 @@ import { extraCategories } from './extra-categories.mjs';
 import { extraCategories2 } from './extra-categories-2.mjs';
 import { extraCategories3 } from './extra-categories-3.mjs';
 import { extraCategories4 } from './extra-categories-4.mjs';
+import { extraCategories5 } from './extra-categories-5.mjs';
+import { extraCategories6 } from './extra-categories-6.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const outDir = join(__dirname, '../src/data/categories');
@@ -644,6 +646,8 @@ const categories = [
   ...extraCategories2.map(({ id, title, names }) => take100(id, title, names)),
   ...extraCategories3.map(({ id, title, names }) => take100(id, title, names)),
   ...extraCategories4.map(({ id, title, names }) => take100(id, title, names)),
+  ...extraCategories5.map(({ id, title, names }) => take100(id, title, names)),
+  ...extraCategories6.map(({ id, title, names }) => take100(id, title, names)),
 ];
 
 for (const category of categories) {

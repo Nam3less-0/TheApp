@@ -38,6 +38,13 @@ const DEFAULT_PLAYER_NAMES = ['Belford', 'Joshua', 'Matthew', 'Kai Jie'];
 export const MIN_PLAYERS = 2;
 export const MAX_PLAYERS = 8;
 
+/** Topic ids where the What Choices lifeline is disabled (e.g. riddles). */
+export const WHAT_CHOICES_BLOCKED_TOPIC_IDS = new Set(['riddles']);
+
+export function isWhatChoicesAllowed(topicId: string | undefined): boolean {
+  return topicId !== undefined && !WHAT_CHOICES_BLOCKED_TOPIC_IDS.has(topicId);
+}
+
 export function getInitials(name: string): string {
   const trimmed = name.trim();
   if (!trimmed) return '?';

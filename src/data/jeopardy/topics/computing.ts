@@ -40,9 +40,9 @@ export default createTopic('computing', 'Computing & Code', {
   4: [
     { question: "What does 'ASCII' stand for?", answer: 'American Standard Code for Information Interchange', choices: ['American Standard Code for Information Interchange', 'Advanced System Code for Internet Interchange', 'Automated Standard Communication Interface'] },
     { question: 'Who developed the C programming language at Bell Labs?', answer: 'Dennis Ritchie', choices: ['Dennis Ritchie', 'Ken Thompson', 'Bjarne Stroustrup'] },
-    { question: 'Which algorithm finds the shortest path in a weighted graph?', answer: "Dijkstra's algorithm", choices: ['Dijkstra\u2019s algorithm', 'Kruskal\u2019s algorithm', 'Bellman-Ford algorithm'] },
+    { question: 'Which algorithm finds the shortest path in a weighted graph?', answer: "Dijkstra's algorithm", choices: ["Dijkstra's algorithm", 'Kruskal\u2019s algorithm', 'Bellman-Ford algorithm'] },
     { question: "What does 'CRUD' stand for?", answer: 'Create, Read, Update, Delete', choices: ['Create, Read, Update, Delete', 'Compile, Run, Update, Deploy', 'Create, Render, Undo, Delete'] },
-    { question: 'Which protocol encrypts web traffic in HTTPS?', answer: 'TLS (Transport Layer Security)', choices: ['TLS', 'SSH', 'FTP'] },
+    { question: 'Which protocol encrypts web traffic in HTTPS?', answer: 'TLS (Transport Layer Security)', choices: ['TLS (Transport Layer Security)', 'SSH', 'FTP'] },
     { question: 'In what year was Python first released?', answer: '1991', choices: ['1991', '1989', '1995'] },
     { question: "What does 'MVC' stand for in software architecture?", answer: 'Model-View-Controller', choices: ['Model-View-Controller', 'Module-Variable-Class', 'Main-Version-Control'] },
     { question: 'Which language did Brendan Eich create in about 10 days in 1995?', answer: 'JavaScript', choices: ['JavaScript', 'Java', 'PHP'] },
@@ -52,7 +52,7 @@ export default createTopic('computing', 'Computing & Code', {
   5: [
     { question: "Who is known as the first computer programmer for her work on Babbage's Analytical Engine?", answer: 'Ada Lovelace', choices: ['Ada Lovelace', 'Grace Hopper', 'Mary Somerville'] },
     { question: 'What theoretical machine did Alan Turing describe in his 1936 paper?', answer: 'A Turing machine', choices: ['A Turing machine', 'A von Neumann machine', 'A finite-state automaton'] },
-    { question: "In the DRY principle, what does 'DRY' stand for?", answer: "Don't Repeat Yourself", choices: ['Don\u2019t Repeat Yourself', 'Data Redundancy Yield', 'Document Repository Yaml'] },
+    { question: "In the DRY principle, what does 'DRY' stand for?", answer: "Don't Repeat Yourself", choices: ["Don't Repeat Yourself", 'Data Redundancy Yield', 'Document Repository Yaml'] },
     { question: 'What is the Halting Problem?', answer: 'The question of whether a program can determine if another program will ever finish running', choices: ['The question of whether a program can determine if another program will ever finish running', 'The challenge of stopping an infinite loop by hand', 'The problem of pausing a program to debug it'] },
     { question: 'What is polymorphism in object-oriented programming?', answer: 'Objects of different types responding to the same interface or method call', choices: ['Objects of different types responding to the same interface or method call', 'Hiding an object\u2019s internal data from outside code', 'Reusing code by inheriting from a parent class'] },
     { question: 'Which distributed version-control system did Linus Torvalds create in 2005?', answer: 'Git', choices: ['Git', 'Mercurial', 'Subversion'] },

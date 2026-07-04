@@ -91,6 +91,14 @@ const CATEGORY_GROUP_BY_ID: Record<string, CategoryGroupId> = {
   'iconic-comic-artifacts': 'comics',
   'famous-comic-creators': 'comics',
   'iconic-comic-locations': 'comics',
+  'most-popular-male-names': 'lifestyle',
+  'most-popular-female-names': 'lifestyle',
+  'most-popular-dog-names': 'lifestyle',
+  'most-popular-tv-characters': 'film-tv',
+  'most-popular-anime-characters': 'anime',
+  'famous-fictional-pets': 'pop-culture',
+  'most-popular-luxury-brands': 'lifestyle',
+  'everyday-inventions': 'knowledge',
 };
 
 export function getCategoryGroupId(categoryId: string): CategoryGroupId {

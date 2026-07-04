@@ -52,7 +52,7 @@ export default createTopic('marvel', 'Marvel Universe', {
   5: [
     { question: 'In which comic issue did Spider-Man first appear?', answer: 'Amazing Fantasy #15', choices: ['Amazing Fantasy #15', 'The Amazing Spider-Man #1', 'Fantastic Four #1'] },
     { question: 'Who co-created Spider-Man with Stan Lee?', answer: 'Steve Ditko', choices: ['Steve Ditko', 'Jack Kirby', 'John Romita'] },
-    { question: 'What is the name of Logan\u2019s clone in the X-Men comics?', answer: 'X-23 (Laura Kinney)', choices: ['X-23', 'Daken', 'Honey Badger'] },
+    { question: 'What is the name of Logan\u2019s clone in the X-Men comics?', answer: 'X-23 (Laura Kinney)', choices: ['X-23 (Laura Kinney)', 'Daken', 'Honey Badger'] },
     { question: 'Which organization is led by Red Skull in Marvel comics?', answer: 'HYDRA', choices: ['HYDRA', 'A.I.M.', 'The Hand'] },
     { question: 'What planet is the symbiote Venom originally from?', answer: 'Klyntar', choices: ['Klyntar', 'Knowhere', 'Sakaar'] },
     { question: 'Who becomes the new Black Panther after T\u2019Challa in Wakanda Forever?', answer: 'Shuri', choices: ['Shuri', 'Nakia', 'Okoye'] },

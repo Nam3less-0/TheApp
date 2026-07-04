@@ -10,11 +10,8 @@ export interface RawQuestion {
   difficulty: Difficulty;
   question: string;
   answer: string;
-  /**
-   * Optional authored multiple-choice options. When omitted, the board builder
-   * generates plausible distractors from other answers in the same topic.
-   */
-  choices?: Choices;
+  /** Three multiple-choice options for the "What Choices" lifeline; index 0 is correct. */
+  choices: Choices;
 }
 
 export interface TopicData {
@@ -25,5 +22,5 @@ export interface TopicData {
 
 export type QuestionBank = Record<
   Difficulty,
-  { question: string; answer: string; choices?: Choices }[]
+  { question: string; answer: string; choices: Choices }[]
 >;

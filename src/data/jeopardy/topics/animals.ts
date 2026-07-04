@@ -35,7 +35,7 @@ export default createTopic('animals', 'Animals & Wildlife', {
     { question: 'What do you call animals active mainly at night?', answer: 'Nocturnal', choices: ['Nocturnal', 'Diurnal', 'Crepuscular'] },
     { question: 'Which reptile is the largest living lizard?', answer: 'The Komodo dragon', choices: ['The Komodo dragon', 'The monitor lizard', 'The iguana'] },
     { question: 'What is the fastest bird in level flight?', answer: 'The common swift', choices: ['The common swift', 'The peregrine falcon', 'The frigatebird'] },
-    { question: 'Which mammal lays eggs?', answer: 'The platypus (and echidna)', choices: ['The platypus', 'The pangolin', 'The aardvark'] },
+    { question: 'Which mammal lays eggs?', answer: 'The platypus (and echidna)', choices: ['The platypus (and echidna)', 'The pangolin', 'The aardvark'] },
   ],
   4: [
     { question: 'What is the collective noun for a group of crows?', answer: 'A murder', choices: ['A murder', 'A flock', 'A parliament'] },
@@ -56,7 +56,7 @@ export default createTopic('animals', 'Animals & Wildlife', {
     { question: 'Which mammal has the most powerful bite force?', answer: 'The hippopotamus', choices: ['The hippopotamus', 'The Bengal tiger', 'The grizzly bear'] },
     { question: 'What is the only continent where giraffes live in the wild?', answer: 'Africa', choices: ['Africa', 'Asia', 'South America'] },
     { question: 'Which insect is responsible for pollinating many crops worldwide?', answer: 'The honeybee', choices: ['The honeybee', 'The butterfly', 'The wasp'] },
-    { question: 'What is the term for animals that regulate body temperature internally?', answer: 'Endotherms (warm-blooded)', choices: ['Endotherms', 'Ectotherms', 'Poikilotherms'] },
+    { question: 'What is the term for animals that regulate body temperature internally?', answer: 'Endotherms (warm-blooded)', choices: ['Endotherms (warm-blooded)', 'Ectotherms', 'Poikilotherms'] },
     { question: 'Which bird migrates from the Arctic to Antarctica and back each year?', answer: 'The Arctic tern', choices: ['The Arctic tern', 'The Arctic skua', 'The snow goose'] },
     { question: 'What is the largest land carnivore?', answer: 'The polar bear', choices: ['The polar bear', 'The Kodiak bear', 'The Siberian tiger'] },
     { question: 'Which animal has the highest blood pressure of any mammal?', answer: 'The giraffe', choices: ['The giraffe', 'The elephant', 'The camel'] },

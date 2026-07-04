@@ -63,6 +63,14 @@ import comicStorylinesData from './famous-comic-storylines.json';
 import comicArtifactsData from './iconic-comic-artifacts.json';
 import comicCreatorsData from './famous-comic-creators.json';
 import comicLocationsData from './iconic-comic-locations.json';
+import maleNamesData from './most-popular-male-names.json';
+import femaleNamesData from './most-popular-female-names.json';
+import dogNamesData from './most-popular-dog-names.json';
+import tvCharactersData from './most-popular-tv-characters.json';
+import animeCharactersData from './most-popular-anime-characters.json';
+import fictionalPetsData from './famous-fictional-pets.json';
+import luxuryBrandsData from './most-popular-luxury-brands.json';
+import everydayInventionsData from './everyday-inventions.json';
 
 const categories: Category[] = [
   animeData,
@@ -125,6 +133,14 @@ const categories: Category[] = [
   comicArtifactsData,
   comicCreatorsData,
   comicLocationsData,
+  maleNamesData,
+  femaleNamesData,
+  dogNamesData,
+  tvCharactersData,
+  animeCharactersData,
+  fictionalPetsData,
+  luxuryBrandsData,
+  everydayInventionsData,
 ] as Category[];
 
 export function getAllCategories(): Category[] {

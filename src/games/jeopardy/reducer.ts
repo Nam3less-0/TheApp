@@ -1,5 +1,5 @@
 import type { AnswerRecord, JeopardyAction, JeopardySession } from './types';
-import { buildBoard, freshLifelines, shuffle } from './utils';
+import { buildBoard, freshLifelines, isWhatChoicesAllowed, shuffle } from './utils';
 
 export const initialJeopardyState: JeopardySession = {
   players: [],
@@ -73,6 +73,8 @@ export function jeopardyReducer(
       if (state.revealedChoices) return state;
       const cell = state.cells.find((c) => c.id === state.activeCellId);
       if (!cell) return state;
+      const topicId = state.columns[cell.columnIndex]?.id;
+      if (!isWhatChoicesAllowed(topicId)) return state;
       const player = state.players[state.currentPlayerIndex];
       if (!player?.lifelines.whatChoices) return state;
 

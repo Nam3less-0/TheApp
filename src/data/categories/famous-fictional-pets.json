@@ -1,0 +1,406 @@
+{
+  "id": "famous-fictional-pets",
+  "title": "Most Well-Known Pets in Fiction",
+  "items": [
+    {
+      "rank": 1,
+      "name": "Snoopy"
+    },
+    {
+      "rank": 2,
+      "name": "Garfield"
+    },
+    {
+      "rank": 3,
+      "name": "Odie"
+    },
+    {
+      "rank": 4,
+      "name": "Scooby-Doo"
+    },
+    {
+      "rank": 5,
+      "name": "Clifford the Big Red Dog"
+    },
+    {
+      "rank": 6,
+      "name": "Pluto"
+    },
+    {
+      "rank": 7,
+      "name": "Goofy"
+    },
+    {
+      "rank": 8,
+      "name": "Dug (Up)"
+    },
+    {
+      "rank": 9,
+      "name": "Bolt"
+    },
+    {
+      "rank": 10,
+      "name": "Lady (Lady and the Tramp)"
+    },
+    {
+      "rank": 11,
+      "name": "Tramp"
+    },
+    {
+      "rank": 12,
+      "name": "Pongo (101 Dalmatians)"
+    },
+    {
+      "rank": 13,
+      "name": "Perdita"
+    },
+    {
+      "rank": 14,
+      "name": "Cruella's Dalmatians"
+    },
+    {
+      "rank": 15,
+      "name": "Copper (Fox and the Hound)"
+    },
+    {
+      "rank": 16,
+      "name": "Todd (Fox and the Hound)"
+    },
+    {
+      "rank": 17,
+      "name": "Simba (lion)"
+    },
+    {
+      "rank": 18,
+      "name": "Nala"
+    },
+    {
+      "rank": 19,
+      "name": "Mufasa"
+    },
+    {
+      "rank": 20,
+      "name": "Timon"
+    },
+    {
+      "rank": 21,
+      "name": "Pumbaa"
+    },
+    {
+      "rank": 22,
+      "name": "Bambi"
+    },
+    {
+      "rank": 23,
+      "name": "Thumper"
+    },
+    {
+      "rank": 24,
+      "name": "Flower (Bambi)"
+    },
+    {
+      "rank": 25,
+      "name": "Dumbo"
+    },
+    {
+      "rank": 26,
+      "name": "Toothless"
+    },
+    {
+      "rank": 27,
+      "name": "Light Fury"
+    },
+    {
+      "rank": 28,
+      "name": "Stitch"
+    },
+    {
+      "rank": 29,
+      "name": "Lilo's Stitch"
+    },
+    {
+      "rank": 30,
+      "name": "Nemo"
+    },
+    {
+      "rank": 31,
+      "name": "Dory"
+    },
+    {
+      "rank": 32,
+      "name": "Marlin"
+    },
+    {
+      "rank": 33,
+      "name": "Bruce (Finding Nemo)"
+    },
+    {
+      "rank": 34,
+      "name": "Crush (turtle)"
+    },
+    {
+      "rank": 35,
+      "name": "Squirt"
+    },
+    {
+      "rank": 36,
+      "name": "Bluey"
+    },
+    {
+      "rank": 37,
+      "name": "Bingo (Bluey)"
+    },
+    {
+      "rank": 38,
+      "name": "Bandit (Bluey)"
+    },
+    {
+      "rank": 39,
+      "name": "Chilli (Bluey)"
+    },
+    {
+      "rank": 40,
+      "name": "Paddington (bear)"
+    },
+    {
+      "rank": 41,
+      "name": "Winnie-the-Pooh"
+    },
+    {
+      "rank": 42,
+      "name": "Piglet"
+    },
+    {
+      "rank": 43,
+      "name": "Tigger"
+    },
+    {
+      "rank": 44,
+      "name": "Eeyore"
+    },
+    {
+      "rank": 45,
+      "name": "Rabbit (Winnie-the-Pooh)"
+    },
+    {
+      "rank": 46,
+      "name": "Kanga"
+    },
+    {
+      "rank": 47,
+      "name": "Roo"
+    },
+    {
+      "rank": 48,
+      "name": "Baloo"
+    },
+    {
+      "rank": 49,
+      "name": "Bagheera"
+    },
+    {
+      "rank": 50,
+      "name": "Shere Khan"
+    },
+    {
+      "rank": 51,
+      "name": "Toto (Wizard of Oz)"
+    },
+    {
+      "rank": 52,
+      "name": "Lassie"
+    },
+    {
+      "rank": 53,
+      "name": "Beethoven (St. Bernard)"
+    },
+    {
+      "rank": 54,
+      "name": "Marley (Marley & Me)"
+    },
+    {
+      "rank": 55,
+      "name": "Hachiko"
+    },
+    {
+      "rank": 56,
+      "name": "Old Yeller"
+    },
+    {
+      "rank": 57,
+      "name": "Benji"
+    },
+    {
+      "rank": 58,
+      "name": "Rin Tin Tin"
+    },
+    {
+      "rank": 59,
+      "name": "Air Bud"
+    },
+    {
+      "rank": 60,
+      "name": "Buddy (Air Bud)"
+    },
+    {
+      "rank": 61,
+      "name": "Snowy (Tintin)"
+    },
+    {
+      "rank": 62,
+      "name": "Snowy (Milou)"
+    },
+    {
+      "rank": 63,
+      "name": "Gromit"
+    },
+    {
+      "rank": 64,
+      "name": "Wallace"
+    },
+    {
+      "rank": 65,
+      "name": "Shaun the Sheep"
+    },
+    {
+      "rank": 66,
+      "name": "Pikachu"
+    },
+    {
+      "rank": 67,
+      "name": "Eevee"
+    },
+    {
+      "rank": 68,
+      "name": "Meowth"
+    },
+    {
+      "rank": 69,
+      "name": "Jigglypuff"
+    },
+    {
+      "rank": 70,
+      "name": "Charizard (companion)"
+    },
+    {
+      "rank": 71,
+      "name": "Hedwig (Harry Potter)"
+    },
+    {
+      "rank": 72,
+      "name": "Crookshanks"
+    },
+    {
+      "rank": 73,
+      "name": "Scabbers"
+    },
+    {
+      "rank": 74,
+      "name": "Fang (Hagrid's dog)"
+    },
+    {
+      "rank": 75,
+      "name": "Buckbeak"
+    },
+    {
+      "rank": 76,
+      "name": "Fawkes (phoenix)"
+    },
+    {
+      "rank": 77,
+      "name": "Norbert (dragon)"
+    },
+    {
+      "rank": 78,
+      "name": "Tribble (Star Trek)"
+    },
+    {
+      "rank": 79,
+      "name": "Data's cat Spot"
+    },
+    {
+      "rank": 80,
+      "name": "Jonesy (Alien cat)"
+    },
+    {
+      "rank": 81,
+      "name": "Gremlin (Gizmo)"
+    },
+    {
+      "rank": 82,
+      "name": "Stripe (Gremlins)"
+    },
+    {
+      "rank": 83,
+      "name": "ET"
+    },
+    {
+      "rank": 84,
+      "name": "Alf"
+    },
+    {
+      "rank": 85,
+      "name": "Chewbacca (companion)"
+    },
+    {
+      "rank": 86,
+      "name": "BB-8"
+    },
+    {
+      "rank": 87,
+      "name": "R2-D2"
+    },
+    {
+      "rank": 88,
+      "name": "C-3PO"
+    },
+    {
+      "rank": 89,
+      "name": "Grogu (Baby Yoda)"
+    },
+    {
+      "rank": 90,
+      "name": "The Mandalorian's Grogu"
+    },
+    {
+      "rank": 91,
+      "name": "Appa (Avatar)"
+    },
+    {
+      "rank": 92,
+      "name": "Momo (Avatar)"
+    },
+    {
+      "rank": 93,
+      "name": "Puss in Boots"
+    },
+    {
+      "rank": 94,
+      "name": "Donkey (Shrek)"
+    },
+    {
+      "rank": 95,
+      "name": "Dragon (Shrek)"
+    },
+    {
+      "rank": 96,
+      "name": "Fiona (ogre form)"
+    },
+    {
+      "rank": 97,
+      "name": "Max (Grinch dog)"
+    },
+    {
+      "rank": 98,
+      "name": "Zero (Nightmare Before Christmas)"
+    },
+    {
+      "rank": 99,
+      "name": "Jack Skellington's Zero"
+    },
+    {
+      "rank": 100,
+      "name": "Salem (Sabrina cat)"
+    }
+  ]
+}

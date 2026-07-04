@@ -15,12 +15,24 @@ export function createTopic(
         `Topic "${id}" difficulty ${difficulty} has ${entries.length} questions; expected ${QUESTIONS_PER_LEVEL}.`,
       );
     }
-    return entries.map(({ question, answer, choices }) => ({
-      difficulty,
-      question,
-      answer,
-      choices,
-    }));
+    return entries.map(({ question, answer, choices }) => {
+      if (!choices || choices.length !== 3) {
+        throw new Error(
+          `Topic "${id}" difficulty ${difficulty} clue "${question.slice(0, 40)}…" is missing 3 choices.`,
+        );
+      }
+      if (choices[0] !== answer) {
+        throw new Error(
+          `Topic "${id}" difficulty ${difficulty}: choices[0] must match answer for "${question.slice(0, 40)}…".`,
+        );
+      }
+      if (new Set(choices.map((c) => c.toLowerCase())).size !== 3) {
+        throw new Error(
+          `Topic "${id}" difficulty ${difficulty}: choices must be distinct for "${question.slice(0, 40)}…".`,
+        );
+      }
+      return { difficulty, question, answer, choices };
+    });
   });
 
   return { id, name, questions };

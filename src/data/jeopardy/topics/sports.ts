@@ -20,7 +20,7 @@ export default createTopic('sports', 'Sports', {
     { question: 'What NBA team did Michael Jordan play for?', answer: 'Chicago Bulls', choices: ['Chicago Bulls', 'Los Angeles Lakers', 'Boston Celtics'] },
     { question: 'What sport uses a shuttlecock and a net?', answer: 'Badminton', choices: ['Badminton', 'Tennis', 'Table tennis'] },
     { question: 'How many innings are in a standard baseball game?', answer: 'Nine', choices: ['Nine', 'Seven', 'Eleven'] },
-    { question: 'What country hosts the Tour de France?', answer: 'France', choices: ['France', 'Italy', 'Belgium'] },
+    { question: 'What European capital city hosts the finish of the Tour de France on the Champs-Élysées?', answer: 'Paris', choices: ['Paris', 'Lyon', 'Marseille'] },
     { question: 'What sport is known as the Sweet Science?', answer: 'Boxing', choices: ['Boxing', 'Wrestling', 'Fencing'] },
     { question: 'What NFL team plays in Green Bay, Wisconsin?', answer: 'Green Bay Packers', choices: ['Green Bay Packers', 'Chicago Bears', 'Minnesota Vikings'] },
     { question: 'What sport did Serena Williams play professionally?', answer: 'Tennis', choices: ['Tennis', 'Golf', 'Badminton'] },
