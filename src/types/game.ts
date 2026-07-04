@@ -1,7 +1,7 @@
 import type { ComponentType, SVGProps } from 'react';
 
 export type GameStatus = 'playable' | 'in-progress';
-export type MetalAccent = 'steel-blue' | 'pewter' | 'silver' | 'copper' | 'ember' | 'gold';
+export type MetalAccent = 'steel-blue' | 'pewter' | 'silver' | 'copper' | 'ember' | 'gold' | 'toxic';
 
 export interface GameEntry {
   id: string;

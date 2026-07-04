@@ -12,6 +12,10 @@ import ImposterGame from '../games/imposter/ImposterGame';
 import { JeopardyProvider } from '../games/jeopardy/context';
 import JeopardyGame from '../games/jeopardy/JeopardyGame';
 import TheBet from '../games/the-bet/TheBet';
+import { ExposedProvider } from '../games/exposed/context';
+import ExposedGame from '../games/exposed/ExposedGame';
+import { BlitzProvider } from '../games/blitz/context';
+import BlitzGame from '../games/blitz/BlitzGame';
 
 function renderGame(gameId: string | undefined): React.ReactNode {
   switch (gameId) {
@@ -41,6 +45,18 @@ function renderGame(gameId: string | undefined): React.ReactNode {
       );
     case 'the-bet':
       return <TheBet />;
+    case 'exposed':
+      return (
+        <ExposedProvider>
+          <ExposedGame />
+        </ExposedProvider>
+      );
+    case 'blitz':
+      return (
+        <BlitzProvider>
+          <BlitzGame />
+        </BlitzProvider>
+      );
     default:
       return null;
   }

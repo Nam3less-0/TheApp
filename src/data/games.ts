@@ -1,5 +1,13 @@
 import type { GameEntry } from '../types/game';
-import { CodewordIcon, ImposterIcon, JeopardyIcon, TheBetIcon, Top100Icon } from '../icons/GameIcons';
+import {
+  BlitzIcon,
+  CodewordIcon,
+  ExposedIcon,
+  ImposterIcon,
+  JeopardyIcon,
+  TheBetIcon,
+  Top100Icon,
+} from '../icons/GameIcons';
 
 export const games: GameEntry[] = [
   {
@@ -41,6 +49,22 @@ export const games: GameEntry[] = [
     metal: 'gold',
     status: 'playable',
     icon: TheBetIcon,
+  },
+  {
+    id: 'exposed',
+    title: 'Exposed',
+    description: 'Answer in secret. Flip the coin. Risk the reveal.',
+    metal: 'toxic',
+    status: 'playable',
+    icon: ExposedIcon,
+  },
+  {
+    id: 'blitz',
+    title: 'Blitz',
+    description: 'Beat the clock, name the category, hit NEXT or lose.',
+    metal: 'silver',
+    status: 'playable',
+    icon: BlitzIcon,
   },
 ];
 
