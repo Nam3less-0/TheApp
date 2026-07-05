@@ -1,18 +1,56 @@
 import type { AnswerRecord, JeopardyAction, JeopardySession } from './types';
-import { buildBoard, freshLifelines, isWhatChoicesAllowed, shuffle } from './utils';
+import {
+  buildBoardFromTopics,
+  freshLifelines,
+  isCellBlockedThisTurn,
+  isWhatChoicesAllowed,
+  pickPreviewTopics,
+  shuffle,
+  SNIPE_CORRECT_POINTS,
+  TURN_LIMITED_VALUES,
+} from './utils';
 
 export const initialJeopardyState: JeopardySession = {
   players: [],
   columns: [],
   cells: [],
   phase: 'setup',
+  pendingPlayers: [],
+  previewColumns: [],
+  blacklistedTopicIds: [],
+  previewSessionTopicIds: [],
   currentPlayerIndex: 0,
   activeCellId: null,
   questionsAnswered: 0,
   history: [],
   revealedChoices: null,
   phoneFriendId: null,
+  sniped: false,
+  snipedFromPlayerIndex: null,
+  turnPickedValues: [],
 };
+
+function beginTopicPreview(
+  players: JeopardySession['players'],
+  blacklistedTopicIds: string[] = [],
+  previewSessionTopicIds: string[] = [],
+): Pick<
+  JeopardySession,
+  | 'pendingPlayers'
+  | 'previewColumns'
+  | 'blacklistedTopicIds'
+  | 'previewSessionTopicIds'
+  | 'phase'
+> {
+  const preview = pickPreviewTopics(blacklistedTopicIds, previewSessionTopicIds);
+  return {
+    pendingPlayers: players,
+    previewColumns: preview.columns,
+    blacklistedTopicIds,
+    previewSessionTopicIds: preview.sessionTopicIds,
+    phase: 'topic-preview',
+  };
+}
 
 function freshPlayers(players: JeopardySession['players']) {
   return players.map((p) => ({
@@ -36,21 +74,94 @@ export function jeopardyReducer(
   action: JeopardyAction,
 ): JeopardySession {
   switch (action.type) {
-    case 'START_GAME': {
-      const players = preparePlayersForGame(action.players);
-      const { columns, cells } = buildBoard();
+    case 'PLAYERS_READY': {
+      return {
+        ...state,
+        ...beginTopicPreview(action.players),
+      };
+    }
+
+    case 'BACK_TO_SETUP': {
+      return {
+        ...state,
+        phase: 'setup',
+        previewColumns: [],
+        blacklistedTopicIds: [],
+        previewSessionTopicIds: [],
+      };
+    }
+
+    case 'REROLL_TOPICS': {
+      if (state.phase !== 'topic-preview') return state;
+      const preview = pickPreviewTopics(
+        state.blacklistedTopicIds,
+        state.previewSessionTopicIds,
+        state.previewColumns.map((column) => column.id),
+      );
+      return {
+        ...state,
+        previewColumns: preview.columns,
+        previewSessionTopicIds: preview.sessionTopicIds,
+      };
+    }
+
+    case 'BLACKLIST_TOPIC': {
+      if (state.phase !== 'topic-preview') return state;
+      if (state.blacklistedTopicIds.includes(action.topicId)) return state;
+
+      const blacklistedTopicIds = [...state.blacklistedTopicIds, action.topicId];
+      const preview = pickPreviewTopics(
+        blacklistedTopicIds,
+        state.previewSessionTopicIds,
+      );
+      return {
+        ...state,
+        blacklistedTopicIds,
+        previewColumns: preview.columns,
+        previewSessionTopicIds: preview.sessionTopicIds,
+      };
+    }
+
+    case 'UNBLACKLIST_TOPIC': {
+      if (state.phase !== 'topic-preview') return state;
+      const blacklistedTopicIds = state.blacklistedTopicIds.filter(
+        (id) => id !== action.topicId,
+      );
+      if (blacklistedTopicIds.length === state.blacklistedTopicIds.length) {
+        return state;
+      }
+      return { ...state, blacklistedTopicIds };
+    }
+
+    case 'CONFIRM_TOPICS': {
+      if (state.phase !== 'topic-preview' || state.previewColumns.length === 0) {
+        return state;
+      }
+
+      const players = preparePlayersForGame(state.pendingPlayers);
+      const { columns, cells } = buildBoardFromTopics(
+        state.previewColumns.map((column) => column.id),
+      );
 
       return {
+        ...state,
         players,
         columns,
         cells,
         phase: 'board',
+        pendingPlayers: [],
+        previewColumns: [],
+        blacklistedTopicIds: [],
+        previewSessionTopicIds: [],
         currentPlayerIndex: 0,
         activeCellId: null,
         questionsAnswered: 0,
         history: [],
         revealedChoices: null,
         phoneFriendId: null,
+        sniped: false,
+        snipedFromPlayerIndex: null,
+        turnPickedValues: [],
       };
     }
 
@@ -58,6 +169,14 @@ export function jeopardyReducer(
       if (state.phase !== 'board') return state;
       const cell = state.cells.find((c) => c.id === action.cellId);
       if (!cell || cell.used) return state;
+      if (isCellBlockedThisTurn(cell.value, state.turnPickedValues)) return state;
+
+      const turnPickedValues = (TURN_LIMITED_VALUES as readonly number[]).includes(
+        cell.value,
+      )
+        ? [...state.turnPickedValues, cell.value]
+        : state.turnPickedValues;
+
       // Clear any lifeline state carried over from the previous clue.
       return {
         ...state,
@@ -65,6 +184,9 @@ export function jeopardyReducer(
         activeCellId: cell.id,
         revealedChoices: null,
         phoneFriendId: null,
+        sniped: false,
+        snipedFromPlayerIndex: null,
+        turnPickedValues,
       };
     }
 
@@ -76,11 +198,17 @@ export function jeopardyReducer(
       const topicId = state.columns[cell.columnIndex]?.id;
       if (!isWhatChoicesAllowed(topicId)) return state;
       const player = state.players[state.currentPlayerIndex];
-      if (!player?.lifelines.whatChoices) return state;
+      if (!player || player.lifelines.whatChoices <= 0) return state;
 
       const players = state.players.map((p) =>
         p.id === player.id
-          ? { ...p, lifelines: { ...p.lifelines, whatChoices: false } }
+          ? {
+              ...p,
+              lifelines: {
+                ...p.lifelines,
+                whatChoices: p.lifelines.whatChoices - 1,
+              },
+            }
           : p,
       );
       return { ...state, players, revealedChoices: shuffle(cell.choices) };
@@ -90,7 +218,7 @@ export function jeopardyReducer(
       if (state.phase !== 'question' && state.phase !== 'answer') return state;
       if (state.phoneFriendId) return state;
       const player = state.players[state.currentPlayerIndex];
-      if (!player?.lifelines.phoneAFriend) return state;
+      if (!player || player.lifelines.phoneAFriend <= 0) return state;
       const helper = state.players.find(
         (p) => p.id === action.helperId && p.id !== player.id,
       );
@@ -98,10 +226,43 @@ export function jeopardyReducer(
 
       const players = state.players.map((p) =>
         p.id === player.id
-          ? { ...p, lifelines: { ...p.lifelines, phoneAFriend: false } }
+          ? {
+              ...p,
+              lifelines: {
+                ...p.lifelines,
+                phoneAFriend: p.lifelines.phoneAFriend - 1,
+              },
+            }
           : p,
       );
       return { ...state, players, phoneFriendId: helper.id };
+    }
+
+    case 'USE_SNIPE': {
+      if (state.phase !== 'question') return state;
+      if (state.revealedChoices || state.phoneFriendId || state.sniped) return state;
+
+      const activePlayer = state.players[state.currentPlayerIndex];
+      const sniper = state.players.find((p) => p.id === action.playerId);
+      if (!activePlayer || !sniper || sniper.id === activePlayer.id) return state;
+      if (!sniper.lifelines.snipe) return state;
+
+      const sniperIndex = state.players.findIndex((p) => p.id === sniper.id);
+      if (sniperIndex < 0) return state;
+
+      const players = state.players.map((p) =>
+        p.id === sniper.id
+          ? { ...p, lifelines: { ...p.lifelines, snipe: false } }
+          : p,
+      );
+
+      return {
+        ...state,
+        players,
+        currentPlayerIndex: sniperIndex,
+        sniped: true,
+        snipedFromPlayerIndex: state.currentPlayerIndex,
+      };
     }
 
     case 'REVEAL_ANSWER': {
@@ -115,15 +276,24 @@ export function jeopardyReducer(
       if (!cell) return state;
 
       const points = cell.value * (cell.isDouble ? 2 : 1);
-      const awarded = action.correct ? points : 0;
       const activePlayer = state.players[state.currentPlayerIndex];
 
-      // Phone a Friend splits a correct clue's points evenly between the active
-      // player and the helper they called.
+      let activeShare: number;
+      let helperShare = 0;
       const helperId = state.phoneFriendId;
-      const splitWithHelper = action.correct && helperId !== null;
-      const activeShare = splitWithHelper ? Math.round(awarded / 2) : awarded;
-      const helperShare = splitWithHelper ? awarded - activeShare : 0;
+
+      if (state.sniped) {
+        activeShare = action.correct
+          ? SNIPE_CORRECT_POINTS
+          : -Math.round(points / 2);
+      } else {
+        const awarded = action.correct ? points : 0;
+        // Phone a Friend splits a correct clue's points evenly between the active
+        // player and the helper they called.
+        const splitWithHelper = action.correct && helperId !== null;
+        activeShare = splitWithHelper ? Math.round(awarded / 2) : awarded;
+        helperShare = splitWithHelper ? awarded - activeShare : 0;
+      }
 
       const players = state.players.map((p) => {
         if (p.id === activePlayer.id) {
@@ -132,10 +302,12 @@ export function jeopardyReducer(
             score: p.score + activeShare,
             correct: p.correct + (action.correct ? 1 : 0),
             missed: p.missed + (action.correct ? 0 : 1),
-            doublesHit: p.doublesHit + (action.correct && cell.isDouble ? 1 : 0),
+            doublesHit:
+              p.doublesHit +
+              (action.correct && !state.sniped && cell.isDouble ? 1 : 0),
           };
         }
-        if (splitWithHelper && p.id === helperId) {
+        if (!state.sniped && helperShare > 0 && p.id === helperId) {
           return { ...p, score: p.score + helperShare };
         }
         return p;
@@ -156,13 +328,18 @@ export function jeopardyReducer(
         correct: action.correct,
         awarded: activeShare,
         helperId: state.phoneFriendId,
+        sniped: state.sniped,
       };
 
       const questionsAnswered = state.questionsAnswered + 1;
       const isOver = cells.every((c) => c.used);
-      const nextPlayerIndex = action.correct
-        ? state.currentPlayerIndex
-        : (state.currentPlayerIndex + 1) % state.players.length;
+      const nextPlayerIndex =
+        state.sniped && state.snipedFromPlayerIndex !== null
+          ? state.snipedFromPlayerIndex
+          : action.correct
+            ? state.currentPlayerIndex
+            : (state.currentPlayerIndex + 1) % state.players.length;
+      const turnChanged = nextPlayerIndex !== state.currentPlayerIndex;
 
       return {
         ...state,
@@ -175,18 +352,24 @@ export function jeopardyReducer(
         history: [...state.history, record],
         revealedChoices: null,
         phoneFriendId: null,
+        sniped: false,
+        snipedFromPlayerIndex: null,
+        turnPickedValues: turnChanged ? [] : state.turnPickedValues,
       };
     }
 
     case 'PLAY_AGAIN': {
-      const players = preparePlayersForGame(state.players);
-      const { columns, cells } = buildBoard();
+      const pendingPlayers = state.players.map((player) => ({
+        ...player,
+        score: 0,
+        correct: 0,
+        missed: 0,
+        doublesHit: 0,
+        lifelines: freshLifelines(),
+      }));
       return {
         ...initialJeopardyState,
-        players,
-        columns,
-        cells,
-        phase: 'board',
+        ...beginTopicPreview(pendingPlayers),
       };
     }
 

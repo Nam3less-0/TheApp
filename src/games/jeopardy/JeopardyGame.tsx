@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useJeopardy } from './context';
 import SetupScreen from './components/SetupScreen';
+import TopicPreviewScreen from './components/TopicPreviewScreen';
 import BoardScreen from './components/BoardScreen';
 import QuestionScreen from './components/QuestionScreen';
 import FinalScreen from './components/FinalScreen';
@@ -32,6 +33,9 @@ export default function JeopardyGame() {
   switch (state.phase) {
     case 'setup':
       screen = <SetupScreen />;
+      break;
+    case 'topic-preview':
+      screen = <TopicPreviewScreen />;
       break;
     case 'board':
       screen = <BoardScreen />;

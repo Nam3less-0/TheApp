@@ -36,23 +36,37 @@ export default function ScoreChips({ players, activePlayerId }: ScoreChipsProps)
                 title="Phone a Friend"
                 className="text-[11px] leading-none"
                 style={{
-                  color: player.lifelines.phoneAFriend ? COLORS.goldBright : COLORS.goldDim,
-                  opacity: player.lifelines.phoneAFriend ? 1 : 0.4,
+                  color:
+                    player.lifelines.phoneAFriend > 0
+                      ? COLORS.goldBright
+                      : COLORS.goldDim,
+                  opacity: player.lifelines.phoneAFriend > 0 ? 1 : 0.4,
                 }}
               >
-                ☎
+                ☎{player.lifelines.phoneAFriend > 1 ? player.lifelines.phoneAFriend : ''}
               </span>
               <span
                 title="What Choices"
                 className="text-[11px] leading-none"
                 style={{
-                  color: player.lifelines.whatChoices
-                    ? COLORS.sapphireBright
-                    : COLORS.sapphireDim,
-                  opacity: player.lifelines.whatChoices ? 1 : 0.4,
+                  color:
+                    player.lifelines.whatChoices > 0
+                      ? COLORS.sapphireBright
+                      : COLORS.sapphireDim,
+                  opacity: player.lifelines.whatChoices > 0 ? 1 : 0.4,
                 }}
               >
-                ☰
+                ☰{player.lifelines.whatChoices > 1 ? player.lifelines.whatChoices : ''}
+              </span>
+              <span
+                title="Snipe"
+                className="text-[11px] leading-none"
+                style={{
+                  color: player.lifelines.snipe ? COLORS.bad : '#5E3A34',
+                  opacity: player.lifelines.snipe ? 1 : 0.4,
+                }}
+              >
+                ⊕
               </span>
             </span>
           </div>

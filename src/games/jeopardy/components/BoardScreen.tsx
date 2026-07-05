@@ -1,5 +1,5 @@
 import { useJeopardy } from '../context';
-import { COLORS, DIFFICULTIES, countRemainingCells, getCellByColumnAndDifficulty } from '../utils';
+import { COLORS, DIFFICULTIES, countRemainingCells, getCellByColumnAndDifficulty, isCellBlockedThisTurn } from '../utils';
 import ScoreChips from './ScoreChips';
 import { JeopardyPageWrap } from './JeopardyPanel';
 
@@ -16,7 +16,8 @@ export default function BoardScreen() {
             {activePlayer?.name}&rsquo;s turn
           </div>
           <div className="mt-0.5 font-mono text-[11px] uppercase tracking-wider text-text-low">
-            {remaining} clue{remaining === 1 ? '' : 's'} left · get it right to pick again
+            {remaining} clue{remaining === 1 ? '' : 's'} left · get it right to pick again · one
+            $200 &amp; $400 per turn
           </div>
         </div>
         <ScoreChips players={state.players} activePlayerId={activePlayer?.id ?? null} />
@@ -54,6 +55,25 @@ export default function BoardScreen() {
                   aria-hidden="true"
                 >
                   &mdash;
+                </div>
+              );
+            }
+
+            const blockedThisTurn = isCellBlockedThisTurn(
+              cell.value,
+              state.turnPickedValues,
+            );
+
+            if (blockedThisTurn) {
+              return (
+                <div
+                  key={cell.id}
+                  className="flex aspect-[5/4] flex-col items-center justify-center rounded-lg border border-line font-display text-sm font-extrabold tracking-[0.5px] text-text-low opacity-45"
+                  style={{ background: 'rgba(255,255,255,0.04)' }}
+                  title={`Already picked a $${cell.value} clue this turn`}
+                  aria-label={`${column.name} for ${cell.value} points — already picked this turn`}
+                >
+                  {cell.value}
                 </div>
               );
             }

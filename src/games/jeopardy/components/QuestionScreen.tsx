@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useJeopardy } from '../context';
-import { COLORS, SILVER_BUTTON, formatScore, isWhatChoicesAllowed } from '../utils';
+import { COLORS, SILVER_BUTTON, formatScore, isSnipeWindowOpen, isWhatChoicesAllowed, SNIPE_CORRECT_POINTS } from '../utils';
 import { JeopardyPageWrap } from './JeopardyPanel';
 import PlayerAvatar from './PlayerAvatar';
 
@@ -72,14 +72,35 @@ function ChoicesIcon() {
   );
 }
 
-const OPTION_LABELS = ['A', 'B', 'C'];
+function SnipeIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+    </svg>
+  );
+}
+
+const OPTION_LABELS = ['A', 'B', 'C', 'D'];
 
 export default function QuestionScreen() {
   const { state, dispatch } = useJeopardy();
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [snipeOpen, setSnipeOpen] = useState(false);
 
   useEffect(() => {
     setPickerOpen(false);
+    setSnipeOpen(false);
   }, [state.activeCellId]);
 
   const cell = state.cells.find((c) => c.id === state.activeCellId);
@@ -97,9 +118,18 @@ export default function QuestionScreen() {
   const choices = state.revealedChoices;
   const helper = state.players.find((p) => p.id === state.phoneFriendId) ?? null;
   const others = state.players.filter((p) => p.id !== player?.id);
+  const snipeWindowOpen = isSnipeWindowOpen(state);
+  const snipeCandidates = state.players.filter(
+    (p) => p.id !== player?.id && p.lifelines.snipe,
+  );
 
-  const lifelines = player?.lifelines ?? { phoneAFriend: false, whatChoices: false };
+  const lifelines = player?.lifelines ?? {
+    phoneAFriend: 0,
+    whatChoices: 0,
+    snipe: false,
+  };
   const splitShare = Math.round(points / 2);
+  const snipePenalty = Math.round(points / 2);
 
   return (
     <JeopardyPageWrap>
@@ -162,6 +192,21 @@ export default function QuestionScreen() {
             {cell.question}
           </p>
 
+          {state.sniped && !revealed && (
+            <div
+              className="mb-5 flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-center font-body text-[12.5px] font-semibold"
+              style={{
+                background: `color-mix(in srgb, ${COLORS.bad} 12%, #1A1C20)`,
+                borderColor: `color-mix(in srgb, ${COLORS.bad} 45%, transparent)`,
+                color: COLORS.bad,
+              }}
+            >
+              <SnipeIcon />
+              Sniped — correct +{formatScore(SNIPE_CORRECT_POINTS)}, wrong −
+              {formatScore(snipePenalty)}
+            </div>
+          )}
+
           {helper && (
             <div
               className="mb-5 flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-center font-body text-[12.5px] font-semibold"
@@ -178,7 +223,11 @@ export default function QuestionScreen() {
           )}
 
           {choices && (
-            <div className="mb-6 grid gap-2.5 sm:grid-cols-3">
+            <div
+              className={`mb-6 grid gap-2.5 ${
+                choices.length === 4 ? 'grid-cols-2 sm:grid-cols-4' : 'sm:grid-cols-3'
+              }`}
+            >
               {choices.map((option, i) => {
                 const isCorrect = option === correctChoice;
                 const highlight = revealed && isCorrect;
@@ -211,6 +260,54 @@ export default function QuestionScreen() {
             </div>
           )}
 
+          {!revealed && snipeWindowOpen && snipeCandidates.length > 0 && (
+            <div className="mb-5 rounded-xl border border-line bg-surface p-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setPickerOpen(false);
+                  setSnipeOpen((o) => !o);
+                }}
+                className="flex w-full items-center justify-center gap-2 rounded-lg border px-2.5 py-2.5 font-body text-[13px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                style={{
+                  background: snipeOpen
+                    ? `color-mix(in srgb, ${COLORS.bad} 18%, #1A1C20)`
+                    : `color-mix(in srgb, ${COLORS.bad} 12%, #1A1C20)`,
+                  borderColor: `color-mix(in srgb, ${COLORS.bad} 40%, transparent)`,
+                  color: COLORS.bad,
+                }}
+              >
+                <SnipeIcon />
+                Steal this question from {player?.name}
+              </button>
+
+              {snipeOpen && (
+                <div className="mt-2 flex flex-col gap-1">
+                  {snipeCandidates.map((candidate) => (
+                    <button
+                      key={candidate.id}
+                      type="button"
+                      onClick={() => {
+                        setPickerOpen(false);
+                        setSnipeOpen(false);
+                        dispatch({ type: 'USE_SNIPE', playerId: candidate.id });
+                      }}
+                      className="flex min-h-11 items-center justify-center gap-2 rounded-lg border px-2.5 py-2 font-body text-[13px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                      style={{
+                        background: `color-mix(in srgb, ${COLORS.bad} 12%, #1A1C20)`,
+                        borderColor: `color-mix(in srgb, ${COLORS.bad} 40%, transparent)`,
+                        color: COLORS.bad,
+                      }}
+                    >
+                      <SnipeIcon />
+                      {candidate.name} snipes
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {!revealed && (
             <>
               <div className="mb-3.5">
@@ -223,9 +320,10 @@ export default function QuestionScreen() {
                       type="button"
                       onClick={() => {
                         setPickerOpen(false);
+                        setSnipeOpen(false);
                         dispatch({ type: 'USE_WHAT_CHOICES' });
                       }}
-                      disabled={!lifelines.whatChoices || choices !== null}
+                      disabled={lifelines.whatChoices <= 0 || choices !== null}
                       className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 font-body text-[12.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-35"
                       style={{
                         background: `color-mix(in srgb, ${COLORS.sapphireBright} 10%, #1A1C20)`,
@@ -235,8 +333,12 @@ export default function QuestionScreen() {
                     >
                       <ChoicesIcon />
                       What Choices
-                      {!lifelines.whatChoices && (
+                      {lifelines.whatChoices <= 0 ? (
                         <span className="font-mono text-[10px] opacity-70">· used</span>
+                      ) : (
+                        <span className="font-mono text-[10px] opacity-70">
+                          · {lifelines.whatChoices} left
+                        </span>
                       )}
                     </button>
                   ) : (
@@ -247,8 +349,11 @@ export default function QuestionScreen() {
 
                   <button
                     type="button"
-                    onClick={() => setPickerOpen((o) => !o)}
-                    disabled={!lifelines.phoneAFriend || helper !== null}
+                    onClick={() => {
+                      setSnipeOpen(false);
+                      setPickerOpen((o) => !o);
+                    }}
+                    disabled={lifelines.phoneAFriend <= 0 || helper !== null}
                     className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 font-body text-[12.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-35"
                     style={{
                       background: pickerOpen
@@ -260,13 +365,17 @@ export default function QuestionScreen() {
                   >
                     <PhoneIcon />
                     Phone a Friend
-                    {!lifelines.phoneAFriend && (
+                    {lifelines.phoneAFriend <= 0 ? (
                       <span className="font-mono text-[10px] opacity-70">· used</span>
+                    ) : (
+                      <span className="font-mono text-[10px] opacity-70">
+                        · {lifelines.phoneAFriend} left
+                      </span>
                     )}
                   </button>
                 </div>
 
-                {pickerOpen && lifelines.phoneAFriend && !helper && (
+                {pickerOpen && lifelines.phoneAFriend > 0 && !helper && (
                   <div
                     className="mt-2.5 rounded-xl border border-line bg-surface p-2.5"
                     style={{ boxShadow: '0 8px 24px -12px rgba(0,0,0,0.65)' }}
@@ -301,6 +410,7 @@ export default function QuestionScreen() {
                 type="button"
                 onClick={() => {
                   setPickerOpen(false);
+                  setSnipeOpen(false);
                   dispatch({ type: 'REVEAL_ANSWER' });
                 }}
                 className="w-full rounded-xl border-none px-4 py-3.5 font-body text-sm font-bold text-void focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
@@ -337,7 +447,9 @@ export default function QuestionScreen() {
                 <CheckIcon />
                 {helper
                   ? `Correct · split +${formatScore(splitShare)} each`
-                  : `${player?.name} got it +${formatScore(points)}`}
+                  : state.sniped
+                    ? `${player?.name} sniped it +${formatScore(SNIPE_CORRECT_POINTS)}`
+                    : `${player?.name} got it +${formatScore(points)}`}
               </button>
               <button
                 type="button"
@@ -350,7 +462,9 @@ export default function QuestionScreen() {
                 }}
               >
                 <CrossIcon />
-                Missed
+                {state.sniped
+                  ? `Missed · −${formatScore(snipePenalty)}`
+                  : 'Missed'}
               </button>
             </div>
           </div>

@@ -1,16 +1,18 @@
 export type Difficulty = 1 | 2 | 3 | 4 | 5;
 
 /**
- * Three multiple-choice options for the "What Choices" lifeline.
- * Index 0 is always the correct option; the other two are plausible distractors.
+ * Multiple-choice options for the "What Choices" lifeline.
+ * Index 0 is always the correct option; the rest are plausible distractors.
+ * Topic banks store three options; non-riddle topics expand to four at load time.
  */
-export type Choices = [string, string, string];
+export type Choices3 = [string, string, string];
+export type Choices4 = [string, string, string, string];
+export type Choices = Choices3 | Choices4;
 
 export interface RawQuestion {
   difficulty: Difficulty;
   question: string;
   answer: string;
-  /** Three multiple-choice options for the "What Choices" lifeline; index 0 is correct. */
   choices: Choices;
 }
 
@@ -22,5 +24,5 @@ export interface TopicData {
 
 export type QuestionBank = Record<
   Difficulty,
-  { question: string; answer: string; choices: Choices }[]
+  { question: string; answer: string; choices: Choices3 }[]
 >;

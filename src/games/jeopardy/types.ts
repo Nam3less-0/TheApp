@@ -2,10 +2,14 @@ import type { Difficulty } from '../../data/jeopardy-questions';
 
 export type { Difficulty };
 
-/** Each lifeline can be used once per game; `true` means still available. */
+/** Per-player lifelines for a game. */
 export interface Lifelines {
-  phoneAFriend: boolean;
-  whatChoices: boolean;
+  /** Remaining Phone a Friend uses (starts at 2). */
+  phoneAFriend: number;
+  /** Remaining What Choices uses (starts at 2). */
+  whatChoices: number;
+  /** Snipe — one use per game; `true` means still available. */
+  snipe: boolean;
 }
 
 export interface Player {
@@ -33,8 +37,8 @@ export interface BoardCell {
   value: number;
   question: string;
   answer: string;
-  /** Three multiple-choice options; index 0 is the correct one. */
-  choices: [string, string, string];
+  /** Multiple-choice options; index 0 is the correct one (3 for riddles, 4 otherwise). */
+  choices: [string, string, string] | [string, string, string, string];
   isDouble: boolean;
   used: boolean;
 }
@@ -52,15 +56,31 @@ export interface AnswerRecord {
   awarded: number;
   /** Helper id when Phone a Friend was used on this clue. */
   helperId: string | null;
+  /** True when another player sniped this clue before it was answered. */
+  sniped: boolean;
 }
 
-export type JeopardyPhase = 'setup' | 'board' | 'question' | 'answer' | 'final';
+export type JeopardyPhase =
+  | 'setup'
+  | 'topic-preview'
+  | 'board'
+  | 'question'
+  | 'answer'
+  | 'final';
 
 export interface JeopardySession {
   players: Player[];
   columns: BoardColumn[];
   cells: BoardCell[];
   phase: JeopardyPhase;
+  /** Players locked in during setup, before the board is built. */
+  pendingPlayers: Player[];
+  /** Six topics chosen during the preview step (before clues are drawn). */
+  previewColumns: BoardColumn[];
+  /** Topic ids excluded from preview rerolls for this game setup. */
+  blacklistedTopicIds: string[];
+  /** Topic ids already surfaced in preview this setup (lowers reroll weight). */
+  previewSessionTopicIds: string[];
   currentPlayerIndex: number;
   activeCellId: string | null;
   questionsAnswered: number;
@@ -72,13 +92,25 @@ export interface JeopardySession {
   revealedChoices: string[] | null;
   /** Helper player chosen via "Phone a Friend" for the current clue; null otherwise. */
   phoneFriendId: string | null;
+  /** True when a Snipe lifeline stole the current clue from the picker. */
+  sniped: boolean;
+  /** Turn returns here after a sniped clue resolves; null when not sniped. */
+  snipedFromPlayerIndex: number | null;
+  /** $200 / $400 values already picked during the active player's current turn. */
+  turnPickedValues: number[];
 }
 
 export type JeopardyAction =
-  | { type: 'START_GAME'; players: Player[] }
+  | { type: 'PLAYERS_READY'; players: Player[] }
+  | { type: 'BACK_TO_SETUP' }
+  | { type: 'REROLL_TOPICS' }
+  | { type: 'BLACKLIST_TOPIC'; topicId: string }
+  | { type: 'UNBLACKLIST_TOPIC'; topicId: string }
+  | { type: 'CONFIRM_TOPICS' }
   | { type: 'SELECT_CELL'; cellId: string }
   | { type: 'REVEAL_ANSWER' }
   | { type: 'RESOLVE'; correct: boolean }
   | { type: 'USE_WHAT_CHOICES' }
   | { type: 'USE_PHONE_A_FRIEND'; helperId: string }
+  | { type: 'USE_SNIPE'; playerId: string }
   | { type: 'PLAY_AGAIN' };

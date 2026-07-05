@@ -1,11 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useJeopardy } from '../context';
 import type { Player } from '../types';
 import {
-  BOARD_COLUMNS,
-  BOARD_SIZE,
-  DIFFICULTIES,
-  DOUBLE_TROUBLE_COUNT,
   MAX_PLAYERS,
   MIN_PLAYERS,
   SILVER_BUTTON,
@@ -17,9 +13,17 @@ import PlayerAvatar from './PlayerAvatar';
 
 export default function SetupScreen() {
   const { state, dispatch } = useJeopardy();
-  const [players, setPlayers] = useState<Player[]>(() =>
-    state.players.length >= MIN_PLAYERS ? state.players : createDefaultPlayers(4),
-  );
+  const [players, setPlayers] = useState<Player[]>(() => {
+    if (state.pendingPlayers.length >= MIN_PLAYERS) return state.pendingPlayers;
+    if (state.players.length >= MIN_PLAYERS) return state.players;
+    return createDefaultPlayers(4);
+  });
+
+  useEffect(() => {
+    if (state.phase === 'setup' && state.pendingPlayers.length >= MIN_PLAYERS) {
+      setPlayers(state.pendingPlayers);
+    }
+  }, [state.phase, state.pendingPlayers]);
 
   const canStart =
     players.length >= MIN_PLAYERS && players.every((p) => p.name.trim().length > 0);
@@ -56,9 +60,9 @@ export default function SetupScreen() {
     );
   }
 
-  function handleStart() {
+  function handleReady() {
     if (!canStart) return;
-    dispatch({ type: 'START_GAME', players });
+    dispatch({ type: 'PLAYERS_READY', players });
   }
 
   return (
@@ -67,8 +71,8 @@ export default function SetupScreen() {
         New game
       </h1>
       <p className="mb-8 font-body text-sm text-text-mid">
-        Add players, then build a fresh board. Play until every tile is cleared — answer
-        correctly and you pick again on the same turn.
+        Set up your players, then preview tonight&apos;s six categories before the
+        board is built.
       </p>
 
       <JeopardyPanel>
@@ -119,19 +123,17 @@ export default function SetupScreen() {
         </section>
 
         <p className="mt-5 font-mono text-[11px] leading-relaxed text-text-low">
-          {BOARD_COLUMNS} random topics · {DIFFICULTIES.length} clues each ·{' '}
-          {DOUBLE_TROUBLE_COUNT} double-trouble tiles · {BOARD_SIZE} clues total · play until
-          the board is clear
+          Step 1 of 3 · players · then topic preview · then the board
         </p>
 
         <button
           type="button"
-          onClick={handleStart}
+          onClick={handleReady}
           disabled={!canStart}
           className="mt-6 w-full rounded-xl border-none px-4 py-4 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue focus-visible:ring-offset-2 focus-visible:ring-offset-void disabled:cursor-not-allowed disabled:opacity-40"
           style={{ background: SILVER_BUTTON }}
         >
-          Build the board
+          Ready — pick topics
         </button>
       </JeopardyPanel>
     </JeopardyPageWrap>
