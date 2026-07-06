@@ -209,6 +209,37 @@ export function BlitzIcon(props: IconProps) {
   );
 }
 
+export function HouseOfCardsIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+      <rect
+        x="4.5"
+        y="6"
+        width="10"
+        height="14"
+        rx="1.5"
+        transform="rotate(-8 4.5 6)"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <rect
+        x="10"
+        y="4"
+        width="10"
+        height="14"
+        rx="1.5"
+        transform="rotate(8 10 4)"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M15 8.2c-1 0-1.7.8-1.7 1.7 0 1.3 1.7 2.4 1.7 2.4s1.7-1.1 1.7-2.4c0-.9-.7-1.7-1.7-1.7Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export function ArrowIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>

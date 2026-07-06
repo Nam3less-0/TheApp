@@ -198,6 +198,61 @@
     }
   }
 
+  /* House of Cards — Onyx & Crimson parlour palette, scoped to the game shell */
+  .hoc-game-shell {
+    --hoc-onyx: #0c0b10;
+    --hoc-panel: #17151d;
+    --hoc-panel-raised: #201d28;
+    --hoc-crimson: #a9203a;
+    --hoc-crimson-bright: #d6294a;
+    --hoc-brass: #a9853a;
+    --hoc-pewter: #8b8fa3;
+    --hoc-line: rgba(169, 133, 58, 0.22);
+    --hoc-line-bright: rgba(169, 133, 58, 0.45);
+    --hoc-ivory: #f3ede0;
+    --hoc-ivory-dim: rgba(243, 237, 224, 0.62);
+    --hoc-good: #6fcf97;
+    --hoc-bad: #e07a5f;
+    background-color: var(--hoc-onyx);
+    color: var(--hoc-ivory);
+  }
+
+  @keyframes hocCardFlip {
+    from {
+      transform: rotateY(90deg);
+      opacity: 0;
+    }
+    to {
+      transform: rotateY(0deg);
+      opacity: 1;
+    }
+  }
+
+  .hoc-card-flip {
+    animation: hocCardFlip 0.32s ease forwards;
+  }
+
+  @keyframes hocPulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+
+  .hoc-active-pulse {
+    animation: hocPulse 1.8s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hoc-card-flip,
+    .hoc-active-pulse {
+      animation: none !important;
+    }
+  }
+
   /* Game tools — 3D dice */
   .dice-scene {
     perspective: 420px;

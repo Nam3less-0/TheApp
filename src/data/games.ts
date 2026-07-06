@@ -3,6 +3,7 @@ import {
   BlitzIcon,
   CodewordIcon,
   ExposedIcon,
+  HouseOfCardsIcon,
   ImposterIcon,
   JeopardyIcon,
   TheBetIcon,
@@ -65,6 +66,14 @@ export const games: GameEntry[] = [
     metal: 'silver',
     status: 'playable',
     icon: BlitzIcon,
+  },
+  {
+    id: 'house-of-cards',
+    title: 'House of Cards',
+    description: "Bet on your table's smarts — one card at a time.",
+    metal: 'crimson',
+    status: 'playable',
+    icon: HouseOfCardsIcon,
   },
 ];
 

@@ -26,6 +26,8 @@ export default {
         toxic: '#9BC53D',
         'toxic-bright': '#C6E86B',
         'toxic-dim': '#4A5A1A',
+        crimson: '#A9203A',
+        'crimson-bright': '#D6294A',
         good: '#7ED9A4',
         bad: '#E08B7A',
       },

@@ -42,8 +42,8 @@ export default createTopic('movies-tv', 'Movies & TV', {
     { question: 'This Netflix sci-fi series is set in the 1980s town of Hawkins, Indiana.', answer: 'Stranger Things', choices: ['Stranger Things', 'Dark', 'The X-Files'] },
     { question: 'This Pixar film follows a family of superheroes living in hiding.', answer: 'The Incredibles', choices: ['The Incredibles', 'Big Hero 6', 'Megamind'] },
     { question: 'This 1993 blockbuster features cloned dinosaurs running loose on an island.', answer: 'Jurassic Park', choices: ['Jurassic Park', 'King Kong', 'The Lost World'] },
-    { question: 'This actress has won multiple Oscars for roles in "Sophie\'s Choice" and "The Iron Lady".', answer: 'Meryl Streep', choices: ['Meryl Streep', 'Cate Blanchett', 'Julia Roberts'] },
-    { question: 'This 1990 Christmas comedy stars Macaulay Culkin defending his home from burglars.', answer: 'Home Alone', choices: ['Home Alone', 'The Santa Clause', 'Jingle All the Way'] },
+    { question: 'This actress starred in "The Devil Wears Prada" and "La La Land".', answer: 'Emma Stone', choices: ['Emma Stone', 'Anne Hathaway', 'Jennifer Lawrence'] },
+    { question: 'This 1990 Christmas comedy stars Macaulay Culkin defending his home from burglars.', answer: 'Home Alone', choices: ['Home Alone', 'The Santa Clause', 'Elf'] },
   ],
   3: [
     { question: 'This Christopher Nolan film features dreams within dreams and a spinning top.', answer: 'Inception', choices: ['Inception', 'Interstellar', 'The Prestige'] },

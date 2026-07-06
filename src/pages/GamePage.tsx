@@ -16,6 +16,8 @@ import { ExposedProvider } from '../games/exposed/context';
 import ExposedGame from '../games/exposed/ExposedGame';
 import { BlitzProvider } from '../games/blitz/context';
 import BlitzGame from '../games/blitz/BlitzGame';
+import { HouseOfCardsProvider } from '../games/house-of-cards/context';
+import HouseOfCardsGame from '../games/house-of-cards/HouseOfCardsGame';
 
 function renderGame(gameId: string | undefined): React.ReactNode {
   switch (gameId) {
@@ -56,6 +58,12 @@ function renderGame(gameId: string | undefined): React.ReactNode {
         <BlitzProvider>
           <BlitzGame />
         </BlitzProvider>
+      );
+    case 'house-of-cards':
+      return (
+        <HouseOfCardsProvider>
+          <HouseOfCardsGame />
+        </HouseOfCardsProvider>
       );
     default:
       return null;
