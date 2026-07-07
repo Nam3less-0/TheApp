@@ -91,7 +91,7 @@ export default createTopic('fields-of-study', 'Fields of Study', {
   ],
   5: [
     { question: 'What is the study of big questions about knowledge, existence, and right and wrong called?', answer: 'Philosophy', choices: ['Philosophy', 'Geology', 'Botany'] },
-    { question: 'What is the study of literature, poems, and written works called?', answer: 'Literature', choices: ['Literature', 'Geology', 'Chemistry'] },
+    { question: 'What field covers novels, poems, plays, and other written works?', answer: 'Literature', choices: ['Literature', 'Geology', 'Chemistry'] },
     { question: 'What is the study of religion and spiritual beliefs called?', answer: 'Theology', choices: ['Theology', 'Geology', 'Astronomy'] },
     { question: 'What is the study of music, composers, and how music works called?', answer: 'Musicology', choices: ['Musicology', 'Geology', 'Botany'] },
     { question: 'What is the study of theater, acting, and stage performance called?', answer: 'Drama', choices: ['Drama', 'Geology', 'Chemistry'] },

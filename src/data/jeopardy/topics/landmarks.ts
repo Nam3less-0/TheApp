@@ -64,7 +64,7 @@ export default createTopic('landmarks', 'World Landmarks & Architecture', {
     { question: 'Twin towers linked by a skybridge defined Kuala Lumpur\'s skyline before taller rivals appeared.', answer: 'Petronas Towers', choices: ['Petronas Towers', 'Taipei 101', 'Willis Tower'] },
     { question: 'A limestone lion with a pharaoh\'s head guards the pyramids on the Giza plateau outside Cairo.', answer: 'Great Sphinx of Giza', choices: ['Great Sphinx of Giza', 'Luxor Temple', 'Abu Simbel'] },
     { question: 'Neolithic standing stones arranged in a circle draw visitors to Wiltshire, England.', answer: 'Stonehenge', choices: ['Stonehenge', 'Avebury', 'Callanish Stones'] },
-    { question: 'Rockefeller Center\'s ice-skating rink and Christmas tree make this Midtown Manhattan complex a holiday icon.', answer: 'Rockefeller Center', choices: ['Rockefeller Center', 'Empire State Building', 'Times Square'] },
+    { question: 'An ice-skating rink and giant Christmas tree make this Midtown Manhattan complex a holiday icon.', answer: 'Rockefeller Center', choices: ['Rockefeller Center', 'Empire State Building', 'Times Square'] },
     { question: 'For 25 years this Chicago skyscraper was the tallest building in the world and is still called the Sears Tower by many locals.', answer: 'Willis Tower', choices: ['Willis Tower', 'Empire State Building', 'John Hancock Center'] },
   ],
   4: [
@@ -110,8 +110,5 @@ export default createTopic('landmarks', 'World Landmarks & Architecture', {
     { question: 'Congress meets under a cast-iron dome in this building at the east end of the National Mall.', answer: 'Capitol Building', choices: ['Capitol Building', 'White House', 'Supreme Court'] },
     { question: 'At 29,032 feet, this Himalayan peak is the highest mountain above sea level on Earth.', answer: 'Mount Everest', choices: ['Mount Everest', 'K2', 'Mount Kilimanjaro'] },
     { question: 'Geysers, hot springs, and bison herds fill America\'s first national park, mostly in Wyoming.', answer: 'Yellowstone National Park', choices: ['Yellowstone National Park', 'Yosemite National Park', 'Grand Canyon'] },
-    { question: 'Gondolas glide through canals past St. Mark\'s Basilica in this Italian city built on water.', answer: 'Venice', choices: ['Venice', 'Florence', 'Verona'] },
-    { question: 'A copper-green statue of a woman holding a torch welcomes ships — name the island she stands on in New York Harbor.', answer: 'Liberty Island', choices: ['Liberty Island', 'Ellis Island', 'Governors Island'] },
-    { question: 'More than a mile deep and carved by the Colorado River, this Arizona gorge is one of the Seven Natural Wonders.', answer: 'Grand Canyon', choices: ['Grand Canyon', 'Death Valley', 'Monument Valley'] },
   ],
 });
