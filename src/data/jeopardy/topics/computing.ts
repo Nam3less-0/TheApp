@@ -19,7 +19,7 @@ export default createTopic('computing', 'Computing & Code', {
     { question: 'What device shows images and text on your screen?', answer: 'A monitor', choices: ['A monitor', 'A printer', 'A scanner'] },
     { question: 'What do you click to open a program or file?', answer: 'An icon', choices: ['An icon', 'A folder', 'A toolbar'] },
     { question: 'What do you call a small picture taken with a phone or camera?', answer: 'A photo', choices: ['A photo', 'A document', 'A spreadsheet'] },
-    { question: 'What button do you press to send an email?', answer: 'Send', choices: ['Send', 'Save', 'Print'] },
+    { question: 'What button in your email client dispatches your message to the recipient?', answer: 'Send', choices: ['Send', 'Save', 'Print'] },
     { question: 'What do you use a mouse to move around the screen?', answer: 'The cursor', choices: ['The cursor', 'The desktop', 'The taskbar'] },
     { question: 'What do you call copying text from one place and putting it in another?', answer: 'Copy and paste', choices: ['Copy and paste', 'Save and close', 'Cut and delete'] },
   ],

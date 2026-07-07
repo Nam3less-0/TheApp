@@ -3,7 +3,7 @@ import { createTopic } from '../createTopic';
 export default createTopic('favourite-pick', 'Favourite Pick', {
   1: [
     { question: 'What pirate captain wears a straw hat in One Piece?', answer: 'Monkey D. Luffy', choices: ['Monkey D. Luffy', 'Roronoa Zoro', 'Sanji'] },
-    { question: 'What legendary treasure is the One Piece series named after?', answer: 'One Piece', choices: ['One Piece', 'All Blue', 'Poneglyphs'] },
+    { question: 'What legendary treasure at the end of the Grand Line is the manga series named after?', answer: 'One Piece', choices: ['One Piece', 'All Blue', 'Poneglyphs'] },
     { question: 'What is the name of Luffy\'s pirate crew?', answer: 'The Straw Hat Pirates', choices: ['The Straw Hat Pirates', 'The Whitebeard Pirates', 'The Red Hair Pirates'] },
     { question: 'What yellow electric mouse is the Pokémon franchise mascot?', answer: 'Pikachu', choices: ['Pikachu', 'Raichu', 'Pichu'] },
     { question: 'What ball-shaped device do Pokémon trainers use to catch creatures?', answer: 'A Poké Ball', choices: ['A Poké Ball', 'A Pokédex', 'A Great Ball'] },
@@ -28,7 +28,7 @@ export default createTopic('favourite-pick', 'Favourite Pick', {
     { question: 'What ship replaced the Going Merry in One Piece?', answer: 'Thousand Sunny', choices: ['Thousand Sunny', 'Moby Dick', 'Red Force'] },
     { question: 'What region is Ash Ketchum from in the Pokémon anime?', answer: 'Kanto', choices: ['Kanto', 'Johto', 'Hoenn'] },
     { question: 'Who gives Ash his first Pokémon and Pokédex in Pallet Town?', answer: 'Professor Oak', choices: ['Professor Oak', 'Professor Elm', 'Professor Birch'] },
-    { question: 'What is Jesse Pinkman\'s first name in Breaking Bad?', answer: 'Jesse', choices: ['Jesse', 'James', 'John'] },
+    { question: 'What is Pinkman\u2019s first name in Breaking Bad?', answer: 'Jesse', choices: ['Jesse', 'James', 'John'] },
     { question: 'What Breaking Bad spin-off follows lawyer Jimmy McGill?', answer: 'Better Call Saul', choices: ['Better Call Saul', 'El Camino', 'Narcos'] },
     { question: 'What Rolex model is iconic for motorsport timing and Paul Newman fame?', answer: 'Daytona', choices: ['Daytona', 'Explorer', 'Air-King'] },
     { question: 'What Rolex watch line was designed for pilots crossing multiple time zones?', answer: 'GMT-Master', choices: ['GMT-Master', 'Milgauss', 'Yacht-Master'] },
@@ -65,7 +65,7 @@ export default createTopic('favourite-pick', 'Favourite Pick', {
     { question: 'What poker hand contains three cards of one rank and two of another?', answer: 'Full house', choices: ['Full house', 'Straight flush', 'Two pair'] },
     { question: 'What term describes pretending to have a strong hand when you do not?', answer: 'Bluff', choices: ['Bluff', 'Check-raise', 'Slow play'] },
     { question: 'What wolf-like Digimon is Matt Ishida\'s partner?', answer: 'Gabumon', choices: ['Gabumon', 'Agumon', 'Veemon'] },
-    { question: 'What bat-like rookie Digimon is Patamon\'s first form before Angemon?', answer: 'Patamon', choices: ['Patamon', 'Gatomon', 'Palmon'] },
+    { question: 'What bat-like rookie Digimon is T.K.\u2019s partner before Angemon?', answer: 'Patamon', choices: ['Patamon', 'Gatomon', 'Palmon'] },
   ],
   4: [
     { question: 'What ancient stone tablets in One Piece hold the world\'s lost history?', answer: 'Poneglyphs', choices: ['Poneglyphs', 'Log Pose', 'Den Den Mushi'] },

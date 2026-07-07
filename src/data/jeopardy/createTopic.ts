@@ -1,4 +1,5 @@
 import type { Choices, Choices3, Difficulty, QuestionBank, TopicData } from './types';
+import { assertAnswerNotInQuestion } from './validateQuestion';
 
 const LEVELS: Difficulty[] = [1, 2, 3, 4, 5];
 const QUESTIONS_PER_LEVEL = 20;
@@ -86,6 +87,8 @@ export function createTopic(
           `Topic "${id}" difficulty ${difficulty}: choices must be distinct for "${question.slice(0, 40)}…".`,
         );
       }
+
+      assertAnswerNotInQuestion(id, difficulty, question, answer);
 
       return { difficulty, question, answer, choices: expanded };
     });

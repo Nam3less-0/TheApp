@@ -1,6 +1,7 @@
 import type { AnswerRecord, JeopardyAction, JeopardySession } from './types';
 import {
-  buildBoardFromTopics,
+  commitBoardDraw,
+  draftBoardFromTopics,
   freshLifelines,
   isCellBlockedThisTurn,
   isWhatChoicesAllowed,
@@ -19,6 +20,7 @@ export const initialJeopardyState: JeopardySession = {
   previewColumns: [],
   blacklistedTopicIds: [],
   previewSessionTopicIds: [],
+  previewCells: [],
   currentPlayerIndex: 0,
   activeCellId: null,
   questionsAnswered: 0,
@@ -38,14 +40,17 @@ function beginTopicPreview(
   JeopardySession,
   | 'pendingPlayers'
   | 'previewColumns'
+  | 'previewCells'
   | 'blacklistedTopicIds'
   | 'previewSessionTopicIds'
   | 'phase'
 > {
   const preview = pickPreviewTopics(blacklistedTopicIds, previewSessionTopicIds);
+  const board = draftBoardFromTopics(preview.columns.map((column) => column.id));
   return {
     pendingPlayers: players,
-    previewColumns: preview.columns,
+    previewColumns: board.columns,
+    previewCells: board.cells,
     blacklistedTopicIds,
     previewSessionTopicIds: preview.sessionTopicIds,
     phase: 'topic-preview',
@@ -86,6 +91,7 @@ export function jeopardyReducer(
         ...state,
         phase: 'setup',
         previewColumns: [],
+        previewCells: [],
         blacklistedTopicIds: [],
         previewSessionTopicIds: [],
       };
@@ -98,10 +104,26 @@ export function jeopardyReducer(
         state.previewSessionTopicIds,
         state.previewColumns.map((column) => column.id),
       );
+      const board = draftBoardFromTopics(preview.columns.map((column) => column.id));
       return {
         ...state,
-        previewColumns: preview.columns,
+        previewColumns: board.columns,
+        previewCells: board.cells,
         previewSessionTopicIds: preview.sessionTopicIds,
+      };
+    }
+
+    case 'RESHUFFLE_PREVIEW_QUESTIONS': {
+      if (state.phase !== 'topic-preview' || state.previewColumns.length === 0) {
+        return state;
+      }
+      const board = draftBoardFromTopics(
+        state.previewColumns.map((column) => column.id),
+      );
+      return {
+        ...state,
+        previewColumns: board.columns,
+        previewCells: board.cells,
       };
     }
 
@@ -114,10 +136,12 @@ export function jeopardyReducer(
         blacklistedTopicIds,
         state.previewSessionTopicIds,
       );
+      const board = draftBoardFromTopics(preview.columns.map((column) => column.id));
       return {
         ...state,
         blacklistedTopicIds,
-        previewColumns: preview.columns,
+        previewColumns: board.columns,
+        previewCells: board.cells,
         previewSessionTopicIds: preview.sessionTopicIds,
       };
     }
@@ -134,14 +158,18 @@ export function jeopardyReducer(
     }
 
     case 'CONFIRM_TOPICS': {
-      if (state.phase !== 'topic-preview' || state.previewColumns.length === 0) {
+      if (
+        state.phase !== 'topic-preview' ||
+        state.previewColumns.length === 0 ||
+        state.previewCells.length === 0
+      ) {
         return state;
       }
 
       const players = preparePlayersForGame(state.pendingPlayers);
-      const { columns, cells } = buildBoardFromTopics(
-        state.previewColumns.map((column) => column.id),
-      );
+      const columns = state.previewColumns;
+      const cells = state.previewCells;
+      commitBoardDraw(columns, cells);
 
       return {
         ...state,
@@ -151,6 +179,7 @@ export function jeopardyReducer(
         phase: 'board',
         pendingPlayers: [],
         previewColumns: [],
+        previewCells: [],
         blacklistedTopicIds: [],
         previewSessionTopicIds: [],
         currentPlayerIndex: 0,

@@ -14,7 +14,7 @@ export default createTopic('technology', 'Technology', {
     { question: 'What device do you use to type letters and numbers into a computer?', answer: 'A keyboard', choices: ['A keyboard', 'A mouse', 'A monitor'] },
     { question: 'What company makes the Android operating system for phones?', answer: 'Google', choices: ['Google', 'Apple', 'Samsung'] },
     { question: 'What do you call the screen that shows images on a computer?', answer: 'A monitor', choices: ['A monitor', 'A printer', 'A speaker'] },
-    { question: 'Which Japanese company makes the Nintendo Switch console?', answer: 'Nintendo', choices: ['Nintendo', 'Sega', 'Bandai Namco'] },
+    { question: 'Which Kyoto-based company makes the Switch console?', answer: 'Nintendo', choices: ['Nintendo', 'Sega', 'Bandai Namco'] },
     { question: 'What is the name of Apple\'s voice assistant on iPhones?', answer: 'Siri', choices: ['Siri', 'Alexa', 'Google Assistant'] },
     { question: 'What do you call unwanted email sent in bulk?', answer: 'Spam', choices: ['Spam', 'Phishing', 'Malware'] },
     { question: 'Which search engine\'s homepage features a colorful doodle logo?', answer: 'Google Search', choices: ['Google Search', 'Bing', 'DuckDuckGo'] },
@@ -86,7 +86,7 @@ export default createTopic('technology', 'Technology', {
     { question: 'What does "API" stand for in software development?', answer: 'Application Programming Interface', choices: ['Application Programming Interface', 'Automated Program Integration', 'Advanced Processing Instruction'] },
     { question: 'Which scientist is considered the father of computer science and broke Enigma codes?', answer: 'Alan Turing', choices: ['Alan Turing', 'Charles Babbage', 'John von Neumann'] },
     { question: 'What does "DNS" stand for in translating domain names to IP addresses?', answer: 'Domain Name System', choices: ['Domain Name System', 'Digital Network Service', 'Data Name Server'] },
-    { question: 'Which company developed the C programming language at Bell Labs?', answer: 'Bell Labs', choices: ['Bell Labs', 'IBM', 'Microsoft'] },
+    { question: 'Which Murray Hill research center developed the C programming language alongside Unix?', answer: 'Bell Labs', choices: ['Bell Labs', 'IBM', 'Microsoft'] },
     { question: 'What year was the first commercially successful video game "Pong" released?', answer: '1972', choices: ['1972', '1975', '1980'] },
   ],
   5: [

@@ -77,6 +77,12 @@ export interface JeopardySession {
   pendingPlayers: Player[];
   /** Six topics chosen during the preview step (before clues are drawn). */
   previewColumns: BoardColumn[];
+  /**
+   * Drafted clues for the preview topics. Populated before the game starts so
+   * the host can inspect and reshuffle the question set; promoted to `cells`
+   * (and committed to the deck history) on CONFIRM_TOPICS.
+   */
+  previewCells: BoardCell[];
   /** Topic ids excluded from preview rerolls for this game setup. */
   blacklistedTopicIds: string[];
   /** Topic ids already surfaced in preview this setup (lowers reroll weight). */
@@ -104,6 +110,7 @@ export type JeopardyAction =
   | { type: 'PLAYERS_READY'; players: Player[] }
   | { type: 'BACK_TO_SETUP' }
   | { type: 'REROLL_TOPICS' }
+  | { type: 'RESHUFFLE_PREVIEW_QUESTIONS' }
   | { type: 'BLACKLIST_TOPIC'; topicId: string }
   | { type: 'UNBLACKLIST_TOPIC'; topicId: string }
   | { type: 'CONFIRM_TOPICS' }

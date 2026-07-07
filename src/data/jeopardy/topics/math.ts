@@ -84,7 +84,7 @@ export default createTopic('math', 'Math & Numbers', {
     { question: 'Who revolutionized abstract algebra and is honored by Noetherian rings?', answer: 'Noether', choices: ['Noether', 'Germain', 'Curie'] },
     { question: 'What famous unsolved problem asks whether P equals NP in computer science?', answer: 'P versus NP', choices: ['P versus NP', 'Pythagorean theorem', 'Golden ratio'] },
     { question: 'What concept describes repeating patterns that look similar at every scale, like coastlines?', answer: 'Fractal', choices: ['Fractal', 'Polygon', 'Integer'] },
-    { question: 'What set-theory symbol represents a collection of distinct objects?', answer: 'Set', choices: ['Set', 'Matrix', 'Vector'] },
+    { question: 'In mathematics, what curly-brace object represents a collection of distinct elements?', answer: 'Set', choices: ['Set', 'Matrix', 'Vector'] },
     { question: 'Who posed 23 famous unsolved problems at the 1900 International Congress?', answer: 'Hilbert', choices: ['Hilbert', 'Riemann', 'Gauss'] },
     { question: 'What mathematical field studies random processes over time, used in finance and physics?', answer: 'Stochastic processes', choices: ['Stochastic processes', 'Plane geometry', 'Basic arithmetic'] },
     { question: 'What is the name for a self-referential statement like "This sentence is false"?', answer: 'Liar paradox', choices: ['Liar paradox', 'Pythagorean theorem', 'Golden ratio'] },

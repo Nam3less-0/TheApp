@@ -104,7 +104,7 @@ export default createTopic('riddles', 'Riddles', {
     { question: 'Riddle: What has no beginning, end, or middle?', answer: 'A circle', choices: ['A circle', 'Time', 'A loop'] },
     { question: 'Riddle: What can fill a room but takes up no space?', answer: 'Light', choices: ['Light', 'Sound', 'Heat'] },
     { question: 'Riddle: What has one letter but starts with "e"?', answer: 'An envelope', choices: ['An envelope', 'An eagle', 'An exit'] },
-    { question: 'Riddle: What word is spelled incorrectly in every dictionary?', answer: 'Incorrectly', choices: ['Incorrectly', 'Wrongly', 'Misspelled'] },
+    { question: 'Riddle: What word do all dictionaries deliberately spell wrong on purpose?', answer: 'Incorrectly', choices: ['Incorrectly', 'Wrongly', 'Misspelled'] },
     { question: 'Riddle: What can you hold in your left hand but not in your right?', answer: 'Your right elbow', choices: ['Your right elbow', 'Your heart', 'Your left hand'] },
     { question: 'Riddle: What runs around the whole yard without moving?', answer: 'A fence', choices: ['A fence', 'A path', 'A shadow'] },
     { question: 'Riddle: What has a bottom at the top and a top at the bottom?', answer: 'Legs', choices: ['Legs', 'A hourglass', 'A staircase'] },

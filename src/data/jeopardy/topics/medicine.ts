@@ -105,7 +105,7 @@ export default createTopic('medicine', 'Medicine & the Human Body', {
     { question: 'A physician who specializes in diagnosing and treating cancer is an this.', answer: 'Oncologist', choices: ['Oncologist', 'Geriatrician', 'Immunologist'] },
     { question: 'Bacteria, viruses, and fungi that cause disease are collectively called these.', answer: 'Pathogens', choices: ['Pathogens', 'Probiotics', 'Antigens'] },
     { question: 'Immune signaling proteins that regulate inflammation are called these.', answer: 'Cytokines', choices: ['Cytokines', 'Enzymes', 'Lipids'] },
-    { question: 'A selective barrier of tightly joined cells protects the brain in the blood-this barrier.', answer: 'Brain', choices: ['Brain', 'Heart', 'Liver'] },
+    { question: 'A selective barrier of tightly joined cells protects the central nervous system in the blood-this barrier.', answer: 'Brain', choices: ['Brain', 'Heart', 'Liver'] },
     { question: 'Protective caps at the ends of chromosomes that shorten with age are called these.', answer: 'Telomeres', choices: ['Telomeres', 'Centromeres', 'Ribosomes'] },
     { question: 'Barry Marshall and Robin Warren linked stomach ulcers to this spiral bacterium.', answer: 'Helicobacter pylori', choices: ['Helicobacter pylori', 'Escherichia coli', 'Staphylococcus aureus'] },
     { question: 'Modern COVID-19 vaccines from Pfizer and Moderna use this type of genetic messenger.', answer: 'mRNA', choices: ['mRNA', 'cDNA', 'tRNA'] },

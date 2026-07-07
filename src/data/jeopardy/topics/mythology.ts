@@ -106,7 +106,7 @@ export default createTopic('mythology', 'Mythology & Legends', {
     { question: 'Who is the Roman equivalent of the Greek god Hermes?', answer: 'Mercury', choices: ['Mercury', 'Vulcan', 'Janus'] },
     { question: 'What is the name of the prophetic priestess at the Temple of Apollo at Delphi?', answer: 'The Oracle of Delphi (Pythia)', choices: ['The Oracle of Delphi (Pythia)', 'The Sibyl of Cumae', 'Cassandra of Troy'] },
     { question: 'Which Mesopotamian hero sought immortality after the death of Enkidu?', answer: 'Gilgamesh', choices: ['Gilgamesh', 'Enmerkar', 'Lugalbanda'] },
-    { question: 'What is the name of Loki\u2019s daughter who rules over the dead in Hel?', answer: 'Hel', choices: ['Hel', 'Angrboda', 'Skadi'] },
+    { question: 'What is the name of Loki\u2019s daughter who rules over the dead in Norse mythology\u2019s underworld realm?', answer: 'Hel', choices: ['Hel', 'Angrboda', 'Skadi'] },
     { question: 'Which Greek hero tamed Pegasus and slew the Chimera?', answer: 'Bellerophon', choices: ['Bellerophon', 'Perseus', 'Cadmus'] },
     { question: 'Who is the Shinto storm god and brother of Amaterasu?', answer: 'Susanoo', choices: ['Susanoo', 'Tsukuyomi', 'Raijin'] },
     { question: 'What is the name of the blessed afterlife realm for Greek heroes?', answer: 'Elysium', choices: ['Elysium', 'Tartarus', 'Asphodel Meadows'] },

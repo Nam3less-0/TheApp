@@ -4,7 +4,7 @@ export default createTopic('physics', 'Physics', {
   1: [
     { question: 'What force pulls objects toward Earth?', answer: 'Gravity', choices: ['Gravity', 'Magnetism', 'Friction'] },
     { question: 'What is the SI unit of length?', answer: 'Meter', choices: ['Meter', 'Kilogram', 'Second'] },
-    { question: 'Which travels faster in air: light or sound?', answer: 'Light', choices: ['Light', 'Sound', 'Wind'] },
+    { question: 'In Earth\'s atmosphere, which travels faster—electromagnetic waves or sound waves?', answer: 'Light', choices: ['Light', 'Sound', 'Wind'] },
     { question: 'What metal do magnets commonly attract?', answer: 'Iron', choices: ['Iron', 'Copper', 'Aluminum'] },
     { question: 'What type of energy does a moving object have?', answer: 'Kinetic energy', choices: ['Kinetic energy', 'Potential energy', 'Thermal energy'] },
     { question: 'What is the SI unit of time?', answer: 'Second', choices: ['Second', 'Minute', 'Hour'] },

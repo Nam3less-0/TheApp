@@ -107,12 +107,16 @@ export function createDefaultPlayers(count = 4): Player[] {
   }));
 }
 
-const RECENT_QUESTIONS_KEY = 'jeopardy-recent-questions';
 const RECENT_TOPICS_KEY = 'jeopardy-recent-topics';
-const MAX_RECENT_QUESTIONS = 400;
+const RECENT_QUESTIONS_KEY = 'jeopardy-recent-questions';
+const QUESTION_DECK_KEY_PREFIX = 'jeopardy-deck-';
 const MAX_RECENT_TOPICS = 36;
-const RECENT_QUESTION_WEIGHT = 1;
-const FRESH_QUESTION_WEIGHT = 10;
+/**
+ * How many recently-served clues to remember across games. A full board is 30
+ * clues, so this keeps roughly the last six games out of the draw whenever a
+ * topic/difficulty pool is large enough to allow it.
+ */
+const MAX_RECENT_QUESTIONS = 180;
 const RECENT_TOPIC_WEIGHT = 1;
 const SESSION_TOPIC_WEIGHT = 2;
 const FRESH_TOPIC_WEIGHT = 6;
@@ -175,24 +179,6 @@ function weightedSampleWithoutReplacement<T>(
   return picked;
 }
 
-/** Weighted single pick — favors higher-weight items. */
-function pickWeightedRandom<T>(
-  items: T[],
-  weightFor: (item: T) => number,
-): T {
-  if (items.length === 1) return items[0];
-  const weights = items.map(weightFor);
-  const total = weights.reduce((sum, weight) => sum + Math.max(weight, 0), 0);
-  if (total <= 0) return shuffle(items)[0];
-
-  let roll = randomInt(total);
-  for (let index = 0; index < items.length; index += 1) {
-    roll -= Math.max(weights[index], 0);
-    if (roll < 0) return items[index];
-  }
-  return items[items.length - 1];
-}
-
 function loadRecentKeys(storageKey: string): string[] {
   try {
     const raw = localStorage.getItem(storageKey);
@@ -222,17 +208,102 @@ function questionKey(
   return `${topicId}|${difficulty}|${question}`;
 }
 
+function slotKey(topicId: string, difficulty: Difficulty): string {
+  return `${topicId}|${difficulty}`;
+}
+
+function loadQuestionDeck(slot: string): string[] {
+  try {
+    const raw = localStorage.getItem(`${QUESTION_DECK_KEY_PREFIX}${slot}`);
+    if (!raw) return [];
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed)
+      ? parsed.filter((entry): entry is string => typeof entry === 'string')
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveQuestionDeck(slot: string, deck: string[]) {
+  try {
+    localStorage.setItem(
+      `${QUESTION_DECK_KEY_PREFIX}${slot}`,
+      JSON.stringify(deck),
+    );
+  } catch {
+    // Ignore quota / private-mode failures.
+  }
+}
+
+interface QuestionDraw<T> {
+  picked: T;
+  /** The picked item's key, so callers can advance persistent state. */
+  pickedKey: string;
+}
+
 /**
- * Prefer items with lower recent-use weight. When everything was seen recently,
- * fall back to the full pool so games never stall.
+ * Pick the next clue for a topic/difficulty slot. This is a pure "peek": it
+ * reads the persisted deck but never writes to storage, so it can be called
+ * repeatedly (e.g. when the host reshuffles) without burning through the pool.
+ *
+ * Selection order, strongest first:
+ *   1. clues still in the slot's deck that were NOT served in recent games,
+ *   2. clues still in the deck but served recently,
+ *   3. any unused clue as a last resort.
+ * This means a full pool cycles once before anything repeats, and even after a
+ * cycle we prefer whatever hasn't been seen in the last several games.
  */
-function pickLeastRecent<T>(
+function drawQuestion<T>(
   items: T[],
   keyFor: (item: T) => string,
-  recentSet: Set<string>,
-): T {
-  return pickWeightedRandom(items, (item) =>
-    recentSet.has(keyFor(item)) ? RECENT_QUESTION_WEIGHT : FRESH_QUESTION_WEIGHT,
+  slot: string,
+  currentDeck: string[],
+  avoidKeys: Set<string>,
+  recentKeys: Set<string>,
+): QuestionDraw<T> {
+  if (items.length === 0) {
+    throw new Error(`No questions available for slot "${slot}".`);
+  }
+
+  const keysByItem = new Map(items.map((item) => [keyFor(item), item]));
+  const allKeys = [...keysByItem.keys()];
+
+  let deck = currentDeck.filter((key) => keysByItem.has(key));
+  if (deck.length === 0) deck = [...allKeys];
+
+  const eligible = deck.filter((key) => !avoidKeys.has(key));
+  const fresh = shuffle(eligible.filter((key) => !recentKeys.has(key)));
+  const stale = shuffle(eligible.filter((key) => recentKeys.has(key)));
+
+  let pickedKey = fresh[0] ?? stale[0];
+
+  if (!pickedKey) {
+    // The deck only holds clues already used on this board — fall back to any
+    // unused clue, still preferring ones not seen in recent games.
+    const fallback = allKeys.filter((key) => !avoidKeys.has(key));
+    const freshFallback = shuffle(fallback.filter((key) => !recentKeys.has(key)));
+    pickedKey = freshFallback[0] ?? shuffle(fallback)[0];
+  }
+
+  if (!pickedKey) {
+    throw new Error(`No unused questions available for slot "${slot}".`);
+  }
+
+  const picked = keysByItem.get(pickedKey);
+  if (!picked) {
+    throw new Error(`Question "${pickedKey}" missing from slot "${slot}".`);
+  }
+  return { picked, pickedKey };
+}
+
+/** Remove a drawn clue from a slot's persisted deck, resetting when exhausted. */
+function advanceQuestionDeck(slot: string, allKeys: string[], drawnKey: string) {
+  let deck = loadQuestionDeck(slot).filter((key) => allKeys.includes(key));
+  if (deck.length === 0) deck = [...allKeys];
+  saveQuestionDeck(
+    slot,
+    deck.filter((key) => key !== drawnKey),
   );
 }
 
@@ -354,10 +425,15 @@ export function buildChoices(
 }
 
 /**
- * Build a board from confirmed preview topics: shuffle column order, draw weighted
- * random questions per difficulty, and flag double-trouble tiles.
+ * Draft a board from preview topics without committing anything to storage.
+ *
+ * Column order matches the given `topicIds` (which are already shuffled during
+ * the preview step), one clue is drawn per difficulty per topic, and
+ * double-trouble tiles are flagged. Because it never writes to storage, this
+ * can be called as many times as the host likes to reshuffle the question set
+ * before the game starts — the pool is only consumed at {@link commitBoardDraw}.
  */
-export function buildBoardFromTopics(topicIds: string[]): BuiltBoard {
+export function draftBoardFromTopics(topicIds: string[]): BuiltBoard {
   const topics = topicIds
     .map((id) => JEOPARDY_TOPICS.find((topic) => topic.id === id))
     .filter((topic): topic is TopicData => topic !== undefined);
@@ -366,32 +442,32 @@ export function buildBoardFromTopics(topicIds: string[]): BuiltBoard {
     throw new Error('Cannot build a board without topics.');
   }
 
-  const recentQuestions = loadRecentKeys(RECENT_QUESTIONS_KEY);
-  const recentQuestionSet = new Set(recentQuestions);
-  const newQuestionKeys: string[] = [];
-  const shuffledTopics = shuffleDeep(topics);
+  const recentKeys = new Set(loadRecentKeys(RECENT_QUESTIONS_KEY));
+  const usedQuestionKeys = new Set<string>();
 
-  const columns: BoardColumn[] = shuffledTopics.map((topic) => ({
+  const columns: BoardColumn[] = topics.map((topic) => ({
     id: topic.id,
     name: topic.name,
   }));
   const cells: BoardCell[] = [];
 
-  shuffledTopics.forEach((topic, columnIndex) => {
+  topics.forEach((topic, columnIndex) => {
     const topicAnswers = topic.questions.map((question) => question.answer);
 
     DIFFICULTIES.forEach((difficulty) => {
       const candidates = topic.questions.filter(
         (question) => question.difficulty === difficulty,
       );
-      const chosen = pickLeastRecent(
+      const slot = slotKey(topic.id, difficulty);
+      const { picked, pickedKey } = drawQuestion(
         candidates,
         (question) => questionKey(topic.id, difficulty, question.question),
-        recentQuestionSet,
+        slot,
+        loadQuestionDeck(slot),
+        usedQuestionKeys,
+        recentKeys,
       );
-      newQuestionKeys.push(
-        questionKey(topic.id, difficulty, chosen.question),
-      );
+      usedQuestionKeys.add(pickedKey);
 
       const choiceCount = topic.id === 'riddles' ? 3 : 4;
       const sameDiff = candidates.map((question) => question.answer);
@@ -402,28 +478,14 @@ export function buildBoardFromTopics(topicIds: string[]): BuiltBoard {
         columnIndex,
         difficulty,
         value: DIFFICULTY_VALUES[difficulty],
-        question: chosen.question,
-        answer: chosen.answer,
-        choices: buildChoices(chosen.answer, chosen.choices, pool, choiceCount),
+        question: picked.question,
+        answer: picked.answer,
+        choices: buildChoices(picked.answer, picked.choices, pool, choiceCount),
         isDouble: false,
         used: false,
       });
     });
   });
-
-  saveRecentKeys(
-    RECENT_QUESTIONS_KEY,
-    [...recentQuestions, ...newQuestionKeys],
-    MAX_RECENT_QUESTIONS,
-  );
-  saveRecentKeys(
-    RECENT_TOPICS_KEY,
-    [
-      ...loadRecentKeys(RECENT_TOPICS_KEY),
-      ...shuffledTopics.map((topic) => topic.id),
-    ],
-    MAX_RECENT_TOPICS,
-  );
 
   const doubleIds = new Set(
     shuffleDeep(cells.map((cell) => cell.id)).slice(0, DOUBLE_TROUBLE_COUNT),
@@ -433,6 +495,41 @@ export function buildBoardFromTopics(topicIds: string[]): BuiltBoard {
   }
 
   return { columns, cells };
+}
+
+/**
+ * Persist the bookkeeping for a board the players committed to: advance each
+ * slot's deck so its clue won't recur until the pool cycles, and record the
+ * served clues + topics so future drafts steer away from them.
+ */
+export function commitBoardDraw(columns: BoardColumn[], cells: BoardCell[]): void {
+  const drawnQuestionKeys: string[] = [];
+
+  for (const cell of cells) {
+    const topicId = columns[cell.columnIndex]?.id;
+    if (!topicId) continue;
+    const topic = JEOPARDY_TOPICS.find((entry) => entry.id === topicId);
+    if (!topic) continue;
+
+    const drawnKey = questionKey(topicId, cell.difficulty, cell.question);
+    drawnQuestionKeys.push(drawnKey);
+
+    const allKeys = topic.questions
+      .filter((question) => question.difficulty === cell.difficulty)
+      .map((question) => questionKey(topicId, cell.difficulty, question.question));
+    advanceQuestionDeck(slotKey(topicId, cell.difficulty), allKeys, drawnKey);
+  }
+
+  saveRecentKeys(
+    RECENT_QUESTIONS_KEY,
+    [...loadRecentKeys(RECENT_QUESTIONS_KEY), ...drawnQuestionKeys],
+    MAX_RECENT_QUESTIONS,
+  );
+  saveRecentKeys(
+    RECENT_TOPICS_KEY,
+    [...loadRecentKeys(RECENT_TOPICS_KEY), ...columns.map((column) => column.id)],
+    MAX_RECENT_TOPICS,
+  );
 }
 
 /** Clues still available on the board. */

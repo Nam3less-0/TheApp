@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { useJeopardy } from '../context';
 import {
   BOARD_COLUMNS,
@@ -10,8 +11,37 @@ import {
 } from '../utils';
 import JeopardyPanel, { JeopardyPageWrap } from './JeopardyPanel';
 
+const RESHUFFLE_ANIM_MS = 450;
+const RESHUFFLE_CONFIRM_MS = 2200;
+
 export default function TopicPreviewScreen() {
   const { state, dispatch } = useJeopardy();
+  const [isReshuffling, setIsReshuffling] = useState(false);
+  const [justReshuffled, setJustReshuffled] = useState(false);
+  const shuffleTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  useEffect(() => {
+    return () => {
+      shuffleTimersRef.current.forEach(clearTimeout);
+    };
+  }, []);
+
+  function handleReshuffle() {
+    if (isReshuffling) return;
+
+    setIsReshuffling(true);
+    setJustReshuffled(false);
+    dispatch({ type: 'RESHUFFLE_PREVIEW_QUESTIONS' });
+
+    shuffleTimersRef.current.forEach(clearTimeout);
+    shuffleTimersRef.current = [
+      setTimeout(() => {
+        setIsReshuffling(false);
+        setJustReshuffled(true);
+      }, RESHUFFLE_ANIM_MS),
+      setTimeout(() => setJustReshuffled(false), RESHUFFLE_ANIM_MS + RESHUFFLE_CONFIRM_MS),
+    ];
+  }
   const allTopics = getAllTopicSummaries();
   const blacklisted = new Set(state.blacklistedTopicIds);
   const eligibleCount = allTopics.length - blacklisted.size;
@@ -20,7 +50,9 @@ export default function TopicPreviewScreen() {
     (topic) => !blacklisted.has(topic.id) && !currentPreviewIds.has(topic.id),
   );
   const canReroll = hasAlternatives;
-  const canStart = state.previewColumns.length === BOARD_COLUMNS;
+  const canStart =
+    state.previewColumns.length === BOARD_COLUMNS &&
+    state.previewCells.length > 0;
 
   return (
     <JeopardyPageWrap>
@@ -28,8 +60,9 @@ export default function TopicPreviewScreen() {
         Choose your topics
       </h1>
       <p className="mb-8 font-body text-sm text-text-mid">
-        Six categories were drawn at random. Reroll for a fresh set, or ban topics you
-        never want to see again this round — banned topics stay out of every reroll.
+        Six categories were drawn at random, and a fresh clue was dealt for every tile.
+        Reroll for new topics, ban ones you never want to see this round, or reshuffle
+        the clues below until you like the board — nothing is locked in until you build it.
       </p>
 
       <JeopardyPanel>
@@ -92,6 +125,81 @@ export default function TopicPreviewScreen() {
             Edit players
           </button>
         </div>
+
+        {state.previewCells.length > 0 && (
+          <section
+            className={`mt-5 rounded-xl border pt-5 transition-[border-color,background-color,box-shadow] duration-300 ${
+              isReshuffling
+                ? 'border-steel-blue/50 bg-steel-blue/5 px-4 pb-4 shadow-[0_0_0_1px_rgba(91,143,232,0.15)]'
+                : justReshuffled
+                  ? 'border-good/35 bg-good/5 px-4 pb-4'
+                  : 'border-transparent px-0 pb-0'
+            }`}
+          >
+            <div
+              className={`border-line pt-0 ${isReshuffling || justReshuffled ? 'border-t-0' : 'border-t pt-5'}`}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="font-body text-sm font-bold text-text-hi">Question set</p>
+                  <p className="mt-1 font-mono text-[11px] leading-relaxed text-text-low">
+                    Clues stay hidden until the game starts. Reshuffle to deal a fresh
+                    set for every tile if you want to be sure.
+                  </p>
+                  <p
+                    className={`mt-2 font-mono text-[11px] font-semibold transition-opacity duration-300 ${
+                      isReshuffling
+                        ? 'text-steel-blue opacity-100'
+                        : justReshuffled
+                          ? 'text-good opacity-100'
+                          : 'pointer-events-none opacity-0'
+                    }`}
+                    aria-live="polite"
+                  >
+                    {isReshuffling ? 'Dealing a new clue for every tile…' : 'Fresh clue set dealt.'}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleReshuffle}
+                  disabled={isReshuffling}
+                  aria-busy={isReshuffling}
+                  className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-line px-3 py-1.5 font-mono text-[11px] text-text-mid transition-colors hover:border-steel-blue/40 hover:text-steel-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-wait disabled:border-steel-blue/40 disabled:text-steel-blue"
+                >
+                  {isReshuffling && (
+                    <span
+                      className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-steel-blue/25 border-t-steel-blue"
+                      aria-hidden="true"
+                    />
+                  )}
+                  {isReshuffling ? 'Shuffling…' : 'Reshuffle clues'}
+                </button>
+              </div>
+
+              <div
+                className={`mt-3 overflow-hidden transition-[max-height,opacity] duration-300 ${
+                  isReshuffling ? 'max-h-16 opacity-100' : 'max-h-0 opacity-0'
+                }`}
+                aria-hidden={!isReshuffling}
+              >
+                <div className="flex flex-wrap gap-1.5">
+                  {state.previewColumns.map((column) => (
+                    <span
+                      key={column.id}
+                      className="inline-flex animate-pulse items-center gap-1 rounded-md border border-steel-blue/25 bg-steel-blue/10 px-2 py-1 font-mono text-[10px] text-steel-blue"
+                    >
+                      <span
+                        className="h-1.5 w-1.5 rounded-full bg-steel-blue"
+                        style={{ animationDelay: '75ms' }}
+                      />
+                      {column.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {state.blacklistedTopicIds.length > 0 && (
           <section className="mt-5 border-t border-line pt-5">

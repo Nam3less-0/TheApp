@@ -76,7 +76,7 @@ export default createTopic('planet-earth', 'Planet Earth', {
     { question: 'What Norwegian town north of the Arctic Circle receives no direct sunlight for weeks each winter?', answer: 'Tromsø', choices: ['Tromsø', 'Bergen', 'Trondheim'] },
     { question: 'What African lake is the second-largest freshwater lake by surface area?', answer: 'Lake Victoria', choices: ['Lake Victoria', 'Lake Tanganyika', 'Lake Malawi'] },
     { question: 'What Peruvian citadel of the Inca sits high in the Andes above the Urubamba River?', answer: 'Machu Picchu', choices: ['Machu Picchu', 'Choquequirao', 'Sacsayhuamán'] },
-    { question: 'What Australian monolith sacred to Anangu people is also called Uluru?', answer: 'Uluru', choices: ['Uluru', 'Kata Tjuta', 'Mount Augustus'] },
+    { question: 'What Australian monolith sacred to Anangu people rises from the Red Centre near Alice Springs?', answer: 'Uluru', choices: ['Uluru', 'Kata Tjuta', 'Mount Augustus'] },
     { question: 'What Icelandic capital sits atop a hot-spot with abundant geothermal energy?', answer: 'Reykjavik', choices: ['Reykjavik', 'Akureyri', 'Keflavik'] },
     { question: 'What Chinese megacity of over 30 million people sits at the Yangtze River\'s head of navigation?', answer: 'Chongqing', choices: ['Chongqing', 'Chengdu', 'Wuhan'] },
     { question: 'What Mexican peninsula separates the Gulf of California from the Pacific?', answer: 'Baja California', choices: ['Baja California', 'Yucatán Peninsula', 'Nicoya Peninsula'] },
