@@ -1,5 +1,13 @@
+import { motion } from 'framer-motion';
 import { useJeopardy } from '../context';
-import { COLORS, DIFFICULTIES, countRemainingCells, getCellByColumnAndDifficulty, isCellBlockedThisTurn } from '../utils';
+import {
+  COLORS,
+  boardShapeFor,
+  countRemainingCells,
+  getCellByColumnAndDifficulty,
+  isCellBlockedThisTurn,
+  playSound,
+} from '../utils';
 import ScoreChips from './ScoreChips';
 import { JeopardyPageWrap } from './JeopardyPanel';
 
@@ -7,21 +15,53 @@ export default function BoardScreen() {
   const { state, dispatch } = useJeopardy();
   const activePlayer = state.players[state.currentPlayerIndex];
   const remaining = countRemainingCells(state.cells);
+  const difficulties = boardShapeFor(state.settings).difficulties;
+
+  function handleSelect(cellId: string) {
+    // Always the neutral pick sound — a double must stay a surprise.
+    playSound('select', state.settings.soundEnabled);
+    dispatch({ type: 'SELECT_CELL', cellId });
+  }
 
   return (
     <JeopardyPageWrap>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2.5">
-        <div>
-          <div className="font-display text-[15px] font-bold text-text-hi">
-            {activePlayer?.name}&rsquo;s turn
-          </div>
-          <div className="mt-0.5 font-mono text-[11px] uppercase tracking-wider text-text-low">
-            {remaining} clue{remaining === 1 ? '' : 's'} left · get it right to pick again · one
-            $200 &amp; $400 per turn
+        <div className="flex items-center gap-2.5">
+          <motion.span
+            key={activePlayer?.id}
+            className="inline-block h-2.5 w-2.5 rounded-full"
+            style={{ background: COLORS.sapphireBright }}
+            animate={{ opacity: [1, 0.3, 1], scale: [1, 1.25, 1] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+            aria-hidden="true"
+          />
+          <div>
+            <div className="font-display text-[15px] font-bold text-text-hi">
+              {activePlayer?.name}&rsquo;s turn
+            </div>
+            <div className="mt-0.5 font-mono text-[11px] uppercase tracking-wider text-text-low">
+              {remaining} clue{remaining === 1 ? '' : 's'} left · get it right to pick again · one
+              $200 &amp; $400 per turn
+            </div>
           </div>
         </div>
         <ScoreChips players={state.players} activePlayerId={activePlayer?.id ?? null} />
       </div>
+
+      {state.undoSnapshot && (
+        <div className="mb-3 flex items-center justify-between gap-3 rounded-xl border border-line bg-surface px-3.5 py-2.5">
+          <span className="font-mono text-[11px] text-text-mid">
+            Marked the wrong result? You can undo the last clue.
+          </span>
+          <button
+            type="button"
+            onClick={() => dispatch({ type: 'UNDO_RESOLVE' })}
+            className="shrink-0 rounded-lg border border-line px-3 py-1.5 font-mono text-[11px] text-text-mid transition-colors hover:border-steel-blue/40 hover:text-steel-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+          >
+            ↩ Undo last
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-6 gap-1.5">
         {state.columns.map((column) => (
@@ -37,7 +77,7 @@ export default function BoardScreen() {
           </div>
         ))}
 
-        {DIFFICULTIES.map((difficulty) =>
+        {difficulties.map((difficulty) =>
           state.columns.map((column, columnIndex) => {
             const cell = getCellByColumnAndDifficulty(
               state.cells,
@@ -78,12 +118,16 @@ export default function BoardScreen() {
               );
             }
 
+            // Double Trouble tiles look identical to every other tile so the
+            // bonus stays hidden until the clue is opened.
             return (
-              <button
+              <motion.button
                 key={cell.id}
                 type="button"
-                onClick={() => dispatch({ type: 'SELECT_CELL', cellId: cell.id })}
-                className="relative flex aspect-[5/4] items-center justify-center rounded-lg border font-display text-sm font-extrabold tracking-[0.5px] transition-transform duration-150 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                onClick={() => handleSelect(cell.id)}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.94 }}
+                className="relative flex aspect-[5/4] items-center justify-center rounded-lg border font-display text-sm font-extrabold tracking-[0.5px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
                 style={{
                   background: `linear-gradient(165deg, ${COLORS.sapphire}, ${COLORS.sapphireDim} 80%)`,
                   borderColor: `color-mix(in srgb, ${COLORS.sapphireBright} 30%, transparent)`,
@@ -94,11 +138,17 @@ export default function BoardScreen() {
                 aria-label={`${column.name} for ${cell.value} points`}
               >
                 {cell.value}
-              </button>
+              </motion.button>
             );
           }),
         )}
       </div>
+
+      {state.settings.finalJeopardy && (
+        <p className="mt-3 text-center font-mono text-[10.5px] text-text-low">
+          Final Jeopardy waits after the board is cleared.
+        </p>
+      )}
     </JeopardyPageWrap>
   );
 }

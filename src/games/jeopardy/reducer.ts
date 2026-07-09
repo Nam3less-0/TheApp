@@ -1,10 +1,23 @@
-import type { AnswerRecord, JeopardyAction, JeopardySession } from './types';
+import type {
+  AnswerRecord,
+  FinalWager,
+  GameSettings,
+  JeopardyAction,
+  JeopardySession,
+} from './types';
 import {
+  boardShapeFor,
   commitBoardDraw,
+  defaultSettings,
   draftBoardFromTopics,
+  drawFinalClue,
   freshLifelines,
+  getAllTopicSummaries,
+  getThemeBundle,
   isCellBlockedThisTurn,
   isWhatChoicesAllowed,
+  maxDailyDoubleWager,
+  maxFinalWager,
   pickPreviewTopics,
   shuffle,
   SNIPE_CORRECT_POINTS,
@@ -30,10 +43,23 @@ export const initialJeopardyState: JeopardySession = {
   sniped: false,
   snipedFromPlayerIndex: null,
   turnPickedValues: [],
+  settings: defaultSettings(),
+  activeWager: null,
+  finalClue: null,
+  finalWagers: [],
+  finalWagerIndex: 0,
+  undoSnapshot: null,
 };
+
+/** Allowed topic ids for the active theme (null = all topics). */
+function themeAllowedIds(settings: GameSettings): string[] | null {
+  const theme = getThemeBundle(settings.themeId);
+  return theme ? theme.topicIds : null;
+}
 
 function beginTopicPreview(
   players: JeopardySession['players'],
+  settings: GameSettings,
   blacklistedTopicIds: string[] = [],
   previewSessionTopicIds: string[] = [],
 ): Pick<
@@ -44,9 +70,21 @@ function beginTopicPreview(
   | 'blacklistedTopicIds'
   | 'previewSessionTopicIds'
   | 'phase'
+  | 'settings'
 > {
-  const preview = pickPreviewTopics(blacklistedTopicIds, previewSessionTopicIds);
-  const board = draftBoardFromTopics(preview.columns.map((column) => column.id));
+  const allowed = themeAllowedIds(settings);
+  const shape = boardShapeFor(settings);
+  const preview = pickPreviewTopics(
+    blacklistedTopicIds,
+    previewSessionTopicIds,
+    [],
+    allowed,
+  );
+  const board = draftBoardFromTopics(
+    preview.columns.map((column) => column.id),
+    shape.difficulties,
+    shape.doubleCount,
+  );
   return {
     pendingPlayers: players,
     previewColumns: board.columns,
@@ -54,6 +92,7 @@ function beginTopicPreview(
     blacklistedTopicIds,
     previewSessionTopicIds: preview.sessionTopicIds,
     phase: 'topic-preview',
+    settings,
   };
 }
 
@@ -74,6 +113,33 @@ function preparePlayersForGame(players: JeopardySession['players']) {
   return reset.length > 1 ? shuffle(reset) : reset;
 }
 
+/** Set up the Final Jeopardy round, or fall straight through to results. */
+function enterFinalOrResults(state: JeopardySession): JeopardySession {
+  if (!state.settings.finalJeopardy) {
+    return { ...state, phase: 'final' };
+  }
+  const contenders = state.players.filter((p) => p.score > 0);
+  if (contenders.length === 0) {
+    return { ...state, phase: 'final' };
+  }
+  const finalClue = drawFinalClue(
+    state.columns.map((column) => column.id),
+    themeAllowedIds(state.settings),
+  );
+  const finalWagers: FinalWager[] = contenders.map((p) => ({
+    playerId: p.id,
+    wager: 0,
+    correct: null,
+  }));
+  return {
+    ...state,
+    phase: 'final-wager',
+    finalClue,
+    finalWagers,
+    finalWagerIndex: 0,
+  };
+}
+
 export function jeopardyReducer(
   state: JeopardySession,
   action: JeopardyAction,
@@ -82,7 +148,7 @@ export function jeopardyReducer(
     case 'PLAYERS_READY': {
       return {
         ...state,
-        ...beginTopicPreview(action.players),
+        ...beginTopicPreview(action.players, action.settings),
       };
     }
 
@@ -99,12 +165,18 @@ export function jeopardyReducer(
 
     case 'REROLL_TOPICS': {
       if (state.phase !== 'topic-preview') return state;
+      const shape = boardShapeFor(state.settings);
       const preview = pickPreviewTopics(
         state.blacklistedTopicIds,
         state.previewSessionTopicIds,
         state.previewColumns.map((column) => column.id),
+        themeAllowedIds(state.settings),
       );
-      const board = draftBoardFromTopics(preview.columns.map((column) => column.id));
+      const board = draftBoardFromTopics(
+        preview.columns.map((column) => column.id),
+        shape.difficulties,
+        shape.doubleCount,
+      );
       return {
         ...state,
         previewColumns: board.columns,
@@ -117,8 +189,11 @@ export function jeopardyReducer(
       if (state.phase !== 'topic-preview' || state.previewColumns.length === 0) {
         return state;
       }
+      const shape = boardShapeFor(state.settings);
       const board = draftBoardFromTopics(
         state.previewColumns.map((column) => column.id),
+        shape.difficulties,
+        shape.doubleCount,
       );
       return {
         ...state,
@@ -127,16 +202,56 @@ export function jeopardyReducer(
       };
     }
 
+    case 'SET_PREVIEW_TOPIC': {
+      if (state.phase !== 'topic-preview') return state;
+      const { slotIndex, topicId } = action;
+      if (slotIndex < 0 || slotIndex >= state.previewColumns.length) return state;
+      if (
+        state.previewColumns.some(
+          (column, index) => column.id === topicId && index !== slotIndex,
+        )
+      ) {
+        return state;
+      }
+      const summary = getAllTopicSummaries().find((topic) => topic.id === topicId);
+      if (!summary) return state;
+
+      const shape = boardShapeFor(state.settings);
+      const nextColumns = state.previewColumns.map((column, index) =>
+        index === slotIndex ? { id: summary.id, name: summary.name } : column,
+      );
+      const board = draftBoardFromTopics(
+        nextColumns.map((column) => column.id),
+        shape.difficulties,
+        shape.doubleCount,
+      );
+      return {
+        ...state,
+        previewColumns: board.columns,
+        previewCells: board.cells,
+        previewSessionTopicIds: [
+          ...new Set([...state.previewSessionTopicIds, topicId]),
+        ],
+      };
+    }
+
     case 'BLACKLIST_TOPIC': {
       if (state.phase !== 'topic-preview') return state;
       if (state.blacklistedTopicIds.includes(action.topicId)) return state;
 
+      const shape = boardShapeFor(state.settings);
       const blacklistedTopicIds = [...state.blacklistedTopicIds, action.topicId];
       const preview = pickPreviewTopics(
         blacklistedTopicIds,
         state.previewSessionTopicIds,
+        [],
+        themeAllowedIds(state.settings),
       );
-      const board = draftBoardFromTopics(preview.columns.map((column) => column.id));
+      const board = draftBoardFromTopics(
+        preview.columns.map((column) => column.id),
+        shape.difficulties,
+        shape.doubleCount,
+      );
       return {
         ...state,
         blacklistedTopicIds,
@@ -191,6 +306,11 @@ export function jeopardyReducer(
         sniped: false,
         snipedFromPlayerIndex: null,
         turnPickedValues: [],
+        activeWager: null,
+        finalClue: null,
+        finalWagers: [],
+        finalWagerIndex: 0,
+        undoSnapshot: null,
       };
     }
 
@@ -206,17 +326,31 @@ export function jeopardyReducer(
         ? [...state.turnPickedValues, cell.value]
         : state.turnPickedValues;
 
+      // A Daily Double with wagering enabled pauses for a bet before the clue.
+      const goesToWager = state.settings.dailyDoubleWager && cell.isDouble;
+
       // Clear any lifeline state carried over from the previous clue.
       return {
         ...state,
-        phase: 'question',
+        phase: goesToWager ? 'wager' : 'question',
         activeCellId: cell.id,
         revealedChoices: null,
         phoneFriendId: null,
         sniped: false,
         snipedFromPlayerIndex: null,
         turnPickedValues,
+        activeWager: null,
+        undoSnapshot: null,
       };
+    }
+
+    case 'SET_WAGER': {
+      if (state.phase !== 'wager' || !state.activeCellId) return state;
+      const player = state.players[state.currentPlayerIndex];
+      if (!player) return state;
+      const cap = maxDailyDoubleWager(player.score);
+      const wager = Math.max(0, Math.min(Math.round(action.amount), cap));
+      return { ...state, activeWager: wager, phase: 'question' };
     }
 
     case 'USE_WHAT_CHOICES': {
@@ -270,6 +404,8 @@ export function jeopardyReducer(
     case 'USE_SNIPE': {
       if (state.phase !== 'question') return state;
       if (state.revealedChoices || state.phoneFriendId || state.sniped) return state;
+      // Snipe is disabled on wagered Daily Doubles.
+      if (state.activeWager !== null) return state;
 
       const activePlayer = state.players[state.currentPlayerIndex];
       const sniper = state.players.find((p) => p.id === action.playerId);
@@ -304,6 +440,7 @@ export function jeopardyReducer(
       const cell = state.cells.find((c) => c.id === state.activeCellId);
       if (!cell) return state;
 
+      const wager = state.activeWager;
       const points = cell.value * (cell.isDouble ? 2 : 1);
       const activePlayer = state.players[state.currentPlayerIndex];
 
@@ -315,13 +452,15 @@ export function jeopardyReducer(
         activeShare = action.correct
           ? SNIPE_CORRECT_POINTS
           : -Math.round(points / 2);
+      } else if (wager !== null) {
+        // Daily Double wager: solo bet, always swings by the wagered amount.
+        activeShare = action.correct ? wager : -wager;
+      } else if (action.correct) {
+        const splitWithHelper = helperId !== null;
+        activeShare = splitWithHelper ? Math.round(points / 2) : points;
+        helperShare = splitWithHelper ? points - activeShare : 0;
       } else {
-        const awarded = action.correct ? points : 0;
-        // Phone a Friend splits a correct clue's points evenly between the active
-        // player and the helper they called.
-        const splitWithHelper = action.correct && helperId !== null;
-        activeShare = splitWithHelper ? Math.round(awarded / 2) : awarded;
-        helperShare = splitWithHelper ? awarded - activeShare : 0;
+        activeShare = state.settings.wrongAnswerPenalty ? -points : 0;
       }
 
       const players = state.players.map((p) => {
@@ -358,6 +497,7 @@ export function jeopardyReducer(
         awarded: activeShare,
         helperId: state.phoneFriendId,
         sniped: state.sniped,
+        wager,
       };
 
       const questionsAnswered = state.questionsAnswered + 1;
@@ -365,40 +505,128 @@ export function jeopardyReducer(
       const nextPlayerIndex =
         state.sniped && state.snipedFromPlayerIndex !== null
           ? state.snipedFromPlayerIndex
-          : action.correct
+          : action.correct || wager !== null
             ? state.currentPlayerIndex
             : (state.currentPlayerIndex + 1) % state.players.length;
       const turnChanged = nextPlayerIndex !== state.currentPlayerIndex;
 
-      return {
+      // Snapshot lets the host undo a mis-tapped resolve from the board.
+      const undoSnapshot: JeopardySession = { ...state, undoSnapshot: null };
+
+      const resolved: JeopardySession = {
         ...state,
         players,
         cells,
         questionsAnswered,
         activeCellId: null,
         currentPlayerIndex: nextPlayerIndex,
-        phase: isOver ? 'final' : 'board',
+        phase: 'board',
         history: [...state.history, record],
         revealedChoices: null,
         phoneFriendId: null,
         sniped: false,
         snipedFromPlayerIndex: null,
         turnPickedValues: turnChanged ? [] : state.turnPickedValues,
+        activeWager: null,
+        undoSnapshot,
+      };
+
+      return isOver ? enterFinalOrResults(resolved) : resolved;
+    }
+
+    case 'UNDO_RESOLVE': {
+      if (!state.undoSnapshot) return state;
+      return state.undoSnapshot;
+    }
+
+    case 'SET_FINAL_WAGER': {
+      if (state.phase !== 'final-wager') return state;
+      const entry = state.finalWagers[state.finalWagerIndex];
+      if (!entry) return state;
+      const player = state.players.find((p) => p.id === entry.playerId);
+      if (!player) return state;
+
+      const cap = maxFinalWager(player.score);
+      const wager = Math.max(0, Math.min(Math.round(action.amount), cap));
+      const finalWagers = state.finalWagers.map((w, index) =>
+        index === state.finalWagerIndex ? { ...w, wager } : w,
+      );
+      const nextIndex = state.finalWagerIndex + 1;
+      const done = nextIndex >= finalWagers.length;
+      return {
+        ...state,
+        finalWagers,
+        finalWagerIndex: done ? state.finalWagerIndex : nextIndex,
+        phase: done ? 'final-clue' : 'final-wager',
+      };
+    }
+
+    case 'RESOLVE_FINAL': {
+      if (state.phase !== 'final-clue') return state;
+      const idx = state.finalWagers.findIndex(
+        (w) => w.playerId === action.playerId,
+      );
+      if (idx < 0) return state;
+      if (state.finalWagers[idx].correct !== null) return state;
+
+      const entry = state.finalWagers[idx];
+      const finalWagers = state.finalWagers.map((w, index) =>
+        index === idx ? { ...w, correct: action.correct } : w,
+      );
+      const delta = action.correct ? entry.wager : -entry.wager;
+      const players = state.players.map((p) =>
+        p.id === entry.playerId ? { ...p, score: p.score + delta } : p,
+      );
+      return { ...state, players, finalWagers };
+    }
+
+    case 'FINISH_FINAL': {
+      if (state.phase !== 'final-clue') return state;
+      if (state.finalWagers.some((w) => w.correct === null)) return state;
+      return { ...state, phase: 'final' };
+    }
+
+    case 'END_GAME': {
+      if (state.phase === 'setup' || state.phase === 'final') return state;
+      // Jump straight to the standings with whatever has been scored so far.
+      return {
+        ...state,
+        phase: 'final',
+        activeCellId: null,
+        activeWager: null,
+        revealedChoices: null,
+        phoneFriendId: null,
+        sniped: false,
+        snipedFromPlayerIndex: null,
+        undoSnapshot: null,
+      };
+    }
+
+    case 'ABANDON_GAME': {
+      // Drop the game and return to setup, keeping players and house rules.
+      return {
+        ...initialJeopardyState,
+        settings: state.settings,
+        pendingPlayers:
+          state.players.length > 0
+            ? freshPlayers(state.players)
+            : state.pendingPlayers,
+        phase: 'setup',
+      };
+    }
+
+    case 'TOGGLE_SOUND': {
+      return {
+        ...state,
+        settings: { ...state.settings, soundEnabled: !state.settings.soundEnabled },
       };
     }
 
     case 'PLAY_AGAIN': {
-      const pendingPlayers = state.players.map((player) => ({
-        ...player,
-        score: 0,
-        correct: 0,
-        missed: 0,
-        doublesHit: 0,
-        lifelines: freshLifelines(),
-      }));
+      const pendingPlayers = freshPlayers(state.players);
       return {
         ...initialJeopardyState,
-        ...beginTopicPreview(pendingPlayers),
+        ...beginTopicPreview(pendingPlayers, state.settings),
       };
     }
 

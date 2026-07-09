@@ -1,6 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useJeopardy } from '../context';
-import { COLORS, SILVER_BUTTON, formatScore, isSnipeWindowOpen, isWhatChoicesAllowed, SNIPE_CORRECT_POINTS } from '../utils';
+import {
+  COLORS,
+  SILVER_BUTTON,
+  formatScore,
+  isSnipeWindowOpen,
+  isWhatChoicesAllowed,
+  playSound,
+  shuffle,
+  SNIPE_CORRECT_POINTS,
+} from '../utils';
 import { JeopardyPageWrap } from './JeopardyPanel';
 import PlayerAvatar from './PlayerAvatar';
 
@@ -98,27 +107,79 @@ export default function QuestionScreen() {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [snipeOpen, setSnipeOpen] = useState(false);
 
+  const timerSeconds = state.settings.clueTimerSeconds;
+  const soundOn = state.settings.soundEnabled;
+  const selfScore = state.settings.selfScore;
+  const [remaining, setRemaining] = useState(timerSeconds);
+
   useEffect(() => {
     setPickerOpen(false);
     setSnipeOpen(false);
-  }, [state.activeCellId]);
+    setRemaining(timerSeconds);
+  }, [state.activeCellId, timerSeconds]);
 
   const cell = state.cells.find((c) => c.id === state.activeCellId);
   const player = state.players[state.currentPlayerIndex];
+  const revealed = state.phase === 'answer';
+  const wager = state.activeWager;
+
+  // Stable option order for self-score / choices display.
+  const selfOptions = useMemo(
+    () => (cell ? shuffle(cell.choices) : []),
+    // Reshuffle only when the clue changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [state.activeCellId],
+  );
+
+  function resolve(correct: boolean) {
+    playSound(correct ? 'correct' : 'wrong', soundOn);
+    dispatch({ type: 'RESOLVE', correct });
+  }
+
+  function selfResolve(correct: boolean) {
+    playSound('reveal', soundOn);
+    dispatch({ type: 'REVEAL_ANSWER' });
+    resolve(correct);
+  }
+
+  // Clue countdown timer.
+  useEffect(() => {
+    if (timerSeconds <= 0 || state.phase !== 'question') return;
+    if (remaining <= 0) {
+      if (selfScore) {
+        selfResolve(false);
+      } else {
+        playSound('reveal', soundOn);
+        dispatch({ type: 'REVEAL_ANSWER' });
+      }
+      return;
+    }
+    if (remaining <= 5) playSound('tick', soundOn);
+    const id = setTimeout(() => setRemaining((r) => r - 1), 1000);
+    return () => clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [remaining, state.phase, timerSeconds]);
+
+  // Reveal the Double Trouble surprise with a cue when the clue opens.
+  useEffect(() => {
+    if (state.phase === 'question' && cell?.isDouble && state.activeWager === null) {
+      playSound('double', soundOn);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.activeCellId]);
 
   if (!cell) return null;
 
   const topicName = state.columns[cell.columnIndex]?.name ?? '';
   const topicId = state.columns[cell.columnIndex]?.id;
-  const whatChoicesAllowed = isWhatChoicesAllowed(topicId);
-  const points = cell.value * (cell.isDouble ? 2 : 1);
-  const revealed = state.phase === 'answer';
+  const whatChoicesAllowed = isWhatChoicesAllowed(topicId) && !selfScore;
+  const points = wager !== null ? wager : cell.value * (cell.isDouble ? 2 : 1);
 
   const correctChoice = cell.choices[0];
   const choices = state.revealedChoices;
   const helper = state.players.find((p) => p.id === state.phoneFriendId) ?? null;
   const others = state.players.filter((p) => p.id !== player?.id);
-  const snipeWindowOpen = isSnipeWindowOpen(state);
+  const snipeWindowOpen = isSnipeWindowOpen(state) && wager === null;
   const snipeCandidates = state.players.filter(
     (p) => p.id !== player?.id && p.lifelines.snipe,
   );
@@ -130,6 +191,8 @@ export default function QuestionScreen() {
   };
   const splitShare = Math.round(points / 2);
   const snipePenalty = Math.round(points / 2);
+  const timerActive = timerSeconds > 0 && !revealed;
+  const timerLow = timerActive && remaining <= 5;
 
   return (
     <JeopardyPageWrap>
@@ -158,14 +221,30 @@ export default function QuestionScreen() {
                 color: COLORS.doubleBright,
               }}
             >
-              ⚡ DOUBLE TROUBLE
+              ⚡ {wager !== null ? 'DAILY DOUBLE' : 'DOUBLE TROUBLE'}
             </div>
           )}
-          <div
-            className="font-display text-xl font-extrabold"
-            style={{ color: COLORS.goldBright }}
-          >
-            {formatScore(points)}
+          <div className="flex items-center gap-3">
+            {timerActive && (
+              <div
+                className="flex h-7 min-w-[28px] items-center justify-center rounded-md px-1.5 font-mono text-[13px] font-bold tabular-nums transition-colors"
+                style={{
+                  background: timerLow
+                    ? `color-mix(in srgb, ${COLORS.bad} 22%, #1A1C20)`
+                    : 'rgba(0,0,0,0.25)',
+                  color: timerLow ? COLORS.bad : '#F2F4F8',
+                }}
+                aria-label={`${remaining} seconds left`}
+              >
+                {Math.max(0, remaining)}s
+              </div>
+            )}
+            <div
+              className="font-display text-xl font-extrabold"
+              style={{ color: COLORS.goldBright }}
+            >
+              {formatScore(points)}
+            </div>
           </div>
         </div>
 
@@ -219,6 +298,37 @@ export default function QuestionScreen() {
               <PhoneIcon />
               {helper.name} is helping — points split{' '}
               {formatScore(splitShare)} / {formatScore(points - splitShare)}
+            </div>
+          )}
+
+          {/* Self-score: tappable options that resolve the clue directly. */}
+          {selfScore && !revealed && (
+            <div
+              className={`mb-6 grid gap-2.5 ${
+                selfOptions.length === 4 ? 'grid-cols-2 sm:grid-cols-4' : 'sm:grid-cols-3'
+              }`}
+            >
+              {selfOptions.map((option, i) => (
+                <button
+                  key={`${option}-${i}`}
+                  type="button"
+                  onClick={() => selfResolve(option === correctChoice)}
+                  className="flex items-start gap-2 rounded-xl border px-3 py-3 text-left font-body text-[13px] font-medium transition-colors hover:border-steel-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                  style={{
+                    background: 'rgba(255,255,255,0.03)',
+                    borderColor: 'rgba(220,224,232,0.12)',
+                    color: '#ECEEF2',
+                  }}
+                >
+                  <span
+                    className="mt-px font-mono text-[10px] font-bold"
+                    style={{ color: COLORS.gold }}
+                  >
+                    {OPTION_LABELS[i]}
+                  </span>
+                  <span className="leading-snug">{option}</span>
+                </button>
+              ))}
             </div>
           )}
 
@@ -308,7 +418,7 @@ export default function QuestionScreen() {
             </div>
           )}
 
-          {!revealed && (
+          {!revealed && !selfScore && (
             <>
               <div className="mb-3.5">
                 <div className="mb-2 text-center font-mono text-[10px] uppercase tracking-[1.5px] text-text-low">
@@ -411,6 +521,7 @@ export default function QuestionScreen() {
                 onClick={() => {
                   setPickerOpen(false);
                   setSnipeOpen(false);
+                  playSound('reveal', soundOn);
                   dispatch({ type: 'REVEAL_ANSWER' });
                 }}
                 className="w-full rounded-xl border-none px-4 py-3.5 font-body text-sm font-bold text-void focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
@@ -436,7 +547,7 @@ export default function QuestionScreen() {
             <div className="flex flex-col gap-2.5 sm:flex-row">
               <button
                 type="button"
-                onClick={() => dispatch({ type: 'RESOLVE', correct: true })}
+                onClick={() => resolve(true)}
                 className="flex flex-1 items-center justify-center gap-[7px] rounded-[11px] border px-3 py-3 text-center font-body text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-good"
                 style={{
                   background: `color-mix(in srgb, ${COLORS.good} 14%, #1A1C20)`,
@@ -453,7 +564,7 @@ export default function QuestionScreen() {
               </button>
               <button
                 type="button"
-                onClick={() => dispatch({ type: 'RESOLVE', correct: false })}
+                onClick={() => resolve(false)}
                 className="flex flex-1 items-center justify-center gap-[7px] rounded-[11px] border px-3 py-3 font-body text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bad"
                 style={{
                   background: `color-mix(in srgb, ${COLORS.bad} 14%, #1A1C20)`,
@@ -464,7 +575,11 @@ export default function QuestionScreen() {
                 <CrossIcon />
                 {state.sniped
                   ? `Missed · −${formatScore(snipePenalty)}`
-                  : 'Missed'}
+                  : wager !== null
+                    ? `Missed · −${formatScore(wager)}`
+                    : state.settings.wrongAnswerPenalty
+                      ? `Missed · −${formatScore(points)}`
+                      : 'Missed'}
               </button>
             </div>
           </div>

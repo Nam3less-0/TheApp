@@ -58,14 +58,53 @@ export interface AnswerRecord {
   helperId: string | null;
   /** True when another player sniped this clue before it was answered. */
   sniped: boolean;
+  /** Amount wagered on a Daily Double clue; null when not wagered. */
+  wager: number | null;
+}
+
+/** House rules chosen during setup; tweak how a game plays. */
+export interface GameSettings {
+  /** Deduct the clue value from the picker's score on a miss. */
+  wrongAnswerPenalty: boolean;
+  /** Countdown per clue in seconds; 0 disables the timer. */
+  clueTimerSeconds: number;
+  /** Shorter board (3 rows instead of 5) for a faster game. */
+  quickGame: boolean;
+  /** Play a Final Jeopardy round with secret wagers after the board clears. */
+  finalJeopardy: boolean;
+  /** Let the picker wager on Double Trouble tiles instead of a fixed 2×. */
+  dailyDoubleWager: boolean;
+  /** Players tap their own answer; the app scores it automatically. */
+  selfScore: boolean;
+  /** Play synthesized sound cues. */
+  soundEnabled: boolean;
+  /** Restrict the topic pool to a themed bundle; null = all topics. */
+  themeId: string | null;
+}
+
+/** A single player's Final Jeopardy wager + outcome. */
+export interface FinalWager {
+  playerId: string;
+  wager: number;
+  /** null until the host marks it; true/false after. */
+  correct: boolean | null;
+}
+
+export interface FinalClue {
+  topicName: string;
+  question: string;
+  answer: string;
 }
 
 export type JeopardyPhase =
   | 'setup'
   | 'topic-preview'
   | 'board'
+  | 'wager'
   | 'question'
   | 'answer'
+  | 'final-wager'
+  | 'final-clue'
   | 'final';
 
 export interface JeopardySession {
@@ -104,20 +143,41 @@ export interface JeopardySession {
   snipedFromPlayerIndex: number | null;
   /** $200 / $400 values already picked during the active player's current turn. */
   turnPickedValues: number[];
+  /** House rules for the active game. */
+  settings: GameSettings;
+  /** Wager locked in for the active Daily Double clue; null when not wagering. */
+  activeWager: number | null;
+  /** Final Jeopardy clue, drawn when the board clears (if enabled). */
+  finalClue: FinalClue | null;
+  /** Per-player Final Jeopardy wagers + outcomes. */
+  finalWagers: FinalWager[];
+  /** Index into finalWagers for the player currently entering a secret wager. */
+  finalWagerIndex: number;
+  /** Snapshot to restore when the host undoes the last resolve; null otherwise. */
+  undoSnapshot: JeopardySession | null;
 }
 
 export type JeopardyAction =
-  | { type: 'PLAYERS_READY'; players: Player[] }
+  | { type: 'PLAYERS_READY'; players: Player[]; settings: GameSettings }
   | { type: 'BACK_TO_SETUP' }
   | { type: 'REROLL_TOPICS' }
   | { type: 'RESHUFFLE_PREVIEW_QUESTIONS' }
   | { type: 'BLACKLIST_TOPIC'; topicId: string }
   | { type: 'UNBLACKLIST_TOPIC'; topicId: string }
+  | { type: 'SET_PREVIEW_TOPIC'; slotIndex: number; topicId: string }
   | { type: 'CONFIRM_TOPICS' }
   | { type: 'SELECT_CELL'; cellId: string }
+  | { type: 'SET_WAGER'; amount: number }
   | { type: 'REVEAL_ANSWER' }
   | { type: 'RESOLVE'; correct: boolean }
+  | { type: 'UNDO_RESOLVE' }
   | { type: 'USE_WHAT_CHOICES' }
   | { type: 'USE_PHONE_A_FRIEND'; helperId: string }
   | { type: 'USE_SNIPE'; playerId: string }
+  | { type: 'SET_FINAL_WAGER'; amount: number }
+  | { type: 'RESOLVE_FINAL'; playerId: string; correct: boolean }
+  | { type: 'FINISH_FINAL' }
+  | { type: 'END_GAME' }
+  | { type: 'ABANDON_GAME' }
+  | { type: 'TOGGLE_SOUND' }
   | { type: 'PLAY_AGAIN' };

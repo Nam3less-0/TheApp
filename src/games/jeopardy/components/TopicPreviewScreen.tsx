@@ -2,12 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useJeopardy } from '../context';
 import {
   BOARD_COLUMNS,
-  BOARD_SIZE,
   COLORS,
-  DIFFICULTIES,
-  DOUBLE_TROUBLE_COUNT,
   SILVER_BUTTON,
-  getAllTopicSummaries,
+  boardShapeFor,
+  getThemeBundle,
+  getTopicSummariesForTheme,
 } from '../utils';
 import JeopardyPanel, { JeopardyPageWrap } from './JeopardyPanel';
 
@@ -18,6 +17,7 @@ export default function TopicPreviewScreen() {
   const { state, dispatch } = useJeopardy();
   const [isReshuffling, setIsReshuffling] = useState(false);
   const [justReshuffled, setJustReshuffled] = useState(false);
+  const [openSlot, setOpenSlot] = useState<number | null>(null);
   const shuffleTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => {
@@ -42,9 +42,11 @@ export default function TopicPreviewScreen() {
       setTimeout(() => setJustReshuffled(false), RESHUFFLE_ANIM_MS + RESHUFFLE_CONFIRM_MS),
     ];
   }
-  const allTopics = getAllTopicSummaries();
+  const allTopics = getTopicSummariesForTheme(state.settings.themeId);
+  const theme = getThemeBundle(state.settings.themeId);
+  const shape = boardShapeFor(state.settings);
   const blacklisted = new Set(state.blacklistedTopicIds);
-  const eligibleCount = allTopics.length - blacklisted.size;
+  const eligibleCount = allTopics.filter((t) => !blacklisted.has(t.id)).length;
   const currentPreviewIds = new Set(state.previewColumns.map((column) => column.id));
   const hasAlternatives = allTopics.some(
     (topic) => !blacklisted.has(topic.id) && !currentPreviewIds.has(topic.id),
@@ -54,15 +56,19 @@ export default function TopicPreviewScreen() {
     state.previewColumns.length === BOARD_COLUMNS &&
     state.previewCells.length > 0;
 
+  const swappableTopics = allTopics.filter(
+    (topic) => !blacklisted.has(topic.id) && !currentPreviewIds.has(topic.id),
+  );
+
   return (
     <JeopardyPageWrap>
       <h1 className="mb-2 font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">
         Choose your topics
       </h1>
       <p className="mb-8 font-body text-sm text-text-mid">
-        Six categories were drawn at random, and a fresh clue was dealt for every tile.
-        Reroll for new topics, ban ones you never want to see this round, or reshuffle
-        the clues below until you like the board — nothing is locked in until you build it.
+        Six categories were drawn{theme ? ` from the ${theme.name} theme` : ' at random'}, and a
+        fresh clue was dealt for every tile. Swap any category by hand, reroll for new topics, ban
+        ones you never want to see, or reshuffle the clues — nothing is locked in until you build it.
       </p>
 
       <JeopardyPanel>
@@ -77,27 +83,69 @@ export default function TopicPreviewScreen() {
           {state.previewColumns.map((column, index) => (
             <li
               key={`${column.id}-${index}`}
-              className="flex items-center gap-3 rounded-xl border border-line bg-surface px-3.5 py-3"
+              className="rounded-xl border border-line bg-surface px-3.5 py-3"
             >
-              <span
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-display text-xs font-extrabold text-text-hi"
-                style={{
-                  background: `linear-gradient(180deg, ${COLORS.sapphireBright}, ${COLORS.sapphireDim})`,
-                }}
-              >
-                {index + 1}
-              </span>
-              <span className="min-w-0 flex-1 font-body text-[15px] font-semibold text-text-hi">
-                {column.name}
-              </span>
-              <button
-                type="button"
-                onClick={() => dispatch({ type: 'BLACKLIST_TOPIC', topicId: column.id })}
-                className="shrink-0 rounded-lg border border-line px-2.5 py-1.5 font-mono text-[11px] text-text-mid transition-colors hover:border-bad/40 hover:text-bad focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
-                aria-label={`Ban ${column.name} from rerolls`}
-              >
-                Ban
-              </button>
+              <div className="flex items-center gap-3">
+                <span
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-display text-xs font-extrabold text-text-hi"
+                  style={{
+                    background: `linear-gradient(180deg, ${COLORS.sapphireBright}, ${COLORS.sapphireDim})`,
+                  }}
+                >
+                  {index + 1}
+                </span>
+                <span className="min-w-0 flex-1 font-body text-[15px] font-semibold text-text-hi">
+                  {column.name}
+                </span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setOpenSlot((cur) => (cur === index ? null : index))
+                  }
+                  disabled={swappableTopics.length === 0 && openSlot !== index}
+                  className="shrink-0 rounded-lg border border-line px-2.5 py-1.5 font-mono text-[11px] text-text-mid transition-colors hover:border-steel-blue/40 hover:text-steel-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-30"
+                  aria-expanded={openSlot === index}
+                  aria-label={`Change ${column.name}`}
+                >
+                  {openSlot === index ? 'Close' : 'Change'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => dispatch({ type: 'BLACKLIST_TOPIC', topicId: column.id })}
+                  className="shrink-0 rounded-lg border border-line px-2.5 py-1.5 font-mono text-[11px] text-text-mid transition-colors hover:border-bad/40 hover:text-bad focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                  aria-label={`Ban ${column.name} from rerolls`}
+                >
+                  Ban
+                </button>
+              </div>
+
+              {openSlot === index && (
+                <div className="mt-2.5 max-h-52 overflow-y-auto rounded-lg border border-line bg-deep p-1.5">
+                  {swappableTopics.length === 0 ? (
+                    <p className="px-2 py-2 font-mono text-[11px] text-text-low">
+                      No other topics available — unban some first.
+                    </p>
+                  ) : (
+                    swappableTopics.map((topic) => (
+                      <button
+                        key={topic.id}
+                        type="button"
+                        onClick={() => {
+                          dispatch({
+                            type: 'SET_PREVIEW_TOPIC',
+                            slotIndex: index,
+                            topicId: topic.id,
+                          });
+                          setOpenSlot(null);
+                        }}
+                        className="block w-full rounded-md px-2.5 py-2 text-left font-body text-[13px] text-text-mid transition-colors hover:bg-surface hover:text-text-hi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                      >
+                        {topic.name}
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
             </li>
           ))}
         </ul>
@@ -229,8 +277,10 @@ export default function TopicPreviewScreen() {
         )}
 
         <p className="mt-5 font-mono text-[11px] leading-relaxed text-text-low">
-          {BOARD_COLUMNS} topics · {DIFFICULTIES.length} clues each ·{' '}
-          {DOUBLE_TROUBLE_COUNT} double-trouble tiles · {BOARD_SIZE} clues total
+          {BOARD_COLUMNS} topics · {shape.difficulties.length} clues each ·{' '}
+          {shape.doubleCount} double-trouble tiles ·{' '}
+          {BOARD_COLUMNS * shape.difficulties.length} clues total
+          {state.settings.finalJeopardy ? ' · + Final Jeopardy' : ''}
         </p>
 
         <button
