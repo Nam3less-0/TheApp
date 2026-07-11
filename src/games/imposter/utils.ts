@@ -1,14 +1,16 @@
-import { IMPOSTER_PAIRS } from '../../data/imposter-pairs';
-import type { Player, RoundMode, RoundRecord, WordPair } from './types';
+import { IMPOSTER_BUCKETS } from '../../data/imposter-buckets';
+import type { Player, RoundMode, RoundRecord, WordBucket } from './types';
 
 export const ROUND_OPTIONS = [3, 5, 7, 10] as const;
 export const MIN_PLAYERS = 3;
 export const MAX_PLAYERS = 10;
 
-/** Chance any given round is a "blank imposter" round instead of standard. */
-export const BLANK_ROUND_CHANCE = 0.3;
-/** Number of word choices (1 correct + decoys) shown during redemption. */
-export const REDEMPTION_OPTION_COUNT = 4;
+/** Each round is a fair 50/50: imposter gets a different word, or no word at all. */
+export const BLANK_ROUND_CHANCE = 0.5;
+
+export function pickRoundMode(): RoundMode {
+  return Math.random() < BLANK_ROUND_CHANCE ? 'blank' : 'standard';
+}
 
 const DEFAULT_PLAYER_NAMES = ['Belford', 'Joshua', 'Matthew', 'Kai Jie'];
 
@@ -46,48 +48,16 @@ function slugify(word: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-/** Build the full pool with stable ids derived from index + slug. */
-export function buildPairPool(): WordPair[] {
-  return IMPOSTER_PAIRS.map((pair, i) => ({
-    id: `${i}-${slugify(pair.wordA)}-${slugify(pair.wordB)}`,
-    wordA: pair.wordA,
-    wordB: pair.wordB,
+/** Build the full pool with stable ids derived from index + first word slug. */
+export function buildBucketPool(): WordBucket[] {
+  return IMPOSTER_BUCKETS.map((bucket, i) => ({
+    id: `${i}-${slugify(bucket.words[0])}`,
+    words: [...bucket.words],
   }));
-}
-
-/** Flat list of every distinct word across all pairs (decoy source). */
-function allWords(): string[] {
-  const set = new Set<string>();
-  for (const pair of IMPOSTER_PAIRS) {
-    set.add(pair.wordA);
-    set.add(pair.wordB);
-  }
-  return [...set];
 }
 
 function normalizeWord(word: string): string {
   return word.trim().toLowerCase();
-}
-
-/**
- * Multiple-choice options for a caught blank-round imposter's redemption guess:
- * the real majority word plus random decoys, all shuffled.
- */
-export function buildRedemptionOptions(
-  correctWord: string,
-  count = REDEMPTION_OPTION_COUNT,
-): string[] {
-  const correctKey = normalizeWord(correctWord);
-  const decoys: string[] = [];
-  const seen = new Set<string>([correctKey]);
-  for (const candidate of shuffle(allWords())) {
-    if (decoys.length >= count - 1) break;
-    const key = normalizeWord(candidate);
-    if (seen.has(key)) continue;
-    seen.add(key);
-    decoys.push(candidate);
-  }
-  return shuffle([correctWord, ...decoys]);
 }
 
 /** True when a redemption guess matches the round's majority word. */
@@ -140,51 +110,53 @@ export function applyDeltas(
 }
 
 export interface RoundDraw {
-  pair: WordPair;
+  bucket: WordBucket;
   mode: RoundMode;
   imposterWord: string;
   majorityWord: string;
   imposterPlayerId: string;
   revealOrder: string[];
-  remainingPairs: WordPair[];
+  remainingBuckets: WordBucket[];
 }
 
 /**
- * Draw a pair (reshuffling the pool when exhausted), avoiding the same pair
- * twice in a row, then re-randomize the round mode, the imposter, the imposter
- * word (coin flip) and the pass-around reveal order. In a blank round the
- * imposter gets no word.
+ * Draw a bucket (reshuffling the pool when exhausted), avoiding the same bucket
+ * twice in a row, then re-randomize the round mode, the imposter and the
+ * pass-around reveal order. The majority word is picked at random from the
+ * bucket; in a standard round the imposter gets a *different* word from the same
+ * bucket, while in a blank round the imposter gets no word.
  */
 export function drawRound(
   players: Player[],
-  remainingPairs: WordPair[],
-  lastPairId: string | null,
+  remainingBuckets: WordBucket[],
+  lastBucketId: string | null,
 ): RoundDraw {
-  let pool = remainingPairs.length > 0 ? [...remainingPairs] : shuffle(buildPairPool());
+  let pool =
+    remainingBuckets.length > 0 ? [...remainingBuckets] : shuffle(buildBucketPool());
 
-  let index = pool.findIndex((p) => p.id !== lastPairId);
+  let index = pool.findIndex((b) => b.id !== lastBucketId);
   if (index < 0) index = 0;
-  const pair = pool[index];
+  const bucket = pool[index];
   pool = pool.filter((_, i) => i !== index);
 
-  const mode: RoundMode = Math.random() < BLANK_ROUND_CHANCE ? 'blank' : 'standard';
+  const mode = pickRoundMode();
 
-  const imposterFirst = Math.random() < 0.5;
-  const majorityWord = imposterFirst ? pair.wordB : pair.wordA;
-  const imposterWord = mode === 'blank' ? '' : imposterFirst ? pair.wordA : pair.wordB;
+  const words = shuffle(bucket.words);
+  const majorityWord = words[0];
+  const imposterWord = mode === 'blank' ? '' : words[1];
 
   const playerIds = players.map((p) => p.id);
   const imposterPlayerId = playerIds[Math.floor(Math.random() * playerIds.length)];
   const revealOrder = shuffle(playerIds);
 
   return {
-    pair,
+    bucket,
     mode,
     imposterWord,
     majorityWord,
     imposterPlayerId,
     revealOrder,
-    remainingPairs: pool,
+    remainingBuckets: pool,
   };
 }
 

@@ -73,10 +73,10 @@ function BlankImposterVault({ onPeek }: { onPeek: () => void }) {
           </>
         ) : (
           <span
-            className="select-none font-display text-[2rem] font-extrabold leading-tight text-text-low/70 blur-[10px] sm:text-[2.5rem]"
+            className="select-none whitespace-nowrap font-display text-[2rem] font-extrabold leading-tight text-text-low/70 blur-[10px] sm:text-[2.5rem]"
             aria-hidden="true"
           >
-            RXM?TQ
+            XKM?TQWZ
           </span>
         )}
       </div>

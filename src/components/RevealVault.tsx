@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface RevealVaultProps {
   /** The secret word shown only while the user presses and holds. */
@@ -13,27 +13,12 @@ interface RevealVaultProps {
 }
 
 const DEFAULT_ACCENT = '#C2533B';
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-/** Deterministic scramble so the concealed text doesn't flicker between renders. */
-function scramble(word: string): string {
-  let seed = 0;
-  for (let i = 0; i < word.length; i += 1) {
-    seed = (seed * 31 + word.charCodeAt(i)) % 100000;
-  }
-  return word
-    .split('')
-    .map((ch) => {
-      if (ch === ' ') return ' ';
-      seed = (seed * 1103515245 + 12345) % 2147483648;
-      return SCRAMBLE_CHARS[seed % SCRAMBLE_CHARS.length];
-    })
-    .join('');
-}
+/** Fixed-length placeholder so concealed words never leak length via the blur. */
+const CONCEALED_PLACEHOLDER = 'XKM?TQWZ';
 
 /**
  * Shared hold-to-peek reveal used by pass-and-play games (Codeword, Imposter).
- * The word stays concealed/scrambled by default and is only legible while the
+ * The word stays concealed by default and is only legible while the
  * user presses and holds, re-concealing the moment they release.
  */
 export default function RevealVault({
@@ -45,7 +30,6 @@ export default function RevealVault({
 }: RevealVaultProps) {
   const [peeking, setPeeking] = useState(false);
   const hasPeekedRef = useRef(false);
-  const scrambled = useMemo(() => scramble(word), [word]);
 
   function startPeek() {
     setPeeking(true);
@@ -110,10 +94,10 @@ export default function RevealVault({
           </span>
         ) : (
           <span
-            className="select-none break-words text-center font-display text-[2rem] font-extrabold leading-tight text-text-low/70 blur-[10px] sm:text-[2.5rem]"
+            className="select-none whitespace-nowrap text-center font-display text-[2rem] font-extrabold leading-tight text-text-low/70 blur-[10px] sm:text-[2.5rem]"
             aria-hidden="true"
           >
-            {scrambled}
+            {CONCEALED_PLACEHOLDER}
           </span>
         )}
       </div>

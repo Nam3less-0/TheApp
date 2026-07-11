@@ -18,7 +18,7 @@ export default function DiscussScreen() {
         <ol className="flex flex-col gap-3">
           {[
             'Go around the table once — each player says one word related to the word they were shown.',
-            'Listen for who feels off. The imposter only saw the odd-one-out word.',
+            'Listen for who feels off — the imposter may have a different word, or no word at all.',
             'Talk it through and agree together on who to vote out.',
           ].map((step, i) => (
             <li key={i} className="flex items-start gap-3">

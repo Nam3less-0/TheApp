@@ -9,6 +9,13 @@ export default function RedeemScreen() {
   const [selected, setSelected] = useState<string | null>(null);
 
   const imposter = getPlayerById(state.players, state.currentImposterPlayerId);
+  const options = state.currentBucket.words;
+  const canSubmit = selected !== null;
+
+  function submitGuess() {
+    if (selected === null) return;
+    dispatch({ type: 'SUBMIT_REDEMPTION', word: selected });
+  }
 
   return (
     <ImposterPageWrap>
@@ -19,20 +26,20 @@ export default function RedeemScreen() {
         Caught — last chance
       </h1>
       <p className="mb-6 text-center font-body text-sm text-text-mid">
-        The table voted you out. Guess the majority word to steal a point.
+        The table voted you out. Pick the majority word to steal a point.
       </p>
 
       <ImposterPanel>
         <div className="mb-5 flex flex-col items-center gap-2 text-center">
           <PlayerAvatar name={imposter?.name ?? '?'} size="lg" />
           <p className="font-body text-sm text-text-mid">
-            <span className="font-bold text-text-hi">{imposter?.name}</span>, what was
-            everyone else&rsquo;s word?
+            <span className="font-bold text-text-hi">{imposter?.name}</span>, which word did
+            everyone else have?
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-2.5">
-          {state.redemptionOptions.map((word) => {
+          {options.map((word) => {
             const isSelected = selected === word;
             return (
               <button
@@ -40,13 +47,15 @@ export default function RedeemScreen() {
                 type="button"
                 onClick={() => setSelected(word)}
                 aria-pressed={isSelected}
-                className={`flex min-h-[60px] items-center justify-center rounded-xl border px-3.5 py-3 text-center font-body text-[15px] font-semibold text-text-hi transition-[border-color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember ${
+                className={`flex min-h-[60px] items-center justify-center rounded-xl border px-3.5 py-3 text-center transition-[border-color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember ${
                   isSelected
                     ? 'border-ember shadow-[0_0_0_1px_#C2533B_inset]'
                     : 'border-line bg-surface hover:border-line-bright'
                 }`}
               >
-                {word}
+                <span className="min-w-0 break-words font-body text-[15px] font-semibold text-text-hi">
+                  {word}
+                </span>
               </button>
             );
           })}
@@ -54,8 +63,8 @@ export default function RedeemScreen() {
 
         <button
           type="button"
-          onClick={() => selected && dispatch({ type: 'SUBMIT_REDEMPTION', word: selected })}
-          disabled={!selected}
+          onClick={submitGuess}
+          disabled={!canSubmit}
           className="mt-6 w-full rounded-xl border-none px-4 py-3.5 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember disabled:cursor-not-allowed disabled:opacity-40"
           style={{ background: 'linear-gradient(180deg, #E07A5F, #C2533B 55%, #7A3526)' }}
         >

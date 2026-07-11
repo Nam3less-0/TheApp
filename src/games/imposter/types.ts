@@ -1,7 +1,7 @@
-export interface WordPair {
+export interface WordBucket {
   id: string;
-  wordA: string;
-  wordB: string;
+  /** Four closely related words. One is the majority word each round. */
+  words: string[];
 }
 
 export interface Player {
@@ -21,7 +21,7 @@ export type RoundMode = 'standard' | 'blank';
 
 export interface RoundRecord {
   round: number;
-  pair: WordPair;
+  bucket: WordBucket;
   mode: RoundMode;
   imposterWord: string;
   majorityWord: string;
@@ -47,8 +47,8 @@ export interface ImposterSession {
   players: Player[];
   totalRounds: number;
   currentRound: number;
-  remainingPairs: WordPair[];
-  currentPair: WordPair;
+  remainingBuckets: WordBucket[];
+  currentBucket: WordBucket;
   currentMode: RoundMode;
   currentImposterWord: string;
   currentMajorityWord: string;
@@ -56,8 +56,6 @@ export interface ImposterSession {
   revealOrder: string[];
   revealIndex: number;
   votedPlayerId: string | null;
-  /** Shuffled guess choices offered to a caught blank-round imposter. */
-  redemptionOptions: string[];
   phase: ImposterPhase;
   history: RoundRecord[];
 }

@@ -138,7 +138,9 @@ export default function ImposterSetupScreen() {
             Blank rounds
           </p>
           <p className="font-body text-[13px] leading-snug text-text-mid">
-            Some rounds are blank: everyone else shares one word and the imposter is
+            Each round randomly picks one of two modes: the imposter gets a
+            different word from the bucket, or gets no word at all. Roughly half
+            of rounds are blank — everyone else shares one word and the imposter is
             only told they&rsquo;re the imposter. Evade the vote for{' '}
             <span className="font-semibold text-text-hi">3 points</span> — or, if
             caught, guess the word for <span className="font-semibold text-text-hi">1 point</span>{' '}

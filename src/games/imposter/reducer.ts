@@ -2,21 +2,20 @@ import type { ImposterAction, ImposterSession, RoundRecord } from './types';
 import {
   drawRound,
   shuffle,
-  buildPairPool,
-  buildRedemptionOptions,
+  buildBucketPool,
   isRedemptionCorrect,
   roundScoreDeltas,
   applyDeltas,
 } from './utils';
 
-const EMPTY_PAIR = { id: '', wordA: '', wordB: '' };
+const EMPTY_BUCKET = { id: '', words: [] };
 
 export const initialImposterState: ImposterSession = {
   players: [],
   totalRounds: 5,
   currentRound: 0,
-  remainingPairs: [],
-  currentPair: EMPTY_PAIR,
+  remainingBuckets: [],
+  currentBucket: EMPTY_BUCKET,
   currentMode: 'standard',
   currentImposterWord: '',
   currentMajorityWord: '',
@@ -24,7 +23,6 @@ export const initialImposterState: ImposterSession = {
   revealOrder: [],
   revealIndex: 0,
   votedPlayerId: null,
-  redemptionOptions: [],
   phase: 'setup',
   history: [],
 };
@@ -36,15 +34,15 @@ export function imposterReducer(
   switch (action.type) {
     case 'START_GAME': {
       const players = action.players.map((p) => ({ ...p, score: 0 }));
-      const pool = shuffle(buildPairPool());
+      const pool = shuffle(buildBucketPool());
       const draw = drawRound(players, pool, null);
 
       return {
         players,
         totalRounds: action.totalRounds,
         currentRound: 1,
-        remainingPairs: draw.remainingPairs,
-        currentPair: draw.pair,
+        remainingBuckets: draw.remainingBuckets,
+        currentBucket: draw.bucket,
         currentMode: draw.mode,
         currentImposterWord: draw.imposterWord,
         currentMajorityWord: draw.majorityWord,
@@ -52,7 +50,6 @@ export function imposterReducer(
         revealOrder: draw.revealOrder,
         revealIndex: 0,
         votedPlayerId: null,
-        redemptionOptions: [],
         phase: 'reveal',
         history: [],
       };
@@ -85,16 +82,12 @@ export function imposterReducer(
 
       // A caught blank-round imposter earns a redemption guess before scoring.
       if (state.currentMode === 'blank' && outcome === 'caught') {
-        return {
-          ...state,
-          phase: 'redeem',
-          redemptionOptions: buildRedemptionOptions(state.currentMajorityWord),
-        };
+        return { ...state, phase: 'redeem' };
       }
 
       const record: RoundRecord = {
         round: state.currentRound,
-        pair: state.currentPair,
+        bucket: state.currentBucket,
         mode: state.currentMode,
         imposterWord: state.currentImposterWord,
         majorityWord: state.currentMajorityWord,
@@ -123,7 +116,7 @@ export function imposterReducer(
 
       const record: RoundRecord = {
         round: state.currentRound,
-        pair: state.currentPair,
+        bucket: state.currentBucket,
         mode: state.currentMode,
         imposterWord: state.currentImposterWord,
         majorityWord: state.currentMajorityWord,
@@ -149,13 +142,17 @@ export function imposterReducer(
         return { ...state, phase: 'final' };
       }
 
-      const draw = drawRound(state.players, state.remainingPairs, state.currentPair.id);
+      const draw = drawRound(
+        state.players,
+        state.remainingBuckets,
+        state.currentBucket.id,
+      );
 
       return {
         ...state,
         currentRound: state.currentRound + 1,
-        remainingPairs: draw.remainingPairs,
-        currentPair: draw.pair,
+        remainingBuckets: draw.remainingBuckets,
+        currentBucket: draw.bucket,
         currentMode: draw.mode,
         currentImposterWord: draw.imposterWord,
         currentMajorityWord: draw.majorityWord,
@@ -163,7 +160,6 @@ export function imposterReducer(
         revealOrder: draw.revealOrder,
         revealIndex: 0,
         votedPlayerId: null,
-        redemptionOptions: [],
         phase: 'reveal',
       };
     }
