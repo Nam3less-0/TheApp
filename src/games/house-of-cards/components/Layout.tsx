@@ -1,8 +1,18 @@
 import type { CSSProperties, ReactNode } from 'react';
 
-export function HocPageWrap({ children }: { children: ReactNode }) {
+export function HocPageWrap({
+  children,
+  wide = false,
+}: {
+  children: ReactNode;
+  wide?: boolean;
+}) {
   return (
-    <div className="mx-auto w-full max-w-[960px] px-4 py-6 sm:px-6 sm:py-8">{children}</div>
+    <div
+      className={`mx-auto w-full px-4 py-6 sm:px-6 sm:py-8 ${wide ? 'max-w-[1280px]' : 'max-w-[960px]'}`}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -36,3 +46,12 @@ export const primaryButtonStyle: CSSProperties = {
 
 export const primaryButtonClass =
   'w-full rounded-xl border-none px-4 py-4 font-body text-[15px] font-bold transition-[opacity,transform] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 motion-safe:enabled:active:scale-[0.99]';
+
+export const secondaryButtonStyle: CSSProperties = {
+  borderColor: 'var(--hoc-line-bright)',
+  background: 'var(--hoc-panel)',
+  color: 'var(--hoc-ivory)',
+};
+
+export const secondaryButtonClass =
+  'w-full rounded-xl border px-4 py-4 font-body text-[15px] font-bold transition-[opacity,transform,border-color] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 motion-safe:enabled:hover:border-[var(--hoc-brass)] motion-safe:enabled:active:scale-[0.99]';

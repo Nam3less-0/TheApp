@@ -12,7 +12,7 @@ export default function BoardPhase() {
   const activeName = state.activeTeam === 'a' ? state.teamAName : state.teamBName;
 
   return (
-    <HocPageWrap>
+    <HocPageWrap wide>
       <Scoreboard
         teamAName={state.teamAName}
         teamBName={state.teamBName}
@@ -36,7 +36,7 @@ export default function BoardPhase() {
         <SuitLegend suitTopicMap={state.suitTopicMap} />
       </div>
 
-      <div className="mt-6 flex flex-col gap-3">
+      <div className="mt-6 flex flex-col gap-5">
         {SUITS.map((suit) => {
           const meta = SUIT_META[suit];
           const suitColor = meta.isRed ? 'var(--hoc-crimson-bright)' : 'var(--hoc-ivory)';
@@ -58,16 +58,17 @@ export default function BoardPhase() {
                   {state.suitTopicMap[suit].name}
                 </span>
               </div>
-              <div className="flex gap-1.5 overflow-x-auto pb-1 sm:gap-2">
-                {cards.map(({ card, index }) => (
-                  <div key={`${suit}-${card.value}`} className="w-[46px] shrink-0 sm:w-auto sm:flex-1">
+              <div className="hoc-card-row-scroll -mx-4 px-4 sm:-mx-6 sm:px-6">
+                <div className="flex w-max gap-2.5 sm:gap-3">
+                  {cards.map(({ card, index }) => (
                     <CardTile
+                      key={`${suit}-${card.value}`}
                       card={card}
                       disabled={card.used}
                       onPick={() => dispatch({ type: 'PICK_CARD', index })}
                     />
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           );
@@ -75,7 +76,7 @@ export default function BoardPhase() {
       </div>
 
       <p
-        className="mt-4 text-center font-mono text-[10px] uppercase tracking-[0.16em] sm:hidden"
+        className="mt-5 text-center font-mono text-[10px] uppercase tracking-[0.16em]"
         style={{ color: 'var(--hoc-ivory-dim)' }}
       >
         Swipe each row to see all 13 cards

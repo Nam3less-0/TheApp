@@ -2,6 +2,7 @@ import type { TopicData } from './types';
 import history from './topics/history';
 import modernHistory from './topics/modern-history';
 import science from './topics/science';
+import randomScienceTrivia from './topics/random-science-trivia';
 import physics from './topics/physics';
 import math from './topics/math';
 import fieldsOfStudy from './topics/fields-of-study';
@@ -16,6 +17,7 @@ import art from './topics/art';
 import technology from './topics/technology';
 import space from './topics/space';
 import computing from './topics/computing';
+import softwareEngineering from './topics/software-engineering';
 import videoGames from './topics/video-games';
 import superheroes from './topics/superheroes';
 import marvel from './topics/marvel';
@@ -27,8 +29,15 @@ import drugs from './topics/drugs';
 import boardGames from './topics/board-games';
 import digitalCreatures from './topics/digital-creatures';
 import neonOpenWorlds from './topics/neon-open-worlds';
-import opulenceOddities from './topics/opulence-oddities';
+import luxuryWatches from './topics/luxury-watches';
+import cardGames from './topics/card-games';
+import favouriteAnime from './topics/favourite-anime';
+import favouriteSports from './topics/favourite-sports';
+import allTimeSports from './topics/all-time-sports';
+import favouriteBoardGames from './topics/favourite-board-games';
+import modernDisney from './topics/modern-disney';
 import supesSatire from './topics/supes-satire';
+import cartoonClassics from './topics/cartoon-classics';
 import riddles from './topics/riddles';
 import finishTheQuote from './topics/finish-the-quote';
 import phobias from './topics/phobias';
@@ -41,6 +50,7 @@ import favouritePick from './topics/favourite-pick';
 import crime from './topics/crime';
 import capitalCities from './topics/capital-cities';
 import landmarks from './topics/landmarks';
+import citiesLandmarks from './topics/cities-landmarks';
 import medicine from './topics/medicine';
 import inventions from './topics/inventions';
 import worldReligions from './topics/world-religions';
@@ -50,17 +60,19 @@ import exploration from './topics/exploration';
 import worldLeaders from './topics/world-leaders';
 import traditions from './topics/traditions';
 
-/** 50 topics × 100 questions (20 per difficulty) = 5,000 total clues. */
+/** 60 topics × 100 questions (20 per difficulty) = 6,000 total clues. */
 export const JEOPARDY_TOPICS: TopicData[] = [
   history,
   modernHistory,
   science,
+  randomScienceTrivia,
   physics,
   math,
   fieldsOfStudy,
   geography,
   capitalCities,
   landmarks,
+  citiesLandmarks,
   music,
   sports,
   popCulture,
@@ -71,6 +83,7 @@ export const JEOPARDY_TOPICS: TopicData[] = [
   technology,
   space,
   computing,
+  softwareEngineering,
   videoGames,
   superheroes,
   marvel,
@@ -82,8 +95,15 @@ export const JEOPARDY_TOPICS: TopicData[] = [
   boardGames,
   digitalCreatures,
   neonOpenWorlds,
-  opulenceOddities,
+  luxuryWatches,
+  cardGames,
+  favouriteAnime,
+  favouriteSports,
+  allTimeSports,
+  favouriteBoardGames,
+  modernDisney,
   supesSatire,
+  cartoonClassics,
   riddles,
   finishTheQuote,
   phobias,

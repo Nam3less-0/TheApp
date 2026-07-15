@@ -36,7 +36,7 @@ export default function SuitLegend({ suitTopicMap }: SuitLegendProps) {
                 className="font-mono text-[10px] uppercase tracking-wide"
                 style={{ color: 'var(--hoc-ivory-dim)' }}
               >
-                {meta.label}
+                {meta.label} &middot; {topic.setLabel} set
               </p>
             </div>
           </div>

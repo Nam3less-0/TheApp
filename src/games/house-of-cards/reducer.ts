@@ -1,14 +1,18 @@
 import { TOPIC_POOL } from '../../data/house-of-cards';
-import { buildDeck, SUITS } from './deck';
-import type { HouseOfCardsAction, HouseOfCardsState, Suit, SuitTopic } from './types';
+import { SUITS, commitDeckDraft, draftDeck } from './deck';
+import type { HouseOfCardsAction, HouseOfCardsState, LockedSuitAssignment, Suit, SuitTopic } from './types';
 
 export const WIN_THRESHOLD = 25;
 export const LOSS_THRESHOLD = -25;
 
 function emptySuitTopicMap(): Record<Suit, SuitTopic> {
   const map = {} as Record<Suit, SuitTopic>;
-  for (const suit of SUITS) map[suit] = { id: '', name: '' };
+  for (const suit of SUITS) map[suit] = { id: '', name: '', setLabel: '' };
   return map;
+}
+
+function emptyLockedSuits(): Record<Suit, boolean> {
+  return { spades: false, hearts: false, diamonds: false, clubs: false };
 }
 
 export const initialHouseOfCardsState: HouseOfCardsState = {
@@ -21,9 +25,42 @@ export const initialHouseOfCardsState: HouseOfCardsState = {
   deck: [],
   activeCardIndex: null,
   suitTopicMap: emptySuitTopicMap(),
+  lockedSuits: emptyLockedSuits(),
+  pendingSetCommits: [],
   winner: null,
   winReason: null,
 };
+
+function applyDeckDraft(
+  state: HouseOfCardsState,
+  draft: ReturnType<typeof draftDeck>,
+): HouseOfCardsState {
+  return {
+    ...state,
+    deck: draft.deck,
+    suitTopicMap: draft.suitTopicMap,
+    pendingSetCommits: draft.setCommits,
+  };
+}
+
+
+function lockedAssignments(state: HouseOfCardsState): Partial<Record<Suit, LockedSuitAssignment>> {
+  const locked: Partial<Record<Suit, LockedSuitAssignment>> = {};
+  for (const suit of SUITS) {
+    if (!state.lockedSuits[suit]) continue;
+    const topic = state.suitTopicMap[suit];
+    const commit = state.pendingSetCommits.find((entry) => entry.topicId === topic.id);
+    if (!topic.id || commit === undefined) continue;
+    locked[suit] = { topicId: topic.id, setIndex: commit.setIndex };
+  }
+  return locked;
+}
+
+function openSuitTopicIds(state: HouseOfCardsState): string[] {
+  return SUITS.filter((suit) => !state.lockedSuits[suit])
+    .map((suit) => state.suitTopicMap[suit].id)
+    .filter(Boolean);
+}
 
 export function houseOfCardsReducer(
   state: HouseOfCardsState,
@@ -31,17 +68,52 @@ export function houseOfCardsReducer(
 ): HouseOfCardsState {
   switch (action.type) {
     case 'START_GAME': {
-      const { deck, suitTopicMap } = buildDeck(TOPIC_POOL);
+      const draft = draftDeck(TOPIC_POOL);
       const teamAName = action.teamAName.trim() || 'Team A';
       const teamBName = action.teamBName.trim() || 'Team B';
+      return applyDeckDraft(
+        {
+          ...initialHouseOfCardsState,
+          phase: 'categories',
+          teamAName,
+          teamBName,
+          activeTeam: 'a',
+        },
+        draft,
+      );
+    }
+
+    case 'REROLL_CATEGORIES': {
+      if (state.phase !== 'categories') return state;
+      const openSuits = SUITS.filter((suit) => !state.lockedSuits[suit]);
+      if (openSuits.length === 0) return state;
+      const draft = draftDeck(TOPIC_POOL, {
+        locked: lockedAssignments(state),
+        excludeTopicIds: openSuitTopicIds(state),
+      });
+      return applyDeckDraft(state, draft);
+    }
+
+    case 'TOGGLE_LOCK_SUIT': {
+      if (state.phase !== 'categories') return state;
+      const topic = state.suitTopicMap[action.suit];
+      if (!topic.id) return state;
       return {
-        ...initialHouseOfCardsState,
+        ...state,
+        lockedSuits: {
+          ...state.lockedSuits,
+          [action.suit]: !state.lockedSuits[action.suit],
+        },
+      };
+    }
+
+    case 'CONFIRM_CATEGORIES': {
+      if (state.phase !== 'categories' || state.deck.length === 0) return state;
+      commitDeckDraft(state.pendingSetCommits);
+      return {
+        ...state,
         phase: 'board',
-        teamAName,
-        teamBName,
-        deck,
-        suitTopicMap,
-        // Team A always opens; turn order is strict A → B → A → B thereafter.
+        pendingSetCommits: [],
         activeTeam: 'a',
       };
     }

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useHouseOfCards } from './context';
 import SetupPhase from './phases/SetupPhase';
+import CategoriesPhase from './phases/CategoriesPhase';
 import BoardPhase from './phases/BoardPhase';
 import QuestionPhase from './phases/QuestionPhase';
 import RevealPhase from './phases/RevealPhase';
@@ -49,6 +50,9 @@ export default function HouseOfCardsGame() {
   switch (state.phase) {
     case 'setup':
       screen = <SetupPhase />;
+      break;
+    case 'categories':
+      screen = <CategoriesPhase />;
       break;
     case 'board':
       screen = <BoardPhase />;

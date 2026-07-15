@@ -253,6 +253,17 @@
     }
   }
 
+  .hoc-card-row-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .hoc-card-row-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Game tools — 3D dice */
   .dice-scene {
     perspective: 420px;

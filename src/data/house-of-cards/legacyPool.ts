@@ -1,6 +1,6 @@
-import type { Topic } from '../../games/house-of-cards/types';
+import type { LegacyTopic } from './legacy';
 
-export const TOPIC_POOL: Topic[] = [
+export const LEGACY_TOPIC_POOL: LegacyTopic[] = [
   {
     id: 'geography',
     name: 'Geography',

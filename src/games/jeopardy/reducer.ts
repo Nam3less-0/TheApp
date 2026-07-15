@@ -8,6 +8,7 @@ import type {
 import {
   boardShapeFor,
   commitBoardDraw,
+  commitRerolledQuestion,
   defaultSettings,
   draftBoardFromTopics,
   drawFinalClue,
@@ -15,10 +16,14 @@ import {
   getAllTopicSummaries,
   getThemeBundle,
   isCellBlockedThisTurn,
+  isPreviouslySeenQuestion,
   isWhatChoicesAllowed,
+  loadRecentQuestionKeys,
+  makeQuestionKey,
   maxDailyDoubleWager,
   maxFinalWager,
   pickPreviewTopics,
+  rerollCellQuestion,
   shuffle,
   SNIPE_CORRECT_POINTS,
   TURN_LIMITED_VALUES,
@@ -49,6 +54,8 @@ export const initialJeopardyState: JeopardySession = {
   finalWagers: [],
   finalWagerIndex: 0,
   undoSnapshot: null,
+  priorRecentQuestionKeys: [],
+  activeCellRerollKeys: [],
 };
 
 /** Allowed topic ids for the active theme (null = all topics). */
@@ -284,6 +291,7 @@ export function jeopardyReducer(
       const players = preparePlayersForGame(state.pendingPlayers);
       const columns = state.previewColumns;
       const cells = state.previewCells;
+      const priorRecentQuestionKeys = loadRecentQuestionKeys();
       commitBoardDraw(columns, cells);
 
       return {
@@ -311,6 +319,8 @@ export function jeopardyReducer(
         finalWagers: [],
         finalWagerIndex: 0,
         undoSnapshot: null,
+        priorRecentQuestionKeys,
+        activeCellRerollKeys: [],
       };
     }
 
@@ -341,6 +351,44 @@ export function jeopardyReducer(
         turnPickedValues,
         activeWager: null,
         undoSnapshot: null,
+        activeCellRerollKeys: [],
+      };
+    }
+
+    case 'REROLL_QUESTION': {
+      if (state.phase !== 'question' || !state.activeCellId) return state;
+      const cell = state.cells.find((c) => c.id === state.activeCellId);
+      if (!cell) return state;
+      if (
+        !isPreviouslySeenQuestion(
+          state.columns,
+          cell,
+          state.priorRecentQuestionKeys,
+          state.history,
+        )
+      ) {
+        return state;
+      }
+
+      const topicId = state.columns[cell.columnIndex]?.id;
+      if (!topicId) return state;
+      const currentKey = makeQuestionKey(topicId, cell.difficulty, cell.question);
+      const result = rerollCellQuestion(state.columns, state.cells, cell.id, [
+        ...state.activeCellRerollKeys,
+        currentKey,
+      ]);
+      if (!result) return state;
+
+      commitRerolledQuestion(state.columns, result.cell, result.pickedKey);
+
+      return {
+        ...state,
+        cells: state.cells.map((c) => (c.id === cell.id ? result.cell : c)),
+        activeCellRerollKeys: [...state.activeCellRerollKeys, currentKey],
+        revealedChoices: null,
+        phoneFriendId: null,
+        sniped: false,
+        snipedFromPlayerIndex: null,
       };
     }
 

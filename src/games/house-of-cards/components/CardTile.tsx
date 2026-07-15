@@ -8,6 +8,9 @@ interface CardTileProps {
   onPick: () => void;
 }
 
+const cardSizeClass =
+  'w-[6.75rem] shrink-0 sm:w-28 md:w-[7.75rem]';
+
 export default function CardTile({ card, disabled, onPick }: CardTileProps) {
   const meta = SUIT_META[card.suit];
   const suitColor = meta.isRed ? 'var(--hoc-crimson-bright)' : 'var(--hoc-ivory)';
@@ -16,7 +19,7 @@ export default function CardTile({ card, disabled, onPick }: CardTileProps) {
     const isCorrect = card.result === 'correct';
     return (
       <div
-        className="relative flex aspect-[3/4] flex-col items-center justify-center rounded-lg border opacity-45"
+        className={`relative flex aspect-[5/7] flex-col items-center justify-center rounded-xl border opacity-45 ${cardSizeClass}`}
         style={{
           borderColor: 'var(--hoc-line)',
           background: 'var(--hoc-panel)',
@@ -24,16 +27,16 @@ export default function CardTile({ card, disabled, onPick }: CardTileProps) {
         aria-label={`${card.rank} of ${meta.label}, used, ${isCorrect ? 'correct' : 'incorrect'}`}
       >
         <span
-          className="font-display text-sm font-bold leading-none sm:text-base"
+          className="font-display text-xl font-bold leading-none sm:text-2xl"
           style={{ color: suitColor }}
         >
           {card.rank}
         </span>
-        <span className="mt-0.5 text-xs leading-none sm:text-sm" style={{ color: suitColor }}>
+        <span className="mt-1.5 text-2xl leading-none sm:text-3xl" style={{ color: suitColor }}>
           {meta.symbol}
         </span>
         <span
-          className="mt-1 font-mono text-[9px] font-bold uppercase leading-none tracking-wide sm:text-[10px]"
+          className="mt-2 font-mono text-xs font-bold uppercase leading-none tracking-wide"
           style={{ color: isCorrect ? 'var(--hoc-good)' : 'var(--hoc-bad)' }}
         >
           {isCorrect ? '\u2713 +' : '\u2717 \u2212'}
@@ -49,7 +52,7 @@ export default function CardTile({ card, disabled, onPick }: CardTileProps) {
       onClick={onPick}
       disabled={disabled}
       aria-label={`Pick the ${card.rank} of ${meta.label}, worth ${card.value} points`}
-      className="hoc-card-flip group relative flex aspect-[3/4] flex-col items-center justify-center rounded-lg border transition-[transform,border-color,box-shadow] duration-150 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-40 motion-safe:enabled:hover:-translate-y-1"
+      className={`hoc-card-flip group relative flex aspect-[5/7] flex-col items-center justify-center rounded-xl border transition-[transform,border-color,box-shadow] duration-150 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-40 motion-safe:enabled:hover:-translate-y-1 ${cardSizeClass}`}
       style={{
         borderColor: 'var(--hoc-line-bright)',
         background:
@@ -60,12 +63,15 @@ export default function CardTile({ card, disabled, onPick }: CardTileProps) {
       }}
     >
       <span
-        className="font-display text-sm font-bold leading-none sm:text-lg"
+        className="font-display text-xl font-bold leading-none sm:text-2xl md:text-3xl"
         style={{ color: suitColor }}
       >
         {card.rank}
       </span>
-      <span className="mt-0.5 text-sm leading-none sm:text-xl" style={{ color: suitColor }}>
+      <span
+        className="mt-1.5 text-2xl leading-none sm:text-3xl md:text-4xl"
+        style={{ color: suitColor }}
+      >
         {meta.symbol}
       </span>
     </button>

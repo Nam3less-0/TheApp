@@ -104,6 +104,26 @@ export function EchoLabIcon(props: IconProps) {
   );
 }
 
+export function RankUpIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+      <path
+        d="M5 7h14M5 12h10M5 17h6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M16 15l3 3M19 15l-3 3"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <circle cx="18" cy="9" r="2" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
 export function Top100Icon(props: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>

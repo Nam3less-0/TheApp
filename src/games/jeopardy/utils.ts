@@ -1,5 +1,6 @@
 import { JEOPARDY_TOPICS, type Difficulty, type TopicData } from '../../data/jeopardy-questions';
 import type {
+  AnswerRecord,
   BoardCell,
   BoardColumn,
   FinalClue,
@@ -61,7 +62,7 @@ export const THEME_BUNDLES: ThemeBundle[] = [
     id: 'stem-night',
     name: 'STEM Night',
     description: 'Science, numbers and machines',
-    topicIds: ['science', 'physics', 'math', 'computing', 'technology', 'space', 'medicine', 'inventions', 'fields-of-study'],
+    topicIds: ['science', 'random-science-trivia', 'physics', 'math', 'computing', 'technology', 'space', 'medicine', 'inventions', 'fields-of-study'],
   },
   {
     id: 'gamer',
@@ -73,7 +74,7 @@ export const THEME_BUNDLES: ThemeBundle[] = [
     id: 'globe-trotter',
     name: 'Globe Trotter',
     description: 'Places, people and the past',
-    topicIds: ['geography', 'capital-cities', 'landmarks', 'history', 'modern-history', 'world-leaders', 'exploration', 'languages', 'traditions', 'transport'],
+    topicIds: ['geography', 'capital-cities', 'landmarks', 'cities-landmarks', 'history', 'modern-history', 'world-leaders', 'exploration', 'languages', 'traditions', 'transport'],
   },
   {
     id: 'general-knowledge',
@@ -280,12 +281,25 @@ function saveRecentKeys(storageKey: string, keys: string[], max: number) {
   }
 }
 
-function questionKey(
+export function makeQuestionKey(
   topicId: string,
   difficulty: Difficulty,
   question: string,
 ): string {
   return `${topicId}|${difficulty}|${question}`;
+}
+
+/** @deprecated internal alias */
+function questionKey(
+  topicId: string,
+  difficulty: Difficulty,
+  question: string,
+): string {
+  return makeQuestionKey(topicId, difficulty, question);
+}
+
+export function loadRecentQuestionKeys(): string[] {
+  return loadRecentKeys(RECENT_QUESTIONS_KEY);
 }
 
 function slotKey(topicId: string, difficulty: Difficulty): string {
@@ -666,6 +680,116 @@ export function commitBoardDraw(columns: BoardColumn[], cells: BoardCell[]): voi
     RECENT_TOPICS_KEY,
     [...loadRecentKeys(RECENT_TOPICS_KEY), ...columns.map((column) => column.id)],
     MAX_RECENT_TOPICS,
+  );
+}
+
+function boardQuestionKeys(columns: BoardColumn[], cells: BoardCell[]): Set<string> {
+  const keys = new Set<string>();
+  for (const cell of cells) {
+    const topicId = columns[cell.columnIndex]?.id;
+    if (!topicId) continue;
+    keys.add(makeQuestionKey(topicId, cell.difficulty, cell.question));
+  }
+  return keys;
+}
+
+/** True when this clue was served in a session before the current board was built. */
+export function isPreviouslySeenQuestion(
+  columns: BoardColumn[],
+  cell: BoardCell,
+  priorRecentQuestionKeys: string[],
+  history: AnswerRecord[],
+): boolean {
+  const topicId = columns[cell.columnIndex]?.id;
+  if (!topicId) return false;
+  const key = makeQuestionKey(topicId, cell.difficulty, cell.question);
+  if (priorRecentQuestionKeys.includes(key)) return true;
+  return history.some(
+    (record) => record.question === cell.question && record.cellId !== cell.id,
+  );
+}
+
+export interface RerollCellResult {
+  cell: BoardCell;
+  pickedKey: string;
+}
+
+/** Draw a replacement clue for one board tile, avoiding other tiles and reroll tries. */
+export function rerollCellQuestion(
+  columns: BoardColumn[],
+  cells: BoardCell[],
+  cellId: string,
+  extraAvoidKeys: string[] = [],
+): RerollCellResult | null {
+  const cell = cells.find((c) => c.id === cellId);
+  if (!cell) return null;
+
+  const topicId = columns[cell.columnIndex]?.id;
+  if (!topicId) return null;
+
+  const topic = JEOPARDY_TOPICS.find((entry) => entry.id === topicId);
+  if (!topic) return null;
+
+  const avoidKeys = new Set(boardQuestionKeys(columns, cells));
+  for (const key of extraAvoidKeys) avoidKeys.add(key);
+
+  const recentKeys = new Set(loadRecentQuestionKeys());
+  const candidates = topic.questions.filter(
+    (question) => question.difficulty === cell.difficulty,
+  );
+  const slot = slotKey(topicId, cell.difficulty);
+  const currentKey = makeQuestionKey(topicId, cell.difficulty, cell.question);
+  avoidKeys.add(currentKey);
+
+  try {
+    const { picked, pickedKey } = drawQuestion(
+      candidates,
+      (question) => makeQuestionKey(topicId, cell.difficulty, question.question),
+      slot,
+      loadQuestionDeck(slot),
+      avoidKeys,
+      recentKeys,
+    );
+    if (pickedKey === currentKey) return null;
+
+    const choiceCount = topic.id === 'riddles' ? 3 : 4;
+    const topicAnswers = topic.questions.map((question) => question.answer);
+    const sameDiff = candidates.map((question) => question.answer);
+    const pool = sameDiff.length >= choiceCount ? sameDiff : topicAnswers;
+
+    return {
+      cell: {
+        ...cell,
+        question: picked.question,
+        answer: picked.answer,
+        choices: buildChoices(picked.answer, picked.choices, pool, choiceCount),
+      },
+      pickedKey,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/** Persist deck + recent history for a clue swapped in via in-game reroll. */
+export function commitRerolledQuestion(
+  columns: BoardColumn[],
+  cell: BoardCell,
+  pickedKey: string,
+): void {
+  const topicId = columns[cell.columnIndex]?.id;
+  if (!topicId) return;
+  const topic = JEOPARDY_TOPICS.find((entry) => entry.id === topicId);
+  if (!topic) return;
+
+  const allKeys = topic.questions
+    .filter((question) => question.difficulty === cell.difficulty)
+    .map((question) => makeQuestionKey(topicId, cell.difficulty, question.question));
+  advanceQuestionDeck(slotKey(topicId, cell.difficulty), allKeys, pickedKey);
+  saveRecentKeys(
+    RECENT_QUESTIONS_KEY,
+    [...loadRecentQuestionKeys(), pickedKey],
+    MAX_RECENT_QUESTIONS,
   );
 }
 

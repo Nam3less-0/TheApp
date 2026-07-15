@@ -6,6 +6,7 @@ import {
   HouseOfCardsIcon,
   ImposterIcon,
   JeopardyIcon,
+  RankUpIcon,
   TheBetIcon,
   Top100Icon,
 } from '../icons/GameIcons';
@@ -18,6 +19,14 @@ export const games: GameEntry[] = [
     metal: 'steel-blue',
     status: 'playable',
     icon: Top100Icon,
+  },
+  {
+    id: 'rank-up',
+    title: 'Rank Up',
+    description: 'Join a room on your phone — synced rounds, self-scored guesses.',
+    metal: 'pewter',
+    status: 'playable',
+    icon: RankUpIcon,
   },
   {
     id: 'codeword',

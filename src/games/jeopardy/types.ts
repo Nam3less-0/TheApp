@@ -155,6 +155,13 @@ export interface JeopardySession {
   finalWagerIndex: number;
   /** Snapshot to restore when the host undoes the last resolve; null otherwise. */
   undoSnapshot: JeopardySession | null;
+  /**
+   * Recent-question keys loaded before this board was committed. Used to flag
+   * clues the group may have seen in an earlier session.
+   */
+  priorRecentQuestionKeys: string[];
+  /** Question keys already tried on the active clue via in-game reroll. */
+  activeCellRerollKeys: string[];
 }
 
 export type JeopardyAction =
@@ -169,6 +176,7 @@ export type JeopardyAction =
   | { type: 'SELECT_CELL'; cellId: string }
   | { type: 'SET_WAGER'; amount: number }
   | { type: 'REVEAL_ANSWER' }
+  | { type: 'REROLL_QUESTION' }
   | { type: 'RESOLVE'; correct: boolean }
   | { type: 'UNDO_RESOLVE' }
   | { type: 'USE_WHAT_CHOICES' }

@@ -86,8 +86,9 @@ export default function SetupPhase() {
           className="mt-5 font-mono text-[11px] leading-relaxed"
           style={{ color: 'var(--hoc-ivory-dim)' }}
         >
-          4 suits, each a random topic drawn fresh every game. Ace = 1 &middot; face
-          cards J/Q/K = 11/12/13.
+          4 suits, each a random topic. You can reroll categories before dealing.
+          Each topic has five question sets (Ace &rarr; King); replaying a topic advances to the next set.
+          Card values: Ace = 1 &middot; J/Q/K = 11/12/13.
         </p>
 
         <button
@@ -97,8 +98,11 @@ export default function SetupPhase() {
           className={`mt-6 ${primaryButtonClass}`}
           style={primaryButtonStyle}
         >
-          Deal the Cards
+          Choose categories
         </button>
+        <p className="mt-3 text-center font-mono text-[10px]" style={{ color: 'var(--hoc-ivory-dim)' }}>
+          You&apos;ll pick categories on the next screen
+        </p>
       </HocPanel>
     </HocPageWrap>
   );

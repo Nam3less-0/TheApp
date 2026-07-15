@@ -4,9 +4,12 @@ import {
   COLORS,
   SILVER_BUTTON,
   formatScore,
+  isPreviouslySeenQuestion,
   isSnipeWindowOpen,
   isWhatChoicesAllowed,
+  makeQuestionKey,
   playSound,
+  rerollCellQuestion,
   shuffle,
   SNIPE_CORRECT_POINTS,
 } from '../utils';
@@ -100,12 +103,32 @@ function SnipeIcon() {
   );
 }
 
+function RerollIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-3 w-3"
+      aria-hidden="true"
+    >
+      <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+      <path d="M21 3v6h-6" />
+    </svg>
+  );
+}
+
 const OPTION_LABELS = ['A', 'B', 'C', 'D'];
 
 export default function QuestionScreen() {
   const { state, dispatch } = useJeopardy();
   const [pickerOpen, setPickerOpen] = useState(false);
   const [snipeOpen, setSnipeOpen] = useState(false);
+  const [rerollOpen, setRerollOpen] = useState(false);
+  const [rerollConfirmOpen, setRerollConfirmOpen] = useState(false);
 
   const timerSeconds = state.settings.clueTimerSeconds;
   const soundOn = state.settings.soundEnabled;
@@ -115,8 +138,10 @@ export default function QuestionScreen() {
   useEffect(() => {
     setPickerOpen(false);
     setSnipeOpen(false);
+    setRerollOpen(false);
+    setRerollConfirmOpen(false);
     setRemaining(timerSeconds);
-  }, [state.activeCellId, timerSeconds]);
+  }, [state.activeCellId, state.activeCellRerollKeys.length, timerSeconds]);
 
   const cell = state.cells.find((c) => c.id === state.activeCellId);
   const player = state.players[state.currentPlayerIndex];
@@ -126,9 +151,9 @@ export default function QuestionScreen() {
   // Stable option order for self-score / choices display.
   const selfOptions = useMemo(
     () => (cell ? shuffle(cell.choices) : []),
-    // Reshuffle only when the clue changes.
+    // Reshuffle when the clue changes (including in-game reroll).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [state.activeCellId],
+    [state.activeCellId, cell?.question],
   );
 
   function resolve(correct: boolean) {
@@ -193,6 +218,28 @@ export default function QuestionScreen() {
   const snipePenalty = Math.round(points / 2);
   const timerActive = timerSeconds > 0 && !revealed;
   const timerLow = timerActive && remaining <= 5;
+  const previouslySeen =
+    cell !== undefined &&
+    isPreviouslySeenQuestion(
+      state.columns,
+      cell,
+      state.priorRecentQuestionKeys,
+      state.history,
+    );
+  const canReroll =
+    previouslySeen &&
+    !revealed &&
+    cell !== undefined &&
+    (() => {
+      const topicId = state.columns[cell.columnIndex]?.id;
+      if (!topicId) return false;
+      return (
+        rerollCellQuestion(state.columns, state.cells, cell.id, [
+          ...state.activeCellRerollKeys,
+          makeQuestionKey(topicId, cell.difficulty, cell.question),
+        ]) !== null
+      );
+    })();
 
   return (
     <JeopardyPageWrap>
@@ -249,7 +296,7 @@ export default function QuestionScreen() {
         </div>
 
         <div
-          className={`px-4 py-6 sm:px-[22px] sm:py-7${revealed ? '' : ' rounded-b-[18px]'}`}
+          className={`relative px-4 py-6 sm:px-[22px] sm:py-7${revealed ? '' : ' rounded-b-[18px]'}`}
           style={{ background: 'linear-gradient(180deg, #222428, #1A1C20)' }}
         >
           {!revealed && (
@@ -270,6 +317,108 @@ export default function QuestionScreen() {
           >
             {cell.question}
           </p>
+
+          {!revealed && previouslySeen && (
+            <div className="pointer-events-none absolute bottom-3 right-3 z-10 sm:bottom-4 sm:right-4">
+              <div className="pointer-events-auto flex flex-col items-end">
+                {!rerollOpen ? (
+                  <button
+                    type="button"
+                    onClick={() => setRerollOpen(true)}
+                    aria-label="Reroll — this question appeared in a recent game"
+                    className="flex h-7 w-7 items-center justify-center rounded-full border shadow-md transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                    style={{
+                      background: `color-mix(in srgb, ${COLORS.gold} 28%, #1A1C20)`,
+                      borderColor: `color-mix(in srgb, ${COLORS.goldBright} 60%, transparent)`,
+                      color: COLORS.goldBright,
+                    }}
+                  >
+                    <RerollIcon />
+                  </button>
+                ) : (
+                  <div
+                    className="w-[min(calc(100vw-3rem),15rem)] rounded-xl border p-3 shadow-lg"
+                    style={{
+                      background: `linear-gradient(180deg, color-mix(in srgb, ${COLORS.goldBright} 92%, #FFF9E8), color-mix(in srgb, ${COLORS.gold} 78%, #FFEEB8))`,
+                      borderColor: COLORS.gold,
+                      boxShadow: `0 8px 28px -8px color-mix(in srgb, ${COLORS.gold} 55%, transparent)`,
+                      color: '#3D2E0A',
+                    }}
+                  >
+                    <div className="mb-1 font-body text-[12px] font-bold leading-snug">
+                      Seen before
+                    </div>
+                    <p className="mb-3 font-body text-[11px] leading-snug opacity-85">
+                      This question appeared in a recent game. Reroll to swap it for
+                      a fresh clue from the same category and value.
+                    </p>
+                    {!rerollConfirmOpen ? (
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setRerollConfirmOpen(true)}
+                          disabled={!canReroll}
+                          className="rounded-md border px-2.5 py-1 font-body text-[11px] font-bold transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-45"
+                          style={{
+                            background: `color-mix(in srgb, ${COLORS.goldDim} 35%, #FFF4CC)`,
+                            borderColor: COLORS.goldDim,
+                            color: '#2A2008',
+                          }}
+                        >
+                          Reroll question
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setRerollOpen(false);
+                            setRerollConfirmOpen(false);
+                          }}
+                          className="font-body text-[11px] font-medium opacity-65 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-steel-blue"
+                        >
+                          Close
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap items-center gap-2 font-body text-[11px]">
+                        <span className="font-semibold">Replace this clue?</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPickerOpen(false);
+                            setSnipeOpen(false);
+                            setRerollOpen(false);
+                            setRerollConfirmOpen(false);
+                            playSound('select', soundOn);
+                            dispatch({ type: 'REROLL_QUESTION' });
+                          }}
+                          className="rounded-md border px-2 py-0.5 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                          style={{
+                            background: '#2A2008',
+                            borderColor: '#2A2008',
+                            color: COLORS.goldBright,
+                          }}
+                        >
+                          Yes
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setRerollConfirmOpen(false)}
+                          className="font-medium opacity-65 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-steel-blue"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
+                    {!canReroll && !rerollConfirmOpen && (
+                      <p className="mt-2 font-body text-[10px] opacity-70">
+                        No fresh questions left for this slot.
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {state.sniped && !revealed && (
             <div

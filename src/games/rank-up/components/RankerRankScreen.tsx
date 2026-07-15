@@ -1,0 +1,50 @@
+import { useState } from 'react';
+import { useRankUp } from '../context';
+import RankEditor from './RankEditor';
+import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
+
+export default function RankerRankScreen() {
+  const { local, confirmRankerOrder } = useRankUp();
+  const draft = local.roundDraft;
+  const [order, setOrder] = useState<string[]>([]);
+
+  if (!draft) return null;
+
+  const canConfirm = order.length === draft.options.length;
+
+  async function handleConfirm() {
+    if (!canConfirm) return;
+    await confirmRankerOrder(order);
+  }
+
+  return (
+    <RankUpPageWrap>
+      <header className="mb-6">
+        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-pewter">
+          Private — don&apos;t show anyone
+        </p>
+        <h1 className="mt-1 font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">
+          Lock in your order
+        </h1>
+      </header>
+
+      <RankUpPanel compact className="mb-6">
+        <p className="font-body text-base font-bold leading-snug text-text-hi">{draft.prompt}</p>
+      </RankUpPanel>
+
+      <RankEditor
+        options={draft.options}
+        order={order}
+        onOrderChange={setOrder}
+        heading="Your secret ranking"
+        description="Tap each option in order from most to least."
+      />
+
+      <div className="mt-8">
+        <RankUpPrimaryButton onClick={handleConfirm} disabled={!canConfirm}>
+          Publish question to room
+        </RankUpPrimaryButton>
+      </div>
+    </RankUpPageWrap>
+  );
+}
