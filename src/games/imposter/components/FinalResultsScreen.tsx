@@ -76,7 +76,7 @@ function PodiumColumn({ player, slot }: { player: Player; slot: (typeof PODIUM)[
 }
 
 export default function FinalResultsScreen() {
-  const { state, dispatch } = useImposter();
+  const { state, restartGame, isHost, synced } = useImposter();
 
   const ranked = [...state.players].sort((a, b) => b.score - a.score);
   const topScore = ranked[0]?.score ?? 0;
@@ -180,14 +180,23 @@ export default function FinalResultsScreen() {
       </ImposterPanel>
 
       <div className="mt-4 flex flex-col gap-3">
+        {( !synced || isHost ) && (
         <button
           type="button"
-          onClick={() => dispatch({ type: 'PLAY_AGAIN' })}
+          onClick={() => void restartGame()}
           className="w-full rounded-xl border-none px-4 py-[15px] font-body text-[15px] font-bold text-void focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember"
           style={{ background: 'linear-gradient(180deg, #E07A5F, #C2533B 55%, #7A3526)' }}
         >
           Play again
         </button>
+        )}
+        {synced && !isHost && (
+          <ImposterPanel>
+            <p className="text-center font-body text-sm text-text-mid">
+              Waiting for the host to start a new game…
+            </p>
+          </ImposterPanel>
+        )}
         <Link
           to="/"
           className="inline-flex min-h-11 items-center justify-center rounded-xl border border-line px-4 py-3 text-center font-body text-sm font-semibold text-text-mid transition-colors hover:border-line-bright hover:text-text-hi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember"

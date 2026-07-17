@@ -64,6 +64,17 @@ export function imposterReducer(
       return { ...state, phase: 'discuss' };
     }
 
+    case 'MARK_REVEAL_READY': {
+      if (state.phase !== 'reveal') return state;
+      const ready = action.playerIds.includes(action.playerId)
+        ? action.playerIds
+        : [...action.playerIds, action.playerId];
+      if (ready.length < state.players.length) {
+        return state;
+      }
+      return { ...state, phase: 'discuss' };
+    }
+
     case 'GO_TO_VOTE': {
       if (state.phase !== 'discuss') return state;
       return { ...state, phase: 'vote' };
@@ -171,6 +182,12 @@ export function imposterReducer(
         totalRounds: state.totalRounds,
       };
     }
+
+    case 'SYNC_STATE':
+      return action.payload;
+
+    case 'RESET':
+      return initialImposterState;
 
     default:
       return state;

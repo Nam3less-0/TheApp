@@ -1,16 +1,23 @@
 import { useState } from 'react';
 import { useRankUp } from '../context';
+import ErrorPanel from './ErrorPanel';
+import OnboardingCards from './OnboardingCards';
 import RankUpPanel, {
   RankUpPageWrap,
   RankUpPrimaryButton,
   RankUpSectionHeading,
 } from './Layout';
 
-export default function SetupScreen() {
+interface SetupScreenProps {
+  onShowRules?: () => void;
+}
+
+export default function SetupScreen({ onShowRules }: SetupScreenProps) {
   const { local, supabaseReady, createGame, joinGame } = useRankUp();
   const [playerName, setPlayerName] = useState(local.playerName || '');
   const [roomCode, setRoomCode] = useState('');
   const [mode, setMode] = useState<'create' | 'join'>('create');
+  const [showRules, setShowRules] = useState(false);
 
   const canSubmit = playerName.trim().length > 0 && (mode === 'create' || roomCode.trim().length === 4);
 
@@ -23,6 +30,25 @@ export default function SetupScreen() {
     }
   }
 
+  function handleRetry() {
+    if (mode === 'create') {
+      void createGame(playerName.trim());
+    } else if (roomCode.trim().length === 4) {
+      void joinGame(roomCode.trim(), playerName.trim());
+    }
+  }
+
+  if (showRules) {
+    return (
+      <OnboardingCards
+        onComplete={() => {
+          setShowRules(false);
+          onShowRules?.();
+        }}
+      />
+    );
+  }
+
   return (
     <RankUpPageWrap>
       <header className="mb-8">
@@ -30,25 +56,27 @@ export default function SetupScreen() {
           Rank Up
         </h1>
         <p className="mt-2 max-w-xl font-body text-sm text-text-mid">
-          Everyone on their own phone. Create a room or join with a code — the ranker runs each
-          round, everyone else guesses and scores themselves.
+          Read the ranker&apos;s mind. Create a room or join with a code — everyone plays on their
+          own phone.
         </p>
+        <button
+          type="button"
+          onClick={() => setShowRules(true)}
+          className="mt-2 font-mono text-[11px] text-pewter underline-offset-2 hover:underline"
+        >
+          How to play
+        </button>
       </header>
 
       {!supabaseReady && (
-        <RankUpPanel compact className="mb-6 border-bad/40">
-          <p className="font-body text-sm text-bad">
-            Supabase is not configured. Add <code className="font-mono text-[12px]">VITE_SUPABASE_URL</code>{' '}
-            and <code className="font-mono text-[12px]">VITE_SUPABASE_ANON_KEY</code> to a{' '}
-            <code className="font-mono text-[12px]">.env</code> file, then restart the dev server.
-          </p>
-        </RankUpPanel>
+        <ErrorPanel message="Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to a .env file, then restart the dev server." />
       )}
 
       {local.syncError && (
-        <RankUpPanel compact className="mb-6 border-bad/40">
-          <p className="font-body text-sm text-bad">{local.syncError}</p>
-        </RankUpPanel>
+        <ErrorPanel
+          message={local.syncError}
+          onRetry={canSubmit && supabaseReady ? handleRetry : undefined}
+        />
       )}
 
       <div className="flex flex-col gap-6">

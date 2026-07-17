@@ -70,8 +70,17 @@ function InterceptRow({ entry }: { entry: InterceptLogEntry }) {
 }
 
 export default function GameOverScreen() {
-  const { state, dispatch } = useCodeword();
+  const { state, dispatch, synced, resetSyncedGame, opponentTeam } = useCodeword();
   const won = state.gameStatus === 'won';
+
+  function handleNewGame() {
+    const card = drawTeamCard();
+    if (synced) {
+      void resetSyncedGame(card);
+    } else {
+      dispatch({ type: 'NEW_GAME', card });
+    }
+  }
 
   return (
     <CodewordPageWrap>
@@ -95,8 +104,12 @@ export default function GameOverScreen() {
         </h1>
         <p className="mt-1.5 font-body text-sm text-text-mid">
           {won
-            ? 'You cracked the other team’s codes twice.'
-            : 'Your team failed to decode your own codes twice.'}
+            ? synced && opponentTeam
+              ? `You cracked ${opponentTeam.name}'s codes twice.`
+              : 'You cracked the other team\'s codes twice.'
+            : synced && opponentTeam
+              ? `${opponentTeam.name} outmaneuvered you — two failed decodes.`
+              : 'Your team failed to decode your own codes twice.'}
         </p>
       </div>
 
@@ -143,7 +156,7 @@ export default function GameOverScreen() {
       <div className="mt-5 flex flex-col gap-2.5">
         <button
           type="button"
-          onClick={() => dispatch({ type: 'NEW_GAME', card: drawTeamCard() })}
+          onClick={handleNewGame}
           className="w-full rounded-xl border-none px-4 py-3.5 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper"
           style={{
             background: 'linear-gradient(180deg, #E2C0A8, #C99A7A 55%, #A87C5E)',

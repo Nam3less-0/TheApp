@@ -1,162 +1,159 @@
 import { useMemo, useState } from 'react';
 import {
-  ITEM_PROMPT_SUGGESTIONS,
-  PLAYER_PROMPT_SUGGESTIONS,
+  drawPromptPreset,
+  presetToReelItem,
+  presetsForType,
+  type RankPromptPreset,
 } from '../../../data/rank-up/prompts';
 import { useRankUp } from '../context';
 import type { QuestionType } from '../types';
 import { optionsFromLabels } from '../utils';
+import CommandCenterFrame from './CommandCenterFrame';
+import PromptReelTrack from './PromptReelTrack';
+import { CrownIcon } from './RankUpIcons';
 import RankUpPanel, {
   RankUpPageWrap,
   RankUpPrimaryButton,
-  RankUpSectionHeading,
   RankUpSecondaryButton,
 } from './Layout';
 
 export default function ComposeScreen() {
-  const { local, confirmCompose } = useRankUp();
+  const { local, players, confirmCompose } = useRankUp();
 
   const [questionType, setQuestionType] = useState<QuestionType>('players');
-  const [prompt, setPrompt] = useState('');
-  const [items, setItems] = useState<string[]>(() =>
-    questionType === 'players'
-      ? ['Alex', 'Jordan', 'Sam', 'Taylor']
-      : ['Coffee', 'Apple juice', 'Beer', 'Coke Zero'],
+  const [drawnPreset, setDrawnPreset] = useState<RankPromptPreset>(() =>
+    drawPromptPreset('players'),
+  );
+  const [spinKey, setSpinKey] = useState(0);
+  const [isSettled, setIsSettled] = useState(false);
+
+  const reelPool = useMemo(
+    () => presetsForType(questionType).map(presetToReelItem),
+    [questionType],
+  );
+  const reelItem = useMemo(() => presetToReelItem(drawnPreset), [drawnPreset]);
+
+  const playerLabels = useMemo(
+    () => players.map((player) => player.name).filter((name) => name.trim().length > 0),
+    [players],
   );
 
-  const suggestions =
-    questionType === 'players' ? PLAYER_PROMPT_SUGGESTIONS : ITEM_PROMPT_SUGGESTIONS;
+  const optionLabels =
+    drawnPreset.type === 'players'
+      ? playerLabels
+      : (drawnPreset.items ?? []).filter((item) => item.trim().length > 0);
 
-  const options = useMemo(() => optionsFromLabels(items), [items]);
-  const canConfirm = prompt.trim().length > 0 && options.length >= 3;
+  const canConfirm = isSettled && optionLabels.length >= 3;
 
   function switchType(type: QuestionType) {
+    if (type === questionType) return;
     setQuestionType(type);
-    setItems(
-      type === 'players'
-        ? ['Alex', 'Jordan', 'Sam', 'Taylor']
-        : ['Coffee', 'Apple juice', 'Beer', 'Coke Zero'],
-    );
+    setDrawnPreset(drawPromptPreset(type));
+    setSpinKey((key) => key + 1);
+    setIsSettled(false);
   }
 
-  function updateItem(index: number, value: string) {
-    setItems((prev) => prev.map((item, i) => (i === index ? value : item)));
-  }
-
-  function addItem() {
-    if (items.length >= 8) return;
-    setItems((prev) => [...prev, '']);
-  }
-
-  function removeItem(index: number) {
-    if (items.length <= 3) return;
-    setItems((prev) => prev.filter((_, i) => i !== index));
+  function handleRespin() {
+    setDrawnPreset((current) => drawPromptPreset(questionType, current.id));
+    setSpinKey((key) => key + 1);
+    setIsSettled(false);
   }
 
   function handleConfirm() {
     if (!canConfirm) return;
-    confirmCompose(questionType, prompt.trim(), options);
+    confirmCompose(drawnPreset.type, drawnPreset.prompt, optionsFromLabels(optionLabels));
   }
 
   return (
     <RankUpPageWrap>
-      <header className="mb-6">
-        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-pewter">
+      <header className="mb-6 text-center">
+        <p className="flex items-center justify-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-pewter">
+          <CrownIcon className="h-3.5 w-3.5" />
           {local.playerName} — ranker
         </p>
         <h1 className="mt-1 font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">
-          Write your question
+          Draw your question
         </h1>
+        <p className="mt-2 font-body text-sm text-text-mid">
+          Spin the reel, reroll if you want, then lock in and rank in secret.
+        </p>
       </header>
 
-      <div className="flex flex-col gap-6">
-        <RankUpPanel compact>
-          <RankUpSectionHeading title="Question type" className="mb-4" />
-          <div className="grid grid-cols-2 gap-3">
-            {(
-              [
-                { id: 'players' as const, label: 'Player rank', hint: 'Rank people' },
-                { id: 'items' as const, label: 'Item rank', hint: 'Rank things' },
-              ] as const
-            ).map((type) => {
-              const selected = questionType === type.id;
-              return (
-                <button
-                  key={type.id}
-                  type="button"
-                  onClick={() => switchType(type.id)}
-                  className={`rounded-xl border bg-surface p-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pewter ${
-                    selected
-                      ? 'border-pewter shadow-[0_0_0_1px_#9B93A8_inset]'
-                      : 'border-line hover:border-line-bright'
-                  }`}
-                  aria-pressed={selected}
-                >
-                  <p className="font-body text-sm font-bold text-text-hi">{type.label}</p>
-                  <p className="mt-1 font-body text-[12px] text-text-mid">{type.hint}</p>
-                </button>
-              );
-            })}
-          </div>
-        </RankUpPanel>
-
-        <RankUpPanel compact>
-          <RankUpSectionHeading title="Question" className="mb-4" />
-          <textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            rows={3}
-            maxLength={200}
-            className="w-full resize-none rounded-xl border border-line bg-deep px-4 py-3 font-body text-[15px] text-text-hi outline-none focus-visible:border-pewter focus-visible:ring-1 focus-visible:ring-pewter"
-          />
-          <div className="mt-3 flex flex-wrap gap-2">
-            {suggestions.slice(0, 4).map((suggestion) => (
+      <CommandCenterFrame>
+        <div className="mb-5 grid grid-cols-2 gap-3">
+          {(
+            [
+              { id: 'players' as const, label: 'Player rank', hint: 'Rank people' },
+              { id: 'items' as const, label: 'Item rank', hint: 'Rank things' },
+            ] as const
+          ).map((type) => {
+            const selected = questionType === type.id;
+            return (
               <button
-                key={suggestion}
+                key={type.id}
                 type="button"
-                onClick={() => setPrompt(suggestion)}
-                className="rounded-full border border-line px-3 py-1.5 font-body text-[11px] text-text-mid transition-colors hover:border-pewter/50 hover:text-text-hi"
+                onClick={() => switchType(type.id)}
+                disabled={!isSettled}
+                className={`rounded-xl border bg-surface p-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pewter disabled:opacity-50 ${
+                  selected
+                    ? 'border-pewter shadow-[0_0_0_1px_#9B93A8_inset]'
+                    : 'border-line hover:border-line-bright'
+                }`}
+                aria-pressed={selected}
               >
-                {suggestion.length > 42 ? `${suggestion.slice(0, 42)}…` : suggestion}
+                <p className="font-body text-sm font-bold text-text-hi">{type.label}</p>
+                <p className="mt-1 font-body text-[12px] text-text-mid">{type.hint}</p>
               </button>
-            ))}
-          </div>
-        </RankUpPanel>
+            );
+          })}
+        </div>
 
-        <RankUpPanel compact>
-          <RankUpSectionHeading title="Options to rank" className="mb-4" />
-          <ul className="flex flex-col gap-2">
-            {items.map((item, index) => (
-              <li key={index} className="flex gap-2">
-                <input
-                  type="text"
-                  value={item}
-                  onChange={(e) => updateItem(index, e.target.value)}
-                  maxLength={40}
-                  className="min-h-11 flex-1 rounded-xl border border-line bg-deep px-4 font-body text-sm text-text-hi outline-none focus-visible:border-pewter focus-visible:ring-1 focus-visible:ring-pewter"
-                />
-                <RankUpSecondaryButton
-                  onClick={() => removeItem(index)}
-                  disabled={items.length <= 3}
-                  className="shrink-0"
+        <PromptReelTrack
+          item={reelItem}
+          pool={reelPool}
+          spinKey={spinKey}
+          onSettled={setIsSettled}
+        />
+
+        <RankUpSecondaryButton
+          onClick={handleRespin}
+          disabled={!isSettled}
+          className="mt-5 w-full text-center"
+        >
+          ↻ Reroll question
+        </RankUpSecondaryButton>
+
+        {isSettled ? (
+          <RankUpPanel compact className="mt-5 border-pewter/25">
+            <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-text-low">
+              Ranking
+            </p>
+            <ul className="flex flex-wrap gap-2">
+              {optionLabels.map((label) => (
+                <li
+                  key={label}
+                  className="rounded-full border border-line bg-deep/60 px-3 py-1 font-body text-[12px] text-text-hi"
                 >
-                  Remove
-                </RankUpSecondaryButton>
-              </li>
-            ))}
-          </ul>
-          <button
-            type="button"
-            onClick={addItem}
-            disabled={items.length >= 8}
-            className="mt-3 font-mono text-[12px] text-text-mid hover:text-text-hi disabled:opacity-40"
-          >
-            + Add option
-          </button>
-        </RankUpPanel>
+                  {label}
+                </li>
+              ))}
+            </ul>
+            {drawnPreset.type === 'players' && optionLabels.length < 3 ? (
+              <p className="mt-3 font-body text-[12px] text-bad">
+                Need at least 3 players in the room for a player rank.
+              </p>
+            ) : null}
+          </RankUpPanel>
+        ) : (
+          <p className="mt-5 text-center font-mono text-[11px] text-text-low" aria-live="polite">
+            Spinning…
+          </p>
+        )}
+      </CommandCenterFrame>
 
+      <div className="mt-6">
         <RankUpPrimaryButton onClick={handleConfirm} disabled={!canConfirm}>
-          Continue to ranking
+          {isSettled ? 'Lock in question' : 'Waiting for reel…'}
         </RankUpPrimaryButton>
       </div>
     </RankUpPageWrap>

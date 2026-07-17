@@ -3,7 +3,7 @@ import ImposterPanel, { ImposterPageWrap } from './ImposterPanel';
 import Scoreboard from './Scoreboard';
 
 export default function DiscussScreen() {
-  const { state, dispatch } = useImposter();
+  const { state, goToVotePhase } = useImposter();
 
   return (
     <ImposterPageWrap>
@@ -34,7 +34,7 @@ export default function DiscussScreen() {
 
         <button
           type="button"
-          onClick={() => dispatch({ type: 'GO_TO_VOTE' })}
+          onClick={() => void goToVotePhase()}
           className="mt-6 w-full rounded-xl border-none px-4 py-3.5 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember"
           style={{ background: 'linear-gradient(180deg, #E07A5F, #C2533B 55%, #7A3526)' }}
         >

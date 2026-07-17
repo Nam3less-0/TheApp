@@ -5,7 +5,7 @@ import PlayerAvatar from './PlayerAvatar';
 import Scoreboard from './Scoreboard';
 
 function ResultPanel() {
-  const { state, dispatch } = useImposter();
+  const { state, advanceRound } = useImposter();
   const record = state.history[state.history.length - 1];
   if (!record) return null;
 
@@ -136,7 +136,7 @@ function ResultPanel() {
 
         <button
           type="button"
-          onClick={() => dispatch({ type: 'NEXT_ROUND' })}
+          onClick={() => void advanceRound()}
           className="w-full rounded-xl border-none px-4 py-3.5 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember"
           style={{ background: 'linear-gradient(180deg, #E07A5F, #C2533B 55%, #7A3526)' }}
         >
@@ -148,7 +148,7 @@ function ResultPanel() {
 }
 
 function VotePanel() {
-  const { state, dispatch } = useImposter();
+  const { state, castVote, revealVote } = useImposter();
 
   return (
     <ImposterPageWrap>
@@ -170,7 +170,7 @@ function VotePanel() {
               <button
                 key={player.id}
                 type="button"
-                onClick={() => dispatch({ type: 'SELECT_VOTE', playerId: player.id })}
+                onClick={() => void castVote(player.id)}
                 aria-pressed={selected}
                 className={`flex min-h-[60px] items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition-[border-color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember ${
                   selected
@@ -189,7 +189,7 @@ function VotePanel() {
 
         <button
           type="button"
-          onClick={() => dispatch({ type: 'REVEAL_IMPOSTER' })}
+          onClick={() => void revealVote()}
           disabled={!state.votedPlayerId}
           className="mt-6 w-full rounded-xl border-none px-4 py-3.5 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember disabled:cursor-not-allowed disabled:opacity-40"
           style={{ background: 'linear-gradient(180deg, #E07A5F, #C2533B 55%, #7A3526)' }}

@@ -1,19 +1,54 @@
-export const PLAYER_PROMPT_SUGGESTIONS = [
-  'Who is most likely to survive a zombie apocalypse?',
-  'Who would be the worst roommate?',
-  'Who would win in a dance-off?',
-  'Who is most likely to become famous?',
-  'Who would you trust to plan the group trip?',
-  'Who tells the best stories at a party?',
-  'Who is most likely to forget their own birthday?',
-  'Who would cheat at board games?',
+import { ITEM_PROMPT_DEFS } from './prompt-bank/items';
+import { PLAYER_PROMPT_TEXTS } from './prompt-bank/players';
+
+export type RankPromptType = 'players' | 'items';
+
+export interface RankPromptPreset {
+  id: string;
+  type: RankPromptType;
+  prompt: string;
+  /** Default items for item-type prompts */
+  items?: string[];
+}
+
+export const RANK_PROMPT_PRESETS: RankPromptPreset[] = [
+  ...PLAYER_PROMPT_TEXTS.map((prompt, index) => ({
+    id: `p${index + 1}`,
+    type: 'players' as const,
+    prompt,
+  })),
+  ...ITEM_PROMPT_DEFS.map((def, index) => ({
+    id: `i${index + 1}`,
+    type: 'items' as const,
+    prompt: def.prompt,
+    items: [...def.items],
+  })),
 ];
 
-export const ITEM_PROMPT_SUGGESTIONS = [
-  'Rank these drinks from best to worst.',
-  'Rank these foods from most to least delicious.',
-  'Rank these vacation spots from dream trip to hard pass.',
-  'Rank these movies from masterpiece to meh.',
-  'Rank these superpowers from best to worst.',
-  'Rank these pizza toppings from elite to criminal.',
-];
+/** @deprecated use RANK_PROMPT_PRESETS */
+export const PLAYER_PROMPT_SUGGESTIONS = RANK_PROMPT_PRESETS.filter((p) => p.type === 'players').map(
+  (p) => p.prompt,
+);
+
+/** @deprecated use RANK_PROMPT_PRESETS */
+export const ITEM_PROMPT_SUGGESTIONS = RANK_PROMPT_PRESETS.filter((p) => p.type === 'items').map(
+  (p) => p.prompt,
+);
+
+export function presetsForType(type: RankPromptType): RankPromptPreset[] {
+  return RANK_PROMPT_PRESETS.filter((preset) => preset.type === type);
+}
+
+export function drawPromptPreset(type: RankPromptType, excludeId?: string): RankPromptPreset {
+  const pool = presetsForType(type).filter((preset) => preset.id !== excludeId);
+  const source = pool.length > 0 ? pool : presetsForType(type);
+  return source[Math.floor(Math.random() * source.length)]!;
+}
+
+export function presetToReelItem(preset: RankPromptPreset) {
+  return {
+    id: preset.id,
+    text: preset.prompt,
+    tag: preset.type === 'players' ? 'Player rank' : 'Item rank',
+  };
+}

@@ -5,7 +5,7 @@ import ImposterPanel, { ImposterPageWrap } from './ImposterPanel';
 import PlayerAvatar from './PlayerAvatar';
 
 export default function RedeemScreen() {
-  const { state, dispatch } = useImposter();
+  const { state, synced, isImposter, playerId, submitRedemptionGuess } = useImposter();
   const [selected, setSelected] = useState<string | null>(null);
 
   const imposter = getPlayerById(state.players, state.currentImposterPlayerId);
@@ -14,7 +14,23 @@ export default function RedeemScreen() {
 
   function submitGuess() {
     if (selected === null) return;
-    dispatch({ type: 'SUBMIT_REDEMPTION', word: selected });
+    void submitRedemptionGuess(selected);
+  }
+
+  if (synced && playerId !== state.currentImposterPlayerId) {
+    return (
+      <ImposterPageWrap>
+        <p className="mb-2 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-ember">
+          Round {state.currentRound} of {state.totalRounds}
+        </p>
+        <ImposterPanel className="text-center">
+          <p className="font-body text-sm font-semibold text-text-hi">Redemption round</p>
+          <p className="mt-2 font-body text-[13px] text-text-mid">
+            {imposter?.name} was caught and gets one guess at the majority word…
+          </p>
+        </ImposterPanel>
+      </ImposterPageWrap>
+    );
   }
 
   return (
@@ -26,7 +42,9 @@ export default function RedeemScreen() {
         Caught — last chance
       </h1>
       <p className="mb-6 text-center font-body text-sm text-text-mid">
-        The table voted you out. Pick the majority word to steal a point.
+        {synced && isImposter
+          ? 'The table voted you out. Pick the majority word to steal a point.'
+          : 'The table voted out the imposter. They get one guess at the majority word.'}
       </p>
 
       <ImposterPanel>

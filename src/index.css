@@ -264,6 +264,44 @@
     display: none;
   }
 
+  /* Top 100 — scroll regions */
+  .top100-scroll {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(111, 168, 220, 0.32) transparent;
+  }
+
+  .top100-scroll::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  .top100-scroll::-webkit-scrollbar-track {
+    margin: 4px 0;
+    background: transparent;
+  }
+
+  .top100-scroll::-webkit-scrollbar-thumb {
+    background: rgba(111, 168, 220, 0.28);
+    border-radius: 999px;
+  }
+
+  .top100-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(111, 168, 220, 0.48);
+  }
+
+  .top100-scroll-hidden {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .top100-scroll-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Game tools — 3D dice */
   .dice-scene {
     perspective: 420px;

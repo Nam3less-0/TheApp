@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRankUp } from '../context';
 import RankEditor from './RankEditor';
+import { CrownIcon } from './RankUpIcons';
 import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
 export default function RankerRankScreen() {
@@ -20,7 +21,8 @@ export default function RankerRankScreen() {
   return (
     <RankUpPageWrap>
       <header className="mb-6">
-        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-pewter">
+        <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-pewter">
+          <CrownIcon className="h-3.5 w-3.5" />
           Private — don&apos;t show anyone
         </p>
         <h1 className="mt-1 font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">

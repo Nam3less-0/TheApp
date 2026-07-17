@@ -11,32 +11,25 @@ import PlayChrome from './PlayChrome';
 import type { PlayMode } from './TurnSwitcher';
 
 export default function CodewordPlayScreen() {
-  const { state, dispatch } = useCodeword();
-  const [mode, setMode] = useState<PlayMode>('ours');
+  const { state, synced, isTransmitting, logOurTurn, logIntercept, opponentTeam } =
+    useCodeword();
+  const [localMode, setLocalMode] = useState<PlayMode>('ours');
   const [ourDraft, setOurDraft] = useState<OurDraft>(emptyOurDraft);
   const [theirDraft, setTheirDraft] = useState<TheirDraft>(emptyTheirDraft);
+
+  const mode: PlayMode = synced ? (isTransmitting ? 'ours' : 'theirs') : localMode;
 
   if (!state.teamCard) return null;
 
   function resolveOurTurn(outcome: 'correct' | 'wrong') {
     if (!ourDraft.code) return;
-    dispatch({
-      type: 'LOG_OUR_TURN',
-      code: ourDraft.code,
-      hints: ourDraft.hints,
-      outcome,
-    });
+    void logOurTurn(ourDraft.code, ourDraft.hints, outcome);
     setOurDraft(emptyOurDraft);
   }
 
   function resolveIntercept(outcome: 'intercepted' | 'missed') {
     const { hintsHeard, actualCode } = buildInterceptPayload(theirDraft);
-    dispatch({
-      type: 'LOG_INTERCEPT',
-      hintsHeard,
-      actualCode,
-      outcome,
-    });
+    void logIntercept(hintsHeard, actualCode, outcome);
     setTheirDraft(emptyTheirDraft);
   }
 
@@ -47,7 +40,8 @@ export default function CodewordPlayScreen() {
         misses={state.ourMisses}
         intercepts={state.ourIntercepts}
         mode={mode}
-        onModeChange={setMode}
+        onModeChange={synced ? undefined : setLocalMode}
+        opponentName={synced ? opponentTeam?.name : undefined}
       />
 
       {mode === 'ours' ? (

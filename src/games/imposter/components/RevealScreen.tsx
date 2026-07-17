@@ -7,10 +7,6 @@ import ImposterPanel, { ImposterPageWrap } from './ImposterPanel';
 
 const EMBER = '#C2533B';
 
-/**
- * Hold-to-peek panel for the blank-round imposter: no word, just confirmation
- * that they're the imposter this round (mirrors RevealVault's interaction).
- */
 function BlankImposterVault({ onPeek }: { onPeek: () => void }) {
   const [peeking, setPeeking] = useState(false);
   const [revealedOnce, setRevealedOnce] = useState(false);
@@ -87,8 +83,71 @@ function BlankImposterVault({ onPeek }: { onPeek: () => void }) {
   );
 }
 
-export default function RevealScreen() {
-  const { state, dispatch } = useImposter();
+function SyncedRevealScreen() {
+  const { state, myPlayer, playerId, revealReadyIds, markReady, roomPlayers } = useImposter();
+  const [hasPeeked, setHasPeeked] = useState(false);
+
+  if (!myPlayer || !playerId) return null;
+
+  const isReady = revealReadyIds.includes(playerId);
+  const isBlankImposter = myPlayer.isImposter && state.currentMode === 'blank';
+  const word = myPlayer.currentWord ?? '';
+
+  return (
+    <ImposterPageWrap>
+      <p className="mb-2 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-ember">
+        Round {state.currentRound} of {state.totalRounds}
+      </p>
+
+      <ImposterPanel>
+        <div className="mb-5 flex flex-col items-center gap-2 text-center">
+          <PlayerAvatar name={myPlayer.name} size="lg" />
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-text-low">
+            Your secret word
+          </p>
+          <h1 className="max-w-full break-words font-display text-[22px] font-extrabold leading-tight text-text-hi sm:text-[26px]">
+            {myPlayer.name}
+          </h1>
+        </div>
+
+        {isReady ? (
+          <div className="rounded-xl border border-line bg-surface px-4 py-6 text-center">
+            <p className="font-body text-sm font-semibold text-text-hi">You're ready</p>
+            <p className="mt-1 font-body text-[13px] text-text-mid">
+              Waiting for {revealReadyIds.length} of {roomPlayers.length} players…
+            </p>
+          </div>
+        ) : isBlankImposter ? (
+          <BlankImposterVault onPeek={() => setHasPeeked(true)} />
+        ) : (
+          <RevealVault word={word} accent={EMBER} onPeek={() => setHasPeeked(true)} />
+        )}
+
+        {!isReady && (
+          <>
+            <button
+              type="button"
+              onClick={() => void markReady()}
+              disabled={!hasPeeked}
+              className="mt-5 w-full rounded-xl border-none px-4 py-3.5 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember disabled:cursor-not-allowed disabled:opacity-40"
+              style={{ background: 'linear-gradient(180deg, #E07A5F, #C2533B 55%, #7A3526)' }}
+            >
+              I've seen it — ready to discuss
+            </button>
+            {!hasPeeked && (
+              <p className="mt-2.5 text-center font-body text-[12px] text-text-low">
+                Reveal your word at least once before continuing.
+              </p>
+            )}
+          </>
+        )}
+      </ImposterPanel>
+    </ImposterPageWrap>
+  );
+}
+
+function LocalRevealScreen() {
+  const { state, advanceRevealTurn } = useImposter();
   const [hasPeeked, setHasPeeked] = useState(false);
 
   const currentId = state.revealOrder[state.revealIndex];
@@ -145,7 +204,7 @@ export default function RevealScreen() {
 
         <button
           type="button"
-          onClick={() => dispatch({ type: 'ADVANCE_REVEAL' })}
+          onClick={() => void advanceRevealTurn()}
           disabled={!hasPeeked}
           className="mt-5 w-full rounded-xl border-none px-4 py-3.5 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember disabled:cursor-not-allowed disabled:opacity-40"
           style={{ background: 'linear-gradient(180deg, #E07A5F, #C2533B 55%, #7A3526)' }}
@@ -160,4 +219,9 @@ export default function RevealScreen() {
       </ImposterPanel>
     </ImposterPageWrap>
   );
+}
+
+export default function RevealScreen() {
+  const { synced } = useImposter();
+  return synced ? <SyncedRevealScreen /> : <LocalRevealScreen />;
 }

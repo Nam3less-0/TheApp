@@ -1,5 +1,6 @@
 import { useRankUp } from '../context';
-import { labelForOption } from '../utils';
+import { GuesserScreenHeader } from './GuesserBadge';
+import OrderList from './OrderList';
 import RankUpPanel, { RankUpPageWrap, RankUpSectionHeading } from './Layout';
 
 const SCORE_OPTIONS = [
@@ -30,32 +31,41 @@ export default function ScoreSelfScreen() {
   const { local, room, selfScore } = useRankUp();
 
   const options = room?.options ?? [];
+  const rankerOrder = room?.rankerOrder ?? [];
 
   return (
     <RankUpPageWrap>
-      <header className="mb-6 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-pewter">
-          Score yourself
-        </p>
-        <h1 className="mt-1 font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">
-          How did you do?
-        </h1>
-      </header>
+      <GuesserScreenHeader
+        eyebrow="Score yourself"
+        title="How did you do?"
+        subtitle="Compare your guess to the ranker's order, then tap your score."
+      />
 
-      <RankUpPanel compact className="mb-6">
-        <RankUpSectionHeading title="Your guess" className="mb-3" />
-        <ol className="flex flex-col gap-1.5">
-          {local.lastGuessOrder.map((id, index) => (
-            <li
-              key={id}
-              className="flex items-center gap-2 rounded-lg bg-deep/50 px-3 py-2 font-body text-[13px] text-text-hi"
-            >
-              <span className="w-4 font-mono text-[11px] text-text-low">{index + 1}</span>
-              {labelForOption(options, id)}
-            </li>
-          ))}
-        </ol>
-      </RankUpPanel>
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <RankUpPanel compact>
+          <RankUpSectionHeading title="Your guess" className="mb-3" />
+          <OrderList
+            order={local.lastGuessOrder}
+            options={options}
+            variant="compact"
+            showRail
+            bestLabel="Best"
+            worstLabel="Worst"
+          />
+        </RankUpPanel>
+
+        <RankUpPanel compact className="border-pewter/30">
+          <RankUpSectionHeading title="Ranker's order" className="mb-3" />
+          <OrderList
+            order={rankerOrder}
+            options={options}
+            variant="compact"
+            showRail
+            bestLabel="Best"
+            worstLabel="Worst"
+          />
+        </RankUpPanel>
+      </div>
 
       <div className="flex flex-col gap-3">
         {SCORE_OPTIONS.map((option) => (

@@ -9,23 +9,27 @@ import {
 import type { GameMode, Player } from '../types';
 import { createDefaultPlayers } from '../utils';
 import CategoryPicker from './CategoryPicker';
+import { DealerIcon } from './Top100Icons';
 import PlayerAvatar from './PlayerAvatar';
 import Top100Panel, {
+  Top100Frame,
   Top100PageWrap,
   Top100PrimaryButton,
   Top100SectionHeading,
 } from './Top100Panel';
 
-const GAME_MODES: { id: GameMode; label: string; description: string }[] = [
+const GAME_MODES: { id: GameMode; label: string; description: string; icon: string }[] = [
   {
     id: 'full',
     label: 'Full game',
     description: 'Every player deals once, rotating from your chosen dealer.',
+    icon: '↻',
   },
   {
     id: 'single',
     label: 'Single round',
     description: 'One category with a fixed dealer — quick session.',
+    icon: '⚡',
   },
 ];
 
@@ -102,19 +106,23 @@ export default function PlayerSetupScreen() {
   return (
     <Top100PageWrap>
       <header className="mb-8">
-        <h1 className="font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">
-          New game
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-steel-blue">
+          Party trivia · Pass & play
+        </p>
+        <h1 className="font-display text-[28px] font-extrabold tracking-[-0.03em] text-text-hi sm:text-[34px]">
+          Set up your table
         </h1>
-        <p className="mt-2 max-w-xl font-body text-sm text-text-mid">
-          Set up your table on the left, then pick a category on the right.
+        <p className="mt-2 max-w-xl font-body text-sm leading-relaxed text-text-mid">
+          Name your players, pick who deals first, then choose a ranked list to guess from.
+          One phone runs the game — everyone plays together.
         </p>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,400px)_minmax(0,1fr)] lg:items-start lg:gap-8">
-        <div className="flex flex-col gap-6">
-          <Top100Panel compact>
-            <Top100SectionHeading title="Game mode" className="mb-4" />
-            <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2 lg:items-start xl:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+        <div className="flex min-w-0 flex-col gap-6">
+          <Top100Panel compact glow>
+            <Top100SectionHeading title="Game mode" step={1} className="mb-4" />
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {GAME_MODES.map((mode) => {
                 const selected = gameMode === mode.id;
                 return (
@@ -122,13 +130,16 @@ export default function PlayerSetupScreen() {
                     key={mode.id}
                     type="button"
                     onClick={() => setGameMode(mode.id)}
-                    className={`rounded-xl border bg-surface p-3.5 text-left transition-[border-color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue focus-visible:ring-offset-2 focus-visible:ring-offset-void sm:p-4 ${
+                    className={`relative overflow-hidden rounded-xl border p-3.5 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue focus-visible:ring-offset-2 focus-visible:ring-offset-void sm:p-4 ${
                       selected
-                        ? 'border-steel-blue shadow-[0_0_0_1px_#6FA8DC_inset]'
-                        : 'border-line hover:border-line-bright'
+                        ? 'border-steel-blue/60 bg-steel-blue/10 shadow-[0_0_20px_-6px_rgba(111,168,220,0.35),inset_0_0_0_1px_rgba(111,168,220,0.25)]'
+                        : 'border-line bg-surface/40 hover:border-line-bright hover:bg-surface/60'
                     }`}
                     aria-pressed={selected}
                   >
+                    <span className="mb-2 flex h-8 w-8 items-center justify-center rounded-lg bg-surface/80 text-base">
+                      {mode.icon}
+                    </span>
                     <p className="mb-1 font-body text-sm font-bold text-text-hi">{mode.label}</p>
                     <p className="font-body text-[12px] leading-snug text-text-mid">
                       {mode.description}
@@ -139,10 +150,11 @@ export default function PlayerSetupScreen() {
             </div>
           </Top100Panel>
 
-          <Top100Panel compact>
+          <Top100Panel compact glow>
             <Top100SectionHeading
               title="Players"
               description="Tap a player to set them as dealer."
+              step={2}
               className="mb-4"
             />
             <ul className="flex flex-col gap-2.5">
@@ -151,10 +163,10 @@ export default function PlayerSetupScreen() {
                 return (
                   <li key={player.id}>
                     <div
-                      className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 transition-[border-color,box-shadow] sm:px-3.5 sm:py-3 ${
+                      className={`flex flex-col gap-2.5 rounded-xl border px-3 py-2.5 transition-all sm:flex-row sm:items-center sm:gap-3 sm:px-3.5 sm:py-3 ${
                         isDealer
-                          ? 'border-steel-blue bg-surface shadow-[0_0_0_1px_#6FA8DC_inset]'
-                          : 'border-line bg-surface/80'
+                          ? 'border-steel-blue/60 bg-steel-blue/8 shadow-[inset_0_0_0_1px_rgba(111,168,220,0.2)]'
+                          : 'border-line/80 bg-surface/40'
                       }`}
                     >
                       <button
@@ -164,38 +176,41 @@ export default function PlayerSetupScreen() {
                         aria-pressed={isDealer}
                         aria-label={`${player.name}${isDealer ? ', selected as dealer' : ''}`}
                       >
-                        <PlayerAvatar name={player.name} />
+                        <PlayerAvatar name={player.name} size="md" ring={isDealer} />
                         <span className="min-w-0 flex-1">
                           <span className="block truncate font-body text-[15px] font-semibold text-text-hi">
                             {player.name}
                           </span>
                           {isDealer && (
-                            <span className="font-mono text-[10px] uppercase tracking-wider text-steel-blue">
+                            <span className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-steel-blue">
+                              <DealerIcon className="h-3 w-3" />
                               Dealer
                             </span>
                           )}
                         </span>
                       </button>
-                      <label className="sr-only" htmlFor={`player-name-${player.id}`}>
-                        Player {index + 1} name
-                      </label>
-                      <input
-                        id={`player-name-${player.id}`}
-                        type="text"
-                        value={player.name}
-                        onChange={(e) => handleNameChange(player.id, e.target.value)}
-                        className="min-h-9 w-[108px] shrink-0 rounded-lg border border-line bg-deep px-2.5 font-body text-[15px] font-semibold text-text-hi outline-none focus-visible:border-steel-blue focus-visible:ring-1 focus-visible:ring-steel-blue sm:w-[140px]"
-                        maxLength={24}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemovePlayer(player.id)}
-                        disabled={players.length <= 3}
-                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-line bg-transparent text-text-low transition-colors hover:text-bad focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-30"
-                        aria-label={`Remove ${player.name}`}
-                      >
-                        ✕
-                      </button>
+                      <div className="flex items-center gap-2 sm:shrink-0">
+                        <label className="sr-only" htmlFor={`player-name-${player.id}`}>
+                          Player {index + 1} name
+                        </label>
+                        <input
+                          id={`player-name-${player.id}`}
+                          type="text"
+                          value={player.name}
+                          onChange={(e) => handleNameChange(player.id, e.target.value)}
+                          className="min-h-9 min-w-0 flex-1 rounded-lg border border-line/80 bg-deep/60 px-2.5 font-body text-[15px] font-semibold text-text-hi outline-none transition-colors focus-visible:border-steel-blue/50 focus-visible:ring-2 focus-visible:ring-steel-blue/25 sm:w-[140px] sm:flex-none"
+                          maxLength={24}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemovePlayer(player.id)}
+                          disabled={players.length <= 3}
+                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-line/80 bg-transparent text-text-low transition-colors hover:border-bad/40 hover:bg-bad/5 hover:text-bad focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-30"
+                          aria-label={`Remove ${player.name}`}
+                        >
+                          ✕
+                        </button>
+                      </div>
                     </div>
                   </li>
                 );
@@ -206,29 +221,33 @@ export default function PlayerSetupScreen() {
               type="button"
               onClick={handleAddPlayer}
               disabled={players.length >= 8}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-line-bright px-3 py-3 font-mono text-[13px] text-text-mid transition-colors hover:border-steel-blue/40 hover:text-text-hi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-40"
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-line-bright bg-surface/20 px-3 py-3 font-mono text-[13px] text-text-mid transition-all hover:border-steel-blue/40 hover:bg-steel-blue/5 hover:text-text-hi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-40"
             >
               + Add player
             </button>
           </Top100Panel>
         </div>
 
-        <div className="lg:sticky lg:top-6">
-          <Top100Panel compact className="flex flex-col">
+        <div className="min-w-0 lg:sticky lg:top-6 lg:self-start">
+          <Top100Frame
+            eyebrow="Step 3 · Category"
+            title={gameMode === 'single' ? 'Pick a list' : 'Pick the first list'}
+            subtitle="Choose from hundreds of ranked categories — anime, music, sports, and more."
+          >
             <CategoryPicker
               categories={categories}
               selectedId={selectedCategoryId}
               onSelect={setSelectedCategoryId}
-              heading={gameMode === 'single' ? 'Category' : 'First category'}
+              heading=""
               description={categoryDescription}
             />
 
-            <div className="mt-6 border-t border-line pt-6">
+            <div className="mt-6 border-t border-line/60 pt-6">
               <Top100PrimaryButton onClick={handleStart} disabled={!canStart}>
                 {gameMode === 'single' ? 'Start round' : 'Start game'}
               </Top100PrimaryButton>
             </div>
-          </Top100Panel>
+          </Top100Frame>
         </div>
       </div>
     </Top100PageWrap>

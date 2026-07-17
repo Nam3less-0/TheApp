@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
 import { useRankUp } from '../context';
 import { shuffleOptions } from '../utils';
-import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
+import CommandCenterFrame from './CommandCenterFrame';
+import GuesserProgressRow from './GuesserProgressRow';
+import { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
 export default function DisplayScreen() {
-  const { room, players, submittedCount, guesserCount, openGuessing } = useRankUp();
+  const { room, players, openGuessing } = useRankUp();
 
   const shuffledOptions = useMemo(
     () => (room ? shuffleOptions(room.options) : []),
@@ -17,19 +19,11 @@ export default function DisplayScreen() {
 
   return (
     <RankUpPageWrap variant="display">
-      <div className="text-center">
-        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-pewter">
-          Live — synced to all phones
-        </p>
-        <RankUpPanel compact className="mb-8 border-pewter/30">
-          <p className="font-display text-2xl font-extrabold leading-tight text-text-hi sm:text-3xl">
-            {room.prompt}
-          </p>
-          <p className="mt-4 font-body text-sm text-text-mid">
-            Ranked by {ranker?.name ?? 'ranker'} — match their order on your phone.
-          </p>
-        </RankUpPanel>
-
+      <CommandCenterFrame
+        eyebrow="Command center — live"
+        title={room.prompt}
+        subtitle={`Ranked by ${ranker?.name ?? 'ranker'} — match their order on your phone.`}
+      >
         <ul className="mb-8 flex flex-col gap-3">
           {shuffledOptions.map((option) => (
             <li
@@ -41,14 +35,12 @@ export default function DisplayScreen() {
           ))}
         </ul>
 
-        <p className="mb-4 font-mono text-[12px] text-text-mid">
-          Guesses locked: {submittedCount}/{guesserCount}
-        </p>
+        <GuesserProgressRow className="mb-6" />
 
         <RankUpPrimaryButton onClick={openGuessing}>
           Open guessing for everyone
         </RankUpPrimaryButton>
-      </div>
+      </CommandCenterFrame>
     </RankUpPageWrap>
   );
 }

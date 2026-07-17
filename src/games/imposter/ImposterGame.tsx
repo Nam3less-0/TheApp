@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useImposter } from './context';
-import ImposterSetupScreen from './components/ImposterSetupScreen';
-import RevealScreen from './components/RevealScreen';
 import DiscussScreen from './components/DiscussScreen';
-import VoteScreen from './components/VoteScreen';
-import RedeemScreen from './components/RedeemScreen';
+import ErrorPanel from './components/ErrorPanel';
 import FinalResultsScreen from './components/FinalResultsScreen';
+import ImposterSetupScreen from './components/ImposterSetupScreen';
+import LobbyScreen from './components/LobbyScreen';
+import RedeemScreen from './components/RedeemScreen';
+import RejoiningSkeleton from './components/RejoiningSkeleton';
+import RevealScreen from './components/RevealScreen';
+import SyncSetupScreen from './components/SyncSetupScreen';
+import VoteScreen from './components/VoteScreen';
 
 function ImposterShell({ children }: { children: React.ReactNode }) {
   return (
@@ -27,13 +31,64 @@ function ImposterShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function ImposterGame() {
-  const { state } = useImposter();
+function ImposterRouter() {
+  const { state, localPhase, room, synced, syncError, leaveGame, roomCode } = useImposter();
+
+  const isRejoining = synced && roomCode && !room && !syncError;
+
+  if (localPhase === 'setup') {
+    return (
+      <ImposterShell>
+        <SyncSetupScreen />
+      </ImposterShell>
+    );
+  }
+
+  if (isRejoining) {
+    return (
+      <ImposterShell>
+        <RejoiningSkeleton />
+      </ImposterShell>
+    );
+  }
+
+  if (synced && syncError && !room) {
+    return (
+      <ImposterShell>
+        <div className="mx-auto max-w-[560px] px-4 py-6">
+          <ErrorPanel message={syncError} />
+          <button
+            type="button"
+            onClick={() => void leaveGame()}
+            className="mt-4 w-full rounded-xl border border-line px-4 py-2.5 font-body text-sm font-semibold text-text-mid"
+          >
+            Back to setup
+          </button>
+        </div>
+      </ImposterShell>
+    );
+  }
+
+  if (synced && room?.phase === 'lobby') {
+    return (
+      <ImposterShell>
+        <LobbyScreen />
+      </ImposterShell>
+    );
+  }
+
+  if (localPhase === 'local' && state.phase === 'setup') {
+    return (
+      <ImposterShell>
+        <ImposterSetupScreen />
+      </ImposterShell>
+    );
+  }
 
   let screen: React.ReactNode;
   switch (state.phase) {
     case 'setup':
-      screen = <ImposterSetupScreen />;
+      screen = <LobbyScreen />;
       break;
     case 'reveal':
       screen = <RevealScreen />;
@@ -55,5 +110,9 @@ export default function ImposterGame() {
       screen = null;
   }
 
-  return <ImposterShell>{screen}</ImposterShell>;
+  return <ImposterShell>{screen ?? <RejoiningSkeleton />}</ImposterShell>;
+}
+
+export default function ImposterGame() {
+  return <ImposterRouter />;
 }

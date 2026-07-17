@@ -55,11 +55,22 @@ export type CodewordAction =
       code: CodeTriple;
       hints: [string, string, string];
       outcome: 'correct' | 'wrong';
+      skipScore?: boolean;
     }
   | {
       type: 'LOG_INTERCEPT';
       hintsHeard: [string, string, string];
       actualCode: CodeTriple;
       outcome: 'intercepted' | 'missed';
+      skipScore?: boolean;
     }
-  | { type: 'NEW_GAME'; card: TeamCard };
+  | { type: 'NEW_GAME'; card: TeamCard }
+  | { type: 'PREPARE_REMATCH'; card: TeamCard }
+  | { type: 'RESET' }
+  | {
+      type: 'SYNC_STATE';
+      payload: Pick<
+        CodewordState,
+        'phase' | 'teamCard' | 'ourMisses' | 'ourIntercepts' | 'currentRound' | 'gameStatus'
+      >;
+    };

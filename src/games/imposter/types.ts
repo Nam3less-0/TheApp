@@ -63,9 +63,12 @@ export interface ImposterSession {
 export type ImposterAction =
   | { type: 'START_GAME'; players: Player[]; totalRounds: number }
   | { type: 'ADVANCE_REVEAL' }
+  | { type: 'MARK_REVEAL_READY'; playerId: string; playerIds: string[] }
   | { type: 'GO_TO_VOTE' }
   | { type: 'SELECT_VOTE'; playerId: string }
   | { type: 'REVEAL_IMPOSTER' }
   | { type: 'SUBMIT_REDEMPTION'; word: string }
   | { type: 'NEXT_ROUND' }
-  | { type: 'PLAY_AGAIN' };
+  | { type: 'PLAY_AGAIN' }
+  | { type: 'SYNC_STATE'; payload: ImposterSession }
+  | { type: 'RESET' };

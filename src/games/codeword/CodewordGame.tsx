@@ -2,7 +2,11 @@ import { Link } from 'react-router-dom';
 import { useCodeword } from './context';
 import CodewordPlayScreen from './components/CodewordPlayScreen';
 import CodewordSetupScreen from './components/CodewordSetupScreen';
+import ErrorPanel from './components/ErrorPanel';
 import GameOverScreen from './components/GameOverScreen';
+import LobbyScreen from './components/LobbyScreen';
+import RejoiningSkeleton from './components/RejoiningSkeleton';
+import SyncSetupScreen from './components/SyncSetupScreen';
 
 function CodewordShell({ children }: { children: React.ReactNode }) {
   return (
@@ -24,23 +28,112 @@ function CodewordShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function CodewordGame() {
-  const { state } = useCodeword();
+function CodewordRouter() {
+  const { state, localPhase, room, synced, syncError, leaveGame, teams, teamId, roomCode } =
+    useCodeword();
 
-  let screen: React.ReactNode;
-  switch (state.phase) {
-    case 'setup':
-      screen = <CodewordSetupScreen />;
-      break;
-    case 'playing':
-      screen = <CodewordPlayScreen />;
-      break;
-    case 'over':
-      screen = <GameOverScreen />;
-      break;
-    default:
-      screen = null;
+  const myTeam = teams.find((team) => team.id === teamId);
+  const isRejoining = synced && roomCode && !room && !syncError;
+
+  if (localPhase === 'setup') {
+    return (
+      <CodewordShell>
+        <SyncSetupScreen />
+      </CodewordShell>
+    );
   }
 
-  return <CodewordShell>{screen}</CodewordShell>;
+  if (isRejoining) {
+    return (
+      <CodewordShell>
+        <RejoiningSkeleton />
+      </CodewordShell>
+    );
+  }
+
+  if (synced && syncError && !room) {
+    return (
+      <CodewordShell>
+        <div className="mx-auto max-w-[560px] px-4 py-6">
+          <ErrorPanel message={syncError} />
+          <button
+            type="button"
+            onClick={leaveGame}
+            className="mt-4 w-full rounded-xl border border-line px-4 py-2.5 font-body text-sm font-semibold text-text-mid transition-colors hover:border-line-bright hover:text-text-hi"
+          >
+            Back to setup
+          </button>
+        </div>
+      </CodewordShell>
+    );
+  }
+
+  if (localPhase === 'local') {
+    let screen: React.ReactNode;
+    switch (state.phase) {
+      case 'setup':
+        screen = <CodewordSetupScreen />;
+        break;
+      case 'playing':
+        screen = <CodewordPlayScreen />;
+        break;
+      case 'over':
+        screen = <GameOverScreen />;
+        break;
+      default:
+        screen = null;
+    }
+    return <CodewordShell>{screen}</CodewordShell>;
+  }
+
+  if (synced && room) {
+    if (room.phase === 'lobby') {
+      return (
+        <CodewordShell>
+          <LobbyScreen />
+        </CodewordShell>
+      );
+    }
+
+    if (room.phase === 'setup') {
+      if (!myTeam?.cardLocked) {
+        return (
+          <CodewordShell>
+            <CodewordSetupScreen synced />
+          </CodewordShell>
+        );
+      }
+      return (
+        <CodewordShell>
+          <LobbyScreen />
+        </CodewordShell>
+      );
+    }
+
+    if (room.phase === 'playing') {
+      return (
+        <CodewordShell>
+          <CodewordPlayScreen />
+        </CodewordShell>
+      );
+    }
+
+    if (room.phase === 'over') {
+      return (
+        <CodewordShell>
+          <GameOverScreen />
+        </CodewordShell>
+      );
+    }
+  }
+
+  return (
+    <CodewordShell>
+      <RejoiningSkeleton />
+    </CodewordShell>
+  );
+}
+
+export default function CodewordGame() {
+  return <CodewordRouter />;
 }

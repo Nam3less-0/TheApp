@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useRankUp } from '../context';
 import { shuffleOptions } from '../utils';
+import { GuesserScreenHeader } from './GuesserBadge';
 import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
 export default function GuesserPromptScreen() {
@@ -17,12 +18,11 @@ export default function GuesserPromptScreen() {
 
   return (
     <RankUpPageWrap>
-      <header className="mb-6 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-pewter">
-          Round live
-        </p>
-        <h1 className="mt-1 font-display text-[26px] font-extrabold text-text-hi">Rank your guess</h1>
-      </header>
+      <GuesserScreenHeader
+        eyebrow="Round live"
+        title="Rank your guess"
+        subtitle="Read the ranker's mind — predict their secret order."
+      />
 
       <RankUpPanel compact className="mb-6">
         <p className="font-body text-base font-bold leading-snug text-text-hi">{room.prompt}</p>

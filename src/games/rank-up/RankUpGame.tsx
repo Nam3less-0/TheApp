@@ -1,16 +1,22 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRankUp } from './context';
+import { SessionUIProvider } from './sessionUi';
 import ComposeScreen from './components/ComposeScreen';
 import DisplayScreen from './components/DisplayScreen';
 import GuesserPromptScreen from './components/GuesserPromptScreen';
 import GuesserRevealScreen from './components/GuesserRevealScreen';
 import GuessingScreen from './components/GuessingScreen';
 import LobbyScreen from './components/LobbyScreen';
+import OnboardingCards, { isRankUpOnboarded } from './components/OnboardingCards';
 import RankerRankScreen from './components/RankerRankScreen';
 import RankerWaitScreen from './components/RankerWaitScreen';
+import ErrorPanel from './components/ErrorPanel';
+import RejoiningSkeleton from './components/RejoiningSkeleton';
 import RevealScreen from './components/RevealScreen';
 import ScoreSelfScreen from './components/ScoreSelfScreen';
 import SetupScreen from './components/SetupScreen';
+import { RankUpPageWrap, RankUpSecondaryButton } from './components/Layout';
 
 function RankUpShell({ children }: { children: React.ReactNode }) {
   return (
@@ -41,12 +47,45 @@ function RankUpShell({ children }: { children: React.ReactNode }) {
 }
 
 function RankUpRouter() {
-  const { local, room, isRanker } = useRankUp();
+  const { local, room, isRanker, leaveGame } = useRankUp();
+  const [onboarded, setOnboarded] = useState(isRankUpOnboarded);
+
+  const isRejoining =
+    local.localPhase !== 'setup' && local.roomCode && !room && !local.syncError;
+
+  if (!onboarded && local.localPhase === 'setup') {
+    return (
+      <RankUpShell>
+        <OnboardingCards onComplete={() => setOnboarded(true)} />
+      </RankUpShell>
+    );
+  }
 
   if (local.localPhase === 'setup') {
     return (
       <RankUpShell>
         <SetupScreen />
+      </RankUpShell>
+    );
+  }
+
+  if (!room && local.syncError) {
+    return (
+      <RankUpShell>
+        <RankUpPageWrap>
+          <ErrorPanel message={local.syncError} />
+          <RankUpSecondaryButton onClick={leaveGame} className="w-full text-center">
+            Back to setup
+          </RankUpSecondaryButton>
+        </RankUpPageWrap>
+      </RankUpShell>
+    );
+  }
+
+  if (isRejoining) {
+    return (
+      <RankUpShell>
+        <RejoiningSkeleton />
       </RankUpShell>
     );
   }
@@ -94,7 +133,7 @@ function RankUpRouter() {
   if (!room) {
     return (
       <RankUpShell>
-        <LobbyScreen />
+        <RejoiningSkeleton />
       </RankUpShell>
     );
   }
@@ -160,5 +199,9 @@ function RankUpRouter() {
 }
 
 export default function RankUpGame() {
-  return <RankUpRouter />;
+  return (
+    <SessionUIProvider>
+      <RankUpRouter />
+    </SessionUIProvider>
+  );
 }
