@@ -24,6 +24,7 @@ export default function PromptScreen() {
 
   useEffect(() => {
     if (!question) return undefined;
+    if (state.paused) return undefined;
     if (timeLeft <= 0) {
       if (!timedOutRef.current) {
         timedOutRef.current = true;
@@ -37,12 +38,13 @@ export default function PromptScreen() {
     }
     const timer = window.setTimeout(() => setTimeLeft((s) => s - 1), 1000);
     return () => window.clearTimeout(timer);
-  }, [timeLeft, question, dispatch]);
+  }, [timeLeft, question, state.paused, dispatch]);
 
   if (!question || !current) return null;
 
   const danger = timeLeft <= 3;
   const progress = question.seconds > 0 ? timeLeft / question.seconds : 0;
+  const rerollsLeft = current.rerollsLeft;
 
   return (
     <BlitzPageWrap>
@@ -78,24 +80,56 @@ export default function PromptScreen() {
         </div>
 
         <div className="flex flex-col items-center gap-4">
-          <TimerRing diameter={140} strokeWidth={10} progress={progress} danger={danger}>
-            <span
-              className={`font-display text-4xl font-extrabold tabular-nums ${
-                danger ? 'text-bad' : 'text-text-hi'
-              }`}
-            >
-              {timeLeft}
-            </span>
-          </TimerRing>
+          <div className="relative">
+            <TimerRing diameter={140} strokeWidth={10} progress={progress} danger={danger}>
+              {state.paused ? (
+                <span className="font-display text-sm font-extrabold uppercase tracking-wider text-silver-bright">
+                  Paused
+                </span>
+              ) : (
+                <span
+                  className={`font-display text-4xl font-extrabold tabular-nums ${
+                    danger ? 'text-bad' : 'text-text-hi'
+                  }`}
+                >
+                  {timeLeft}
+                </span>
+              )}
+            </TimerRing>
+          </div>
 
           <button
             type="button"
             onClick={() => dispatch({ type: 'SUCCESS' })}
-            className="w-full rounded-xl border-none px-4 py-4 font-display text-lg font-extrabold text-void transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-silver active:scale-[0.98]"
+            disabled={state.paused}
+            className="w-full rounded-xl border-none px-4 py-4 font-display text-lg font-extrabold text-void transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-silver active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
             style={{ background: 'linear-gradient(180deg, #F2F4F8, #C9CDD6 55%, #8B8F99)' }}
           >
             NEXT
           </button>
+
+          <div className="grid w-full grid-cols-2 gap-2.5">
+            <button
+              type="button"
+              onClick={() => dispatch({ type: 'TOGGLE_PAUSE' })}
+              className="rounded-xl border border-line-bright bg-surface px-3 py-2.5 font-body text-sm font-bold text-text-hi transition-colors hover:border-silver-bright"
+            >
+              {state.paused ? 'Resume' : 'Pause \u2014 discuss'}
+            </button>
+            <button
+              type="button"
+              onClick={() => dispatch({ type: 'REROLL' })}
+              disabled={rerollsLeft <= 0}
+              className="rounded-xl border border-line-bright bg-surface px-3 py-2.5 font-body text-sm font-bold text-text-hi transition-colors hover:border-silver-bright disabled:cursor-not-allowed disabled:opacity-30"
+            >
+              Reroll ({rerollsLeft} left)
+            </button>
+          </div>
+          {state.paused && (
+            <p className="text-center font-body text-[12px] text-text-low">
+              Clock&rsquo;s frozen &mdash; sort out whether the category&rsquo;s fair, then hit Resume.
+            </p>
+          )}
         </div>
       </BlitzPanel>
     </BlitzPageWrap>

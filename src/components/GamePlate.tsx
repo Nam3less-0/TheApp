@@ -13,6 +13,7 @@ const metalHex: Record<GameEntry['metal'], string> = {
   gold: '#C9A44A',
   toxic: '#9BC53D',
   crimson: '#D6294A',
+  violet: '#B39DFF',
 };
 
 interface GamePlateProps {

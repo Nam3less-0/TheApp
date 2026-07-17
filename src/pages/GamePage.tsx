@@ -20,6 +20,8 @@ import { HouseOfCardsProvider } from '../games/house-of-cards/context';
 import HouseOfCardsGame from '../games/house-of-cards/HouseOfCardsGame';
 import { RankUpProvider } from '../games/rank-up/context';
 import RankUpGame from '../games/rank-up/RankUpGame';
+import { MinigameProvider } from '../games/minigame/context';
+import MinigameGame from '../games/minigame/MinigameGame';
 
 function renderGame(gameId: string | undefined): React.ReactNode {
   switch (gameId) {
@@ -72,6 +74,12 @@ function renderGame(gameId: string | undefined): React.ReactNode {
         <RankUpProvider>
           <RankUpGame />
         </RankUpProvider>
+      );
+    case 'minigame':
+      return (
+        <MinigameProvider>
+          <MinigameGame />
+        </MinigameProvider>
       );
     default:
       return null;

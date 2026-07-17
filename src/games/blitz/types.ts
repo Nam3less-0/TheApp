@@ -4,6 +4,7 @@ export interface Player {
   id: string;
   name: string;
   score: number;
+  rerollsLeft: number;
 }
 
 export interface RoundRecord {
@@ -24,6 +25,8 @@ export interface BlitzSession {
   remainingQuestions: BlitzQuestion[];
   currentPlayerId: string;
   currentQuestion: BlitzQuestion | null;
+  /** True while the timer is frozen for an off-app "is this fair?" discussion. */
+  paused: boolean;
   phase: BlitzPhase;
   history: RoundRecord[];
 }
@@ -33,4 +36,6 @@ export type BlitzAction =
   | { type: 'SUCCESS' }
   | { type: 'TIMEOUT' }
   | { type: 'CONTINUE' }
+  | { type: 'TOGGLE_PAUSE' }
+  | { type: 'REROLL' }
   | { type: 'PLAY_AGAIN' };

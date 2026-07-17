@@ -29,7 +29,9 @@ export default function BlitzSetupScreen() {
       </h1>
       <p className="mb-8 font-body text-sm text-text-mid">
         A random player gets a category and a clock. Name enough in time and
-        hit NEXT. Miss it, and everyone else scores.
+        hit NEXT. Miss it, and everyone else scores. You can pause the clock
+        to argue about a category, and everyone gets 2 rerolls a game if they
+        get stuck with one they don&rsquo;t know.
       </p>
 
       <BlitzPanel>

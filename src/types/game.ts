@@ -9,7 +9,8 @@ export type MetalAccent =
   | 'ember'
   | 'gold'
   | 'toxic'
-  | 'crimson';
+  | 'crimson'
+  | 'violet';
 
 export interface GameEntry {
   id: string;

@@ -6,6 +6,7 @@ import {
   HouseOfCardsIcon,
   ImposterIcon,
   JeopardyIcon,
+  MinigameIcon,
   RankUpIcon,
   TheBetIcon,
   Top100Icon,
@@ -83,6 +84,14 @@ export const games: GameEntry[] = [
     metal: 'crimson',
     status: 'playable',
     icon: HouseOfCardsIcon,
+  },
+  {
+    id: 'minigame',
+    title: 'Minigame',
+    description: '10 rounds, 1 hidden Saboteur each time — build, vote, bluff.',
+    metal: 'violet',
+    status: 'playable',
+    icon: MinigameIcon,
   },
 ];
 

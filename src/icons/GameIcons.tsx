@@ -273,3 +273,18 @@ export function ArrowIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function MinigameIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+      <path
+        d="M4 10c0-2.2 3.6-4 8-4s8 1.8 8 4c0 1-.6 1.8-1.6 2.3-.5.3-1.2.1-1.8-.4-.6-.5-1.3-.7-2.1-.4-.9.3-1.5 1-1.5 1.9v.1c0 1-.8 1.5-1.7 1.2-.6-.2-1.2-.2-1.8 0-.9.3-1.7-.2-1.7-1.2v-.1c0-.9-.6-1.6-1.5-1.9-.8-.3-1.5-.1-2.1.4-.6.5-1.3.7-1.8.4C4.6 11.8 4 11 4 10Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <circle cx="8.5" cy="9.5" r="1" fill="currentColor" />
+      <circle cx="15.5" cy="9.5" r="1" fill="currentColor" />
+    </svg>
+  );
+}
