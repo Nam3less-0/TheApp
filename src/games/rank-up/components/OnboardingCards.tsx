@@ -25,7 +25,7 @@ const CARDS = [
   {
     title: 'Rank Up',
     tagline: 'Read the ranker\'s mind.',
-    body: 'One player ranks a secret order. Everyone else guesses how they ranked it — then scores themselves on the honor system.',
+    body: 'One player ranks a secret order. Everyone else guesses how they ranked it — then scores are tallied automatically after the reveal.',
     icon: null,
   },
   {
@@ -36,8 +36,8 @@ const CARDS = [
   },
   {
     title: 'Scoring',
-    tagline: 'Honor system',
-    body: 'After the reveal, tap how you did: Perfect match +3, Closest guess +1, Miss +0. Be honest — it\'s more fun that way.',
+    tagline: 'Auto scoring',
+    body: 'After the reveal, scores are calculated automatically: perfect match +3, closest guess +1, everyone else +0.',
     icon: 'score' as const,
   },
 ];

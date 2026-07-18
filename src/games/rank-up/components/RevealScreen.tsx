@@ -33,7 +33,7 @@ export default function RevealScreen() {
         </ol>
 
         <p className="mb-6 font-body text-[13px] text-text-mid">
-          Everyone scores themselves on their phone.
+          Scores are calculated automatically when you reveal.
         </p>
 
         <RankUpPrimaryButton onClick={() => nextRound()}>Next round</RankUpPrimaryButton>

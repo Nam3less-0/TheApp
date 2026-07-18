@@ -1,4 +1,5 @@
 import { getSupabase } from '../../../lib/supabase';
+import { scoreRoundPoints } from '../utils';
 import type { QuestionType, RankOption } from '../types';
 import { mapPlayer, mapRoom, type RankUpPlayer, type RankUpRoom } from './types';
 
@@ -149,15 +150,54 @@ export async function revealAnswer(
   rankerOrder: string[],
 ): Promise<void> {
   const supabase = getSupabase();
+  const code = roomCode.toUpperCase();
+  const existingRoom = await fetchRoom(code);
+  const existingPlayers = await fetchPlayers(code);
+
+  if (
+    existingRoom?.phase === 'reveal' &&
+    existingPlayers.some((player) => player.lastRoundPoints != null)
+  ) {
+    return;
+  }
+
   const { error } = await supabase
     .from('rank_up_rooms')
     .update({
       phase: 'reveal',
       ranker_order: rankerOrder,
     })
-    .eq('code', roomCode.toUpperCase());
+    .eq('code', code);
 
   if (error) throw error;
+
+  const room = await fetchRoom(code);
+  if (!room?.rankerPlayerId) return;
+
+  const guessers = existingPlayers.filter((player) => player.id !== room.rankerPlayerId);
+  const allGuessOrders = guessers
+    .map((player) => player.guessOrder ?? [])
+    .filter((order) => order.length > 0);
+
+  await Promise.all(
+    guessers.map(async (player) => {
+      const guessOrder = player.guessOrder ?? [];
+      const points =
+        guessOrder.length > 0
+          ? scoreRoundPoints(guessOrder, rankerOrder, allGuessOrders)
+          : 0;
+
+      const { error: playerError } = await supabase
+        .from('rank_up_players')
+        .update({
+          score: player.score + points,
+          last_round_points: points,
+        })
+        .eq('id', player.id);
+
+      if (playerError) throw playerError;
+    }),
+  );
 }
 
 export async function resetToLobby(
@@ -196,17 +236,27 @@ async function resetGuessSubmissions(roomCode: string): Promise<void> {
   const supabase = getSupabase();
   const { error } = await supabase
     .from('rank_up_players')
-    .update({ guess_submitted: false })
+    .update({
+      guess_submitted: false,
+      guess_order: null,
+      last_round_points: null,
+    })
     .eq('room_code', roomCode.toUpperCase());
 
   if (error) throw error;
 }
 
-export async function markGuessSubmitted(playerId: string): Promise<void> {
+export async function markGuessSubmitted(
+  playerId: string,
+  guessOrder: string[],
+): Promise<void> {
   const supabase = getSupabase();
   const { error } = await supabase
     .from('rank_up_players')
-    .update({ guess_submitted: true })
+    .update({
+      guess_submitted: true,
+      guess_order: guessOrder,
+    })
     .eq('id', playerId);
 
   if (error) throw error;

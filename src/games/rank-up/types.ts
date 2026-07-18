@@ -6,8 +6,7 @@ export type LocalPhase =
   | 'compose'
   | 'ranker-rank'
   | 'guessing'
-  | 'guess-submitted'
-  | 'score-self';
+  | 'guess-submitted';
 
 export interface RankOption {
   id: string;
@@ -28,8 +27,7 @@ export type LocalAction =
   | { type: 'ENTER_RANKER_RANK'; draft: RoundDraft }
   | { type: 'ENTER_GUESSING' }
   | { type: 'SUBMIT_GUESS'; guessOrder: string[] }
-  | { type: 'ENTER_SCORE_SELF' }
-  | { type: 'ADD_SCORE'; points: 0 | 1 | 3 }
+  | { type: 'SYNC_SCORE'; score: number }
   | { type: 'RETURN_TO_LOBBY' }
   | { type: 'RESET' };
 
@@ -88,17 +86,10 @@ export function localReducer(state: LocalState, action: LocalAction): LocalState
         localPhase: 'guess-submitted',
         lastGuessOrder: action.guessOrder,
       };
-    case 'ENTER_SCORE_SELF':
+    case 'SYNC_SCORE':
       return {
         ...state,
-        localPhase: 'score-self',
-      };
-    case 'ADD_SCORE':
-      return {
-        ...state,
-        localPhase: 'lobby',
-        score: state.score + action.points,
-        lastGuessOrder: [],
+        score: action.score,
       };
     case 'RETURN_TO_LOBBY':
       return {

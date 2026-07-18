@@ -14,7 +14,6 @@ import RankerWaitScreen from './components/RankerWaitScreen';
 import ErrorPanel from './components/ErrorPanel';
 import RejoiningSkeleton from './components/RejoiningSkeleton';
 import RevealScreen from './components/RevealScreen';
-import ScoreSelfScreen from './components/ScoreSelfScreen';
 import SetupScreen from './components/SetupScreen';
 import { RankUpPageWrap, RankUpSecondaryButton } from './components/Layout';
 
@@ -114,14 +113,6 @@ function RankUpRouter() {
     );
   }
 
-  if (local.localPhase === 'score-self') {
-    return (
-      <RankUpShell>
-        <ScoreSelfScreen />
-      </RankUpShell>
-    );
-  }
-
   if (local.localPhase === 'guess-submitted') {
     return (
       <RankUpShell>
@@ -134,17 +125,6 @@ function RankUpRouter() {
     return (
       <RankUpShell>
         <RejoiningSkeleton />
-      </RankUpShell>
-    );
-  }
-
-  // After self-score, guessers sit in local lobby while the room is still on reveal.
-  // Do not use room.phase !== 'lobby' — that catches display/guessing right after publish
-  // and freezes everyone on "Round complete".
-  if (local.localPhase === 'lobby' && room.phase === 'reveal' && !isRanker) {
-    return (
-      <RankUpShell>
-        <LobbyScreen waitingForNextRound />
       </RankUpShell>
     );
   }

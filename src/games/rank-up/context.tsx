@@ -30,7 +30,6 @@ import {
   setRanker,
   startGuessing,
   subscribeToRoom,
-  updatePlayerScore,
 } from './sync/roomApi';
 import type { RankUpPlayer, RankUpRoom } from './sync/types';
 
@@ -55,9 +54,7 @@ interface RankUpContextValue {
   abandonRound: () => Promise<void>;
   assignRanker: (playerId: string) => Promise<void>;
   startGuessingLocal: () => void;
-  beginSelfScore: () => void;
   submitGuess: (order: string[]) => Promise<void>;
-  selfScore: (points: 0 | 1 | 3) => Promise<void>;
 }
 
 const RankUpContext = createContext<RankUpContextValue | null>(null);
@@ -69,6 +66,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
 
   const isRanker = Boolean(room && local.playerId && room.rankerPlayerId === local.playerId);
   const isHost = Boolean(room && local.playerId && room.hostPlayerId === local.playerId);
+  const myPlayer = players.find((player) => player.id === local.playerId) ?? null;
   const guesserCount = players.filter((player) => player.id !== room?.rankerPlayerId).length;
   const submittedCount = players.filter(
     (player) => player.id !== room?.rankerPlayerId && player.guessSubmitted,
@@ -104,12 +102,17 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
   }, [local.roomCode]);
 
   useEffect(() => {
-    if (!room) return;
+    if (!room || isRanker) return;
 
     if (room.phase === 'lobby' && local.localPhase !== 'lobby' && local.localPhase !== 'setup') {
       dispatch({ type: 'RETURN_TO_LOBBY' });
     }
-  }, [room?.phase, local.localPhase, room]);
+  }, [room?.phase, isRanker, local.localPhase, room]);
+
+  useEffect(() => {
+    if (!myPlayer || myPlayer.score === local.score) return;
+    dispatch({ type: 'SYNC_SCORE', score: myPlayer.score });
+  }, [myPlayer?.score, local.score, myPlayer]);
 
   const createGame = useCallback(async (playerName: string) => {
     if (!isSupabaseConfigured()) {
@@ -257,25 +260,12 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'ENTER_GUESSING' });
   }, []);
 
-  const beginSelfScore = useCallback(() => {
-    dispatch({ type: 'ENTER_SCORE_SELF' });
-  }, []);
-
   const submitGuess = useCallback(
     async (order: string[]) => {
       dispatch({ type: 'SUBMIT_GUESS', guessOrder: order });
-      await markGuessSubmitted(local.playerId);
+      await markGuessSubmitted(local.playerId, order);
     },
     [local.playerId],
-  );
-
-  const selfScore = useCallback(
-    async (points: 0 | 1 | 3) => {
-      const nextScore = local.score + points;
-      dispatch({ type: 'ADD_SCORE', points });
-      await updatePlayerScore(local.playerId, nextScore);
-    },
-    [local.playerId, local.score],
   );
 
   const value = useMemo(
@@ -300,9 +290,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       abandonRound,
       assignRanker,
       startGuessingLocal,
-      beginSelfScore,
       submitGuess,
-      selfScore,
     }),
     [
       local,
@@ -324,9 +312,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       abandonRound,
       assignRanker,
       startGuessingLocal,
-      beginSelfScore,
       submitGuess,
-      selfScore,
     ],
   );
 

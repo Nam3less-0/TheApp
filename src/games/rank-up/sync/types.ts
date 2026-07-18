@@ -1,4 +1,5 @@
 import type { QuestionType, RankOption } from '../types';
+import type { RoundPoints } from '../utils';
 
 export type RoomPhase = 'lobby' | 'display' | 'guessing' | 'reveal';
 
@@ -20,6 +21,8 @@ export interface PlayerRow {
   name: string;
   score: number;
   guess_submitted: boolean;
+  guess_order: string[] | null;
+  last_round_points: number | null;
   joined_at: string;
 }
 
@@ -39,6 +42,8 @@ export interface RankUpPlayer {
   name: string;
   score: number;
   guessSubmitted: boolean;
+  guessOrder: string[] | null;
+  lastRoundPoints: RoundPoints | null;
 }
 
 export function mapRoom(row: RoomRow): RankUpRoom {
@@ -54,11 +59,20 @@ export function mapRoom(row: RoomRow): RankUpRoom {
   };
 }
 
+function parseRoundPoints(value: number | null | undefined): RoundPoints | null {
+  if (value === 0 || value === 1 || value === 3) return value;
+  return null;
+}
+
 export function mapPlayer(row: PlayerRow): RankUpPlayer {
+  const guessOrder = Array.isArray(row.guess_order) ? row.guess_order : null;
+
   return {
     id: row.id,
     name: row.name,
     score: row.score,
     guessSubmitted: row.guess_submitted,
+    guessOrder,
+    lastRoundPoints: parseRoundPoints(row.last_round_points),
   };
 }
