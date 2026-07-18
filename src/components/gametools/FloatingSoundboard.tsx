@@ -8,7 +8,6 @@ const SIZE = 68;
 const DRAG_THRESHOLD = 6;
 
 const CLIPS = [
-  '/sounds/clip-1.mp3',
   '/sounds/clip-2.mp3',
   '/sounds/clip-3.mp3',
   '/sounds/clip-4.mp3',
