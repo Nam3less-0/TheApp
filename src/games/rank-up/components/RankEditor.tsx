@@ -86,26 +86,21 @@ export default function RankEditor({
 
       <RankUpPanel compact className="border-pewter/30">
         <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-pewter">
-          Drag to reorder
+          Ranked — drag to reorder
         </p>
         <div className="flex gap-3">
-          <div
-            className="flex w-6 shrink-0 flex-col items-center justify-between self-stretch py-0.5"
-            aria-hidden="true"
-          >
-            <span className="shrink-0 font-mono text-[9px] font-bold uppercase tracking-wider text-good">
+          <div className="sticky top-4 flex w-6 shrink-0 flex-col items-center self-start py-2">
+            <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-good">
               Best
             </span>
-            <div className="relative my-1 flex min-h-0 flex-1 items-stretch justify-center">
-              <div
-                className="w-px self-stretch"
-                style={{
-                  background:
-                    'linear-gradient(180deg, rgba(120,200,140,0.6) 0%, rgba(155,147,168,0.35) 50%, rgba(200,100,100,0.5) 100%)',
-                }}
-              />
-            </div>
-            <span className="shrink-0 font-mono text-[9px] font-bold uppercase tracking-wider text-bad/80">
+            <div
+              className="my-2 w-px min-h-[3rem] flex-1"
+              style={{
+                background:
+                  'linear-gradient(180deg, rgba(120,200,140,0.6) 0%, rgba(155,147,168,0.35) 50%, rgba(200,100,100,0.5) 100%)',
+              }}
+            />
+            <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-bad/80">
               Worst
             </span>
           </div>

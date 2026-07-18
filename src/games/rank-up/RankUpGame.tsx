@@ -138,7 +138,10 @@ function RankUpRouter() {
     );
   }
 
-  if (local.localPhase === 'lobby' && room.phase !== 'lobby') {
+  // After self-score, guessers sit in local lobby while the room is still on reveal.
+  // Do not use room.phase !== 'lobby' — that catches display/guessing right after publish
+  // and freezes everyone on "Round complete".
+  if (local.localPhase === 'lobby' && room.phase === 'reveal' && !isRanker) {
     return (
       <RankUpShell>
         <LobbyScreen waitingForNextRound />
