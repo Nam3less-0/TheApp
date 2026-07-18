@@ -124,6 +124,8 @@ export interface JeopardySession {
   previewCells: BoardCell[];
   /** Topic ids excluded from preview rerolls for this game setup. */
   blacklistedTopicIds: string[];
+  /** Per-slot lock flags for the topic preview (length = board columns). */
+  lockedPreviewSlots: boolean[];
   /** Topic ids already surfaced in preview this setup (lowers reroll weight). */
   previewSessionTopicIds: string[];
   currentPlayerIndex: number;
@@ -169,6 +171,7 @@ export type JeopardyAction =
   | { type: 'BACK_TO_SETUP' }
   | { type: 'REROLL_TOPICS' }
   | { type: 'RESHUFFLE_PREVIEW_QUESTIONS' }
+  | { type: 'TOGGLE_LOCK_PREVIEW_SLOT'; slotIndex: number }
   | { type: 'BLACKLIST_TOPIC'; topicId: string }
   | { type: 'UNBLACKLIST_TOPIC'; topicId: string }
   | { type: 'SET_PREVIEW_TOPIC'; slotIndex: number; topicId: string }

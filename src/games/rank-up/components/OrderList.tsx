@@ -43,12 +43,17 @@ export default function OrderList({
 
   return (
     <div className="flex gap-3">
-      <div className="flex w-5 shrink-0 flex-col items-center justify-between py-1">
-        <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-good">
+      <div
+        className="flex w-5 shrink-0 flex-col items-center justify-between self-stretch py-0.5"
+        aria-hidden="true"
+      >
+        <span className="shrink-0 font-mono text-[9px] font-bold uppercase tracking-wider text-good">
           {bestLabel}
         </span>
-        <div className="my-1 w-px flex-1 bg-gradient-to-b from-good/50 via-pewter/30 to-bad/50" />
-        <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-bad/80">
+        <div className="relative my-1 flex min-h-0 flex-1 items-stretch justify-center">
+          <div className="w-px self-stretch bg-gradient-to-b from-good/50 via-pewter/30 to-bad/50" />
+        </div>
+        <span className="shrink-0 font-mono text-[9px] font-bold uppercase tracking-wider text-bad/80">
           {worstLabel}
         </span>
       </div>

@@ -19,3 +19,7 @@ export function optionsFromLabels(labels: string[]): RankOption[] {
     .filter((label) => label.length > 0)
     .map((label, index) => ({ id: `opt-${index}`, label }));
 }
+
+export function defaultRankOrder(options: RankOption[]): string[] {
+  return options.map((option) => option.id);
+}

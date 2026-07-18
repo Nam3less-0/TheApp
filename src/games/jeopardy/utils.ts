@@ -417,12 +417,13 @@ export interface PreviewTopicsResult {
   eligibleCount: number;
 }
 
-/** Pick six topics for the setup preview, honoring blacklist and session history. */
+/** Pick topics for the setup preview, honoring blacklist and session history. */
 export function pickPreviewTopics(
   blacklistedTopicIds: string[],
   previewSessionTopicIds: string[],
   excludeTopicIds: string[] = [],
   allowedTopicIds: string[] | null = null,
+  count: number = BOARD_COLUMNS,
 ): PreviewTopicsResult {
   const blocked = new Set(blacklistedTopicIds);
   const excluded = new Set(excludeTopicIds);
@@ -432,15 +433,16 @@ export function pickPreviewTopics(
     : JEOPARDY_TOPICS;
   let eligible = pool.filter((topic) => !blocked.has(topic.id));
   const withoutExcluded = eligible.filter((topic) => !excluded.has(topic.id));
+  const target = Math.max(0, count);
 
   // On reroll, prefer a completely fresh set when enough topics remain.
-  if (withoutExcluded.length >= BOARD_COLUMNS) {
+  if (withoutExcluded.length >= target) {
     eligible = withoutExcluded;
   }
 
   const recentTopicSet = new Set(loadRecentKeys(RECENT_TOPICS_KEY));
   const sessionTopicSet = new Set(previewSessionTopicIds);
-  const pickCount = Math.min(BOARD_COLUMNS, eligible.length);
+  const pickCount = Math.min(target, eligible.length);
 
   const picked = weightedSampleWithoutReplacement(
     shuffleDeep(eligible),
@@ -459,6 +461,62 @@ export function pickPreviewTopics(
     })),
     sessionTopicIds: nextSessionTopicIds,
     eligibleCount: pool.filter((topic) => !blocked.has(topic.id)).length,
+  };
+}
+
+/**
+ * Reroll only unlocked preview slots, keeping locked categories in place.
+ * Locked topic ids are never redrawn into open slots.
+ */
+export function rerollUnlockedPreviewTopics(
+  currentColumns: BoardColumn[],
+  lockedSlots: boolean[],
+  blacklistedTopicIds: string[],
+  previewSessionTopicIds: string[],
+  allowedTopicIds: string[] | null = null,
+): PreviewTopicsResult {
+  const openIndexes = currentColumns
+    .map((_, index) => index)
+    .filter((index) => !lockedSlots[index]);
+  const lockedIds = currentColumns
+    .filter((_, index) => lockedSlots[index])
+    .map((column) => column.id);
+
+  const allowed = allowedTopicIds ? new Set(allowedTopicIds) : null;
+  const pool = allowed
+    ? JEOPARDY_TOPICS.filter((topic) => allowed.has(topic.id))
+    : JEOPARDY_TOPICS;
+  const blocked = new Set(blacklistedTopicIds);
+  const eligibleCount = pool.filter((topic) => !blocked.has(topic.id)).length;
+
+  if (openIndexes.length === 0) {
+    return {
+      columns: currentColumns,
+      sessionTopicIds: previewSessionTopicIds,
+      eligibleCount,
+    };
+  }
+
+  const preview = pickPreviewTopics(
+    [...blacklistedTopicIds, ...lockedIds],
+    previewSessionTopicIds,
+    currentColumns.map((column) => column.id),
+    allowedTopicIds,
+    openIndexes.length,
+  );
+
+  let pickIndex = 0;
+  const columns = currentColumns.map((column, index) => {
+    if (lockedSlots[index]) return column;
+    const next = preview.columns[pickIndex];
+    pickIndex += 1;
+    return next ?? column;
+  });
+
+  return {
+    columns,
+    sessionTopicIds: preview.sessionTopicIds,
+    eligibleCount,
   };
 }
 

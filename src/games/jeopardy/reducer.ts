@@ -24,7 +24,9 @@ import {
   maxFinalWager,
   pickPreviewTopics,
   rerollCellQuestion,
+  rerollUnlockedPreviewTopics,
   shuffle,
+  BOARD_COLUMNS,
   SNIPE_CORRECT_POINTS,
   TURN_LIMITED_VALUES,
 } from './utils';
@@ -37,6 +39,7 @@ export const initialJeopardyState: JeopardySession = {
   pendingPlayers: [],
   previewColumns: [],
   blacklistedTopicIds: [],
+  lockedPreviewSlots: Array.from({ length: BOARD_COLUMNS }, () => false),
   previewSessionTopicIds: [],
   previewCells: [],
   currentPlayerIndex: 0,
@@ -58,6 +61,10 @@ export const initialJeopardyState: JeopardySession = {
   activeCellRerollKeys: [],
 };
 
+function emptyLockedSlots(): boolean[] {
+  return Array.from({ length: BOARD_COLUMNS }, () => false);
+}
+
 /** Allowed topic ids for the active theme (null = all topics). */
 function themeAllowedIds(settings: GameSettings): string[] | null {
   const theme = getThemeBundle(settings.themeId);
@@ -75,6 +82,7 @@ function beginTopicPreview(
   | 'previewColumns'
   | 'previewCells'
   | 'blacklistedTopicIds'
+  | 'lockedPreviewSlots'
   | 'previewSessionTopicIds'
   | 'phase'
   | 'settings'
@@ -97,6 +105,7 @@ function beginTopicPreview(
     previewColumns: board.columns,
     previewCells: board.cells,
     blacklistedTopicIds,
+    lockedPreviewSlots: emptyLockedSlots(),
     previewSessionTopicIds: preview.sessionTopicIds,
     phase: 'topic-preview',
     settings,
@@ -166,6 +175,7 @@ export function jeopardyReducer(
         previewColumns: [],
         previewCells: [],
         blacklistedTopicIds: [],
+        lockedPreviewSlots: emptyLockedSlots(),
         previewSessionTopicIds: [],
       };
     }
@@ -173,10 +183,15 @@ export function jeopardyReducer(
     case 'REROLL_TOPICS': {
       if (state.phase !== 'topic-preview') return state;
       const shape = boardShapeFor(state.settings);
-      const preview = pickPreviewTopics(
+      const lockedSlots =
+        state.lockedPreviewSlots.length === BOARD_COLUMNS
+          ? state.lockedPreviewSlots
+          : emptyLockedSlots();
+      const preview = rerollUnlockedPreviewTopics(
+        state.previewColumns,
+        lockedSlots,
         state.blacklistedTopicIds,
         state.previewSessionTopicIds,
-        state.previewColumns.map((column) => column.id),
         themeAllowedIds(state.settings),
       );
       const board = draftBoardFromTopics(
@@ -189,7 +204,22 @@ export function jeopardyReducer(
         previewColumns: board.columns,
         previewCells: board.cells,
         previewSessionTopicIds: preview.sessionTopicIds,
+        lockedPreviewSlots: lockedSlots,
       };
+    }
+
+    case 'TOGGLE_LOCK_PREVIEW_SLOT': {
+      if (state.phase !== 'topic-preview') return state;
+      const { slotIndex } = action;
+      if (slotIndex < 0 || slotIndex >= state.previewColumns.length) return state;
+      const lockedSlots =
+        state.lockedPreviewSlots.length === BOARD_COLUMNS
+          ? state.lockedPreviewSlots
+          : emptyLockedSlots();
+      const lockedPreviewSlots = lockedSlots.map((locked, index) =>
+        index === slotIndex ? !locked : locked,
+      );
+      return { ...state, lockedPreviewSlots };
     }
 
     case 'RESHUFFLE_PREVIEW_QUESTIONS': {
@@ -304,6 +334,7 @@ export function jeopardyReducer(
         previewColumns: [],
         previewCells: [],
         blacklistedTopicIds: [],
+        lockedPreviewSlots: emptyLockedSlots(),
         previewSessionTopicIds: [],
         currentPlayerIndex: 0,
         activeCellId: null,

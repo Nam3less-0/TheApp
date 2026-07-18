@@ -7,8 +7,27 @@ export interface RankPromptPreset {
   id: string;
   type: RankPromptType;
   prompt: string;
-  /** Default items for item-type prompts */
+  /** Default items for item-type prompts (full pool before draw-time trim) */
   items?: string[];
+}
+
+function shuffle<T>(items: T[]): T[] {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+/** Pick 4–6 items from a pool (pool should have at least 4 entries). */
+export function resolveItemOptions(pool: string[]): string[] {
+  const cleaned = pool.map((item) => item.trim()).filter((item) => item.length > 0);
+  if (cleaned.length <= 4) return cleaned;
+
+  const maxCount = Math.min(6, cleaned.length);
+  const count = 4 + Math.floor(Math.random() * (maxCount - 3));
+  return shuffle(cleaned).slice(0, count);
 }
 
 export const RANK_PROMPT_PRESETS: RankPromptPreset[] = [
@@ -39,10 +58,17 @@ export function presetsForType(type: RankPromptType): RankPromptPreset[] {
   return RANK_PROMPT_PRESETS.filter((preset) => preset.type === type);
 }
 
-export function drawPromptPreset(type: RankPromptType, excludeId?: string): RankPromptPreset {
-  const pool = presetsForType(type).filter((preset) => preset.id !== excludeId);
-  const source = pool.length > 0 ? pool : presetsForType(type);
-  return source[Math.floor(Math.random() * source.length)]!;
+/** Draw any question type from the combined pool. */
+export function drawPromptPreset(excludeId?: string): RankPromptPreset {
+  const pool = RANK_PROMPT_PRESETS.filter((preset) => preset.id !== excludeId);
+  const source = pool.length > 0 ? pool : RANK_PROMPT_PRESETS;
+  const picked = source[Math.floor(Math.random() * source.length)]!;
+
+  if (picked.type === 'items' && picked.items?.length) {
+    return { ...picked, items: resolveItemOptions(picked.items) };
+  }
+
+  return picked;
 }
 
 export function presetToReelItem(preset: RankPromptPreset) {
@@ -51,4 +77,14 @@ export function presetToReelItem(preset: RankPromptPreset) {
     text: preset.prompt,
     tag: preset.type === 'players' ? 'Player rank' : 'Item rank',
   };
+}
+
+export function optionLabelsForPreset(
+  preset: RankPromptPreset,
+  playerNames: string[],
+): string[] {
+  if (preset.type === 'players') {
+    return playerNames.filter((name) => name.trim().length > 0);
+  }
+  return (preset.items ?? []).filter((item) => item.trim().length > 0);
 }

@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRankUp } from '../context';
+import { defaultRankOrder } from '../utils';
 import RankEditor from './RankEditor';
 import { CrownIcon } from './RankUpIcons';
 import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
@@ -7,7 +8,15 @@ import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 export default function RankerRankScreen() {
   const { local, confirmRankerOrder } = useRankUp();
   const draft = local.roundDraft;
-  const [order, setOrder] = useState<string[]>([]);
+  const [order, setOrder] = useState<string[]>(() =>
+    draft ? defaultRankOrder(draft.options) : [],
+  );
+
+  useEffect(() => {
+    if (draft) {
+      setOrder(defaultRankOrder(draft.options));
+    }
+  }, [draft?.prompt]);
 
   if (!draft) return null;
 
@@ -39,7 +48,7 @@ export default function RankerRankScreen() {
         order={order}
         onOrderChange={setOrder}
         heading="Your secret ranking"
-        description="Tap each option in order from most to least."
+        description="Drag to reorder from best to worst."
       />
 
       <div className="mt-8">

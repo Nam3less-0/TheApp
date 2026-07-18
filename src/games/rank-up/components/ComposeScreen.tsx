@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import {
   drawPromptPreset,
+  optionLabelsForPreset,
   presetToReelItem,
-  presetsForType,
+  RANK_PROMPT_PRESETS,
   type RankPromptPreset,
 } from '../../../data/rank-up/prompts';
 import { useRankUp } from '../context';
-import type { QuestionType } from '../types';
 import { optionsFromLabels } from '../utils';
 import CommandCenterFrame from './CommandCenterFrame';
 import PromptReelTrack from './PromptReelTrack';
@@ -20,41 +20,30 @@ import RankUpPanel, {
 export default function ComposeScreen() {
   const { local, players, confirmCompose } = useRankUp();
 
-  const [questionType, setQuestionType] = useState<QuestionType>('players');
-  const [drawnPreset, setDrawnPreset] = useState<RankPromptPreset>(() =>
-    drawPromptPreset('players'),
-  );
+  const [drawnPreset, setDrawnPreset] = useState<RankPromptPreset>(() => drawPromptPreset());
   const [spinKey, setSpinKey] = useState(0);
   const [isSettled, setIsSettled] = useState(false);
 
   const reelPool = useMemo(
-    () => presetsForType(questionType).map(presetToReelItem),
-    [questionType],
+    () => RANK_PROMPT_PRESETS.map(presetToReelItem),
+    [],
   );
   const reelItem = useMemo(() => presetToReelItem(drawnPreset), [drawnPreset]);
 
-  const playerLabels = useMemo(
-    () => players.map((player) => player.name).filter((name) => name.trim().length > 0),
+  const playerNames = useMemo(
+    () => players.map((player) => player.name),
     [players],
   );
 
-  const optionLabels =
-    drawnPreset.type === 'players'
-      ? playerLabels
-      : (drawnPreset.items ?? []).filter((item) => item.trim().length > 0);
+  const optionLabels = useMemo(
+    () => optionLabelsForPreset(drawnPreset, playerNames),
+    [drawnPreset, playerNames],
+  );
 
   const canConfirm = isSettled && optionLabels.length >= 3;
 
-  function switchType(type: QuestionType) {
-    if (type === questionType) return;
-    setQuestionType(type);
-    setDrawnPreset(drawPromptPreset(type));
-    setSpinKey((key) => key + 1);
-    setIsSettled(false);
-  }
-
   function handleRespin() {
-    setDrawnPreset((current) => drawPromptPreset(questionType, current.id));
+    setDrawnPreset((current) => drawPromptPreset(current.id));
     setSpinKey((key) => key + 1);
     setIsSettled(false);
   }
@@ -75,39 +64,11 @@ export default function ComposeScreen() {
           Draw your question
         </h1>
         <p className="mt-2 font-body text-sm text-text-mid">
-          Spin the reel, reroll if you want, then lock in and rank in secret.
+          Player or item questions — spin the reel, reroll if you want, then rank in secret.
         </p>
       </header>
 
       <CommandCenterFrame>
-        <div className="mb-5 grid grid-cols-2 gap-3">
-          {(
-            [
-              { id: 'players' as const, label: 'Player rank', hint: 'Rank people' },
-              { id: 'items' as const, label: 'Item rank', hint: 'Rank things' },
-            ] as const
-          ).map((type) => {
-            const selected = questionType === type.id;
-            return (
-              <button
-                key={type.id}
-                type="button"
-                onClick={() => switchType(type.id)}
-                disabled={!isSettled}
-                className={`rounded-xl border bg-surface p-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pewter disabled:opacity-50 ${
-                  selected
-                    ? 'border-pewter shadow-[0_0_0_1px_#9B93A8_inset]'
-                    : 'border-line hover:border-line-bright'
-                }`}
-                aria-pressed={selected}
-              >
-                <p className="font-body text-sm font-bold text-text-hi">{type.label}</p>
-                <p className="mt-1 font-body text-[12px] text-text-mid">{type.hint}</p>
-              </button>
-            );
-          })}
-        </div>
-
         <PromptReelTrack
           item={reelItem}
           pool={reelPool}
@@ -125,8 +86,13 @@ export default function ComposeScreen() {
 
         {isSettled ? (
           <RankUpPanel compact className="mt-5 border-pewter/25">
-            <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-text-low">
-              Ranking
+            <p className="mb-2 flex items-center justify-between gap-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-text-low">
+                Ranking
+              </span>
+              <span className="font-mono text-[10px] uppercase tracking-wider text-pewter">
+                {drawnPreset.type === 'players' ? 'Players' : 'Items'} · {optionLabels.length}
+              </span>
             </p>
             <ul className="flex flex-wrap gap-2">
               {optionLabels.map((label) => (

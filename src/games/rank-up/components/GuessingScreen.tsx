@@ -1,12 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRankUp } from '../context';
+import { defaultRankOrder } from '../utils';
 import { GuesserScreenHeader } from './GuesserBadge';
 import RankEditor from './RankEditor';
 import { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
 export default function GuessingScreen() {
   const { local, room, submitGuess } = useRankUp();
-  const [order, setOrder] = useState<string[]>([]);
+  const [order, setOrder] = useState<string[]>(() =>
+    room ? defaultRankOrder(room.options) : [],
+  );
+
+  useEffect(() => {
+    if (room?.options) {
+      setOrder(defaultRankOrder(room.options));
+    }
+  }, [room?.prompt]);
 
   if (!room?.options.length) return null;
 
@@ -30,7 +39,7 @@ export default function GuessingScreen() {
         order={order}
         onOrderChange={setOrder}
         heading="Predicted ranking"
-        description="Tap to add, then drag to reorder from best to worst."
+        description="Drag to reorder from best to worst."
       />
 
       <div className="mt-8">
