@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useRankUp } from '../context';
 import { shuffleOptions } from '../utils';
 import { GuesserScreenHeader } from './GuesserBadge';
+import AbandonRoundButton from './AbandonRoundButton';
 import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
 export default function GuesserPromptScreen() {
@@ -39,7 +40,10 @@ export default function GuesserPromptScreen() {
       </RankUpPanel>
 
       {canGuess ? (
-        <RankUpPrimaryButton onClick={startGuessingLocal}>Start my ranking</RankUpPrimaryButton>
+        <div className="flex flex-col gap-3">
+          <RankUpPrimaryButton onClick={startGuessingLocal}>Start my ranking</RankUpPrimaryButton>
+          <AbandonRoundButton />
+        </div>
       ) : (
         <p className="text-center font-body text-sm text-text-mid">Waiting for ranker…</p>
       )}

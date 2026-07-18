@@ -1,5 +1,6 @@
 import { useRankUp } from '../context';
 import { labelForOption } from '../utils';
+import AbandonRoundButton from './AbandonRoundButton';
 import CommandCenterFrame from './CommandCenterFrame';
 import { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
@@ -36,6 +37,7 @@ export default function RevealScreen() {
         </p>
 
         <RankUpPrimaryButton onClick={() => nextRound()}>Next round</RankUpPrimaryButton>
+        <AbandonRoundButton className="mt-3" />
       </CommandCenterFrame>
     </RankUpPageWrap>
   );

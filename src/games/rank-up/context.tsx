@@ -52,6 +52,7 @@ interface RankUpContextValue {
   openGuessing: () => Promise<void>;
   revealRound: () => Promise<void>;
   nextRound: (nextRankerId?: string) => Promise<void>;
+  abandonRound: () => Promise<void>;
   assignRanker: (playerId: string) => Promise<void>;
   startGuessingLocal: () => void;
   beginSelfScore: () => void;
@@ -103,12 +104,12 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
   }, [local.roomCode]);
 
   useEffect(() => {
-    if (!room || isRanker) return;
+    if (!room) return;
 
     if (room.phase === 'lobby' && local.localPhase !== 'lobby' && local.localPhase !== 'setup') {
       dispatch({ type: 'RETURN_TO_LOBBY' });
     }
-  }, [room?.phase, isRanker, local.localPhase, room]);
+  }, [room?.phase, local.localPhase, room]);
 
   const createGame = useCallback(async (playerName: string) => {
     if (!isSupabaseConfigured()) {
@@ -228,6 +229,22 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     [local.roomCode, local.playerId],
   );
 
+  const abandonRound = useCallback(async () => {
+    if (!room) return;
+
+    if (room.phase === 'lobby') {
+      dispatch({ type: 'RETURN_TO_LOBBY' });
+      return;
+    }
+
+    if (!local.roomCode || (!isHost && !isRanker)) return;
+
+    const rankerId = room.rankerPlayerId ?? local.playerId;
+    await resetToLobby(local.roomCode, rankerId);
+    clearPendingOrder(local.roomCode);
+    dispatch({ type: 'RETURN_TO_LOBBY' });
+  }, [local.roomCode, local.playerId, room, isHost, isRanker]);
+
   const assignRanker = useCallback(
     async (playerId: string) => {
       if (!local.roomCode) return;
@@ -280,6 +297,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       openGuessing,
       revealRound,
       nextRound,
+      abandonRound,
       assignRanker,
       startGuessingLocal,
       beginSelfScore,
@@ -303,6 +321,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       openGuessing,
       revealRound,
       nextRound,
+      abandonRound,
       assignRanker,
       startGuessingLocal,
       beginSelfScore,

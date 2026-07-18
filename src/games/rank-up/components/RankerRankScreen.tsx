@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRankUp } from '../context';
 import { defaultRankOrder } from '../utils';
 import RankEditor from './RankEditor';
+import AbandonRoundButton from './AbandonRoundButton';
 import { CrownIcon } from './RankUpIcons';
 import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
@@ -51,10 +52,11 @@ export default function RankerRankScreen() {
         description="Drag to reorder from best to worst."
       />
 
-      <div className="mt-8">
+      <div className="mt-8 flex flex-col gap-3">
         <RankUpPrimaryButton onClick={handleConfirm} disabled={!canConfirm}>
           Publish question to room
         </RankUpPrimaryButton>
+        <AbandonRoundButton />
       </div>
     </RankUpPageWrap>
   );

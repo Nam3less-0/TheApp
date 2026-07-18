@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRankUp } from '../context';
 import { defaultRankOrder } from '../utils';
 import { GuesserScreenHeader } from './GuesserBadge';
+import AbandonRoundButton from './AbandonRoundButton';
 import RankEditor from './RankEditor';
 import { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
@@ -42,10 +43,11 @@ export default function GuessingScreen() {
         description="Drag to reorder from best to worst."
       />
 
-      <div className="mt-8">
+      <div className="mt-8 flex flex-col gap-3">
         <RankUpPrimaryButton onClick={handleSubmit} disabled={!canSubmit}>
           Lock in guess
         </RankUpPrimaryButton>
+        <AbandonRoundButton />
       </div>
     </RankUpPageWrap>
   );

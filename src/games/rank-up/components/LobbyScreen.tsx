@@ -6,6 +6,7 @@ import { labelForOption } from '../utils';
 import { CrownIcon, EyeIcon } from './RankUpIcons';
 import RoundHistoryDrawer from './RoundHistoryDrawer';
 import RoomCodeDisplay from './RoomCodeDisplay';
+import AbandonRoundButton from './AbandonRoundButton';
 import RankUpPanel, {
   RankUpPageWrap,
   RankUpPrimaryButton,
@@ -169,6 +170,8 @@ export default function LobbyScreen({ waitingForNextRound = false }: { waitingFo
             </p>
           </RankUpPanel>
         ) : null}
+
+        <AbandonRoundButton />
 
         <RankUpSecondaryButton onClick={leaveGame} className="w-full text-center">
           Leave room

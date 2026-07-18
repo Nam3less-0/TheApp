@@ -1,6 +1,7 @@
 import { useRankUp } from '../context';
 import CommandCenterFrame from './CommandCenterFrame';
 import GuesserProgressRow from './GuesserProgressRow';
+import AbandonRoundButton from './AbandonRoundButton';
 import { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
 export default function RankerWaitScreen() {
@@ -18,6 +19,7 @@ export default function RankerWaitScreen() {
         <GuesserProgressRow className="mb-8" />
 
         <RankUpPrimaryButton onClick={revealRound}>Reveal my answer</RankUpPrimaryButton>
+        <AbandonRoundButton className="mt-3" />
       </CommandCenterFrame>
     </RankUpPageWrap>
   );

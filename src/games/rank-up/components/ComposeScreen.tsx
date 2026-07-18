@@ -10,6 +10,7 @@ import { useRankUp } from '../context';
 import { optionsFromLabels } from '../utils';
 import CommandCenterFrame from './CommandCenterFrame';
 import PromptReelTrack from './PromptReelTrack';
+import AbandonRoundButton from './AbandonRoundButton';
 import { CrownIcon } from './RankUpIcons';
 import RankUpPanel, {
   RankUpPageWrap,
@@ -117,10 +118,11 @@ export default function ComposeScreen() {
         )}
       </CommandCenterFrame>
 
-      <div className="mt-6">
+      <div className="mt-6 flex flex-col gap-3">
         <RankUpPrimaryButton onClick={handleConfirm} disabled={!canConfirm}>
           {isSettled ? 'Lock in question' : 'Waiting for reel…'}
         </RankUpPrimaryButton>
+        <AbandonRoundButton />
       </div>
     </RankUpPageWrap>
   );

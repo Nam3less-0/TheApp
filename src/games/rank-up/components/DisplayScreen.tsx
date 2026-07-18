@@ -3,6 +3,7 @@ import { useRankUp } from '../context';
 import { shuffleOptions } from '../utils';
 import CommandCenterFrame from './CommandCenterFrame';
 import GuesserProgressRow from './GuesserProgressRow';
+import AbandonRoundButton from './AbandonRoundButton';
 import { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
 export default function DisplayScreen() {
@@ -40,6 +41,7 @@ export default function DisplayScreen() {
         <RankUpPrimaryButton onClick={openGuessing}>
           Open guessing for everyone
         </RankUpPrimaryButton>
+        <AbandonRoundButton className="mt-3" />
       </CommandCenterFrame>
     </RankUpPageWrap>
   );
