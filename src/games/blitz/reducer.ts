@@ -1,14 +1,15 @@
 import type { BlitzAction, BlitzSession, RoundRecord } from './types';
-import { TARGET_SCORE, REROLLS_PER_PLAYER, buildQuestionPool, drawQuestion, pickRandomPlayer } from './utils';
+import { TOTAL_ROUNDS, buildQuestionPool, drawQuestion, pickRandomPlayer } from './utils';
 
 export const initialBlitzState: BlitzSession = {
   players: [],
-  targetScore: TARGET_SCORE,
+  totalRounds: TOTAL_ROUNDS,
   round: 0,
   remainingQuestions: [],
   currentPlayerId: '',
   currentQuestion: null,
   paused: false,
+  rerollUsedThisRound: false,
   phase: 'setup',
   history: [],
 };
@@ -16,19 +17,23 @@ export const initialBlitzState: BlitzSession = {
 export function blitzReducer(state: BlitzSession, action: BlitzAction): BlitzSession {
   switch (action.type) {
     case 'START_GAME': {
-      const players = action.players.map((p) => ({ ...p, score: 0, rerollsLeft: REROLLS_PER_PLAYER }));
+      const players = action.players.map((p) => ({ ...p, score: 0 }));
+      // One big shuffled pool for the whole session — with 800+ prompts and
+      // at most ~20 draws in a 10-round game, this never needs to reshuffle,
+      // so nothing can repeat within a single game.
       const pool = buildQuestionPool();
       const draw = drawQuestion(pool);
 
       return {
         ...initialBlitzState,
         players,
-        targetScore: TARGET_SCORE,
+        totalRounds: TOTAL_ROUNDS,
         round: 1,
         remainingQuestions: draw.remaining,
         currentPlayerId: pickRandomPlayer(players),
         currentQuestion: draw.question,
         paused: false,
+        rerollUsedThisRound: false,
         phase: 'prompt',
         history: [],
       };
@@ -45,7 +50,14 @@ export function blitzReducer(state: BlitzSession, action: BlitzAction): BlitzSes
         prompt: state.currentQuestion.prompt,
         seconds: state.currentQuestion.seconds,
         success: true,
+        rerolled: state.rerollUsedThisRound,
       };
+
+      const history = [...state.history, record];
+
+      if (state.round >= state.totalRounds) {
+        return { ...state, phase: 'final', history };
+      }
 
       const draw = drawQuestion(state.remainingQuestions);
 
@@ -56,7 +68,8 @@ export function blitzReducer(state: BlitzSession, action: BlitzAction): BlitzSes
         currentPlayerId: pickRandomPlayer(state.players),
         currentQuestion: draw.question,
         paused: false,
-        history: [...state.history, record],
+        rerollUsedThisRound: false,
+        history,
       };
     }
 
@@ -71,6 +84,7 @@ export function blitzReducer(state: BlitzSession, action: BlitzAction): BlitzSes
         prompt: state.currentQuestion.prompt,
         seconds: state.currentQuestion.seconds,
         success: false,
+        rerolled: state.rerollUsedThisRound,
       };
 
       const players = state.players.map((p) =>
@@ -92,24 +106,19 @@ export function blitzReducer(state: BlitzSession, action: BlitzAction): BlitzSes
       return { ...state, paused: !state.paused };
     }
 
-    // Current player burns one of their tokens to swap this question for a
-    // fresh draw, without losing their turn or costing anyone points.
+    // Exactly one skip is available per round, usable by whoever's turn it
+    // is. The skipped question is dropped for the rest of this session (not
+    // returned to the pool) so it can never resurface and repeat later.
     case 'REROLL': {
-      if (state.phase !== 'prompt' || !state.currentQuestion) return state;
-      const current = state.players.find((p) => p.id === state.currentPlayerId);
-      if (!current || current.rerollsLeft <= 0) return state;
+      if (state.phase !== 'prompt' || !state.currentQuestion || state.rerollUsedThisRound) return state;
 
       const draw = drawQuestion(state.remainingQuestions);
-      const players = state.players.map((p) =>
-        p.id === current.id ? { ...p, rerollsLeft: p.rerollsLeft - 1 } : p,
-      );
 
       return {
         ...state,
-        players,
-        // Put the skipped question back into rotation for later in the session.
-        remainingQuestions: [...draw.remaining, state.currentQuestion],
+        remainingQuestions: draw.remaining,
         currentQuestion: draw.question,
+        rerollUsedThisRound: true,
         paused: false,
       };
     }
@@ -117,8 +126,7 @@ export function blitzReducer(state: BlitzSession, action: BlitzAction): BlitzSes
     case 'CONTINUE': {
       if (state.phase !== 'result') return state;
 
-      const hasWinner = state.players.some((p) => p.score >= state.targetScore);
-      if (hasWinner) {
+      if (state.round >= state.totalRounds) {
         return { ...state, phase: 'final' };
       }
 
@@ -130,6 +138,7 @@ export function blitzReducer(state: BlitzSession, action: BlitzAction): BlitzSes
         remainingQuestions: draw.remaining,
         currentPlayerId: pickRandomPlayer(state.players),
         currentQuestion: draw.question,
+        rerollUsedThisRound: false,
         phase: 'prompt',
       };
     }
@@ -137,7 +146,7 @@ export function blitzReducer(state: BlitzSession, action: BlitzAction): BlitzSes
     case 'PLAY_AGAIN': {
       return {
         ...initialBlitzState,
-        players: state.players.map((p) => ({ ...p, score: 0, rerollsLeft: REROLLS_PER_PLAYER })),
+        players: state.players.map((p) => ({ ...p, score: 0 })),
       };
     }
 

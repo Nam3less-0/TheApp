@@ -44,18 +44,16 @@ export default function PromptScreen() {
 
   const danger = timeLeft <= 3;
   const progress = question.seconds > 0 ? timeLeft / question.seconds : 0;
-  const rerollsLeft = current.rerollsLeft;
 
   return (
     <BlitzPageWrap>
       <p className="mb-2 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-silver">
-        Round {state.round}
+        Round {state.round} of {state.totalRounds}
       </p>
 
       <ScoreStrip
         players={state.players}
         currentPlayerId={state.currentPlayerId}
-        targetScore={state.targetScore}
         className="mb-5"
       />
 
@@ -119,10 +117,10 @@ export default function PromptScreen() {
             <button
               type="button"
               onClick={() => dispatch({ type: 'REROLL' })}
-              disabled={rerollsLeft <= 0}
+              disabled={state.rerollUsedThisRound}
               className="rounded-xl border border-line-bright bg-surface px-3 py-2.5 font-body text-sm font-bold text-text-hi transition-colors hover:border-silver-bright disabled:cursor-not-allowed disabled:opacity-30"
             >
-              Reroll ({rerollsLeft} left)
+              {state.rerollUsedThisRound ? 'Skip used this round' : 'Skip this category'}
             </button>
           </div>
           {state.paused && (

@@ -12,19 +12,15 @@ export default function ResultScreen() {
   if (!record || !player) return null;
 
   const others = state.players.filter((p) => p.id !== player.id);
-  const hasWinner = state.players.some((p) => p.score >= state.targetScore);
+  const isLastRound = state.round >= state.totalRounds;
 
   return (
     <BlitzPageWrap>
       <p className="mb-2 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-silver">
-        Round {record.round}
+        Round {record.round} of {state.totalRounds}
       </p>
 
-      <ScoreStrip
-        players={state.players}
-        targetScore={state.targetScore}
-        className="mb-5"
-      />
+      <ScoreStrip players={state.players} className="mb-5" />
 
       <BlitzPanel>
         <div className="mb-5 flex flex-col items-center gap-2 text-center">
@@ -65,7 +61,7 @@ export default function ResultScreen() {
           className="w-full rounded-xl border-none px-4 py-3.5 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-silver"
           style={{ background: 'linear-gradient(180deg, #F2F4F8, #C9CDD6 55%, #8B8F99)' }}
         >
-          {hasWinner ? 'See final standings' : 'Next round'}
+          {isLastRound ? 'See final standings' : 'Next round'}
         </button>
       </BlitzPanel>
     </BlitzPageWrap>

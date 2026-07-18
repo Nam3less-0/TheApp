@@ -1,9 +1,8 @@
 import { BLITZ_QUESTIONS, type BlitzQuestion } from '../../data/blitz-questions';
 import type { Player } from './types';
 
-export const TARGET_SCORE = 10;
+export const TOTAL_ROUNDS = 10;
 export const PLAYER_COUNT = 4;
-export const REROLLS_PER_PLAYER = 2;
 
 const DEFAULT_PLAYER_NAMES = ['Belford', 'Joshua', 'Matthew', 'Kai Jie'];
 
@@ -12,7 +11,6 @@ export function createDefaultPlayers(count = PLAYER_COUNT): Player[] {
     id: `player-${i + 1}`,
     name: DEFAULT_PLAYER_NAMES[i] ?? `Player ${i + 1}`,
     score: 0,
-    rerollsLeft: REROLLS_PER_PLAYER,
   }));
 }
 

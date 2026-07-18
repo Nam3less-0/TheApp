@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import FloatingTimer from './FloatingTimer';
 import FloatingDice from './FloatingDice';
+import FloatingSoundboard from './FloatingSoundboard';
 
 function MenuRow({
   icon,
@@ -42,6 +43,7 @@ export default function GameTools() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
   const [showDice, setShowDice] = useState(false);
+  const [showSoundboard, setShowSoundboard] = useState(false);
 
   return (
     <>
@@ -101,6 +103,15 @@ export default function GameTools() {
                   setMenuOpen(false);
                 }}
               />
+              <MenuRow
+                icon="🔊"
+                label="Soundboard"
+                active={showSoundboard}
+                onClick={() => {
+                  setShowSoundboard((v) => !v);
+                  setMenuOpen(false);
+                }}
+              />
             </div>
           </div>
         </>
@@ -108,6 +119,7 @@ export default function GameTools() {
 
       {showTimer && <FloatingTimer onClose={() => setShowTimer(false)} />}
       {showDice && <FloatingDice onClose={() => setShowDice(false)} />}
+      {showSoundboard && <FloatingSoundboard onClose={() => setShowSoundboard(false)} />}
     </>
   );
 }

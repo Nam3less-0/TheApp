@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useBlitz } from '../context';
 import type { Player } from '../types';
-import { PLAYER_COUNT, TARGET_SCORE, createDefaultPlayers } from '../utils';
+import { PLAYER_COUNT, TOTAL_ROUNDS, createDefaultPlayers } from '../utils';
 import BlitzPanel, { BlitzPageWrap } from './BlitzPanel';
 import PlayerAvatar from './PlayerAvatar';
 
@@ -28,10 +28,10 @@ export default function BlitzSetupScreen() {
         New game
       </h1>
       <p className="mb-8 font-body text-sm text-text-mid">
-        A random player gets a category and a clock. Name enough in time and
-        hit NEXT. Miss it, and everyone else scores. You can pause the clock
-        to argue about a category, and everyone gets 2 rerolls a game if they
-        get stuck with one they don&rsquo;t know.
+        10 rounds. A random player gets a category and a clock each round.
+        Name enough in time and hit NEXT. Miss it, and everyone else scores.
+        You can pause the clock to argue about a category, and each round
+        comes with one free skip if you get stuck with one nobody knows.
       </p>
 
       <BlitzPanel>
@@ -77,9 +77,9 @@ export default function BlitzSetupScreen() {
             the timer runs out to pass safely. Run out of time, and every
             other player gets{' '}
             <span className="font-semibold text-text-hi">+1 point</span>.
-            First to{' '}
-            <span className="font-semibold text-text-hi">{TARGET_SCORE} points</span>{' '}
-            wins.
+            The game runs for{' '}
+            <span className="font-semibold text-text-hi">{TOTAL_ROUNDS} rounds</span>{' '}
+            &mdash; highest score at the end wins.
           </p>
         </section>
 

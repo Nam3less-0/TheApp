@@ -4,21 +4,17 @@ import PlayerAvatar from './PlayerAvatar';
 interface ScoreStripProps {
   players: Player[];
   currentPlayerId?: string;
-  targetScore: number;
   className?: string;
 }
 
-export default function ScoreStrip({
-  players,
-  currentPlayerId,
-  targetScore,
-  className = '',
-}: ScoreStripProps) {
+export default function ScoreStrip({ players, currentPlayerId, className = '' }: ScoreStripProps) {
+  const maxScore = Math.max(1, ...players.map((p) => p.score));
+
   return (
     <div className={`grid grid-cols-4 gap-2 ${className}`}>
       {players.map((player) => {
         const isCurrent = player.id === currentPlayerId;
-        const pct = Math.min(100, (player.score / targetScore) * 100);
+        const pct = Math.min(100, (player.score / maxScore) * 100);
         return (
           <div
             key={player.id}

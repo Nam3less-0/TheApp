@@ -4,7 +4,6 @@ export interface Player {
   id: string;
   name: string;
   score: number;
-  rerollsLeft: number;
 }
 
 export interface RoundRecord {
@@ -14,19 +13,22 @@ export interface RoundRecord {
   prompt: string;
   seconds: number;
   success: boolean;
+  rerolled: boolean;
 }
 
 export type BlitzPhase = 'setup' | 'prompt' | 'result' | 'final';
 
 export interface BlitzSession {
   players: Player[];
-  targetScore: number;
+  totalRounds: number;
   round: number;
   remainingQuestions: BlitzQuestion[];
   currentPlayerId: string;
   currentQuestion: BlitzQuestion | null;
   /** True while the timer is frozen for an off-app "is this fair?" discussion. */
   paused: boolean;
+  /** Each round grants exactly one skip, usable by whoever's turn it is. */
+  rerollUsedThisRound: boolean;
   phase: BlitzPhase;
   history: RoundRecord[];
 }
