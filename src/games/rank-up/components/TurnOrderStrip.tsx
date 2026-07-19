@@ -13,7 +13,7 @@ function initials(name: string) {
 export default function TurnOrderStrip() {
   const { room, players, turnOrder, turnIndex } = useRankUp();
 
-  if (!room || isAwaitingRoundStart(room, players.length)) return null;
+  if (!room || isAwaitingRoundStart(room)) return null;
 
   const slots = turnOrder
     .map((playerId) => players.find((player) => player.id === playerId))

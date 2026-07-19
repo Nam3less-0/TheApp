@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:rank-up-db": "node scripts/check-rank-up-db.mjs"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.1",

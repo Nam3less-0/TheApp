@@ -1,9 +1,10 @@
--- Full rotation rounds: turn order, round number, round recap phase
+-- Run this in Supabase Dashboard → SQL Editor if Rank Up rotation is not working.
+-- Confirms migration 006_turn_rotation.sql
 
 alter table public.rank_up_rooms
-  add column turn_order jsonb not null default '[]'::jsonb,
-  add column turn_index integer not null default 0,
-  add column round_number integer not null default 1;
+  add column if not exists turn_order jsonb not null default '[]'::jsonb,
+  add column if not exists turn_index integer not null default 0,
+  add column if not exists round_number integer not null default 1;
 
 alter table public.rank_up_rooms drop constraint if exists rank_up_rooms_phase_check;
 

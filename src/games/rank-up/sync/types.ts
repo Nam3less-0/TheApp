@@ -86,7 +86,7 @@ export function mapPlayer(row: PlayerRow): RankUpPlayer {
   };
 }
 
-/** Host has not called startRound — turn queue only contains the host until then. */
-export function isAwaitingRoundStart(room: RankUpRoom, playerCount: number): boolean {
-  return room.phase === 'lobby' && room.turnOrder.length < playerCount;
+/** Host has not called startRound — turn queue is empty until then. */
+export function isAwaitingRoundStart(room: RankUpRoom): boolean {
+  return room.phase === 'lobby' && room.turnOrder.length === 0;
 }

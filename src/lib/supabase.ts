@@ -23,17 +23,36 @@ export function getSupabase(): SupabaseClient {
   return client;
 }
 
+const RANK_UP_MIGRATION_HINT =
+  'Rank Up needs database migration 006. In Supabase → SQL Editor, run the file supabase/migrations/006_turn_rotation.sql, then reload.';
+
 /** Supabase/PostgREST errors are plain objects, not Error instances. */
 export function formatSupabaseError(error: unknown, fallback: string): string {
-  if (error instanceof Error) return error.message;
-  if (
-    error &&
-    typeof error === 'object' &&
-    'message' in error &&
-    typeof error.message === 'string' &&
-    error.message.length > 0
-  ) {
+  if (error instanceof Error) {
+    if (error.message.includes('turn_order') || error.message.includes('round-recap')) {
+      return RANK_UP_MIGRATION_HINT;
+    }
     return error.message;
+  }
+  if (error && typeof error === 'object') {
+    const code = 'code' in error ? String(error.code) : '';
+    const message =
+      'message' in error && typeof error.message === 'string' ? error.message : '';
+
+    if (
+      code === '42703' &&
+      (message.includes('turn_order') ||
+        message.includes('turn_index') ||
+        message.includes('round_number'))
+    ) {
+      return RANK_UP_MIGRATION_HINT;
+    }
+
+    if (code === '23514' && message.includes('rank_up_rooms_phase_check')) {
+      return RANK_UP_MIGRATION_HINT;
+    }
+
+    if (message.length > 0) return message;
   }
   return fallback;
 }

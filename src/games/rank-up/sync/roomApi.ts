@@ -85,7 +85,7 @@ export async function createRoom(playerId: string, playerName: string): Promise<
     ranker_player_id: playerId,
     phase: 'lobby',
     options: [],
-    turn_order: [playerId],
+    turn_order: [],
     turn_index: 0,
     round_number: 1,
   });
@@ -149,7 +149,7 @@ export async function startRound(roomCode: string, playerIds: string[]): Promise
   const room = await fetchRoom(code);
   if (!room) throw new Error('Room not found.');
 
-  const isFirstRoundStart = room.turnOrder.length < playerIds.length;
+  const isFirstRoundStart = room.turnOrder.length === 0;
   const turnOrder = shuffleIds([...playerIds]);
 
   const { error } = await supabase

@@ -82,7 +82,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
   const roundNumber = room?.roundNumber ?? 1;
   const isLastTurnOfRound =
     turnOrder.length > 0 && turnIndex === turnOrder.length - 1;
-  const awaitingRoundStart = Boolean(room && isAwaitingRoundStart(room, players.length));
+  const awaitingRoundStart = Boolean(room && isAwaitingRoundStart(room));
 
   useEffect(() => {
     if (local.localPhase === 'setup') return;
