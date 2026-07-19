@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRankUp } from '../context';
 import { defaultRankOrder } from '../utils';
 import RankEditor from './RankEditor';
 import AbandonRoundButton from './AbandonRoundButton';
+import ErrorPanel from './ErrorPanel';
 import { CrownIcon } from './RankUpIcons';
 import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
@@ -12,20 +13,20 @@ export default function RankerRankScreen() {
   const [order, setOrder] = useState<string[]>(() =>
     draft ? defaultRankOrder(draft.options) : [],
   );
-
-  useEffect(() => {
-    if (draft) {
-      setOrder(defaultRankOrder(draft.options));
-    }
-  }, [draft?.prompt]);
+  const [publishing, setPublishing] = useState(false);
 
   if (!draft) return null;
 
   const canConfirm = order.length === draft.options.length;
 
   async function handleConfirm() {
-    if (!canConfirm) return;
-    await confirmRankerOrder(order);
+    if (!canConfirm || publishing) return;
+    setPublishing(true);
+    try {
+      await confirmRankerOrder(order);
+    } finally {
+      setPublishing(false);
+    }
   }
 
   return (
@@ -40,6 +41,10 @@ export default function RankerRankScreen() {
         </h1>
       </header>
 
+      {local.syncError ? (
+        <ErrorPanel message={local.syncError} className="!mb-4" />
+      ) : null}
+
       <RankUpPanel compact className="mb-6">
         <p className="font-body text-base font-bold leading-snug text-text-hi">{draft.prompt}</p>
       </RankUpPanel>
@@ -53,8 +58,8 @@ export default function RankerRankScreen() {
       />
 
       <div className="mt-8 flex flex-col gap-3">
-        <RankUpPrimaryButton onClick={handleConfirm} disabled={!canConfirm}>
-          Publish question to room
+        <RankUpPrimaryButton onClick={handleConfirm} disabled={!canConfirm || publishing}>
+          {publishing ? 'Publishing…' : 'Publish round'}
         </RankUpPrimaryButton>
         <AbandonRoundButton />
       </div>

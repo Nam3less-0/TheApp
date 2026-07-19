@@ -119,6 +119,21 @@ export function ImposterProvider({ children }: { children: ReactNode }) {
   }, [roomCode, localPhase]);
 
   useEffect(() => {
+    if (!playerId || !roomCode || localPhase !== 'synced') return;
+
+    const activePlayerId = playerId;
+    const activeRoomCode = roomCode;
+
+    function handlePageHide() {
+      void leaveRoom(activePlayerId, activeRoomCode);
+      clearSession();
+    }
+
+    window.addEventListener('pagehide', handlePageHide);
+    return () => window.removeEventListener('pagehide', handlePageHide);
+  }, [playerId, roomCode, localPhase]);
+
+  useEffect(() => {
     if (!synced || !room) return;
     const session = buildSession(room, roomPlayers);
     dispatch({ type: 'SYNC_STATE', payload: session });

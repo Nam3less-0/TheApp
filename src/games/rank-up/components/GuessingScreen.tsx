@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRankUp } from '../context';
 import { defaultRankOrder } from '../utils';
 import { GuesserScreenHeader } from './GuesserBadge';
 import AbandonRoundButton from './AbandonRoundButton';
+import ErrorPanel from './ErrorPanel';
 import RankEditor from './RankEditor';
 import { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
@@ -11,29 +12,33 @@ export default function GuessingScreen() {
   const [order, setOrder] = useState<string[]>(() =>
     room ? defaultRankOrder(room.options) : [],
   );
-
-  useEffect(() => {
-    if (room?.options) {
-      setOrder(defaultRankOrder(room.options));
-    }
-  }, [room?.prompt]);
+  const [submitting, setSubmitting] = useState(false);
 
   if (!room?.options.length) return null;
 
   const canSubmit = order.length === room.options.length;
 
   async function handleSubmit() {
-    if (!canSubmit) return;
-    await submitGuess(order);
+    if (!canSubmit || submitting) return;
+    setSubmitting(true);
+    try {
+      await submitGuess(order);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
     <RankUpPageWrap>
       <GuesserScreenHeader
-        eyebrow={`${local.playerName} — private`}
-        title="Your guess"
+        eyebrow="Round live — your turn"
+        title="Rank your guess"
         subtitle={room.prompt ?? undefined}
       />
+
+      {local.syncError ? (
+        <ErrorPanel message={local.syncError} className="mb-4" />
+      ) : null}
 
       <RankEditor
         options={room.options}
@@ -44,8 +49,8 @@ export default function GuessingScreen() {
       />
 
       <div className="mt-8 flex flex-col gap-3">
-        <RankUpPrimaryButton onClick={handleSubmit} disabled={!canSubmit}>
-          Lock in guess
+        <RankUpPrimaryButton onClick={handleSubmit} disabled={!canSubmit || submitting}>
+          {submitting ? 'Locking in…' : 'Lock in guess'}
         </RankUpPrimaryButton>
         <AbandonRoundButton />
       </div>

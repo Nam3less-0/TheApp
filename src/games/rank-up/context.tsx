@@ -21,6 +21,7 @@ import {
 } from './storage';
 import {
   createRoom,
+  fetchPlayers,
   joinRoom,
   leaveRoom,
   markGuessSubmitted,
@@ -102,6 +103,19 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
   }, [local.roomCode]);
 
   useEffect(() => {
+    if (local.localPhase === 'setup' || !local.playerId || !local.roomCode) return;
+
+    function handlePageHide() {
+      void leaveRoom(local.playerId, local.roomCode!);
+      clearSession();
+      clearPendingOrder(local.roomCode!);
+    }
+
+    window.addEventListener('pagehide', handlePageHide);
+    return () => window.removeEventListener('pagehide', handlePageHide);
+  }, [local.localPhase, local.playerId, local.roomCode]);
+
+  useEffect(() => {
     if (!room || isRanker) return;
 
     if (room.phase === 'lobby' && local.localPhase !== 'lobby' && local.localPhase !== 'setup') {
@@ -113,6 +127,20 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     if (!myPlayer || myPlayer.score === local.score) return;
     dispatch({ type: 'SYNC_SCORE', score: myPlayer.score });
   }, [myPlayer?.score, local.score, myPlayer]);
+
+  useEffect(() => {
+    if (!myPlayer?.guessSubmitted || !myPlayer.guessOrder?.length) return;
+    if (local.localPhase === 'guess-submitted') return;
+    if (room?.phase === 'lobby' || !room) return;
+    dispatch({ type: 'SUBMIT_GUESS', guessOrder: myPlayer.guessOrder });
+  }, [
+    myPlayer?.guessSubmitted,
+    myPlayer?.guessOrder,
+    room?.phase,
+    local.localPhase,
+    myPlayer,
+    room,
+  ]);
 
   const createGame = useCallback(async (playerName: string) => {
     if (!isSupabaseConfigured()) {
@@ -193,15 +221,35 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
 
   const confirmRankerOrder = useCallback(
     async (order: string[]) => {
-      if (!local.roomCode || !local.roundDraft) return;
+      if (!local.roomCode || !local.roundDraft) {
+        dispatch({
+          type: 'SET_SYNC_ERROR',
+          message: 'Round setup was lost. Cancel and start the round again.',
+        });
+        return;
+      }
+
       savePendingOrder(local.roomCode, order);
-      await publishDisplay(local.roomCode, {
-        questionType: local.roundDraft.type,
-        prompt: local.roundDraft.prompt,
-        options: local.roundDraft.options,
-        rankerPlayerId: local.playerId,
-      });
-      dispatch({ type: 'RETURN_TO_LOBBY' });
+      const draft = local.roundDraft;
+
+      try {
+        const updatedRoom = await publishDisplay(local.roomCode, {
+          questionType: draft.type,
+          prompt: draft.prompt,
+          options: draft.options,
+          rankerPlayerId: local.playerId,
+        });
+        setRoom(updatedRoom);
+        const updatedPlayers = await fetchPlayers(local.roomCode);
+        setPlayers(updatedPlayers);
+        dispatch({ type: 'RETURN_TO_LOBBY' });
+        dispatch({ type: 'SET_SYNC_ERROR', message: null });
+      } catch (error) {
+        dispatch({
+          type: 'SET_SYNC_ERROR',
+          message: error instanceof Error ? error.message : 'Could not publish round.',
+        });
+      }
     },
     [local.roomCode, local.roundDraft, local.playerId],
   );
@@ -218,8 +266,16 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       dispatch({ type: 'SET_SYNC_ERROR', message: 'Ranker order not found on this device.' });
       return;
     }
-    await revealAnswer(local.roomCode, order);
-    clearPendingOrder(local.roomCode);
+    try {
+      await revealAnswer(local.roomCode, order);
+      clearPendingOrder(local.roomCode);
+      dispatch({ type: 'SET_SYNC_ERROR', message: null });
+    } catch (error) {
+      dispatch({
+        type: 'SET_SYNC_ERROR',
+        message: error instanceof Error ? error.message : 'Could not reveal answer.',
+      });
+    }
   }, [local.roomCode]);
 
   const nextRound = useCallback(
@@ -262,8 +318,15 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
 
   const submitGuess = useCallback(
     async (order: string[]) => {
-      dispatch({ type: 'SUBMIT_GUESS', guessOrder: order });
-      await markGuessSubmitted(local.playerId, order);
+      try {
+        await markGuessSubmitted(local.playerId, order);
+        dispatch({ type: 'SUBMIT_GUESS', guessOrder: order });
+      } catch (error) {
+        dispatch({
+          type: 'SET_SYNC_ERROR',
+          message: error instanceof Error ? error.message : 'Could not submit guess.',
+        });
+      }
     },
     [local.playerId],
   );

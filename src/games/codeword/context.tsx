@@ -137,6 +137,22 @@ export function CodewordProvider({ children }: { children: ReactNode }) {
   }, [roomCode, localPhase]);
 
   useEffect(() => {
+    if (!teamId || !roomCode || localPhase === 'local' || localPhase === 'setup') return;
+
+    const activeTeamId = teamId;
+    const activeRoomCode = roomCode;
+
+    function handlePageHide() {
+      void leaveRoom(activeTeamId, activeRoomCode);
+      clearTeamCard(activeRoomCode);
+      clearSession();
+    }
+
+    window.addEventListener('pagehide', handlePageHide);
+    return () => window.removeEventListener('pagehide', handlePageHide);
+  }, [teamId, roomCode, localPhase]);
+
+  useEffect(() => {
     if (!synced || !room || !myTeam) return;
 
     const card = loadTeamCard(room.code) ?? state.teamCard;

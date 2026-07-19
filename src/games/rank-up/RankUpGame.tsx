@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { useRankUp } from './context';
 import { SessionUIProvider } from './sessionUi';
 import ComposeScreen from './components/ComposeScreen';
-import DisplayScreen from './components/DisplayScreen';
-import GuesserPromptScreen from './components/GuesserPromptScreen';
 import GuesserRevealScreen from './components/GuesserRevealScreen';
 import GuessingScreen from './components/GuessingScreen';
 import LobbyScreen from './components/LobbyScreen';
@@ -14,6 +12,7 @@ import RankerWaitScreen from './components/RankerWaitScreen';
 import ErrorPanel from './components/ErrorPanel';
 import RejoiningSkeleton from './components/RejoiningSkeleton';
 import RevealScreen from './components/RevealScreen';
+import RoundPhaseBar from './components/RoundPhaseBar';
 import SetupScreen from './components/SetupScreen';
 import { RankUpPageWrap, RankUpSecondaryButton } from './components/Layout';
 
@@ -40,14 +39,20 @@ function RankUpShell({ children }: { children: React.ReactNode }) {
           <span className="w-12" aria-hidden="true" />
         </div>
       </div>
+      <RoundPhaseBar />
       <div className="relative">{children}</div>
     </div>
   );
 }
 
 function RankUpRouter() {
-  const { local, room, isRanker, leaveGame } = useRankUp();
+  const { local, room, players, isRanker, leaveGame } = useRankUp();
   const [onboarded, setOnboarded] = useState(isRankUpOnboarded);
+
+  const myPlayer = players.find((player) => player.id === local.playerId);
+  const guessAlreadySubmitted =
+    local.localPhase === 'guess-submitted' ||
+    Boolean(myPlayer?.guessSubmitted && room && room.phase !== 'lobby');
 
   const isRejoining =
     local.localPhase !== 'setup' && local.roomCode && !room && !local.syncError;
@@ -105,15 +110,7 @@ function RankUpRouter() {
     );
   }
 
-  if (local.localPhase === 'guessing') {
-    return (
-      <RankUpShell>
-        <GuessingScreen />
-      </RankUpShell>
-    );
-  }
-
-  if (local.localPhase === 'guess-submitted') {
+  if (guessAlreadySubmitted && !isRanker) {
     return (
       <RankUpShell>
         <GuesserRevealScreen />
@@ -132,11 +129,6 @@ function RankUpRouter() {
   if (isRanker) {
     switch (room.phase) {
       case 'display':
-        return (
-          <RankUpShell>
-            <DisplayScreen />
-          </RankUpShell>
-        );
       case 'guessing':
         return (
           <RankUpShell>
@@ -163,7 +155,7 @@ function RankUpRouter() {
     case 'guessing':
       return (
         <RankUpShell>
-          <GuesserPromptScreen />
+          <GuessingScreen />
         </RankUpShell>
       );
     case 'reveal':

@@ -116,23 +116,28 @@ export async function publishDisplay(
     options: RankOption[];
     rankerPlayerId: string;
   },
-): Promise<void> {
+): Promise<RankUpRoom> {
   const supabase = getSupabase();
+  const code = roomCode.toUpperCase();
   const { error } = await supabase
     .from('rank_up_rooms')
     .update({
-      phase: 'display',
+      phase: 'guessing',
       question_type: payload.questionType,
       prompt: payload.prompt,
       options: payload.options,
       ranker_player_id: payload.rankerPlayerId,
       ranker_order: null,
     })
-    .eq('code', roomCode.toUpperCase());
+    .eq('code', code);
 
   if (error) throw error;
 
-  await resetGuessSubmissions(roomCode);
+  await resetGuessSubmissions(code);
+
+  const room = await fetchRoom(code);
+  if (!room) throw new Error('Room not found after publish.');
+  return room;
 }
 
 export async function startGuessing(roomCode: string): Promise<void> {
@@ -234,6 +239,7 @@ export async function setRanker(roomCode: string, rankerPlayerId: string): Promi
 
 async function resetGuessSubmissions(roomCode: string): Promise<void> {
   const supabase = getSupabase();
+  const code = roomCode.toUpperCase();
   const { error } = await supabase
     .from('rank_up_players')
     .update({
@@ -241,9 +247,16 @@ async function resetGuessSubmissions(roomCode: string): Promise<void> {
       guess_order: null,
       last_round_points: null,
     })
-    .eq('room_code', roomCode.toUpperCase());
+    .eq('room_code', code);
 
-  if (error) throw error;
+  if (!error) return;
+
+  const { error: fallbackError } = await supabase
+    .from('rank_up_players')
+    .update({ guess_submitted: false })
+    .eq('room_code', code);
+
+  if (fallbackError) throw fallbackError;
 }
 
 export async function markGuessSubmitted(
@@ -259,7 +272,14 @@ export async function markGuessSubmitted(
     })
     .eq('id', playerId);
 
-  if (error) throw error;
+  if (!error) return;
+
+  const { error: fallbackError } = await supabase
+    .from('rank_up_players')
+    .update({ guess_submitted: true })
+    .eq('id', playerId);
+
+  if (fallbackError) throw fallbackError;
 }
 
 export async function updatePlayerScore(playerId: string, score: number): Promise<void> {
@@ -317,10 +337,17 @@ export function subscribeToRoom(
 
 export async function leaveRoom(playerId: string, roomCode: string): Promise<void> {
   const supabase = getSupabase();
-  await supabase.from('rank_up_players').delete().eq('id', playerId);
+  const code = roomCode.toUpperCase();
 
-  const players = await fetchPlayers(roomCode);
+  const { error: playerError } = await supabase
+    .from('rank_up_players')
+    .delete()
+    .eq('id', playerId);
+  if (playerError) throw playerError;
+
+  const players = await fetchPlayers(code);
   if (players.length === 0) {
-    await supabase.from('rank_up_rooms').delete().eq('code', roomCode.toUpperCase());
+    const { error: roomError } = await supabase.from('rank_up_rooms').delete().eq('code', code);
+    if (roomError) throw roomError;
   }
 }

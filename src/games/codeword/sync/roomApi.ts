@@ -338,10 +338,14 @@ export function subscribeToRoom(
 
 export async function leaveRoom(teamId: string, roomCode: string): Promise<void> {
   const supabase = getSupabase();
-  await supabase.from('codeword_teams').delete().eq('id', teamId);
+  const code = roomCode.toUpperCase();
 
-  const teams = await fetchTeams(roomCode);
+  const { error: teamError } = await supabase.from('codeword_teams').delete().eq('id', teamId);
+  if (teamError) throw teamError;
+
+  const teams = await fetchTeams(code);
   if (teams.length === 0) {
-    await supabase.from('codeword_rooms').delete().eq('code', roomCode.toUpperCase());
+    const { error: roomError } = await supabase.from('codeword_rooms').delete().eq('code', code);
+    if (roomError) throw roomError;
   }
 }
