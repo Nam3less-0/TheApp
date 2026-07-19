@@ -1,14 +1,11 @@
 import { useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
+import { rankUpPlayerJoinUrl } from '../../../../lib/appUrl';
 import { useRankUpHost } from '../context';
 import RoomCodeDisplay from '../../components/RoomCodeDisplay';
 import RankUpPanel, { RankUpPageWrap } from '../../components/Layout';
 import { CrownIcon } from '../../components/RankUpIcons';
 import { isAwaitingRoundStart } from '../../sync/types';
-
-function playerJoinUrl(code: string): string {
-  return `${window.location.origin}/play/rank-up?join=${code}`;
-}
 
 export default function HostLobbyScreen() {
   const { room, players } = useRankUpHost();
@@ -18,7 +15,7 @@ export default function HostLobbyScreen() {
     const canvas = canvasRef.current;
     if (!canvas || !room) return;
 
-    void QRCode.toCanvas(canvas, playerJoinUrl(room.code), {
+    void QRCode.toCanvas(canvas, rankUpPlayerJoinUrl(room.code), {
       width: 240,
       margin: 1,
       color: {
@@ -55,7 +52,7 @@ export default function HostLobbyScreen() {
             Join link
           </p>
           <p className="mt-1 break-all px-2 text-center font-mono text-[11px] text-text-mid">
-            {playerJoinUrl(room.code)}
+            {rankUpPlayerJoinUrl(room.code)}
           </p>
         </RankUpPanel>
 
