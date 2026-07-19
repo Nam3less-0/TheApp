@@ -1,8 +1,10 @@
+import type { ReactNode } from 'react';
 import { useRankUpHost } from './context';
 import HostLobbyScreen from './components/HostLobbyScreen';
 import HostProgressScreen from './components/HostProgressScreen';
 import HostRevealScreen from './components/HostRevealScreen';
 import HostRoundRecapScreen from './components/HostRoundRecapScreen';
+import HostDisplayLayout from './components/HostDisplayLayout';
 import RejoiningSkeleton from '../components/RejoiningSkeleton';
 import ErrorPanel from '../components/ErrorPanel';
 import { RankUpPageWrap, RankUpSecondaryButton } from '../components/Layout';
@@ -33,16 +35,23 @@ export default function HostScreenRouter() {
     return <RejoiningSkeleton />;
   }
 
+  let screen: ReactNode;
+
   switch (room.phase) {
     case 'guessing':
     case 'display':
-      return <HostProgressScreen />;
+      screen = <HostProgressScreen />;
+      break;
     case 'reveal':
-      return <HostRevealScreen />;
+      screen = <HostRevealScreen />;
+      break;
     case 'round-recap':
-      return <HostRoundRecapScreen />;
+      screen = <HostRoundRecapScreen />;
+      break;
     case 'lobby':
     default:
-      return <HostLobbyScreen />;
+      screen = <HostLobbyScreen />;
   }
+
+  return <HostDisplayLayout>{screen}</HostDisplayLayout>;
 }

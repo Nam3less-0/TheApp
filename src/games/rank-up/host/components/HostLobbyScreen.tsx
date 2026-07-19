@@ -2,9 +2,8 @@ import { useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
 import { rankUpPlayerJoinUrl } from '../../../../lib/appUrl';
 import { useRankUpHost } from '../context';
-import RoomCodeDisplay from '../../components/RoomCodeDisplay';
-import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton, RankUpSecondaryButton } from '../../components/Layout';
-import { CrownIcon } from '../../components/RankUpIcons';
+import HostLeaderboard from './HostLeaderboard';
+import RankUpPanel, { RankUpPrimaryButton, RankUpSecondaryButton } from '../../components/Layout';
 import { isAwaitingRoundStart } from '../../sync/types';
 
 export default function HostLobbyScreen() {
@@ -33,23 +32,43 @@ export default function HostLobbyScreen() {
     room.rankerPlayerId && !players.some((player) => player.id === room.rankerPlayerId),
   );
 
+  if (!awaitingRoundStart) {
+    return (
+      <RankUpPanel compact className="mx-auto max-w-xl border-[#6FA3C4]/25">
+        <p className="text-center font-body text-sm text-text-mid">
+          {ranker
+            ? `${ranker.name} is up next — waiting for them to start their turn on their phone.`
+            : 'Waiting for the next turn…'}
+        </p>
+        {rankerMissingFromRoom ? (
+          <RankUpSecondaryButton
+            onClick={() => skipCurrentTurn()}
+            className="mt-4 w-full text-center"
+          >
+            Skip {ranker?.name ?? 'ranker'}&apos;s turn
+          </RankUpSecondaryButton>
+        ) : null}
+      </RankUpPanel>
+    );
+  }
+
   return (
-    <RankUpPageWrap variant="display">
-      <header className="mb-8 text-center">
+    <div className="flex flex-col gap-8">
+      <header className="text-center">
         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#6FA3C4]">
-          Host display — lobby
+          Host display — setup
         </p>
         <h1 className="mt-2 font-display text-[32px] font-extrabold leading-tight text-text-hi sm:text-4xl">
           Scan to play on your phone
         </h1>
         <p className="mx-auto mt-3 max-w-lg font-body text-sm text-text-mid">
           {isGameroom
-            ? 'Players scan the QR code to join on their phones. Start each round from this screen when everyone is ready.'
-            : 'This screen runs the session — start rounds, reveal answers, and advance turns from here.'}
+            ? 'Players join via QR code. Start the round when everyone is ready — then this screen switches to the leaderboard.'
+            : 'Share the QR code. Start the round from here when ready.'}
         </p>
       </header>
 
-      <div className="mx-auto grid max-w-3xl gap-6 lg:grid-cols-[1fr_1.1fr]">
+      <div className="mx-auto grid w-full max-w-2xl gap-6 sm:grid-cols-2">
         <RankUpPanel compact className="flex flex-col items-center justify-center border-[#6FA3C4]/25">
           <canvas ref={canvasRef} className="rounded-xl" aria-label={`QR code to join room ${room.code}`} />
           <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-text-low">
@@ -60,84 +79,27 @@ export default function HostLobbyScreen() {
           </p>
         </RankUpPanel>
 
-        <div className="flex flex-col gap-6">
-          <RoomCodeDisplay code={room.code} />
-
-          <RankUpPanel compact>
-            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-low">
-              Players ({players.length})
+        <div className="flex flex-col justify-center gap-4">
+          <RankUpPrimaryButton
+            onClick={() => startNewRound()}
+            disabled={players.length < 2}
+            className="w-full"
+          >
+            Start Round 1
+          </RankUpPrimaryButton>
+          {players.length < 2 ? (
+            <p className="text-center font-mono text-[10px] uppercase tracking-[0.12em] text-text-low">
+              Need at least 2 players to start
             </p>
-            <ul className="flex flex-col gap-2">
-              {players.map((player) => {
-                const isCurrentRanker = player.id === room.rankerPlayerId;
-
-                return (
-                  <li
-                    key={player.id}
-                    className={`flex items-center justify-between rounded-xl border px-4 py-3 ${
-                      isCurrentRanker ? 'border-pewter/50 bg-surface' : 'border-line'
-                    }`}
-                  >
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-deep/60 font-mono text-xs font-bold text-text-mid">
-                        {isCurrentRanker ? (
-                          <CrownIcon className="h-3.5 w-3.5 text-pewter" />
-                        ) : (
-                          player.name.slice(0, 1).toUpperCase()
-                        )}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="truncate font-body text-sm font-semibold text-text-hi">
-                          {player.name}
-                        </p>
-                        <p className="font-mono text-[10px] uppercase tracking-wider text-text-low">
-                          {isCurrentRanker ? 'Ranker' : 'Guesser'}
-                        </p>
-                      </div>
-                    </div>
-                    <span className="font-mono text-sm text-pewter">{player.score}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          </RankUpPanel>
-
-          {awaitingRoundStart ? (
-            <>
-              <RankUpPrimaryButton
-                onClick={() => startNewRound()}
-                disabled={players.length < 2}
-                className="w-full"
-              >
-                Start Round 1
-              </RankUpPrimaryButton>
-              {players.length < 2 ? (
-                <p className="text-center font-mono text-[10px] uppercase tracking-[0.12em] text-text-low">
-                  Need at least 2 players to start
-                </p>
-              ) : null}
-            </>
-          ) : (
-            <>
-              <RankUpPanel compact>
-                <p className="text-center font-body text-sm text-text-mid">
-                  {ranker
-                    ? `Waiting for ${ranker.name} to start their turn…`
-                    : 'Waiting for the next turn…'}
-                </p>
-              </RankUpPanel>
-              {rankerMissingFromRoom ? (
-                <RankUpSecondaryButton
-                  onClick={() => skipCurrentTurn()}
-                  className="w-full text-center"
-                >
-                  Skip {ranker?.name ?? 'ranker'}&apos;s turn
-                </RankUpSecondaryButton>
-              ) : null}
-            </>
-          )}
+          ) : null}
         </div>
       </div>
-    </RankUpPageWrap>
+
+      {players.length > 0 ? (
+        <div className="mx-auto w-full max-w-md">
+          <HostLeaderboard variant="sidebar" />
+        </div>
+      ) : null}
+    </div>
   );
 }

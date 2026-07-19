@@ -5,7 +5,7 @@ import {
   cellTone,
   guessedPosition,
 } from '../comparisonGrid';
-import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton, RankUpSecondaryButton } from '../../components/Layout';
+import RankUpPanel, { RankUpPrimaryButton, RankUpSecondaryButton } from '../../components/Layout';
 import { CrownIcon } from '../../components/RankUpIcons';
 
 export default function HostRevealScreen() {
@@ -17,8 +17,8 @@ export default function HostRevealScreen() {
   const guessers = players.filter((player) => player.id !== room.rankerPlayerId);
 
   return (
-    <RankUpPageWrap variant="display">
-      <header className="mb-6 text-center">
+    <div className="flex flex-col gap-6">
+      <header className="text-center lg:text-left">
         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#6FA3C4]">
           Host display — reveal
         </p>
@@ -129,6 +129,6 @@ export default function HostRevealScreen() {
           Abandon round
         </RankUpSecondaryButton>
       </div>
-    </RankUpPageWrap>
+    </div>
   );
 }

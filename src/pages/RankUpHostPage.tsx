@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRankUpHost } from '../games/rank-up/host/context';
 import HostScreenRouter from '../games/rank-up/host/HostScreenRouter';
 import HostGameOptionsMenu from '../games/rank-up/host/components/HostGameOptionsMenu';
+import HostRoomCodeBadge from '../games/rank-up/host/components/HostRoomCodeBadge';
 import ErrorPanel from '../games/rank-up/components/ErrorPanel';
 import RankUpPanel, {
   RankUpPageWrap,
@@ -93,7 +94,10 @@ function HostShell({ children }: { children: React.ReactNode }) {
           >
             ← Shelf
           </Link>
-          <span className="font-display text-sm font-bold text-text-hi">Rank Up — Host Display</span>
+          <div className="flex min-w-0 flex-1 flex-col items-center gap-0.5">
+            <span className="font-display text-sm font-bold text-text-hi">Rank Up — Host Display</span>
+            {roomCode ? <HostRoomCodeBadge code={roomCode} /> : null}
+          </div>
           {roomCode ? (
             <div className="flex items-center gap-3">
               <button
