@@ -1,12 +1,15 @@
 import { useRankUp } from '../context';
 import { labelForOption, perfectPoints } from '../utils';
 import AbandonRoundButton from './AbandonRoundButton';
+import BigScreenRevealCard from './BigScreenRevealCard';
 import CommandCenterFrame from './CommandCenterFrame';
 import ScoreResultChip from './ScoreResultChip';
+import { TeamsRevealSummaryPanel } from './TeamsRevealSummary';
 import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
 export default function RevealScreen() {
-  const { room, players, advanceTurn, isLastTurnOfRound } = useRankUp();
+  const { room, players, advanceTurn, isLastTurnOfRound, hostDeviceConnected, isTeamsGame } =
+    useRankUp();
 
   if (!room?.rankerOrder || !room.prompt) return null;
 
@@ -35,7 +38,14 @@ export default function RevealScreen() {
           ))}
         </ol>
 
-        {guessers.length > 0 ? (
+        {hostDeviceConnected ? (
+          <BigScreenRevealCard
+            pointsLabel="Scores on the big screen"
+            className="mb-6"
+          />
+        ) : isTeamsGame ? (
+          <TeamsRevealSummaryPanel />
+        ) : guessers.length > 0 ? (
           <RankUpPanel compact className="mb-6">
             <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-low">
               Round scores

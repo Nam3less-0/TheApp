@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRankUp } from './context';
 import { SessionUIProvider } from './sessionUi';
+import TeamFormationScreen from './components/TeamFormationScreen';
 import ComposeScreen from './components/ComposeScreen';
 import GuesserRevealScreen from './components/GuesserRevealScreen';
 import GuessingScreen from './components/GuessingScreen';
@@ -17,6 +18,7 @@ import RoundRecapScreen from './components/RoundRecapScreen';
 import SetupScreen from './components/SetupScreen';
 import TurnOrderStrip from './components/TurnOrderStrip';
 import TurnTransitionBeat from './components/TurnTransitionBeat';
+import GameOptionsMenu from './components/GameOptionsMenu';
 import RankUpPanel, { RankUpPageWrap, RankUpSecondaryButton } from './components/Layout';
 
 function RankUpShell({ children }: { children: React.ReactNode }) {
@@ -39,7 +41,7 @@ function RankUpShell({ children }: { children: React.ReactNode }) {
             ← Shelf
           </Link>
           <span className="font-display text-sm font-bold text-text-hi">Rank Up</span>
-          <span className="w-12" aria-hidden="true" />
+          <GameOptionsMenu />
         </div>
       </div>
       <RoundPhaseBar />
@@ -97,7 +99,16 @@ function MidTurnLobbyRouter() {
 }
 
 function RankUpRouter() {
-  const { local, room, players, isRanker, leaveGame, awaitingRoundStart } = useRankUp();
+  const {
+    local,
+    room,
+    players,
+    isRanker,
+    leaveGame,
+    awaitingRoundStart,
+    isTeamsGame,
+    teamFormationComplete,
+  } = useRankUp();
   const [onboarded, setOnboarded] = useState(isRankUpOnboarded);
 
   const myPlayer = players.find((player) => player.id === local.playerId);
@@ -213,7 +224,11 @@ function RankUpRouter() {
       default:
         return (
           <RankUpShell>
-            <LobbyScreen />
+            {isTeamsGame && awaitingRoundStart && !teamFormationComplete ? (
+              <TeamFormationScreen />
+            ) : (
+              <LobbyScreen />
+            )}
           </RankUpShell>
         );
     }
@@ -236,7 +251,11 @@ function RankUpRouter() {
     default:
       return (
         <RankUpShell>
-          <LobbyScreen />
+          {isTeamsGame && awaitingRoundStart && !teamFormationComplete ? (
+            <TeamFormationScreen />
+          ) : (
+            <LobbyScreen />
+          )}
         </RankUpShell>
       );
   }

@@ -26,11 +26,21 @@ export function getSupabase(): SupabaseClient {
 const RANK_UP_MIGRATION_HINT =
   'Rank Up needs database migration 006. In Supabase → SQL Editor, run the file supabase/migrations/006_turn_rotation.sql, then reload.';
 
+const RANK_UP_TEAMS_MIGRATION_HINT =
+  'Rank Up Teams mode needs migration 007. In Supabase → SQL Editor, run supabase/migrations/007_teams.sql, then reload.';
+
 /** Supabase/PostgREST errors are plain objects, not Error instances. */
 export function formatSupabaseError(error: unknown, fallback: string): string {
   if (error instanceof Error) {
     if (error.message.includes('turn_order') || error.message.includes('round-recap')) {
       return RANK_UP_MIGRATION_HINT;
+    }
+    if (
+      error.message.includes('game_mode') ||
+      error.message.includes('team_id') ||
+      error.message.includes('rank_up_teams')
+    ) {
+      return RANK_UP_TEAMS_MIGRATION_HINT;
     }
     return error.message;
   }
@@ -43,9 +53,14 @@ export function formatSupabaseError(error: unknown, fallback: string): string {
       code === '42703' &&
       (message.includes('turn_order') ||
         message.includes('turn_index') ||
-        message.includes('round_number'))
+        message.includes('round_number') ||
+        message.includes('game_mode') ||
+        message.includes('team_id') ||
+        message.includes('team_draft_order'))
     ) {
-      return RANK_UP_MIGRATION_HINT;
+      return message.includes('game_mode') || message.includes('team')
+        ? RANK_UP_TEAMS_MIGRATION_HINT
+        : RANK_UP_MIGRATION_HINT;
     }
 
     if (code === '23514' && message.includes('rank_up_rooms_phase_check')) {

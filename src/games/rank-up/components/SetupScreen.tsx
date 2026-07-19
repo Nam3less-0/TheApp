@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useRankUp } from '../context';
 import ErrorPanel from './ErrorPanel';
 import OnboardingCards from './OnboardingCards';
@@ -17,14 +18,24 @@ export default function SetupScreen({ onShowRules }: SetupScreenProps) {
   const [playerName, setPlayerName] = useState(local.playerName || '');
   const [roomCode, setRoomCode] = useState('');
   const [mode, setMode] = useState<'create' | 'join'>('create');
+  const [gameMode, setGameMode] = useState<'classic' | 'teams'>('classic');
   const [showRules, setShowRules] = useState(false);
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const join = searchParams.get('join');
+    if (join && join.length === 4) {
+      setMode('join');
+      setRoomCode(join.toUpperCase());
+    }
+  }, [searchParams]);
 
   const canSubmit = playerName.trim().length > 0 && (mode === 'create' || roomCode.trim().length === 4);
 
   async function handleSubmit() {
     if (!canSubmit) return;
     if (mode === 'create') {
-      await createGame(playerName.trim());
+      await createGame(playerName.trim(), gameMode);
     } else {
       await joinGame(roomCode.trim(), playerName.trim());
     }
@@ -32,7 +43,7 @@ export default function SetupScreen({ onShowRules }: SetupScreenProps) {
 
   function handleRetry() {
     if (mode === 'create') {
-      void createGame(playerName.trim());
+      void createGame(playerName.trim(), gameMode);
     } else if (roomCode.trim().length === 4) {
       void joinGame(roomCode.trim(), playerName.trim());
     }
@@ -130,6 +141,35 @@ export default function SetupScreen({ onShowRules }: SetupScreenProps) {
               maxLength={4}
               className="w-full rounded-xl border border-line bg-deep px-4 py-3 font-mono text-xl tracking-[0.3em] text-text-hi uppercase outline-none focus-visible:border-pewter focus-visible:ring-1 focus-visible:ring-pewter"
             />
+          )}
+
+          {mode === 'create' && (
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              {(
+                [
+                  { id: 'classic' as const, label: 'Classic', hint: 'Free-for-all on phones' },
+                  { id: 'teams' as const, label: '2v2 Teams', hint: 'Exactly 4 players' },
+                ] as const
+              ).map((entry) => {
+                const selected = gameMode === entry.id;
+                return (
+                  <button
+                    key={entry.id}
+                    type="button"
+                    onClick={() => setGameMode(entry.id)}
+                    className={`rounded-xl border bg-surface p-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pewter ${
+                      selected
+                        ? 'border-pewter shadow-[0_0_0_1px_#9B93A8_inset]'
+                        : 'border-line hover:border-line-bright'
+                    }`}
+                    aria-pressed={selected}
+                  >
+                    <p className="font-body text-sm font-bold text-text-hi">{entry.label}</p>
+                    <p className="mt-1 font-body text-[12px] text-text-mid">{entry.hint}</p>
+                  </button>
+                );
+              })}
+            </div>
           )}
         </RankUpPanel>
 

@@ -1,13 +1,15 @@
 import { useRankUp } from '../context';
 import { roundPointsLabel } from '../utils';
+import BigScreenRevealCard from './BigScreenRevealCard';
 import { GuesserScreenHeader } from './GuesserBadge';
+import { TeamsRevealSummaryPanel } from './TeamsRevealSummary';
 import GuesserProgressRow from './GuesserProgressRow';
 import OrderList from './OrderList';
 import ScoreResultChip from './ScoreResultChip';
 import RankUpPanel, { RankUpPageWrap } from './Layout';
 
 export default function GuesserRevealScreen() {
-  const { local, room, players } = useRankUp();
+  const { local, room, players, hostDeviceConnected, isTeamsGame } = useRankUp();
   const myPlayer = players.find((player) => player.id === local.playerId);
   const myGuessOrder =
     local.lastGuessOrder.length > 0
@@ -58,7 +60,10 @@ export default function GuesserRevealScreen() {
             You didn&apos;t lock in a guess this round — no points earned.
           </p>
         </RankUpPanel>
-      ) : roundPoints != null && myGuessOrder.length > 0 ? (
+      ) : hostDeviceConnected && roundPoints != null && myGuessOrder.length > 0 ? (
+        <BigScreenRevealCard pointsLabel={`+${roundPoints}`} className="mb-6" />
+      ) : isTeamsGame && roundPoints != null && !hostDeviceConnected ? null : roundPoints != null &&
+        myGuessOrder.length > 0 ? (
         <div className="mb-6 flex justify-center">
           <ScoreResultChip
             points={roundPoints}
@@ -78,7 +83,11 @@ export default function GuesserRevealScreen() {
         </p>
       ) : null}
 
-      {!missedGuess ? (
+      {isTeamsGame && revealed && !missedGuess && roundPoints != null && !hostDeviceConnected ? (
+        <TeamsRevealSummaryPanel />
+      ) : null}
+
+      {!missedGuess && !hostDeviceConnected && !isTeamsGame ? (
         <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <RankUpPanel compact>
             <p className="mb-3 font-body text-sm font-bold text-text-hi">Your guess</p>
@@ -104,7 +113,7 @@ export default function GuesserRevealScreen() {
             />
           </RankUpPanel>
         </div>
-      ) : (
+      ) : missedGuess ? (
         <RankUpPanel compact className="mb-6 border-pewter/30">
           <p className="mb-3 font-body text-sm font-bold text-text-hi">Ranker&apos;s order</p>
           <OrderList
@@ -116,7 +125,7 @@ export default function GuesserRevealScreen() {
             worstLabel="Worst"
           />
         </RankUpPanel>
-      )}
+      ) : null}
 
       <p className="text-center font-body text-[12px] text-text-low">
         Waiting for the ranker to continue…

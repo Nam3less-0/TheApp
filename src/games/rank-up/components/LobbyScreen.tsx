@@ -7,6 +7,7 @@ import RankUpPanel, {
   RankUpPrimaryButton,
   RankUpSecondaryButton,
 } from './Layout';
+import CastToScreenPanel from './CastToScreenPanel';
 import { CrownIcon } from './RankUpIcons';
 
 export default function LobbyScreen() {
@@ -115,6 +116,8 @@ export default function LobbyScreen() {
         ) : null}
 
         <AbandonRoundButton />
+
+        <CastToScreenPanel code={room.code} />
 
         <RankUpSecondaryButton onClick={leaveGame} className="w-full text-center">
           Leave room

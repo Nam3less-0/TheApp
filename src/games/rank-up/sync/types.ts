@@ -2,6 +2,14 @@ import type { QuestionType, RankOption } from '../types';
 import type { RoundPoints } from '../utils';
 
 export type RoomPhase = 'lobby' | 'display' | 'guessing' | 'reveal' | 'round-recap';
+export type GameMode = 'classic' | 'teams';
+export type TeamAccent = 'a' | 'b';
+
+export interface TeamDraftOrder {
+  order: string[];
+  movedBy: string | null;
+  updatedAt: number;
+}
 
 export interface RoomRow {
   code: string;
@@ -15,6 +23,8 @@ export interface RoomRow {
   turn_order: string[];
   turn_index: number;
   round_number: number;
+  game_mode: GameMode;
+  team_draft_order: TeamDraftOrder | null;
   created_at: string;
 }
 
@@ -26,7 +36,15 @@ export interface PlayerRow {
   guess_submitted: boolean;
   guess_order: string[] | null;
   last_round_points: number | null;
+  team_id: string | null;
   joined_at: string;
+}
+
+export interface TeamRow {
+  id: string;
+  room_code: string;
+  name: string;
+  accent: TeamAccent;
 }
 
 export interface RankUpRoom {
@@ -41,6 +59,8 @@ export interface RankUpRoom {
   turnOrder: string[];
   turnIndex: number;
   roundNumber: number;
+  gameMode: GameMode;
+  teamDraftOrder: TeamDraftOrder | null;
 }
 
 export interface RankUpPlayer {
@@ -50,6 +70,25 @@ export interface RankUpPlayer {
   guessSubmitted: boolean;
   guessOrder: string[] | null;
   lastRoundPoints: RoundPoints | null;
+  teamId: string | null;
+}
+
+export interface RankUpTeam {
+  id: string;
+  roomCode: string;
+  name: string;
+  accent: TeamAccent;
+}
+
+function parseTeamDraftOrder(value: unknown): TeamDraftOrder | null {
+  if (!value || typeof value !== 'object') return null;
+  const row = value as Record<string, unknown>;
+  if (!Array.isArray(row.order)) return null;
+  return {
+    order: row.order as string[],
+    movedBy: typeof row.movedBy === 'string' ? row.movedBy : null,
+    updatedAt: typeof row.updatedAt === 'number' ? row.updatedAt : Date.now(),
+  };
 }
 
 export function mapRoom(row: RoomRow): RankUpRoom {
@@ -65,6 +104,8 @@ export function mapRoom(row: RoomRow): RankUpRoom {
     turnOrder: Array.isArray(row.turn_order) ? row.turn_order : [],
     turnIndex: row.turn_index ?? 0,
     roundNumber: row.round_number ?? 1,
+    gameMode: row.game_mode ?? 'classic',
+    teamDraftOrder: parseTeamDraftOrder(row.team_draft_order),
   };
 }
 
@@ -83,6 +124,16 @@ export function mapPlayer(row: PlayerRow): RankUpPlayer {
     guessSubmitted: row.guess_submitted,
     guessOrder,
     lastRoundPoints: parseRoundPoints(row.last_round_points),
+    teamId: row.team_id,
+  };
+}
+
+export function mapTeam(row: TeamRow): RankUpTeam {
+  return {
+    id: row.id,
+    roomCode: row.room_code,
+    name: row.name,
+    accent: row.accent,
   };
 }
 

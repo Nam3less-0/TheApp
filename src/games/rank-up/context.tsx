@@ -21,35 +21,56 @@ import {
 } from './storage';
 import {
   abandonCurrentTurn,
+  abandonGame as abandonGameRoom,
   advanceTurn,
+  assignPlayerToTeam,
   createRoom,
   fetchPlayers,
   joinRoom,
   leaveRoom,
   markGuessSubmitted,
+  markTeamGuessSubmitted,
   publishDisplay,
   revealAnswer,
   startRound,
   subscribeToRoom,
 } from './sync/roomApi';
-import { isAwaitingRoundStart, type RankUpPlayer, type RankUpRoom } from './sync/types';
+import {
+  isAwaitingRoundStart,
+  type GameMode,
+  type RankUpPlayer,
+  type RankUpRoom,
+  type RankUpTeam,
+} from './sync/types';
+import {
+  getTeamsGuessRole,
+  isTeamFormationComplete,
+  isTeamsMode,
+  teamsGuessProgress,
+} from './teams';
 
 interface RankUpContextValue {
   local: LocalState;
   room: RankUpRoom | null;
   players: RankUpPlayer[];
+  teams: RankUpTeam[];
+  isTeamsGame: boolean;
+  teamFormationComplete: boolean;
+  teamsGuessRole: ReturnType<typeof getTeamsGuessRole> | null;
   isRanker: boolean;
   isHost: boolean;
   supabaseReady: boolean;
   submittedCount: number;
   guesserCount: number;
+  hostDeviceConnected: boolean;
   turnOrder: string[];
   turnIndex: number;
   roundNumber: number;
   isLastTurnOfRound: boolean;
   awaitingRoundStart: boolean;
-  createGame: (playerName: string) => Promise<void>;
+  createGame: (playerName: string, gameMode?: GameMode) => Promise<void>;
   joinGame: (roomCode: string, playerName: string) => Promise<void>;
+  assignPlayerTeam: (playerId: string, teamId: string | null) => Promise<void>;
   leaveGame: () => Promise<void>;
   beginCompose: () => void;
   confirmCompose: (questionType: QuestionType, prompt: string, options: RankOption[]) => void;
@@ -59,7 +80,9 @@ interface RankUpContextValue {
   startNewRound: () => Promise<void>;
   skipCurrentTurn: () => Promise<void>;
   abandonRound: () => Promise<void>;
+  abandonGame: () => Promise<void>;
   submitGuess: (order: string[]) => Promise<void>;
+  submitTeamGuess: (order: string[], teammateIds: string[]) => Promise<void>;
 }
 
 const RankUpContext = createContext<RankUpContextValue | null>(null);
@@ -68,14 +91,28 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
   const [local, dispatch] = useReducer(localReducer, initialLocalState);
   const [room, setRoom] = useState<RankUpRoom | null>(null);
   const [players, setPlayers] = useState<RankUpPlayer[]>([]);
+  const [teams, setTeams] = useState<RankUpTeam[]>([]);
+  const [hostDeviceConnected, setHostDeviceConnected] = useState(false);
+
+  const isTeamsGame = isTeamsMode(room);
+  const teamFormationComplete = isTeamFormationComplete(players, teams);
+  const teamsGuessRole =
+    room && isTeamsGame && local.playerId
+      ? getTeamsGuessRole(room, players, teams, local.playerId)
+      : null;
 
   const isRanker = Boolean(room && local.playerId && room.rankerPlayerId === local.playerId);
   const isHost = Boolean(room && local.playerId && room.hostPlayerId === local.playerId);
   const myPlayer = players.find((player) => player.id === local.playerId) ?? null;
-  const guesserCount = players.filter((player) => player.id !== room?.rankerPlayerId).length;
-  const submittedCount = players.filter(
-    (player) => player.id !== room?.rankerPlayerId && player.guessSubmitted,
-  ).length;
+  const teamsProgress = room && isTeamsGame ? teamsGuessProgress(room, players, teams) : null;
+  const guesserCount =
+    teamsProgress?.guesserCount ??
+    players.filter((player) => player.id !== room?.rankerPlayerId).length;
+  const submittedCount =
+    teamsProgress?.submittedCount ??
+    players.filter(
+      (player) => player.id !== room?.rankerPlayerId && player.guessSubmitted,
+    ).length;
 
   const turnOrder = room?.turnOrder ?? [];
   const turnIndex = room?.turnIndex ?? 0;
@@ -105,11 +142,18 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!local.roomCode || !isSupabaseConfigured()) return;
 
+    setHostDeviceConnected(false);
+    setTeams([]);
+
     return subscribeToRoom(
       local.roomCode,
       setRoom,
       setPlayers,
       (message) => dispatch({ type: 'SET_SYNC_ERROR', message }),
+      {
+        onHostDeviceConnected: setHostDeviceConnected,
+        onTeams: setTeams,
+      },
     );
   }, [local.roomCode]);
 
@@ -135,6 +179,12 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
   }, [room?.phase, isRanker, local.localPhase, room]);
 
   useEffect(() => {
+    if (!room || !awaitingRoundStart) return;
+    if (local.localPhase === 'lobby' || local.localPhase === 'setup') return;
+    dispatch({ type: 'RETURN_TO_LOBBY' });
+  }, [awaitingRoundStart, local.localPhase, room]);
+
+  useEffect(() => {
     if (!myPlayer || myPlayer.score === local.score) return;
     dispatch({ type: 'SYNC_SCORE', score: myPlayer.score });
   }, [myPlayer?.score, local.score, myPlayer]);
@@ -153,7 +203,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     room,
   ]);
 
-  const createGame = useCallback(async (playerName: string) => {
+  const createGame = useCallback(async (playerName: string, gameMode: GameMode = 'classic') => {
     if (!isSupabaseConfigured()) {
       dispatch({ type: 'SET_SYNC_ERROR', message: 'Supabase is not configured.' });
       return;
@@ -162,7 +212,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'SET_CONNECTING', value: true });
     try {
       const playerId = getOrCreatePlayerId();
-      const created = await createRoom(playerId, playerName.trim());
+      const created = await createRoom(playerId, playerName.trim(), gameMode);
       dispatch({
         type: 'ENTER_LOBBY',
         playerId,
@@ -201,6 +251,18 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const assignPlayerTeamAction = useCallback(async (targetPlayerId: string, teamId: string | null) => {
+    try {
+      await assignPlayerToTeam(targetPlayerId, teamId);
+      dispatch({ type: 'SET_SYNC_ERROR', message: null });
+    } catch (error) {
+      dispatch({
+        type: 'SET_SYNC_ERROR',
+        message: formatSupabaseError(error, 'Could not update team assignment.'),
+      });
+    }
+  }, []);
+
   const leaveGame = useCallback(async () => {
     if (local.playerId && local.roomCode) {
       try {
@@ -214,6 +276,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'RESET' });
     setRoom(null);
     setPlayers([]);
+    setTeams([]);
   }, [local.playerId, local.roomCode]);
 
   const beginCompose = useCallback(() => {
@@ -320,6 +383,15 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'RETURN_TO_LOBBY' });
   }, [local.roomCode, room, isHost, isRanker]);
 
+  const abandonGame = useCallback(async () => {
+    if (!local.roomCode || !isHost) return;
+
+    await abandonGameRoom(local.roomCode);
+    clearPendingOrder(local.roomCode);
+    dispatch({ type: 'RETURN_TO_LOBBY' });
+    dispatch({ type: 'SYNC_SCORE', score: 0 });
+  }, [local.roomCode, isHost]);
+
   const submitGuess = useCallback(
     async (order: string[]) => {
       try {
@@ -335,16 +407,37 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     [local.playerId],
   );
 
+  const submitTeamGuess = useCallback(
+    async (order: string[], teammateIds: string[]) => {
+      if (!local.roomCode) return;
+      try {
+        await markTeamGuessSubmitted(local.roomCode, teammateIds, order);
+        dispatch({ type: 'SUBMIT_GUESS', guessOrder: order });
+      } catch (error) {
+        dispatch({
+          type: 'SET_SYNC_ERROR',
+          message: formatSupabaseError(error, 'Could not submit team guess.'),
+        });
+      }
+    },
+    [local.roomCode],
+  );
+
   const value = useMemo(
     (): RankUpContextValue => ({
       local,
       room,
       players,
+      teams,
+      isTeamsGame,
+      teamFormationComplete,
+      teamsGuessRole,
       isRanker,
       isHost,
       supabaseReady: isSupabaseConfigured(),
       submittedCount,
       guesserCount,
+      hostDeviceConnected,
       turnOrder,
       turnIndex,
       roundNumber,
@@ -352,6 +445,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       awaitingRoundStart,
       createGame,
       joinGame,
+      assignPlayerTeam: assignPlayerTeamAction,
       leaveGame,
       beginCompose,
       confirmCompose,
@@ -361,16 +455,23 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       startNewRound,
       skipCurrentTurn,
       abandonRound,
+      abandonGame,
       submitGuess,
+      submitTeamGuess,
     }),
     [
       local,
       room,
       players,
+      teams,
+      isTeamsGame,
+      teamFormationComplete,
+      teamsGuessRole,
       isRanker,
       isHost,
       submittedCount,
       guesserCount,
+      hostDeviceConnected,
       turnOrder,
       turnIndex,
       roundNumber,
@@ -378,6 +479,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       awaitingRoundStart,
       createGame,
       joinGame,
+      assignPlayerTeamAction,
       leaveGame,
       beginCompose,
       confirmCompose,
@@ -387,7 +489,9 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       startNewRound,
       skipCurrentTurn,
       abandonRound,
+      abandonGame,
       submitGuess,
+      submitTeamGuess,
     ],
   );
 
