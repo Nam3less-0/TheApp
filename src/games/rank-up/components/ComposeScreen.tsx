@@ -9,6 +9,7 @@ import {
 import { useRankUp } from '../context';
 import { optionsFromLabels } from '../utils';
 import CommandCenterFrame from './CommandCenterFrame';
+import DifficultyBadge from './DifficultyBadge';
 import PromptReelTrack from './PromptReelTrack';
 import AbandonRoundButton from './AbandonRoundButton';
 import { CrownIcon } from './RankUpIcons';
@@ -39,6 +40,11 @@ export default function ComposeScreen() {
   const optionLabels = useMemo(
     () => optionLabelsForPreset(drawnPreset, playerNames),
     [drawnPreset, playerNames],
+  );
+
+  const previewOptions = useMemo(
+    () => (isSettled ? optionsFromLabels(optionLabels) : []),
+    [isSettled, optionLabels],
   );
 
   const canConfirm = isSettled && optionLabels.length >= 3;
@@ -86,7 +92,9 @@ export default function ComposeScreen() {
         </RankUpSecondaryButton>
 
         {isSettled ? (
-          <RankUpPanel compact className="mt-5 border-pewter/25">
+          <>
+            <DifficultyBadge options={previewOptions} className="mt-5" />
+            <RankUpPanel compact className="mt-5 border-pewter/25">
             <p className="mb-2 flex items-center justify-between gap-2">
               <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-text-low">
                 Ranking
@@ -111,6 +119,7 @@ export default function ComposeScreen() {
               </p>
             ) : null}
           </RankUpPanel>
+          </>
         ) : (
           <p className="mt-5 text-center font-mono text-[11px] text-text-low" aria-live="polite">
             Spinning…

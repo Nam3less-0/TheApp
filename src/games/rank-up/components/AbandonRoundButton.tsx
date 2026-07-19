@@ -11,7 +11,8 @@ export default function AbandonRoundButton({ className = '' }: AbandonRoundButto
   const [busy, setBusy] = useState(false);
 
   const isDrafting = local.localPhase === 'compose' || local.localPhase === 'ranker-rank';
-  const roundInProgress = room != null && room.phase !== 'lobby';
+  const roundInProgress =
+    room != null && room.phase !== 'lobby' && room.phase !== 'round-recap';
   const canAbandon = (isHost || isRanker) && (isDrafting || roundInProgress);
 
   if (!canAbandon) return null;

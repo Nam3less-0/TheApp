@@ -3,13 +3,8 @@ import { roundPointsLabel } from '../utils';
 import { GuesserScreenHeader } from './GuesserBadge';
 import GuesserProgressRow from './GuesserProgressRow';
 import OrderList from './OrderList';
+import ScoreResultChip from './ScoreResultChip';
 import RankUpPanel, { RankUpPageWrap } from './Layout';
-
-const POINTS_BADGE: Record<0 | 1 | 3, string> = {
-  3: '+3',
-  1: '+1',
-  0: '+0',
-};
 
 export default function GuesserRevealScreen() {
   const { local, room, players } = useRankUp();
@@ -51,7 +46,7 @@ export default function GuesserRevealScreen() {
           missedGuess
             ? 'No guess submitted'
             : roundPoints != null
-              ? roundPointsLabel(roundPoints)
+              ? roundPointsLabel(roundPoints, room.options.length)
               : 'Results'
         }
         subtitle={room.prompt}
@@ -63,23 +58,25 @@ export default function GuesserRevealScreen() {
             You didn&apos;t lock in a guess this round — no points earned.
           </p>
         </RankUpPanel>
-      ) : roundPoints != null ? (
-        <RankUpPanel compact className="mb-6 border-pewter/30 text-center">
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-pewter">
-            You earned
-          </p>
-          <p className="mt-1 font-display text-4xl font-extrabold text-text-hi">
-            {POINTS_BADGE[roundPoints]}
-          </p>
-          <p className="mt-2 font-body text-sm text-text-mid">
-            Total score: {local.score}
-          </p>
-        </RankUpPanel>
+      ) : roundPoints != null && myGuessOrder.length > 0 ? (
+        <div className="mb-6 flex justify-center">
+          <ScoreResultChip
+            points={roundPoints}
+            guessOrder={myGuessOrder}
+            rankerOrder={room.rankerOrder!}
+          />
+        </div>
       ) : (
         <RankUpPanel compact className="mb-6">
           <p className="text-center font-body text-sm text-text-mid">Calculating your score…</p>
         </RankUpPanel>
       )}
+
+      {!missedGuess && roundPoints != null ? (
+        <p className="mb-6 text-center font-body text-sm text-text-mid">
+          Total score: {local.score}
+        </p>
+      ) : null}
 
       {!missedGuess ? (
         <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -122,7 +119,7 @@ export default function GuesserRevealScreen() {
       )}
 
       <p className="text-center font-body text-[12px] text-text-low">
-        Waiting for the ranker to start the next round…
+        Waiting for the ranker to continue…
       </p>
     </RankUpPageWrap>
   );

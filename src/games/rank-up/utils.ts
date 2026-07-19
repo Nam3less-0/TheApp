@@ -9,6 +9,10 @@ export function shuffleOptions<T>(items: T[]): T[] {
   return copy;
 }
 
+export function shuffleIds(ids: string[]): string[] {
+  return shuffleOptions(ids);
+}
+
 export function labelForOption(options: RankOption[], optionId: string): string {
   return options.find((option) => option.id === optionId)?.label ?? optionId;
 }
@@ -24,7 +28,11 @@ export function defaultRankOrder(options: RankOption[]): string[] {
   return options.map((option) => option.id);
 }
 
-export type RoundPoints = 0 | 1 | 3;
+export type RoundPoints = number;
+
+export function perfectPoints(itemCount: number): number {
+  return Math.min(3, Math.max(1, itemCount - 2));
+}
 
 export function ordersEqual(a: string[], b: string[]): boolean {
   return a.length === b.length && a.every((id, index) => id === b[index]);
@@ -35,7 +43,10 @@ interface GuessCloseness {
   displacement: number;
 }
 
-function measureGuessCloseness(guessOrder: string[], rankerOrder: string[]): GuessCloseness {
+export function measureGuessCloseness(
+  guessOrder: string[],
+  rankerOrder: string[],
+): GuessCloseness {
   let exactPositions = 0;
   let displacement = 0;
 
@@ -54,13 +65,14 @@ function compareCloseness(a: GuessCloseness, b: GuessCloseness): number {
   return a.displacement - b.displacement;
 }
 
-/** Perfect match +3, closest non-perfect guess(es) +1, otherwise +0. */
+/** Perfect match scales with item count; closest non-perfect guess(es) +1, otherwise +0. */
 export function scoreRoundPoints(
   guessOrder: string[],
   rankerOrder: string[],
   allGuessOrders: string[][],
 ): RoundPoints {
-  if (ordersEqual(guessOrder, rankerOrder)) return 3;
+  const perfect = perfectPoints(rankerOrder.length);
+  if (ordersEqual(guessOrder, rankerOrder)) return perfect;
   if (guessOrder.length !== rankerOrder.length || rankerOrder.length === 0) return 0;
 
   const validGuesses = allGuessOrders.filter((order) => order.length === rankerOrder.length);
@@ -75,17 +87,36 @@ export function scoreRoundPoints(
   }
 
   if (compareCloseness(mine, best) > 0) return 0;
-  if (ordersEqual(guessOrder, rankerOrder)) return 3;
   return 1;
 }
 
-export function roundPointsLabel(points: RoundPoints): string {
-  switch (points) {
-    case 3:
-      return 'Perfect match';
-    case 1:
-      return 'Closest guess';
-    default:
-      return 'Miss';
+export function roundPointsLabel(points: RoundPoints, itemCount?: number): string {
+  const perfect = itemCount != null ? perfectPoints(itemCount) : 3;
+  if (points === perfect) return 'Perfect match';
+  if (points === 1) return 'Closest guess';
+  return 'Miss';
+}
+
+export function positionsOff(guessOrder: string[], rankerOrder: string[]): number {
+  if (guessOrder.length !== rankerOrder.length || rankerOrder.length === 0) {
+    return rankerOrder.length;
   }
+  const { exactPositions } = measureGuessCloseness(guessOrder, rankerOrder);
+  return rankerOrder.length - exactPositions;
+}
+
+export function revealScoreCaption(
+  points: RoundPoints,
+  guessOrder: string[],
+  rankerOrder: string[],
+): string {
+  const itemCount = rankerOrder.length;
+  const perfect = perfectPoints(itemCount);
+  const off = positionsOff(guessOrder, rankerOrder);
+
+  if (points === perfect) {
+    return off === 0 ? '0 off · exact order' : `${off} off · exact order`;
+  }
+  if (points === 1) return `${off} off · closest guess`;
+  return `${off} off`;
 }

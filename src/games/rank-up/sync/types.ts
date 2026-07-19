@@ -1,7 +1,7 @@
 import type { QuestionType, RankOption } from '../types';
 import type { RoundPoints } from '../utils';
 
-export type RoomPhase = 'lobby' | 'display' | 'guessing' | 'reveal';
+export type RoomPhase = 'lobby' | 'display' | 'guessing' | 'reveal' | 'round-recap';
 
 export interface RoomRow {
   code: string;
@@ -12,6 +12,9 @@ export interface RoomRow {
   prompt: string | null;
   options: RankOption[];
   ranker_order: string[] | null;
+  turn_order: string[];
+  turn_index: number;
+  round_number: number;
   created_at: string;
 }
 
@@ -35,6 +38,9 @@ export interface RankUpRoom {
   prompt: string | null;
   options: RankOption[];
   rankerOrder: string[] | null;
+  turnOrder: string[];
+  turnIndex: number;
+  roundNumber: number;
 }
 
 export interface RankUpPlayer {
@@ -56,12 +62,15 @@ export function mapRoom(row: RoomRow): RankUpRoom {
     prompt: row.prompt,
     options: Array.isArray(row.options) ? row.options : [],
     rankerOrder: row.ranker_order,
+    turnOrder: Array.isArray(row.turn_order) ? row.turn_order : [],
+    turnIndex: row.turn_index ?? 0,
+    roundNumber: row.round_number ?? 1,
   };
 }
 
 function parseRoundPoints(value: number | null | undefined): RoundPoints | null {
-  if (value === 0 || value === 1 || value === 3) return value;
-  return null;
+  if (value == null || value < 0 || value > 3) return null;
+  return value;
 }
 
 export function mapPlayer(row: PlayerRow): RankUpPlayer {
@@ -75,4 +84,9 @@ export function mapPlayer(row: PlayerRow): RankUpPlayer {
     guessOrder,
     lastRoundPoints: parseRoundPoints(row.last_round_points),
   };
+}
+
+/** Host has not called startRound — turn queue only contains the host until then. */
+export function isAwaitingRoundStart(room: RankUpRoom, playerCount: number): boolean {
+  return room.phase === 'lobby' && room.turnOrder.length < playerCount;
 }

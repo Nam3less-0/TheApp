@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRankUp } from '../context';
 import { defaultRankOrder } from '../utils';
+import DifficultyBadge from './DifficultyBadge';
 import RankEditor from './RankEditor';
 import AbandonRoundButton from './AbandonRoundButton';
 import ErrorPanel from './ErrorPanel';
@@ -45,9 +46,11 @@ export default function RankerRankScreen() {
         <ErrorPanel message={local.syncError} className="!mb-4" />
       ) : null}
 
-      <RankUpPanel compact className="mb-6">
+      <RankUpPanel compact className="mb-4">
         <p className="font-body text-base font-bold leading-snug text-text-hi">{draft.prompt}</p>
       </RankUpPanel>
+
+      <DifficultyBadge options={draft.options} className="mb-6" />
 
       <RankEditor
         options={draft.options}

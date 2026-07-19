@@ -24,7 +24,7 @@ export const games: GameEntry[] = [
   {
     id: 'rank-up',
     title: 'Rank Up',
-    description: 'Join a room on your phone — synced rounds, self-scored guesses.',
+    description: 'Join a room on your phone — synced rounds with automatic scoring.',
     metal: 'pewter',
     status: 'playable',
     icon: RankUpIcon,

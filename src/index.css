@@ -423,4 +423,25 @@
       transform: rotateY(var(--fy));
     }
   }
+
+  /* Rank Up — current turn pulse */
+  @keyframes rankUpTurnPulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(216, 179, 106, 0.35);
+    }
+    50% {
+      box-shadow: 0 0 0 6px rgba(216, 179, 106, 0);
+    }
+  }
+
+  .rank-up-turn-pulse {
+    animation: rankUpTurnPulse 2.2s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rank-up-turn-pulse {
+      animation: none;
+    }
+  }
 }

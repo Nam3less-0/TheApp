@@ -1,5 +1,5 @@
 import { getSupabase } from '../../../lib/supabase';
-import { scoreRoundPoints } from '../utils';
+import { scoreRoundPoints, shuffleIds } from '../utils';
 import type { QuestionType, RankOption } from '../types';
 import { mapPlayer, mapRoom, type RankUpPlayer, type RankUpRoom } from './types';
 
@@ -85,6 +85,9 @@ export async function createRoom(playerId: string, playerName: string): Promise<
     ranker_player_id: playerId,
     phase: 'lobby',
     options: [],
+    turn_order: [playerId],
+    turn_index: 0,
+    round_number: 1,
   });
 
   if (roomError) throw roomError;
@@ -140,6 +143,35 @@ export async function joinRoom(
   return room;
 }
 
+export async function startRound(roomCode: string, playerIds: string[]): Promise<void> {
+  const supabase = getSupabase();
+  const code = roomCode.toUpperCase();
+  const room = await fetchRoom(code);
+  if (!room) throw new Error('Room not found.');
+
+  const isFirstRoundStart = room.turnOrder.length < playerIds.length;
+  const turnOrder = shuffleIds([...playerIds]);
+
+  const { error } = await supabase
+    .from('rank_up_rooms')
+    .update({
+      turn_order: turnOrder,
+      turn_index: 0,
+      round_number: isFirstRoundStart ? room.roundNumber : room.roundNumber + 1,
+      ranker_player_id: turnOrder[0] ?? null,
+      phase: 'lobby',
+      question_type: null,
+      prompt: null,
+      options: [],
+      ranker_order: null,
+    })
+    .eq('code', code);
+
+  if (error) throw error;
+
+  await resetGuessSubmissions(roomCode);
+}
+
 export async function publishDisplay(
   roomCode: string,
   payload: {
@@ -172,20 +204,7 @@ export async function publishDisplay(
   return room;
 }
 
-export async function startGuessing(roomCode: string): Promise<void> {
-  const supabase = getSupabase();
-  const { error } = await supabase
-    .from('rank_up_rooms')
-    .update({ phase: 'guessing' })
-    .eq('code', roomCode.toUpperCase());
-
-  if (error) throw error;
-}
-
-export async function revealAnswer(
-  roomCode: string,
-  rankerOrder: string[],
-): Promise<void> {
+export async function revealAnswer(roomCode: string, rankerOrder: string[]): Promise<void> {
   const supabase = getSupabase();
   const code = roomCode.toUpperCase();
   const existingRoom = await fetchRoom(code);
@@ -237,36 +256,80 @@ export async function revealAnswer(
   );
 }
 
-export async function resetToLobby(
-  roomCode: string,
-  nextRankerPlayerId: string,
-): Promise<void> {
+async function clearRoundFields(code: string): Promise<void> {
   const supabase = getSupabase();
   const { error } = await supabase
     .from('rank_up_rooms')
     .update({
-      phase: 'lobby',
-      ranker_player_id: nextRankerPlayerId,
       question_type: null,
       prompt: null,
       options: [],
       ranker_order: null,
     })
-    .eq('code', roomCode.toUpperCase());
+    .eq('code', code);
+
+  if (error) throw error;
+}
+
+export async function advanceTurn(roomCode: string): Promise<void> {
+  const supabase = getSupabase();
+  const code = roomCode.toUpperCase();
+  const room = await fetchRoom(code);
+  if (!room) throw new Error('Room not found.');
+
+  const nextIndex = room.turnIndex + 1;
+
+  if (nextIndex < room.turnOrder.length) {
+    const nextRankerId = room.turnOrder[nextIndex]!;
+
+    const { error } = await supabase
+      .from('rank_up_rooms')
+      .update({
+        turn_index: nextIndex,
+        ranker_player_id: nextRankerId,
+        phase: 'lobby',
+      })
+      .eq('code', code);
+
+    if (error) throw error;
+
+    await clearRoundFields(code);
+    await resetGuessSubmissions(roomCode);
+    return;
+  }
+
+  const { error } = await supabase
+    .from('rank_up_rooms')
+    .update({
+      phase: 'round-recap',
+    })
+    .eq('code', code);
+
+  if (error) throw error;
+
+  await clearRoundFields(code);
+}
+
+export async function abandonCurrentTurn(roomCode: string): Promise<void> {
+  const supabase = getSupabase();
+  const code = roomCode.toUpperCase();
+  const room = await fetchRoom(code);
+  if (!room?.rankerPlayerId) throw new Error('Room not found.');
+
+  const { error } = await supabase
+    .from('rank_up_rooms')
+    .update({
+      phase: 'lobby',
+      question_type: null,
+      prompt: null,
+      options: [],
+      ranker_order: null,
+    })
+    .eq('code', code);
 
   if (error) throw error;
 
   await resetGuessSubmissions(roomCode);
-}
-
-export async function setRanker(roomCode: string, rankerPlayerId: string): Promise<void> {
-  const supabase = getSupabase();
-  const { error } = await supabase
-    .from('rank_up_rooms')
-    .update({ ranker_player_id: rankerPlayerId })
-    .eq('code', roomCode.toUpperCase());
-
-  if (error) throw error;
 }
 
 async function resetGuessSubmissions(roomCode: string): Promise<void> {
@@ -370,6 +433,21 @@ export function subscribeToRoom(
 export async function leaveRoom(playerId: string, roomCode: string): Promise<void> {
   const supabase = getSupabase();
   const code = roomCode.toUpperCase();
+
+  const room = await fetchRoom(code);
+
+  if (room) {
+    const leavingIndex = room.turnOrder.indexOf(playerId);
+    if (leavingIndex > room.turnIndex) {
+      const nextTurnOrder = room.turnOrder.filter((id) => id !== playerId);
+      const { error: turnOrderError } = await supabase
+        .from('rank_up_rooms')
+        .update({ turn_order: nextTurnOrder })
+        .eq('code', code);
+
+      if (turnOrderError) throw turnOrderError;
+    }
+  }
 
   const { error: playerError } = await supabase
     .from('rank_up_players')

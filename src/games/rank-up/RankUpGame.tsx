@@ -13,8 +13,11 @@ import ErrorPanel from './components/ErrorPanel';
 import RejoiningSkeleton from './components/RejoiningSkeleton';
 import RevealScreen from './components/RevealScreen';
 import RoundPhaseBar from './components/RoundPhaseBar';
+import RoundRecapScreen from './components/RoundRecapScreen';
 import SetupScreen from './components/SetupScreen';
-import { RankUpPageWrap, RankUpSecondaryButton } from './components/Layout';
+import TurnOrderStrip from './components/TurnOrderStrip';
+import TurnTransitionBeat from './components/TurnTransitionBeat';
+import RankUpPanel, { RankUpPageWrap, RankUpSecondaryButton } from './components/Layout';
 
 function RankUpShell({ children }: { children: React.ReactNode }) {
   return (
@@ -40,13 +43,61 @@ function RankUpShell({ children }: { children: React.ReactNode }) {
         </div>
       </div>
       <RoundPhaseBar />
+      <TurnOrderStrip />
       <div className="relative">{children}</div>
     </div>
   );
 }
 
+function MidTurnLobbyRouter() {
+  const { isRanker, beginCompose, isHost, room, players, skipCurrentTurn } = useRankUp();
+  const [transitionDone, setTransitionDone] = useState(false);
+
+  const rankerMissingFromRoom = Boolean(
+    room?.rankerPlayerId && !players.some((player) => player.id === room.rankerPlayerId),
+  );
+
+  if (rankerMissingFromRoom && isHost) {
+    return (
+      <RankUpPageWrap>
+        <RankUpPanel compact className="mb-4">
+          <p className="text-center font-body text-sm text-text-mid">
+            The ranker left before their turn. Skip to the next player?
+          </p>
+        </RankUpPanel>
+        <RankUpSecondaryButton onClick={() => skipCurrentTurn()} className="w-full text-center">
+          Skip ranker&apos;s turn
+        </RankUpSecondaryButton>
+      </RankUpPageWrap>
+    );
+  }
+
+  if (!transitionDone) {
+    return (
+      <TurnTransitionBeat
+        onComplete={() => {
+          setTransitionDone(true);
+          if (isRanker) beginCompose();
+        }}
+      />
+    );
+  }
+
+  if (isRanker) {
+    return null;
+  }
+
+  return (
+    <RankUpPageWrap>
+      <p className="text-center font-body text-sm text-text-mid">
+        Waiting for the ranker to draw a question…
+      </p>
+    </RankUpPageWrap>
+  );
+}
+
 function RankUpRouter() {
-  const { local, room, players, isRanker, leaveGame } = useRankUp();
+  const { local, room, players, isRanker, leaveGame, awaitingRoundStart } = useRankUp();
   const [onboarded, setOnboarded] = useState(isRankUpOnboarded);
 
   const myPlayer = players.find((player) => player.id === local.playerId);
@@ -110,7 +161,7 @@ function RankUpRouter() {
     );
   }
 
-  if (guessAlreadySubmitted && !isRanker) {
+  if (guessAlreadySubmitted && !isRanker && room?.phase !== 'round-recap') {
     return (
       <RankUpShell>
         <GuesserRevealScreen />
@@ -122,6 +173,24 @@ function RankUpRouter() {
     return (
       <RankUpShell>
         <RejoiningSkeleton />
+      </RankUpShell>
+    );
+  }
+
+  if (room.phase === 'round-recap') {
+    return (
+      <RankUpShell>
+        <RoundRecapScreen />
+      </RankUpShell>
+    );
+  }
+
+  if (room.phase === 'lobby' && !awaitingRoundStart) {
+    return (
+      <RankUpShell>
+        <MidTurnLobbyRouter
+          key={`${room.roundNumber}-${room.turnIndex}-${room.rankerPlayerId}`}
+        />
       </RankUpShell>
     );
   }

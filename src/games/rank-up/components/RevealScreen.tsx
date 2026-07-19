@@ -1,16 +1,18 @@
 import { useRankUp } from '../context';
-import { labelForOption, roundPointsLabel } from '../utils';
+import { labelForOption, perfectPoints } from '../utils';
 import AbandonRoundButton from './AbandonRoundButton';
 import CommandCenterFrame from './CommandCenterFrame';
+import ScoreResultChip from './ScoreResultChip';
 import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
 export default function RevealScreen() {
-  const { room, players, nextRound } = useRankUp();
+  const { room, players, advanceTurn, isLastTurnOfRound } = useRankUp();
 
   if (!room?.rankerOrder || !room.prompt) return null;
 
   const ranker = players.find((player) => player.id === room.rankerPlayerId);
   const guessers = players.filter((player) => player.id !== room.rankerPlayerId);
+  const itemCount = room.options.length;
 
   return (
     <RankUpPageWrap variant="display">
@@ -38,33 +40,43 @@ export default function RevealScreen() {
             <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-low">
               Round scores
             </p>
-            <ul className="flex flex-col gap-2">
-              {guessers.map((player) => (
-                <li
-                  key={player.id}
-                  className="flex items-center justify-between rounded-lg border border-line px-3 py-2"
-                >
-                  <span className="font-body text-sm font-semibold text-text-hi">
-                    {player.name}
-                  </span>
-                  <span className="font-mono text-sm text-pewter">
-                    {player.lastRoundPoints != null
-                      ? roundPointsLabel(player.lastRoundPoints)
-                      : player.guessSubmitted
-                        ? 'Scored'
-                        : 'No guess'}
-                  </span>
-                </li>
-              ))}
+            <ul className="flex flex-col gap-3">
+              {guessers.map((player) => {
+                const guessOrder = player.guessOrder ?? [];
+                const points = player.lastRoundPoints;
+
+                return (
+                  <li
+                    key={player.id}
+                    className="flex flex-col gap-3 rounded-lg border border-line px-3 py-3 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <span className="font-body text-sm font-semibold text-text-hi">
+                      {player.name}
+                    </span>
+                    {points != null && guessOrder.length > 0 ? (
+                      <ScoreResultChip
+                        points={points}
+                        guessOrder={guessOrder}
+                        rankerOrder={room.rankerOrder!}
+                      />
+                    ) : (
+                      <span className="font-mono text-sm text-text-low">
+                        {player.guessSubmitted ? 'Scored' : 'No guess'}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
+            <p className="mt-3 font-mono text-[10px] text-text-low">
+              Perfect pays +{perfectPoints(itemCount)} this turn
+            </p>
           </RankUpPanel>
         ) : null}
 
-        <p className="mb-6 font-body text-[13px] text-text-mid">
-          Scores have been calculated automatically.
-        </p>
-
-        <RankUpPrimaryButton onClick={() => nextRound()}>Next round</RankUpPrimaryButton>
+        <RankUpPrimaryButton onClick={() => advanceTurn()}>
+          {isLastTurnOfRound ? 'See round recap' : 'Next turn'}
+        </RankUpPrimaryButton>
         <AbandonRoundButton className="mt-3" />
       </CommandCenterFrame>
     </RankUpPageWrap>

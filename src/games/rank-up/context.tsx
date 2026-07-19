@@ -20,19 +20,19 @@ import {
   savePendingOrder,
 } from './storage';
 import {
+  abandonCurrentTurn,
+  advanceTurn,
   createRoom,
   fetchPlayers,
   joinRoom,
   leaveRoom,
   markGuessSubmitted,
   publishDisplay,
-  resetToLobby,
   revealAnswer,
-  setRanker,
-  startGuessing,
+  startRound,
   subscribeToRoom,
 } from './sync/roomApi';
-import type { RankUpPlayer, RankUpRoom } from './sync/types';
+import { isAwaitingRoundStart, type RankUpPlayer, type RankUpRoom } from './sync/types';
 
 interface RankUpContextValue {
   local: LocalState;
@@ -43,18 +43,22 @@ interface RankUpContextValue {
   supabaseReady: boolean;
   submittedCount: number;
   guesserCount: number;
+  turnOrder: string[];
+  turnIndex: number;
+  roundNumber: number;
+  isLastTurnOfRound: boolean;
+  awaitingRoundStart: boolean;
   createGame: (playerName: string) => Promise<void>;
   joinGame: (roomCode: string, playerName: string) => Promise<void>;
   leaveGame: () => Promise<void>;
   beginCompose: () => void;
   confirmCompose: (questionType: QuestionType, prompt: string, options: RankOption[]) => void;
   confirmRankerOrder: (order: string[]) => Promise<void>;
-  openGuessing: () => Promise<void>;
   revealRound: () => Promise<void>;
-  nextRound: (nextRankerId?: string) => Promise<void>;
+  advanceTurn: () => Promise<void>;
+  startNewRound: () => Promise<void>;
+  skipCurrentTurn: () => Promise<void>;
   abandonRound: () => Promise<void>;
-  assignRanker: (playerId: string) => Promise<void>;
-  startGuessingLocal: () => void;
   submitGuess: (order: string[]) => Promise<void>;
 }
 
@@ -72,6 +76,13 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
   const submittedCount = players.filter(
     (player) => player.id !== room?.rankerPlayerId && player.guessSubmitted,
   ).length;
+
+  const turnOrder = room?.turnOrder ?? [];
+  const turnIndex = room?.turnIndex ?? 0;
+  const roundNumber = room?.roundNumber ?? 1;
+  const isLastTurnOfRound =
+    turnOrder.length > 0 && turnIndex === turnOrder.length - 1;
+  const awaitingRoundStart = Boolean(room && isAwaitingRoundStart(room, players.length));
 
   useEffect(() => {
     if (local.localPhase === 'setup') return;
@@ -254,11 +265,6 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     [local.roomCode, local.roundDraft, local.playerId],
   );
 
-  const openGuessing = useCallback(async () => {
-    if (!local.roomCode) return;
-    await startGuessing(local.roomCode);
-  }, [local.roomCode]);
-
   const revealRound = useCallback(async () => {
     if (!local.roomCode) return;
     const order = loadPendingOrder(local.roomCode);
@@ -278,15 +284,26 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     }
   }, [local.roomCode]);
 
-  const nextRound = useCallback(
-    async (nextRankerId?: string) => {
-      if (!local.roomCode) return;
-      const rankerId = nextRankerId ?? local.playerId;
-      await resetToLobby(local.roomCode, rankerId);
-      dispatch({ type: 'RETURN_TO_LOBBY' });
-    },
-    [local.roomCode, local.playerId],
-  );
+  const advanceTurnAction = useCallback(async () => {
+    if (!local.roomCode) return;
+    await advanceTurn(local.roomCode);
+    dispatch({ type: 'RETURN_TO_LOBBY' });
+  }, [local.roomCode]);
+
+  const startNewRound = useCallback(async () => {
+    if (!local.roomCode) return;
+    await startRound(
+      local.roomCode,
+      players.map((player) => player.id),
+    );
+    dispatch({ type: 'RETURN_TO_LOBBY' });
+  }, [local.roomCode, players]);
+
+  const skipCurrentTurn = useCallback(async () => {
+    if (!local.roomCode || !isHost) return;
+    await advanceTurn(local.roomCode);
+    dispatch({ type: 'RETURN_TO_LOBBY' });
+  }, [local.roomCode, isHost]);
 
   const abandonRound = useCallback(async () => {
     if (!room) return;
@@ -298,23 +315,10 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
 
     if (!local.roomCode || (!isHost && !isRanker)) return;
 
-    const rankerId = room.rankerPlayerId ?? local.playerId;
-    await resetToLobby(local.roomCode, rankerId);
+    await abandonCurrentTurn(local.roomCode);
     clearPendingOrder(local.roomCode);
     dispatch({ type: 'RETURN_TO_LOBBY' });
-  }, [local.roomCode, local.playerId, room, isHost, isRanker]);
-
-  const assignRanker = useCallback(
-    async (playerId: string) => {
-      if (!local.roomCode) return;
-      await setRanker(local.roomCode, playerId);
-    },
-    [local.roomCode],
-  );
-
-  const startGuessingLocal = useCallback(() => {
-    dispatch({ type: 'ENTER_GUESSING' });
-  }, []);
+  }, [local.roomCode, room, isHost, isRanker]);
 
   const submitGuess = useCallback(
     async (order: string[]) => {
@@ -341,18 +345,22 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       supabaseReady: isSupabaseConfigured(),
       submittedCount,
       guesserCount,
+      turnOrder,
+      turnIndex,
+      roundNumber,
+      isLastTurnOfRound,
+      awaitingRoundStart,
       createGame,
       joinGame,
       leaveGame,
       beginCompose,
       confirmCompose,
       confirmRankerOrder,
-      openGuessing,
       revealRound,
-      nextRound,
+      advanceTurn: advanceTurnAction,
+      startNewRound,
+      skipCurrentTurn,
       abandonRound,
-      assignRanker,
-      startGuessingLocal,
       submitGuess,
     }),
     [
@@ -363,18 +371,22 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       isHost,
       submittedCount,
       guesserCount,
+      turnOrder,
+      turnIndex,
+      roundNumber,
+      isLastTurnOfRound,
+      awaitingRoundStart,
       createGame,
       joinGame,
       leaveGame,
       beginCompose,
       confirmCompose,
       confirmRankerOrder,
-      openGuessing,
       revealRound,
-      nextRound,
+      advanceTurnAction,
+      startNewRound,
+      skipCurrentTurn,
       abandonRound,
-      assignRanker,
-      startGuessingLocal,
       submitGuess,
     ],
   );
