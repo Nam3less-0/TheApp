@@ -55,7 +55,27 @@ export async function fetchPlayers(roomCode: string): Promise<RankUpPlayer[]> {
   return (data ?? []).map((row) => mapPlayer(row as never));
 }
 
+async function fetchPlayerRoomCode(playerId: string): Promise<string | null> {
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('rank_up_players')
+    .select('room_code')
+    .eq('id', playerId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data?.room_code ?? null;
+}
+
+async function clearStalePlayerMembership(playerId: string): Promise<void> {
+  const existingRoomCode = await fetchPlayerRoomCode(playerId);
+  if (!existingRoomCode) return;
+  await leaveRoom(playerId, existingRoomCode);
+}
+
 export async function createRoom(playerId: string, playerName: string): Promise<RankUpRoom> {
+  await clearStalePlayerMembership(playerId);
+
   const supabase = getSupabase();
   const code = await uniqueRoomCode();
 
@@ -75,7 +95,10 @@ export async function createRoom(playerId: string, playerName: string): Promise<
     name: playerName,
   });
 
-  if (playerError) throw playerError;
+  if (playerError) {
+    await supabase.from('rank_up_rooms').delete().eq('code', code);
+    throw playerError;
+  }
 
   const room = await fetchRoom(code);
   if (!room) throw new Error('Room was not created.');
@@ -92,18 +115,27 @@ export async function joinRoom(
   const room = await fetchRoom(roomCode);
   if (!room) throw new Error('Room not found. Check the code and try again.');
 
+  const existingRoomCode = await fetchPlayerRoomCode(playerId);
+  if (existingRoomCode === roomCode) {
+    const { error: updateError } = await supabase
+      .from('rank_up_players')
+      .update({ name: playerName })
+      .eq('id', playerId);
+    if (updateError) throw updateError;
+    return room;
+  }
+
+  if (existingRoomCode) {
+    await leaveRoom(playerId, existingRoomCode);
+  }
+
   const { error } = await supabase.from('rank_up_players').insert({
     id: playerId,
     room_code: roomCode,
     name: playerName,
   });
 
-  if (error) {
-    if (error.code === '23505') {
-      throw new Error('You are already in this room on another tab.');
-    }
-    throw error;
-  }
+  if (error) throw error;
 
   return room;
 }

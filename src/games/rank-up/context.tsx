@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { isSupabaseConfigured } from '../../lib/supabase';
+import { formatSupabaseError, isSupabaseConfigured } from '../../lib/supabase';
 import { initialLocalState, localReducer, type LocalState, type QuestionType, type RankOption } from './types';
 import {
   clearPendingOrder,
@@ -161,7 +161,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       dispatch({
         type: 'SET_SYNC_ERROR',
-        message: error instanceof Error ? error.message : 'Could not create room.',
+        message: formatSupabaseError(error, 'Could not create room.'),
       });
     }
   }, []);
@@ -185,7 +185,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       dispatch({
         type: 'SET_SYNC_ERROR',
-        message: error instanceof Error ? error.message : 'Could not join room.',
+        message: formatSupabaseError(error, 'Could not join room.'),
       });
     }
   }, []);
@@ -247,7 +247,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         dispatch({
           type: 'SET_SYNC_ERROR',
-          message: error instanceof Error ? error.message : 'Could not publish round.',
+          message: formatSupabaseError(error, 'Could not publish round.'),
         });
       }
     },
@@ -273,7 +273,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       dispatch({
         type: 'SET_SYNC_ERROR',
-        message: error instanceof Error ? error.message : 'Could not reveal answer.',
+        message: formatSupabaseError(error, 'Could not reveal answer.'),
       });
     }
   }, [local.roomCode]);
@@ -324,7 +324,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         dispatch({
           type: 'SET_SYNC_ERROR',
-          message: error instanceof Error ? error.message : 'Could not submit guess.',
+          message: formatSupabaseError(error, 'Could not submit guess.'),
         });
       }
     },
