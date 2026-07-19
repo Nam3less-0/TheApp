@@ -480,6 +480,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       teamsGuessRole,
       isRanker,
       isHost,
+      canStartRound,
       submittedCount,
       guesserCount,
       hostDeviceConnected,
