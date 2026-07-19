@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useRankUp } from '../context';
-import { defaultRankOrder } from '../utils';
+import { defaultRankOrder, perfectPoints } from '../utils';
 import { GuesserScreenHeader } from './GuesserBadge';
 import AbandonRoundButton from './AbandonRoundButton';
 import ErrorPanel from './ErrorPanel';
 import RankEditor from './RankEditor';
-import { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
+import { CheckIcon } from './RankUpIcons';
+import { RankUpPageWrap } from './Layout';
 
 export default function GuessingScreen() {
   const { local, room, submitGuess } = useRankUp();
@@ -17,6 +18,7 @@ export default function GuessingScreen() {
   if (!room?.options.length) return null;
 
   const canSubmit = order.length === room.options.length;
+  const perfect = perfectPoints(room.options.length);
 
   async function handleSubmit() {
     if (!canSubmit || submitting) return;
@@ -46,12 +48,17 @@ export default function GuessingScreen() {
         onOrderChange={setOrder}
         heading="Predicted ranking"
         description="Drag to reorder from best to worst."
+        hintText={`🎯 Perfect match pays ${perfect} pts this round`}
+        ctaLabel="Submit Guess"
+        ctaIcon={<CheckIcon className="h-4 w-4" />}
+        ctaTint="guesser"
+        onSubmit={handleSubmit}
+        submitting={submitting}
+        submitDisabled={!canSubmit}
+        confirmationMessage="Guess locked in. Waiting on the others…"
       />
 
-      <div className="mt-8 flex flex-col gap-3">
-        <RankUpPrimaryButton onClick={handleSubmit} disabled={!canSubmit || submitting}>
-          {submitting ? 'Locking in…' : 'Lock in guess'}
-        </RankUpPrimaryButton>
+      <div className="mt-6">
         <AbandonRoundButton />
       </div>
     </RankUpPageWrap>

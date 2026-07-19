@@ -109,3 +109,43 @@ export function AlertIcon({ className = '', ...props }: IconProps) {
     </svg>
   );
 }
+
+export function GripIcon({ className = '', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className} {...props}>
+      <circle cx="9" cy="7" r="1.2" />
+      <circle cx="15" cy="7" r="1.2" />
+      <circle cx="9" cy="12" r="1.2" />
+      <circle cx="15" cy="12" r="1.2" />
+      <circle cx="9" cy="17" r="1.2" />
+      <circle cx="15" cy="17" r="1.2" />
+    </svg>
+  );
+}
+
+export function SealIcon({ className = '', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className} {...props}>
+      <path
+        d="M12 3 14.5 8.5 20.5 9.3 16 13.2 17.2 19.2 12 16.4 6.8 19.2 8 13.2 3.5 9.3 9.5 8.5 12 3Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function CheckIcon({ className = '', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className} {...props}>
+      <path
+        d="m6 12.5 3.5 3.5L18 7.5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

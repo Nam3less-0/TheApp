@@ -5,8 +5,8 @@ import DifficultyBadge from './DifficultyBadge';
 import RankEditor from './RankEditor';
 import AbandonRoundButton from './AbandonRoundButton';
 import ErrorPanel from './ErrorPanel';
-import { CrownIcon } from './RankUpIcons';
-import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
+import { CrownIcon, SealIcon } from './RankUpIcons';
+import RankUpPanel, { RankUpPageWrap } from './Layout';
 
 export default function RankerRankScreen() {
   const { local, confirmRankerOrder } = useRankUp();
@@ -58,12 +58,17 @@ export default function RankerRankScreen() {
         onOrderChange={setOrder}
         heading="Your secret ranking"
         description="Drag to reorder from best to worst."
+        hintText="🔒 Only you see this order until reveal"
+        ctaLabel="Lock In Secretly"
+        ctaIcon={<SealIcon className="h-4 w-4" />}
+        ctaTint="ranker"
+        onSubmit={handleConfirm}
+        submitting={publishing}
+        submitDisabled={!canConfirm}
+        confirmationMessage="Sealed. Nobody can see this until you reveal."
       />
 
-      <div className="mt-8 flex flex-col gap-3">
-        <RankUpPrimaryButton onClick={handleConfirm} disabled={!canConfirm || publishing}>
-          {publishing ? 'Publishing…' : 'Publish round'}
-        </RankUpPrimaryButton>
+      <div className="mt-6">
         <AbandonRoundButton />
       </div>
     </RankUpPageWrap>
