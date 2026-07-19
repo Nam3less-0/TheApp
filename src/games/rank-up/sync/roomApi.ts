@@ -15,6 +15,11 @@ import {
 } from './types';
 
 export const HOST_PRESENCE_KEY = 'host-device';
+export const PENDING_HOST_ID = '__pending_host__';
+
+export function isPendingHost(hostPlayerId: string | null | undefined): boolean {
+  return hostPlayerId === PENDING_HOST_ID;
+}
 
 export interface SubscribeToRoomOptions {
   /** Host device: track read-only spectator presence on join. */
@@ -168,6 +173,30 @@ export async function createRoom(
   return room;
 }
 
+/** Creates a player-less room for gameroom / host-display setup. First joiner becomes game host. */
+export async function createGameroomRoom(): Promise<RankUpRoom> {
+  const supabase = getSupabase();
+  const code = await uniqueRoomCode();
+
+  const { error: roomError } = await supabase.from('rank_up_rooms').insert({
+    code,
+    host_player_id: PENDING_HOST_ID,
+    ranker_player_id: null,
+    phase: 'lobby',
+    options: [],
+    turn_order: [],
+    turn_index: 0,
+    round_number: 1,
+    game_mode: 'classic',
+  });
+
+  if (roomError) throw roomError;
+
+  const room = await fetchRoom(code);
+  if (!room) throw new Error('Room was not created.');
+  return room;
+}
+
 export async function joinRoom(
   code: string,
   playerId: string,
@@ -206,6 +235,22 @@ export async function joinRoom(
   });
 
   if (error) throw error;
+
+  if (isPendingHost(room.hostPlayerId)) {
+    const { error: hostError } = await supabase
+      .from('rank_up_rooms')
+      .update({
+        host_player_id: playerId,
+        ranker_player_id: playerId,
+      })
+      .eq('code', roomCode);
+
+    if (hostError) throw hostError;
+
+    const updated = await fetchRoom(roomCode);
+    if (!updated) throw new Error('Room not found after assigning host.');
+    return updated;
+  }
 
   return room;
 }
