@@ -2,8 +2,7 @@ import RoundRecapView from '../../components/RoundRecapView';
 import { useRankUpHost } from '../context';
 
 export default function HostRoundRecapScreen() {
-  const { room, players, roundNumber, roundPointsByPlayer, isGameroom, startNewRound } =
-    useRankUpHost();
+  const { room, players, roundNumber, roundPointsByPlayer, startNewRound } = useRankUpHost();
 
   if (!room) return null;
 
@@ -12,7 +11,7 @@ export default function HostRoundRecapScreen() {
       players={players}
       roundNumber={roundNumber}
       roundPointsByPlayer={roundPointsByPlayer}
-      showHostActions={isGameroom}
+      showHostActions
       onStartRound={() => startNewRound()}
     />
   );

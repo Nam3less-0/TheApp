@@ -52,14 +52,14 @@ function RankUpShell({ children }: { children: React.ReactNode }) {
 }
 
 function MidTurnLobbyRouter() {
-  const { isRanker, beginCompose, isHost, room, players, skipCurrentTurn } = useRankUp();
+  const { isRanker, beginCompose, canSkipTurn, room, players, skipCurrentTurn } = useRankUp();
   const [transitionDone, setTransitionDone] = useState(false);
 
   const rankerMissingFromRoom = Boolean(
     room?.rankerPlayerId && !players.some((player) => player.id === room.rankerPlayerId),
   );
 
-  if (rankerMissingFromRoom && isHost) {
+  if (rankerMissingFromRoom && canSkipTurn) {
     return (
       <RankUpPageWrap>
         <RankUpPanel compact className="mb-4">

@@ -9,7 +9,7 @@ import ScoreResultChip from './ScoreResultChip';
 import RankUpPanel, { RankUpPageWrap } from './Layout';
 
 export default function GuesserRevealScreen() {
-  const { local, room, players, hostDeviceConnected, isTeamsGame } = useRankUp();
+  const { local, room, players, hostDeviceConnected, isTeamsGame, sessionHostActive } = useRankUp();
   const myPlayer = players.find((player) => player.id === local.playerId);
   const myGuessOrder =
     local.lastGuessOrder.length > 0
@@ -128,7 +128,9 @@ export default function GuesserRevealScreen() {
       ) : null}
 
       <p className="text-center font-body text-[12px] text-text-low">
-        Waiting for the ranker to continue…
+        {sessionHostActive
+          ? 'Waiting for the gameroom host to continue…'
+          : 'Waiting for the ranker to continue…'}
       </p>
     </RankUpPageWrap>
   );

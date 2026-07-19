@@ -9,7 +9,16 @@ import {
   type ReactNode,
 } from 'react';
 import { formatSupabaseError, isSupabaseConfigured } from '../../../lib/supabase';
-import { fetchRoom, startRound, subscribeToRoom, isGameroomRoom } from '../sync/roomApi';
+import {
+  abandonCurrentTurn,
+  abandonGame as abandonGameRoom,
+  advanceTurn,
+  fetchRoom,
+  revealAnswer,
+  startRound,
+  subscribeToRoom,
+  isGameroomRoom,
+} from '../sync/roomApi';
 import { isAwaitingRoundStart, type RankUpPlayer, type RankUpRoom } from '../sync/types';
 
 interface RankUpHostContextValue {
@@ -22,6 +31,8 @@ interface RankUpHostContextValue {
   submittedCount: number;
   guesserCount: number;
   roundNumber: number;
+  turnIndex: number;
+  isLastTurnOfRound: boolean;
   awaitingRoundStart: boolean;
   roundPointsByPlayer: Record<string, number>;
   isGameroom: boolean;
@@ -29,6 +40,11 @@ interface RankUpHostContextValue {
   disconnect: () => void;
   clearError: () => void;
   startNewRound: () => Promise<void>;
+  revealRound: () => Promise<void>;
+  advanceTurn: () => Promise<void>;
+  skipCurrentTurn: () => Promise<void>;
+  abandonRound: () => Promise<void>;
+  abandonGame: () => Promise<void>;
 }
 
 const RankUpHostContext = createContext<RankUpHostContextValue | null>(null);
@@ -49,6 +65,10 @@ export function RankUpHostProvider({ children }: { children: ReactNode }) {
     (player) => player.id !== room?.rankerPlayerId && player.guessSubmitted,
   ).length;
   const roundNumber = room?.roundNumber ?? 1;
+  const turnOrder = room?.turnOrder ?? [];
+  const turnIndex = room?.turnIndex ?? 0;
+  const isLastTurnOfRound =
+    turnOrder.length > 0 && turnIndex === turnOrder.length - 1;
   const awaitingRoundStart = Boolean(room && isAwaitingRoundStart(room));
   const isGameroom = isGameroomRoom(room);
 
@@ -159,6 +179,53 @@ export function RankUpHostProvider({ children }: { children: ReactNode }) {
     }
   }, [roomCode, players]);
 
+  const revealRound = useCallback(async () => {
+    if (!roomCode) return;
+    try {
+      await revealAnswer(roomCode);
+      setSyncError(null);
+    } catch (error) {
+      setSyncError(formatSupabaseError(error, 'Could not reveal answer.'));
+    }
+  }, [roomCode]);
+
+  const advanceTurnAction = useCallback(async () => {
+    if (!roomCode) return;
+    try {
+      await advanceTurn(roomCode);
+      setSyncError(null);
+    } catch (error) {
+      setSyncError(formatSupabaseError(error, 'Could not advance turn.'));
+    }
+  }, [roomCode]);
+
+  const skipCurrentTurn = useCallback(async () => {
+    await advanceTurnAction();
+  }, [advanceTurnAction]);
+
+  const abandonRound = useCallback(async () => {
+    if (!roomCode) return;
+    try {
+      await abandonCurrentTurn(roomCode);
+      setSyncError(null);
+    } catch (error) {
+      setSyncError(formatSupabaseError(error, 'Could not abandon round.'));
+    }
+  }, [roomCode]);
+
+  const abandonGame = useCallback(async () => {
+    if (!roomCode) return;
+    try {
+      await abandonGameRoom(roomCode);
+      setRoundPointsByPlayer({});
+      lastAccumulatedRevealKey.current = null;
+      trackedRoundNumber.current = null;
+      setSyncError(null);
+    } catch (error) {
+      setSyncError(formatSupabaseError(error, 'Could not abandon game.'));
+    }
+  }, [roomCode]);
+
   const value = useMemo(
     (): RankUpHostContextValue => ({
       roomCode,
@@ -170,6 +237,8 @@ export function RankUpHostProvider({ children }: { children: ReactNode }) {
       submittedCount,
       guesserCount,
       roundNumber,
+      turnIndex,
+      isLastTurnOfRound,
       awaitingRoundStart,
       roundPointsByPlayer,
       isGameroom,
@@ -177,6 +246,11 @@ export function RankUpHostProvider({ children }: { children: ReactNode }) {
       disconnect,
       clearError,
       startNewRound,
+      revealRound,
+      advanceTurn: advanceTurnAction,
+      skipCurrentTurn,
+      abandonRound,
+      abandonGame,
     }),
     [
       roomCode,
@@ -187,6 +261,8 @@ export function RankUpHostProvider({ children }: { children: ReactNode }) {
       submittedCount,
       guesserCount,
       roundNumber,
+      turnIndex,
+      isLastTurnOfRound,
       awaitingRoundStart,
       roundPointsByPlayer,
       isGameroom,
@@ -194,6 +270,11 @@ export function RankUpHostProvider({ children }: { children: ReactNode }) {
       disconnect,
       clearError,
       startNewRound,
+      revealRound,
+      advanceTurnAction,
+      skipCurrentTurn,
+      abandonRound,
+      abandonGame,
     ],
   );
 

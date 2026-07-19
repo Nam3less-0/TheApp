@@ -7,13 +7,16 @@ interface AbandonRoundButtonProps {
 }
 
 export default function AbandonRoundButton({ className = '' }: AbandonRoundButtonProps) {
-  const { local, room, isHost, isRanker, abandonRound } = useRankUp();
+  const { local, room, isHost, isRanker, abandonRound, sessionHostActive } = useRankUp();
   const [busy, setBusy] = useState(false);
 
   const isDrafting = local.localPhase === 'compose' || local.localPhase === 'ranker-rank';
   const roundInProgress =
     room != null && room.phase !== 'lobby' && room.phase !== 'round-recap';
-  const canAbandon = (isHost || isRanker) && (isDrafting || roundInProgress);
+  const canAbandon =
+    !sessionHostActive &&
+    (isHost || isRanker) &&
+    (isDrafting || roundInProgress);
 
   if (!canAbandon) return null;
 

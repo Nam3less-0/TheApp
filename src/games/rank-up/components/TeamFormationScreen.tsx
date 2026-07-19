@@ -127,6 +127,8 @@ export default function TeamFormationScreen() {
     players,
     teams,
     isHost,
+    canStartRound,
+    sessionHostActive,
     assignPlayerTeam,
     startNewRound,
     leaveGame,
@@ -230,7 +232,7 @@ export default function TeamFormationScreen() {
       ) : null}
 
       <div className="flex flex-col gap-3">
-        {isHost ? (
+        {canStartRound ? (
           <RankUpPrimaryButton
             onClick={() => startNewRound()}
             disabled={!formationReady || !playerCountOk}
@@ -241,7 +243,9 @@ export default function TeamFormationScreen() {
           <RankUpPanel compact>
             <p className="text-center font-body text-sm text-text-mid">
               {formationReady && playerCountOk
-                ? 'Waiting for the host to start Round 1…'
+                ? sessionHostActive
+                  ? 'Waiting for the gameroom to start Round 1…'
+                  : 'Waiting for the host to start Round 1…'
                 : 'Waiting for teams to be set…'}
             </p>
           </RankUpPanel>

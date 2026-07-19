@@ -335,6 +335,7 @@ export async function publishDisplay(
     options: RankOption[];
     rankerPlayerId: string;
   },
+  secretRankerOrder?: string[],
 ): Promise<RankUpRoom> {
   const supabase = getSupabase();
   const code = roomCode.toUpperCase();
@@ -346,7 +347,7 @@ export async function publishDisplay(
       prompt: payload.prompt,
       options: payload.options,
       ranker_player_id: payload.rankerPlayerId,
-      ranker_order: null,
+      ranker_order: secretRankerOrder?.length ? secretRankerOrder : null,
     })
     .eq('code', code);
 
@@ -359,11 +360,19 @@ export async function publishDisplay(
   return room;
 }
 
-export async function revealAnswer(roomCode: string, rankerOrder: string[]): Promise<void> {
+export async function revealAnswer(roomCode: string, rankerOrder?: string[]): Promise<void> {
   const supabase = getSupabase();
   const code = roomCode.toUpperCase();
   const existingRoom = await fetchRoom(code);
   const existingPlayers = await fetchPlayers(code);
+
+  let order = rankerOrder;
+  if (!order?.length) {
+    order = existingRoom?.rankerOrder ?? undefined;
+  }
+  if (!order?.length) {
+    throw new Error('Ranker order not found.');
+  }
 
   if (
     existingRoom?.phase === 'reveal' &&
@@ -376,7 +385,7 @@ export async function revealAnswer(roomCode: string, rankerOrder: string[]): Pro
     .from('rank_up_rooms')
     .update({
       phase: 'reveal',
-      ranker_order: rankerOrder,
+      ranker_order: order,
     })
     .eq('code', code);
 
@@ -386,7 +395,7 @@ export async function revealAnswer(roomCode: string, rankerOrder: string[]): Pro
   if (!room?.rankerPlayerId) return;
 
   if (isTeamsMode(room)) {
-    await scoreTeamsReveal(code, room, existingPlayers, rankerOrder);
+    await scoreTeamsReveal(code, room, existingPlayers, order);
     return;
   }
 
@@ -400,7 +409,7 @@ export async function revealAnswer(roomCode: string, rankerOrder: string[]): Pro
       const guessOrder = player.guessOrder ?? [];
       const points =
         guessOrder.length > 0
-          ? scoreRoundPoints(guessOrder, rankerOrder, allGuessOrders)
+          ? scoreRoundPoints(guessOrder, order, allGuessOrders)
           : 0;
 
       const { error: playerError } = await supabase

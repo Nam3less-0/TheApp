@@ -16,9 +16,9 @@ export default function LobbyScreen() {
     room,
     players,
     isRanker,
-    isHost,
     canStartRound,
-    hostDeviceConnected,
+    canSkipTurn,
+    sessionHostActive,
     leaveGame,
     beginCompose,
     startNewRound,
@@ -93,7 +93,7 @@ export default function LobbyScreen() {
           ) : (
             <RankUpPanel compact>
               <p className="text-center font-body text-sm text-text-mid">
-                {gameroom && hostDeviceConnected
+                {sessionHostActive
                   ? 'Waiting for the gameroom to start Round 1…'
                   : gameroom
                     ? 'Waiting for the first player to start Round 1…'
@@ -116,7 +116,7 @@ export default function LobbyScreen() {
           </RankUpPanel>
         )}
 
-        {isHost && rankerMissingFromRoom ? (
+        {canSkipTurn && rankerMissingFromRoom ? (
           <RankUpSecondaryButton onClick={() => skipCurrentTurn()} className="w-full text-center">
             Skip {ranker?.name ?? 'ranker'}&apos;s turn
           </RankUpSecondaryButton>

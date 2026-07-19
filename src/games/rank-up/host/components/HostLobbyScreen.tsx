@@ -3,12 +3,12 @@ import QRCode from 'qrcode';
 import { rankUpPlayerJoinUrl } from '../../../../lib/appUrl';
 import { useRankUpHost } from '../context';
 import RoomCodeDisplay from '../../components/RoomCodeDisplay';
-import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from '../../components/Layout';
+import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton, RankUpSecondaryButton } from '../../components/Layout';
 import { CrownIcon } from '../../components/RankUpIcons';
 import { isAwaitingRoundStart } from '../../sync/types';
 
 export default function HostLobbyScreen() {
-  const { room, players, isGameroom, startNewRound } = useRankUpHost();
+  const { room, players, isGameroom, startNewRound, skipCurrentTurn } = useRankUpHost();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -29,6 +29,9 @@ export default function HostLobbyScreen() {
 
   const ranker = players.find((player) => player.id === room.rankerPlayerId);
   const awaitingRoundStart = isAwaitingRoundStart(room);
+  const rankerMissingFromRoom = Boolean(
+    room.rankerPlayerId && !players.some((player) => player.id === room.rankerPlayerId),
+  );
 
   return (
     <RankUpPageWrap variant="display">
@@ -42,7 +45,7 @@ export default function HostLobbyScreen() {
         <p className="mx-auto mt-3 max-w-lg font-body text-sm text-text-mid">
           {isGameroom
             ? 'Players scan the QR code to join on their phones. Start each round from this screen when everyone is ready.'
-            : 'Point your camera at the QR code, or share the room code. This screen mirrors the game — the phone host runs the session.'}
+            : 'This screen runs the session — start rounds, reveal answers, and advance turns from here.'}
         </p>
       </header>
 
@@ -100,7 +103,7 @@ export default function HostLobbyScreen() {
           </RankUpPanel>
 
           {awaitingRoundStart ? (
-            isGameroom ? (
+            <>
               <RankUpPrimaryButton
                 onClick={() => startNewRound()}
                 disabled={players.length < 2}
@@ -108,27 +111,31 @@ export default function HostLobbyScreen() {
               >
                 Start Round 1
               </RankUpPrimaryButton>
-            ) : (
+              {players.length < 2 ? (
+                <p className="text-center font-mono text-[10px] uppercase tracking-[0.12em] text-text-low">
+                  Need at least 2 players to start
+                </p>
+              ) : null}
+            </>
+          ) : (
+            <>
               <RankUpPanel compact>
                 <p className="text-center font-body text-sm text-text-mid">
-                  Waiting for the host to start Round 1…
+                  {ranker
+                    ? `Waiting for ${ranker.name} to start their turn…`
+                    : 'Waiting for the next turn…'}
                 </p>
               </RankUpPanel>
-            )
-          ) : (
-            <RankUpPanel compact>
-              <p className="text-center font-body text-sm text-text-mid">
-                {ranker
-                  ? `Waiting for ${ranker.name} to start their turn…`
-                  : 'Waiting for the next turn…'}
-              </p>
-            </RankUpPanel>
+              {rankerMissingFromRoom ? (
+                <RankUpSecondaryButton
+                  onClick={() => skipCurrentTurn()}
+                  className="w-full text-center"
+                >
+                  Skip {ranker?.name ?? 'ranker'}&apos;s turn
+                </RankUpSecondaryButton>
+              ) : null}
+            </>
           )}
-          {isGameroom && awaitingRoundStart && players.length < 2 ? (
-            <p className="text-center font-mono text-[10px] uppercase tracking-[0.12em] text-text-low">
-              Need at least 2 players to start
-            </p>
-          ) : null}
         </div>
       </div>
     </RankUpPageWrap>

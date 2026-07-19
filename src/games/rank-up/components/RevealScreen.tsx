@@ -8,8 +8,16 @@ import { TeamsRevealSummaryPanel } from './TeamsRevealSummary';
 import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from './Layout';
 
 export default function RevealScreen() {
-  const { room, players, advanceTurn, isLastTurnOfRound, hostDeviceConnected, isTeamsGame } =
-    useRankUp();
+  const {
+    room,
+    players,
+    advanceTurn,
+    isLastTurnOfRound,
+    hostDeviceConnected,
+    isTeamsGame,
+    canAdvanceTurn,
+    sessionHostActive,
+  } = useRankUp();
 
   if (!room?.rankerOrder || !room.prompt) return null;
 
@@ -84,10 +92,22 @@ export default function RevealScreen() {
           </RankUpPanel>
         ) : null}
 
-        <RankUpPrimaryButton onClick={() => advanceTurn()}>
-          {isLastTurnOfRound ? 'See round recap' : 'Next turn'}
-        </RankUpPrimaryButton>
-        <AbandonRoundButton className="mt-3" />
+        {canAdvanceTurn ? (
+          <>
+            <RankUpPrimaryButton onClick={() => advanceTurn()}>
+              {isLastTurnOfRound ? 'See round recap' : 'Next turn'}
+            </RankUpPrimaryButton>
+            <AbandonRoundButton className="mt-3" />
+          </>
+        ) : (
+          <RankUpPanel compact>
+            <p className="text-center font-body text-sm text-text-mid">
+              {sessionHostActive
+                ? 'Waiting for the gameroom host to continue…'
+                : 'Waiting for the ranker to continue…'}
+            </p>
+          </RankUpPanel>
+        )}
       </CommandCenterFrame>
     </RankUpPageWrap>
   );

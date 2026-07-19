@@ -1,17 +1,29 @@
+import { useState } from 'react';
 import { useRankUpHost } from '../context';
 import PlayerAvatarChip from '../../components/PlayerAvatarChip';
-import RankUpPanel, { RankUpPageWrap } from '../../components/Layout';
+import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton } from '../../components/Layout';
 import { CrownIcon } from '../../components/RankUpIcons';
 
 export default function HostProgressScreen() {
-  const { room, players, submittedCount, guesserCount } = useRankUpHost();
+  const { room, players, submittedCount, guesserCount, revealRound } = useRankUpHost();
+  const [revealing, setRevealing] = useState(false);
 
   if (!room?.prompt) return null;
 
   const ranker = players.find((player) => player.id === room.rankerPlayerId);
   const guessers = players.filter((player) => player.id !== room.rankerPlayerId);
   const progress = guesserCount > 0 ? Math.round((submittedCount / guesserCount) * 100) : 0;
-  const allIn = guesserCount > 0 && submittedCount >= guesserCount;
+  const allIn = guesserCount === 0 || submittedCount >= guesserCount;
+
+  async function handleReveal() {
+    if (!allIn || revealing) return;
+    setRevealing(true);
+    try {
+      await revealRound();
+    } finally {
+      setRevealing(false);
+    }
+  }
 
   return (
     <RankUpPageWrap variant="display">
@@ -54,7 +66,7 @@ export default function HostProgressScreen() {
 
         <p className="text-center font-body text-sm text-text-mid">
           {allIn
-            ? 'All guesses in — waiting for reveal'
+            ? 'All guesses in — ready to reveal'
             : `${submittedCount} of ${guesserCount} guesses in`}
         </p>
 
@@ -68,6 +80,20 @@ export default function HostProgressScreen() {
           ))}
         </div>
       </RankUpPanel>
+
+      <div className="mx-auto mt-6 max-w-2xl">
+        <RankUpPrimaryButton
+          onClick={() => void handleReveal()}
+          disabled={!allIn || revealing}
+          className="w-full"
+        >
+          {revealing
+            ? 'Revealing…'
+            : allIn
+              ? 'Reveal answer'
+              : `Reveal answer (${submittedCount}/${guesserCount})`}
+        </RankUpPrimaryButton>
+      </div>
     </RankUpPageWrap>
   );
 }

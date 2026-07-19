@@ -34,7 +34,6 @@ import {
   revealAnswer,
   startRound,
   subscribeToRoom,
-  isGameroomRoom,
 } from './sync/roomApi';
 import {
   isAwaitingRoundStart,
@@ -49,6 +48,15 @@ import {
   isTeamsMode,
   teamsGuessProgress,
 } from './teams';
+import {
+  canAbandonGameOnPhone,
+  canAdvanceOnPhone,
+  canRevealOnPhone,
+  canSkipOnPhone,
+  canStartRoundOnPhone,
+  sanitizeRoomForPlayers,
+  sessionHostActive,
+} from './facilitation';
 
 interface RankUpContextValue {
   local: LocalState;
@@ -61,6 +69,10 @@ interface RankUpContextValue {
   isRanker: boolean;
   isHost: boolean;
   canStartRound: boolean;
+  canRevealRound: boolean;
+  canAdvanceTurn: boolean;
+  canSkipTurn: boolean;
+  sessionHostActive: boolean;
   supabaseReady: boolean;
   submittedCount: number;
   guesserCount: number;
@@ -91,10 +103,17 @@ const RankUpContext = createContext<RankUpContextValue | null>(null);
 
 export function RankUpProvider({ children }: { children: ReactNode }) {
   const [local, dispatch] = useReducer(localReducer, initialLocalState);
-  const [room, setRoom] = useState<RankUpRoom | null>(null);
+  const [rawRoom, setRawRoom] = useState<RankUpRoom | null>(null);
   const [players, setPlayers] = useState<RankUpPlayer[]>([]);
   const [teams, setTeams] = useState<RankUpTeam[]>([]);
   const [hostDeviceConnected, setHostDeviceConnected] = useState(false);
+
+  const room = useMemo(
+    () =>
+      rawRoom ? sanitizeRoomForPlayers(rawRoom, hostDeviceConnected) : null,
+    [rawRoom, hostDeviceConnected],
+  );
+  const hostSessionActive = sessionHostActive(hostDeviceConnected);
 
   const isTeamsGame = isTeamsMode(room);
   const teamFormationComplete = isTeamFormationComplete(players, teams);
@@ -105,14 +124,18 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
 
   const isRanker = Boolean(room && local.playerId && room.rankerPlayerId === local.playerId);
   const isHost = Boolean(room && local.playerId && room.hostPlayerId === local.playerId);
-  const gameroom = isGameroomRoom(room);
   const isFirstPlayer = Boolean(
     local.playerId && players.length > 0 && players[0]?.id === local.playerId,
   );
-  const canStartRound = Boolean(
-    room &&
-      (isHost || (gameroom && !hostDeviceConnected && isFirstPlayer)),
-  );
+  const canStartRound = canStartRoundOnPhone({
+    room,
+    isHost,
+    isFirstPlayer,
+    hostDeviceConnected,
+  });
+  const canRevealRound = canRevealOnPhone(isRanker, hostDeviceConnected);
+  const canAdvanceTurn = canAdvanceOnPhone(isRanker, hostDeviceConnected);
+  const canSkipTurn = canSkipOnPhone(isHost, hostDeviceConnected);
   const myPlayer = players.find((player) => player.id === local.playerId) ?? null;
   const teamsProgress = room && isTeamsGame ? teamsGuessProgress(room, players, teams) : null;
   const guesserCount =
@@ -157,7 +180,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
 
     return subscribeToRoom(
       local.roomCode,
-      setRoom,
+      setRawRoom,
       setPlayers,
       (message) => dispatch({ type: 'SET_SYNC_ERROR', message }),
       {
@@ -284,7 +307,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
     clearSession();
     if (local.roomCode) clearPendingOrder(local.roomCode);
     dispatch({ type: 'RESET' });
-    setRoom(null);
+    setRawRoom(null);
     setPlayers([]);
     setTeams([]);
   }, [local.playerId, local.roomCode]);
@@ -317,13 +340,17 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       const draft = local.roundDraft;
 
       try {
-        const updatedRoom = await publishDisplay(local.roomCode, {
-          questionType: draft.type,
-          prompt: draft.prompt,
-          options: draft.options,
-          rankerPlayerId: local.playerId,
-        });
-        setRoom(updatedRoom);
+        const updatedRoom = await publishDisplay(
+          local.roomCode,
+          {
+            questionType: draft.type,
+            prompt: draft.prompt,
+            options: draft.options,
+            rankerPlayerId: local.playerId,
+          },
+          hostDeviceConnected ? order : undefined,
+        );
+        setRawRoom(updatedRoom);
         const updatedPlayers = await fetchPlayers(local.roomCode);
         setPlayers(updatedPlayers);
         dispatch({ type: 'RETURN_TO_LOBBY' });
@@ -335,11 +362,11 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
         });
       }
     },
-    [local.roomCode, local.roundDraft, local.playerId],
+    [local.roomCode, local.roundDraft, local.playerId, hostDeviceConnected],
   );
 
   const revealRound = useCallback(async () => {
-    if (!local.roomCode) return;
+    if (!local.roomCode || !canRevealRound) return;
     const order = loadPendingOrder(local.roomCode);
     if (!order) {
       dispatch({ type: 'SET_SYNC_ERROR', message: 'Ranker order not found on this device.' });
@@ -355,13 +382,13 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
         message: formatSupabaseError(error, 'Could not reveal answer.'),
       });
     }
-  }, [local.roomCode]);
+  }, [local.roomCode, canRevealRound]);
 
   const advanceTurnAction = useCallback(async () => {
-    if (!local.roomCode) return;
+    if (!local.roomCode || !canAdvanceTurn) return;
     await advanceTurn(local.roomCode);
     dispatch({ type: 'RETURN_TO_LOBBY' });
-  }, [local.roomCode]);
+  }, [local.roomCode, canAdvanceTurn]);
 
   const startNewRound = useCallback(async () => {
     if (!local.roomCode || !canStartRound) return;
@@ -373,10 +400,10 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
   }, [local.roomCode, players, canStartRound]);
 
   const skipCurrentTurn = useCallback(async () => {
-    if (!local.roomCode || !isHost) return;
+    if (!local.roomCode || !canSkipTurn) return;
     await advanceTurn(local.roomCode);
     dispatch({ type: 'RETURN_TO_LOBBY' });
-  }, [local.roomCode, isHost]);
+  }, [local.roomCode, canSkipTurn]);
 
   const abandonRound = useCallback(async () => {
     if (!room) return;
@@ -386,21 +413,21 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    if (!local.roomCode || (!isHost && !isRanker)) return;
+    if (hostDeviceConnected || !local.roomCode || (!isHost && !isRanker)) return;
 
     await abandonCurrentTurn(local.roomCode);
     clearPendingOrder(local.roomCode);
     dispatch({ type: 'RETURN_TO_LOBBY' });
-  }, [local.roomCode, room, isHost, isRanker]);
+  }, [local.roomCode, room, isHost, isRanker, hostDeviceConnected]);
 
   const abandonGame = useCallback(async () => {
-    if (!local.roomCode || !isHost) return;
+    if (!local.roomCode || !canAbandonGameOnPhone(isHost, hostDeviceConnected)) return;
 
     await abandonGameRoom(local.roomCode);
     clearPendingOrder(local.roomCode);
     dispatch({ type: 'RETURN_TO_LOBBY' });
     dispatch({ type: 'SYNC_SCORE', score: 0 });
-  }, [local.roomCode, isHost]);
+  }, [local.roomCode, isHost, hostDeviceConnected]);
 
   const submitGuess = useCallback(
     async (order: string[]) => {
@@ -445,6 +472,10 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       isRanker,
       isHost,
       canStartRound,
+      canRevealRound,
+      canAdvanceTurn,
+      canSkipTurn,
+      sessionHostActive: hostSessionActive,
       supabaseReady: isSupabaseConfigured(),
       submittedCount,
       guesserCount,
@@ -481,6 +512,10 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       isRanker,
       isHost,
       canStartRound,
+      canRevealRound,
+      canAdvanceTurn,
+      canSkipTurn,
+      hostSessionActive,
       submittedCount,
       guesserCount,
       hostDeviceConnected,

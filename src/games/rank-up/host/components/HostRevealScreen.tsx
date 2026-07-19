@@ -5,11 +5,11 @@ import {
   cellTone,
   guessedPosition,
 } from '../comparisonGrid';
-import RankUpPanel, { RankUpPageWrap } from '../../components/Layout';
+import RankUpPanel, { RankUpPageWrap, RankUpPrimaryButton, RankUpSecondaryButton } from '../../components/Layout';
 import { CrownIcon } from '../../components/RankUpIcons';
 
 export default function HostRevealScreen() {
-  const { room, players } = useRankUpHost();
+  const { room, players, advanceTurn, isLastTurnOfRound, abandonRound } = useRankUpHost();
 
   if (!room?.rankerOrder?.length || !room.prompt) return null;
 
@@ -114,9 +114,21 @@ export default function HostRevealScreen() {
         )}
       </div>
 
-      <p className="mt-6 text-center font-body text-sm text-text-mid">
-        Waiting for the ranker to continue…
-      </p>
+      <div className="mx-auto mt-8 flex max-w-xl flex-col gap-3">
+        <RankUpPrimaryButton onClick={() => advanceTurn()} className="w-full">
+          {isLastTurnOfRound ? 'See round recap' : 'Next turn'}
+        </RankUpPrimaryButton>
+        <RankUpSecondaryButton
+          onClick={() => {
+            if (window.confirm('Abandon the current round for everyone and return to the lobby? Scores are kept.')) {
+              void abandonRound();
+            }
+          }}
+          className="w-full text-center text-bad hover:border-bad/40 hover:text-bad"
+        >
+          Abandon round
+        </RankUpSecondaryButton>
+      </div>
     </RankUpPageWrap>
   );
 }

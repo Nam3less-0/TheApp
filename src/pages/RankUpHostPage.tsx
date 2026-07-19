@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRankUpHost } from '../games/rank-up/host/context';
 import HostScreenRouter from '../games/rank-up/host/HostScreenRouter';
+import HostGameOptionsMenu from '../games/rank-up/host/components/HostGameOptionsMenu';
 import ErrorPanel from '../games/rank-up/components/ErrorPanel';
 import RankUpPanel, {
   RankUpPageWrap,
@@ -94,13 +95,16 @@ function HostShell({ children }: { children: React.ReactNode }) {
           </Link>
           <span className="font-display text-sm font-bold text-text-hi">Rank Up — Host Display</span>
           {roomCode ? (
-            <button
-              type="button"
-              onClick={disconnect}
-              className="font-mono text-xs text-text-low transition-colors hover:text-text-mid"
-            >
-              Disconnect
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={disconnect}
+                className="font-mono text-xs text-text-low transition-colors hover:text-text-mid"
+              >
+                Disconnect
+              </button>
+              <HostGameOptionsMenu />
+            </div>
           ) : (
             <span className="w-16" aria-hidden="true" />
           )}
