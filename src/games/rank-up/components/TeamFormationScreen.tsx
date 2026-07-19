@@ -8,7 +8,6 @@ import {
 } from '../teams';
 import type { RankUpPlayer, RankUpTeam } from '../sync/types';
 import RoomCodeDisplay from './RoomCodeDisplay';
-import CastToScreenPanel from './CastToScreenPanel';
 import RankUpPanel, {
   RankUpPageWrap,
   RankUpPrimaryButton,
@@ -253,8 +252,6 @@ export default function TeamFormationScreen() {
             Teams locked — {formatTeamMembers(teamA, players)} vs {formatTeamMembers(teamB, players)}
           </p>
         ) : null}
-
-        <CastToScreenPanel code={room.code} />
 
         <RankUpSecondaryButton onClick={leaveGame} className="w-full text-center">
           Leave room

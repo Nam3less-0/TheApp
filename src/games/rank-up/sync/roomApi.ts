@@ -21,6 +21,13 @@ export function isPendingHost(hostPlayerId: string | null | undefined): boolean 
   return hostPlayerId === PENDING_HOST_ID;
 }
 
+/** Room created via Play gameroom — the big-screen device runs the session, not a phone player. */
+export function isGameroomRoom(
+  room: { hostPlayerId: string } | null | undefined,
+): boolean {
+  return isPendingHost(room?.hostPlayerId);
+}
+
 export interface SubscribeToRoomOptions {
   /** Host device: track read-only spectator presence on join. */
   trackHostPresence?: Record<string, unknown>;
@@ -173,7 +180,7 @@ export async function createRoom(
   return room;
 }
 
-/** Creates a player-less room for gameroom / host-display setup. First joiner becomes game host. */
+/** Creates a player-less room for gameroom — the display device starts rounds; phones only play. */
 export async function createGameroomRoom(): Promise<RankUpRoom> {
   const supabase = getSupabase();
   const code = await uniqueRoomCode();
@@ -235,22 +242,6 @@ export async function joinRoom(
   });
 
   if (error) throw error;
-
-  if (isPendingHost(room.hostPlayerId)) {
-    const { error: hostError } = await supabase
-      .from('rank_up_rooms')
-      .update({
-        host_player_id: playerId,
-        ranker_player_id: playerId,
-      })
-      .eq('code', roomCode);
-
-    if (hostError) throw hostError;
-
-    const updated = await fetchRoom(roomCode);
-    if (!updated) throw new Error('Room not found after assigning host.');
-    return updated;
-  }
 
   return room;
 }
@@ -551,7 +542,7 @@ export async function abandonGame(roomCode: string): Promise<void> {
       turn_order: [],
       turn_index: 0,
       round_number: 1,
-      ranker_player_id: room.hostPlayerId,
+      ranker_player_id: isGameroomRoom(room) ? null : room.hostPlayerId,
       question_type: null,
       prompt: null,
       options: [],

@@ -34,6 +34,7 @@ import {
   revealAnswer,
   startRound,
   subscribeToRoom,
+  isGameroomRoom,
 } from './sync/roomApi';
 import {
   isAwaitingRoundStart,
@@ -59,6 +60,7 @@ interface RankUpContextValue {
   teamsGuessRole: ReturnType<typeof getTeamsGuessRole> | null;
   isRanker: boolean;
   isHost: boolean;
+  canStartRound: boolean;
   supabaseReady: boolean;
   submittedCount: number;
   guesserCount: number;
@@ -103,6 +105,14 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
 
   const isRanker = Boolean(room && local.playerId && room.rankerPlayerId === local.playerId);
   const isHost = Boolean(room && local.playerId && room.hostPlayerId === local.playerId);
+  const gameroom = isGameroomRoom(room);
+  const isFirstPlayer = Boolean(
+    local.playerId && players.length > 0 && players[0]?.id === local.playerId,
+  );
+  const canStartRound = Boolean(
+    room &&
+      (isHost || (gameroom && !hostDeviceConnected && isFirstPlayer)),
+  );
   const myPlayer = players.find((player) => player.id === local.playerId) ?? null;
   const teamsProgress = room && isTeamsGame ? teamsGuessProgress(room, players, teams) : null;
   const guesserCount =
@@ -354,13 +364,13 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
   }, [local.roomCode]);
 
   const startNewRound = useCallback(async () => {
-    if (!local.roomCode) return;
+    if (!local.roomCode || !canStartRound) return;
     await startRound(
       local.roomCode,
       players.map((player) => player.id),
     );
     dispatch({ type: 'RETURN_TO_LOBBY' });
-  }, [local.roomCode, players]);
+  }, [local.roomCode, players, canStartRound]);
 
   const skipCurrentTurn = useCallback(async () => {
     if (!local.roomCode || !isHost) return;
@@ -434,6 +444,7 @@ export function RankUpProvider({ children }: { children: ReactNode }) {
       teamsGuessRole,
       isRanker,
       isHost,
+      canStartRound,
       supabaseReady: isSupabaseConfigured(),
       submittedCount,
       guesserCount,

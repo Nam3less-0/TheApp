@@ -3,8 +3,17 @@ import { useSessionUI } from '../sessionUi';
 import RoundRecapView from './RoundRecapView';
 
 export default function RoundRecapScreen() {
-  const { local, room, players, teams, isTeamsGame, roundNumber, isHost, startNewRound, leaveGame } =
-    useRankUp();
+  const {
+    local,
+    room,
+    players,
+    teams,
+    isTeamsGame,
+    roundNumber,
+    canStartRound,
+    startNewRound,
+    leaveGame,
+  } = useRankUp();
   const { roundPointsByPlayer } = useSessionUI();
 
   if (!room) return null;
@@ -17,7 +26,7 @@ export default function RoundRecapScreen() {
       roundNumber={roundNumber}
       roundPointsByPlayer={roundPointsByPlayer}
       highlightPlayerId={local.playerId}
-      showHostActions={isHost}
+      showHostActions={canStartRound}
       onStartRound={() => startNewRound()}
       onLeave={() => leaveGame()}
     />

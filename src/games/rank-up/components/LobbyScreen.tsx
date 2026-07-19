@@ -7,7 +7,7 @@ import RankUpPanel, {
   RankUpPrimaryButton,
   RankUpSecondaryButton,
 } from './Layout';
-import CastToScreenPanel from './CastToScreenPanel';
+import { isGameroomRoom } from '../sync/roomApi';
 import { CrownIcon } from './RankUpIcons';
 
 export default function LobbyScreen() {
@@ -17,6 +17,8 @@ export default function LobbyScreen() {
     players,
     isRanker,
     isHost,
+    canStartRound,
+    hostDeviceConnected,
     leaveGame,
     beginCompose,
     startNewRound,
@@ -32,6 +34,7 @@ export default function LobbyScreen() {
   const rankerMissingFromRoom = Boolean(
     room.rankerPlayerId && !players.some((player) => player.id === room.rankerPlayerId),
   );
+  const gameroom = isGameroomRoom(room);
 
   return (
     <RankUpPageWrap>
@@ -85,12 +88,16 @@ export default function LobbyScreen() {
 
       <div className="flex flex-col gap-3">
         {awaitingRoundStart ? (
-          isHost ? (
+          canStartRound ? (
             <RankUpPrimaryButton onClick={() => startNewRound()}>Start Round 1</RankUpPrimaryButton>
           ) : (
             <RankUpPanel compact>
               <p className="text-center font-body text-sm text-text-mid">
-                Waiting for the host to start Round 1…
+                {gameroom && hostDeviceConnected
+                  ? 'Waiting for the gameroom to start Round 1…'
+                  : gameroom
+                    ? 'Waiting for the first player to start Round 1…'
+                    : 'Waiting for the host to start Round 1…'}
               </p>
             </RankUpPanel>
           )
@@ -116,8 +123,6 @@ export default function LobbyScreen() {
         ) : null}
 
         <AbandonRoundButton />
-
-        <CastToScreenPanel code={room.code} />
 
         <RankUpSecondaryButton onClick={leaveGame} className="w-full text-center">
           Leave room

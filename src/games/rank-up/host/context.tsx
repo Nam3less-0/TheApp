@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { formatSupabaseError, isSupabaseConfigured } from '../../../lib/supabase';
-import { fetchRoom, subscribeToRoom } from '../sync/roomApi';
+import { fetchRoom, startRound, subscribeToRoom, isGameroomRoom } from '../sync/roomApi';
 import { isAwaitingRoundStart, type RankUpPlayer, type RankUpRoom } from '../sync/types';
 
 interface RankUpHostContextValue {
@@ -24,9 +24,11 @@ interface RankUpHostContextValue {
   roundNumber: number;
   awaitingRoundStart: boolean;
   roundPointsByPlayer: Record<string, number>;
+  isGameroom: boolean;
   connectToRoom: (code: string) => Promise<void>;
   disconnect: () => void;
   clearError: () => void;
+  startNewRound: () => Promise<void>;
 }
 
 const RankUpHostContext = createContext<RankUpHostContextValue | null>(null);
@@ -48,6 +50,7 @@ export function RankUpHostProvider({ children }: { children: ReactNode }) {
   ).length;
   const roundNumber = room?.roundNumber ?? 1;
   const awaitingRoundStart = Boolean(room && isAwaitingRoundStart(room));
+  const isGameroom = isGameroomRoom(room);
 
   useEffect(() => {
     if (!roomCode || !isSupabaseConfigured()) return;
@@ -143,6 +146,19 @@ export function RankUpHostProvider({ children }: { children: ReactNode }) {
     setSyncError(null);
   }, []);
 
+  const startNewRound = useCallback(async () => {
+    if (!roomCode) return;
+    try {
+      await startRound(
+        roomCode,
+        players.map((player) => player.id),
+      );
+      setSyncError(null);
+    } catch (error) {
+      setSyncError(formatSupabaseError(error, 'Could not start round.'));
+    }
+  }, [roomCode, players]);
+
   const value = useMemo(
     (): RankUpHostContextValue => ({
       roomCode,
@@ -156,9 +172,11 @@ export function RankUpHostProvider({ children }: { children: ReactNode }) {
       roundNumber,
       awaitingRoundStart,
       roundPointsByPlayer,
+      isGameroom,
       connectToRoom,
       disconnect,
       clearError,
+      startNewRound,
     }),
     [
       roomCode,
@@ -171,9 +189,11 @@ export function RankUpHostProvider({ children }: { children: ReactNode }) {
       roundNumber,
       awaitingRoundStart,
       roundPointsByPlayer,
+      isGameroom,
       connectToRoom,
       disconnect,
       clearError,
+      startNewRound,
     ],
   );
 
