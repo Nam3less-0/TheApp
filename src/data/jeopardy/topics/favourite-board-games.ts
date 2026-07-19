@@ -20,7 +20,7 @@ export default createTopic('favourite-board-games', 'Favourite Board Games', {
     { question: 'In chess, what is it called when the king is under attack?', answer: 'Check', choices: ['Check', 'Checkmate', 'Stalemate', 'Castling'] },
     { question: 'In Monopoly, what colored properties are the most expensive on the classic board?', answer: 'Dark blue (Boardwalk and Park Place)', choices: ['Dark blue (Boardwalk and Park Place)', 'Green', 'Red', 'Yellow'] },
     { question: 'In poker, what five-card hand ranks highest of all?', answer: 'A royal flush', choices: ['A royal flush', 'Four of a kind', 'A full house', 'A straight flush'] },
-    { question: 'In Mahjong, what special winning hand uses only one suit plus honors?', answer: 'A flush hand (qing yise)', choices: ['A flush hand (qing yise)', 'A pair only', 'Seven pairs always', 'All triplets (peng peng hu)'] },
+    { question: 'In Mahjong, what special winning hand uses only one suit plus honor tiles?', answer: 'Honitsu (half flush)', choices: ['Honitsu (half flush)', 'Chiitoitsu', 'Tanyao', 'Toitoi'] },
     { question: 'In Splendor, how do you win the game?', answer: 'Reach 15 prestige points first', choices: ['Reach 15 prestige points first', 'Collect all gem types', 'Bankrupt other players', 'Own the most noble tiles'] },
   ],
   2: [
@@ -76,7 +76,7 @@ export default createTopic('favourite-board-games', 'Favourite Board Games', {
     { question: 'In chess, what rating system is commonly used to rank competitive players?', answer: 'Elo', choices: ['Elo', 'Glicko', 'Handicap', 'Buchholz'] },
     { question: 'In Monopoly, how much cash does each player start with under classic rules?', answer: '$1,500', choices: ['$1,500', '$2,000', '$1,000', '$1,200'] },
     { question: 'In poker, what trapping tactic checks a strong hand to lure opponents into betting?', answer: 'A slow play', choices: ['A slow play', 'A bluff', 'A fold', 'A check-raise'] },
-    { question: 'In Mahjong, what rare winning hand made entirely of pairs is called chiitoitsu?', answer: 'Seven pairs (chiitoitsu)', choices: ['Seven pairs (chiitoitsu)', 'Four concealed triplets', 'Thirteen orphans', 'All green'] },
+    { question: 'In riichi Mahjong, what yaku is a winning hand made up of exactly seven different pairs?', answer: 'Chiitoitsu', choices: ['Chiitoitsu', 'Toitoi', 'Kokushi', 'Suuankou'] },
     { question: 'In Splendor, what tier of development cards costs the most gems but gives the most points?', answer: 'Level 3 cards', choices: ['Level 3 cards', 'Level 1 cards', 'Noble tiles', 'Level 2 cards'] },
     { question: 'In chess, which opening starts with White playing pawn to e4 and Black answering with c5?', answer: 'The Sicilian Defence', choices: ['The Sicilian Defence', 'The French Defence', 'The Queen\'s Gambit', 'The Caro-Kann Defence'] },
     { question: 'In Monopoly, which railroad is NOT one of the four on the classic board?', answer: 'Union Pacific', choices: ['Union Pacific', 'B&O Railroad', 'Reading Railroad', 'Pennsylvania Railroad'] },

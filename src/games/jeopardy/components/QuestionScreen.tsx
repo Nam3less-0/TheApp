@@ -127,8 +127,6 @@ export default function QuestionScreen() {
   const { state, dispatch } = useJeopardy();
   const [pickerOpen, setPickerOpen] = useState(false);
   const [snipeOpen, setSnipeOpen] = useState(false);
-  const [rerollOpen, setRerollOpen] = useState(false);
-  const [rerollConfirmOpen, setRerollConfirmOpen] = useState(false);
 
   const timerSeconds = state.settings.clueTimerSeconds;
   const soundOn = state.settings.soundEnabled;
@@ -138,8 +136,6 @@ export default function QuestionScreen() {
   useEffect(() => {
     setPickerOpen(false);
     setSnipeOpen(false);
-    setRerollOpen(false);
-    setRerollConfirmOpen(false);
     setRemaining(timerSeconds);
   }, [state.activeCellId, state.activeCellRerollKeys.length, timerSeconds]);
 
@@ -226,8 +222,10 @@ export default function QuestionScreen() {
       state.priorRecentQuestionKeys,
       state.history,
     );
+  const inRerollChain = state.activeCellRerollKeys.length > 0;
+  const showRerollOption = previouslySeen || inRerollChain;
   const canReroll =
-    previouslySeen &&
+    showRerollOption &&
     !revealed &&
     cell !== undefined &&
     (() => {
@@ -318,105 +316,28 @@ export default function QuestionScreen() {
             {cell.question}
           </p>
 
-          {!revealed && previouslySeen && (
+          {!revealed && showRerollOption && (
             <div className="pointer-events-none absolute bottom-3 right-3 z-10 sm:bottom-4 sm:right-4">
-              <div className="pointer-events-auto flex flex-col items-end">
-                {!rerollOpen ? (
-                  <button
-                    type="button"
-                    onClick={() => setRerollOpen(true)}
-                    aria-label="Reroll — this question appeared in a recent game"
-                    className="flex h-7 w-7 items-center justify-center rounded-full border shadow-md transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
-                    style={{
-                      background: `color-mix(in srgb, ${COLORS.gold} 28%, #1A1C20)`,
-                      borderColor: `color-mix(in srgb, ${COLORS.goldBright} 60%, transparent)`,
-                      color: COLORS.goldBright,
-                    }}
-                  >
-                    <RerollIcon />
-                  </button>
-                ) : (
-                  <div
-                    className="w-[min(calc(100vw-3rem),15rem)] rounded-xl border p-3 shadow-lg"
-                    style={{
-                      background: `linear-gradient(180deg, color-mix(in srgb, ${COLORS.goldBright} 92%, #FFF9E8), color-mix(in srgb, ${COLORS.gold} 78%, #FFEEB8))`,
-                      borderColor: COLORS.gold,
-                      boxShadow: `0 8px 28px -8px color-mix(in srgb, ${COLORS.gold} 55%, transparent)`,
-                      color: '#3D2E0A',
-                    }}
-                  >
-                    <div className="mb-1 font-body text-[12px] font-bold leading-snug">
-                      Seen before
-                    </div>
-                    <p className="mb-3 font-body text-[11px] leading-snug opacity-85">
-                      This question appeared in a recent game. Reroll to swap it for
-                      a fresh clue from the same category and value.
-                    </p>
-                    {!rerollConfirmOpen ? (
-                      <div className="flex flex-wrap items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setRerollConfirmOpen(true)}
-                          disabled={!canReroll}
-                          className="rounded-md border px-2.5 py-1 font-body text-[11px] font-bold transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-45"
-                          style={{
-                            background: `color-mix(in srgb, ${COLORS.goldDim} 35%, #FFF4CC)`,
-                            borderColor: COLORS.goldDim,
-                            color: '#2A2008',
-                          }}
-                        >
-                          Reroll question
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setRerollOpen(false);
-                            setRerollConfirmOpen(false);
-                          }}
-                          className="font-body text-[11px] font-medium opacity-65 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-steel-blue"
-                        >
-                          Close
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="flex flex-wrap items-center gap-2 font-body text-[11px]">
-                        <span className="font-semibold">Replace this clue?</span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setPickerOpen(false);
-                            setSnipeOpen(false);
-                            setRerollOpen(false);
-                            setRerollConfirmOpen(false);
-                            playSound('select', soundOn);
-                            dispatch({ type: 'REROLL_QUESTION' });
-                          }}
-                          className="rounded-md border px-2 py-0.5 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
-                          style={{
-                            background: '#2A2008',
-                            borderColor: '#2A2008',
-                            color: COLORS.goldBright,
-                          }}
-                        >
-                          Yes
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setRerollConfirmOpen(false)}
-                          className="font-medium opacity-65 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-steel-blue"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    )}
-                    {!canReroll && !rerollConfirmOpen && (
-                      <p className="mt-2 font-body text-[10px] opacity-70">
-                        No fresh questions left for this slot.
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
+              <button
+                type="button"
+                disabled={!canReroll}
+                onClick={() => {
+                  setPickerOpen(false);
+                  setSnipeOpen(false);
+                  playSound('select', soundOn);
+                  dispatch({ type: 'REROLL_QUESTION' });
+                }}
+                aria-label="Reroll question"
+                title={canReroll ? 'Reroll question' : 'No alternatives left'}
+                className="pointer-events-auto flex h-7 w-7 items-center justify-center rounded-full border shadow-md transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+                style={{
+                  background: `color-mix(in srgb, ${COLORS.sapphire} 55%, #1A1C20)`,
+                  borderColor: `color-mix(in srgb, ${COLORS.sapphireBright} 45%, transparent)`,
+                  color: COLORS.goldBright,
+                }}
+              >
+                <RerollIcon />
+              </button>
             </div>
           )}
 

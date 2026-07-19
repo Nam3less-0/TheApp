@@ -390,14 +390,13 @@ export function jeopardyReducer(
       if (state.phase !== 'question' || !state.activeCellId) return state;
       const cell = state.cells.find((c) => c.id === state.activeCellId);
       if (!cell) return state;
-      if (
-        !isPreviouslySeenQuestion(
-          state.columns,
-          cell,
-          state.priorRecentQuestionKeys,
-          state.history,
-        )
-      ) {
+      const seenBefore = isPreviouslySeenQuestion(
+        state.columns,
+        cell,
+        state.priorRecentQuestionKeys,
+        state.history,
+      );
+      if (!seenBefore && state.activeCellRerollKeys.length === 0) {
         return state;
       }
 
