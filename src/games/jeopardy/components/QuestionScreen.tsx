@@ -223,9 +223,7 @@ export default function QuestionScreen() {
       state.history,
     );
   const inRerollChain = state.activeCellRerollKeys.length > 0;
-  const showRerollOption = previouslySeen || inRerollChain;
   const canReroll =
-    showRerollOption &&
     !revealed &&
     cell !== undefined &&
     (() => {
@@ -238,6 +236,13 @@ export default function QuestionScreen() {
         ]) !== null
       );
     })();
+
+  function handleRerollQuestion() {
+    setPickerOpen(false);
+    setSnipeOpen(false);
+    playSound('select', soundOn);
+    dispatch({ type: 'REROLL_QUESTION' });
+  }
 
   return (
     <JeopardyPageWrap>
@@ -310,34 +315,54 @@ export default function QuestionScreen() {
             className={`text-center font-body leading-[1.55] ${
               revealed
                 ? 'mb-3 text-sm font-medium text-text-mid opacity-50'
-                : 'mb-6 text-[17px] font-semibold text-text-hi'
+                : 'mb-4 text-[17px] font-semibold text-text-hi'
             }`}
           >
             {cell.question}
           </p>
 
-          {!revealed && showRerollOption && (
-            <div className="pointer-events-none absolute bottom-3 right-3 z-10 sm:bottom-4 sm:right-4">
+          {!revealed && (
+            <div className="mb-5 flex flex-col items-center gap-1.5">
+              {previouslySeen && (
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[1.5px]"
+                  style={{ color: COLORS.gold }}
+                >
+                  Played in a past game
+                </span>
+              )}
               <button
                 type="button"
                 disabled={!canReroll}
-                onClick={() => {
-                  setPickerOpen(false);
-                  setSnipeOpen(false);
-                  playSound('select', soundOn);
-                  dispatch({ type: 'REROLL_QUESTION' });
-                }}
-                aria-label="Reroll question"
-                title={canReroll ? 'Reroll question' : 'No alternatives left'}
-                className="pointer-events-auto flex h-7 w-7 items-center justify-center rounded-full border shadow-md transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+                onClick={handleRerollQuestion}
+                aria-label={
+                  inRerollChain ? 'Try another clue' : 'Swap clue — seen this before'
+                }
+                title={canReroll ? 'Draw a fresh clue' : 'No alternatives left for this tile'}
+                className="group flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[1.2px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-35"
                 style={{
-                  background: `color-mix(in srgb, ${COLORS.sapphire} 55%, #1A1C20)`,
-                  borderColor: `color-mix(in srgb, ${COLORS.sapphireBright} 45%, transparent)`,
-                  color: COLORS.goldBright,
+                  background: inRerollChain
+                    ? `color-mix(in srgb, ${COLORS.sapphireBright} 14%, #1A1C20)`
+                    : 'rgba(255,255,255,0.02)',
+                  borderColor: inRerollChain
+                    ? `color-mix(in srgb, ${COLORS.sapphireBright} 45%, transparent)`
+                    : 'rgba(220,224,232,0.12)',
+                  color: inRerollChain ? COLORS.sapphireBright : '#9CA0AA',
                 }}
               >
-                <RerollIcon />
+                <span
+                  className="transition-transform group-hover:rotate-[-30deg] group-disabled:group-hover:rotate-0"
+                  style={{ color: COLORS.goldBright }}
+                >
+                  <RerollIcon />
+                </span>
+                {inRerollChain ? 'Try another clue' : 'Seen this before?'}
               </button>
+              {!canReroll && (
+                <span className="font-mono text-[10px] text-text-low">
+                  No swap available for this tile
+                </span>
+              )}
             </div>
           )}
 
