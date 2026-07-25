@@ -23,7 +23,7 @@ type Phase =
   | 'discussion'
   | 'vote-gate'
   | 'vote'
-  | 'influencer-gate'
+  | 'swap-prompt'
   | 'influencer'
   | 'reveal';
 
@@ -56,10 +56,6 @@ export default function CratesPlay({ players, onResolve }: GameProps) {
   const speakingOrder = useMemo(() => shuffle(players.map((p) => p.id)), [players]);
   const saboteurId = useMemo(
     () => Object.keys(setup.roles).find((id) => setup.roles[id] === 'SABOTEUR')!,
-    [setup],
-  );
-  const influencerId = useMemo(
-    () => Object.keys(setup.roles).find((id) => setup.roles[id] === 'INFLUENCER')!,
     [setup],
   );
 
@@ -124,7 +120,7 @@ export default function CratesPlay({ players, onResolve }: GameProps) {
       setPhase('vote-gate');
     } else {
       setSeatIndex(0);
-      setPhase('influencer-gate');
+      setPhase('swap-prompt');
     }
   }
 
@@ -486,25 +482,44 @@ export default function CratesPlay({ players, onResolve }: GameProps) {
     );
   }
 
-  // ---------- Influencer swap ----------
-  if (phase === 'influencer-gate') {
-    const influencer = playerById.get(influencerId)!;
+  // ---------- Swap window ----------
+  // Deliberately names nobody. If the Influencer doesn't want to swap they just
+  // sit still and anyone can tap "let it stand", so staying quiet keeps their
+  // identity hidden. Reaching for the iPad is the price of using the power.
+  if (phase === 'swap-prompt') {
+    const groupChoice = tallyCrate(crateVotes);
     return (
       <>
         {roundBadge}
         <MinigamePanel>
-          <div className="flex min-h-[220px] flex-col items-center justify-center gap-3 text-center">
-            <PlayerAvatar name={influencer.name} size="lg" />
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-text-low">
-              Pass to the Influencer
+          <p className="mb-1 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-[#B36FD9]">
+            Swap window
+          </p>
+          <h2 className="mb-1 text-center font-display text-xl font-extrabold text-text-hi">
+            Influencer &mdash; last chance
+          </h2>
+          <p className="mb-4 text-center font-body text-sm text-text-mid">
+            The group settled on <span className="font-bold text-text-hi">Crate {groupChoice}</span>.
+          </p>
+
+          <div className="mb-5 rounded-xl border border-line bg-surface px-3.5 py-3">
+            <p className="font-body text-[12.5px] leading-snug text-text-mid">
+              If you&rsquo;re the Influencer and want to swap, take the iPad and choose. If you
+              don&rsquo;t &mdash; say nothing. Anyone can tap <span className="font-semibold text-text-hi">Let it stand</span>,
+              so silence gives nothing away.
             </p>
-            <h2 className="font-display text-2xl font-extrabold text-text-hi">{influencer.name}</h2>
-            <p className="max-w-[280px] font-body text-[12px] text-text-low">
-              Everyone else, look away — this decision is private.
-            </p>
-            <div className="mt-1 w-full max-w-[240px]">
-              <PrimaryButton onClick={() => setPhase('influencer')}>I have it</PrimaryButton>
-            </div>
+          </div>
+
+          <div className="flex flex-col gap-2.5">
+            <button
+              type="button"
+              onClick={() => setPhase('influencer')}
+              className="rounded-xl border px-4 py-3.5 font-body text-sm font-bold transition-colors"
+              style={{ borderColor: '#B36FD966', background: 'rgba(179,111,217,0.12)', color: '#C9A0EC' }}
+            >
+              I want to swap
+            </button>
+            <PrimaryButton onClick={() => resolveInfluencer(null)}>Let it stand</PrimaryButton>
           </div>
         </MinigamePanel>
       </>
@@ -522,7 +537,7 @@ export default function CratesPlay({ players, onResolve }: GameProps) {
         {roundBadge}
         <MinigamePanel>
           <p className="mb-1 text-center font-mono text-[11px] uppercase tracking-[0.14em] text-text-low">
-            Influencer only
+            Choose the swap
           </p>
           <h2 className="mb-1 text-center font-display text-xl font-extrabold text-text-hi">
             The group chose Crate {groupChoice}
@@ -556,9 +571,12 @@ export default function CratesPlay({ players, onResolve }: GameProps) {
             })}
           </div>
 
-          <PrimaryButton onClick={() => resolveInfluencer(null)}>
-            Let the vote stand
-          </PrimaryButton>
+          <div className="flex flex-col gap-2.5">
+            <PrimaryButton onClick={() => resolveInfluencer(null)}>
+              Actually, let it stand
+            </PrimaryButton>
+            <GhostButton onClick={() => setPhase('swap-prompt')}>Back</GhostButton>
+          </div>
         </MinigamePanel>
       </>
     );

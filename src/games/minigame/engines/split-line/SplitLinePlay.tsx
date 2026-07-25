@@ -44,6 +44,13 @@ export default function SplitLinePlay({ players, onResolve }: GameProps) {
   const [lastPlacedZone, setLastPlacedZone] = useState<number | null>(null);
   const [battleWins, setBattleWins] = useState<Record<TeamId, number>>({ A: 0, B: 0 });
   const [phase, setPhase] = useState<'intro' | 'placing' | 'battle-result'>('intro');
+  /** Whether each team has been handed their one-time Strike, and whether it's spent. */
+  const [strikeGranted, setStrikeGranted] = useState<Record<TeamId, boolean>>({ A: false, B: false });
+  const [strikeUsed, setStrikeUsed] = useState<Record<TeamId, boolean>>({ A: false, B: false });
+  /** Non-null while the "you just got a Strike" banner is showing. */
+  const [strikeReveal, setStrikeReveal] = useState<TeamId | null>(null);
+  /** True when the current team has armed their Strike and is picking a target zone. */
+  const [strikeArmed, setStrikeArmed] = useState(false);
 
   /** The team going first gets one extra token to offset the last-word advantage. */
   function budgetFor(team: TeamId) {
@@ -54,8 +61,50 @@ export default function SplitLinePlay({ players, onResolve }: GameProps) {
   const bDone = placed.B >= budgetFor('B');
   const allDone = aDone && bDone;
 
+  /**
+   * Roll for a Strike grant at the start of a turn. Random timing is the point —
+   * neither side can plan around when it lands. Guaranteed by the last few
+   * tokens so a team never finishes a battle without ever seeing it.
+   */
+  function maybeGrantStrike(team: TeamId) {
+    if (strikeGranted[team] || strikeUsed[team]) return;
+    const remaining = budgetFor(team) - placed[team];
+    const guaranteed = remaining <= 4;
+    if (guaranteed || Math.random() < 0.22) {
+      setStrikeGranted((s) => ({ ...s, [team]: true }));
+      setStrikeReveal(team);
+    }
+  }
+
+  /** Remove one opposing token from a zone, spending this team's Strike. */
+  function useStrike(zoneIndex: number) {
+    const team = turn;
+    const other: TeamId = team === 'A' ? 'B' : 'A';
+    if (!strikeGranted[team] || strikeUsed[team]) return;
+    if (tokens[other][zoneIndex] <= 0) return;
+
+    setTokens((prev) => ({
+      ...prev,
+      [other]: prev[other].map((v, i) => (i === zoneIndex ? v - 1 : v)),
+    }));
+    setStrikeUsed((s) => ({ ...s, [team]: true }));
+    setStrikeArmed(false);
+    setLastPlacedZone(zoneIndex);
+
+    // A Strike consumes the turn but not a token — hand over to the other side.
+    const otherFinished = placed[other] >= budgetFor(other);
+    if (!otherFinished) {
+      setTurn(other);
+      maybeGrantStrike(other);
+    }
+  }
+
   function placeToken(zoneIndex: number) {
     if (phase !== 'placing') return;
+    if (strikeArmed) {
+      useStrike(zoneIndex);
+      return;
+    }
     const team = turn;
     if (placed[team] >= budgetFor(team)) return;
 
@@ -74,7 +123,10 @@ export default function SplitLinePlay({ players, onResolve }: GameProps) {
     }
     const other: TeamId = team === 'A' ? 'B' : 'A';
     const otherFinished = other === 'A' ? aFinished : bFinished;
-    if (!otherFinished) setTurn(other);
+    if (!otherFinished) {
+      setTurn(other);
+      maybeGrantStrike(other);
+    }
   }
 
   /** Zone-by-zone scoring: more tokens takes it, ties score for nobody. */
@@ -111,6 +163,10 @@ export default function SplitLinePlay({ players, onResolve }: GameProps) {
     setPlaced({ A: 0, B: 0 });
     setTurn(nextFirst);
     setLastPlacedZone(null);
+    setStrikeGranted({ A: false, B: false });
+    setStrikeUsed({ A: false, B: false });
+    setStrikeReveal(null);
+    setStrikeArmed(false);
     setBattleIndex(battleIndex + 1);
     setPhase('placing');
   }
@@ -187,7 +243,12 @@ export default function SplitLinePlay({ players, onResolve }: GameProps) {
           </p>
         </div>
 
-        <PrimaryButton onClick={() => { setTurn(battle.firstTeam); setPhase('placing'); }}>
+        <PrimaryButton
+          onClick={() => {
+            setTurn(battle.firstTeam);
+            setPhase('placing');
+          }}
+        >
           Start battle 1
         </PrimaryButton>
       </MinigamePanel>
@@ -288,6 +349,39 @@ export default function SplitLinePlay({ players, onResolve }: GameProps) {
           </motion.div>
         </AnimatePresence>
 
+        {strikeGranted[turn] && !strikeUsed[turn] && (
+          <motion.button
+            type="button"
+            onClick={() => setStrikeArmed((v) => !v)}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              boxShadow: strikeArmed
+                ? '0 0 24px -4px #E8434F'
+                : ['0 0 0 0 rgba(232,67,79,0)', '0 0 18px -4px #E8434F', '0 0 0 0 rgba(232,67,79,0)'],
+            }}
+            transition={{
+              opacity: { duration: 0.25 },
+              scale: { duration: 0.25 },
+              boxShadow: strikeArmed ? { duration: 0.2 } : { duration: 1.6, repeat: Infinity },
+            }}
+            className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl border-2 px-4 py-2.5"
+            style={{
+              borderColor: '#E8434F',
+              background: strikeArmed ? 'rgba(232,67,79,0.22)' : 'rgba(232,67,79,0.1)',
+            }}
+          >
+            <span className="text-base" aria-hidden="true">💥</span>
+            <span className="font-display text-sm font-extrabold text-[#FF8A92]">
+              {strikeArmed ? 'Pick a zone to strike' : 'Strike available'}
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-wider text-text-low">
+              {strikeArmed ? 'tap to cancel' : 'once per battle'}
+            </span>
+          </motion.button>
+        )}
+
         <p className="text-center font-body text-[12px] text-text-low">{teamName(turn)}</p>
       </MinigamePanel>
 
@@ -303,11 +397,21 @@ export default function SplitLinePlay({ players, onResolve }: GameProps) {
                 key={i}
                 type="button"
                 onClick={() => placeToken(i)}
-                disabled={allDone}
-                className="relative overflow-hidden rounded-xl border-2 px-3 py-2.5 text-left transition-colors disabled:opacity-50"
+                disabled={allDone || (strikeArmed && tokens[turn === 'A' ? 'B' : 'A'][i] <= 0)}
+                className="relative overflow-hidden rounded-xl border-2 px-3 py-2.5 text-left transition-colors disabled:opacity-40"
                 style={{
-                  borderColor: leader ? `${teamColor(leader)}66` : 'rgba(220,224,232,0.16)',
-                  background: leader ? `${teamColor(leader)}10` : 'rgba(26,28,32,0.6)',
+                  borderColor: strikeArmed
+                    ? tokens[turn === 'A' ? 'B' : 'A'][i] > 0
+                      ? '#E8434F'
+                      : 'rgba(220,224,232,0.16)'
+                    : leader
+                      ? `${teamColor(leader)}66`
+                      : 'rgba(220,224,232,0.16)',
+                  background: strikeArmed && tokens[turn === 'A' ? 'B' : 'A'][i] > 0
+                    ? 'rgba(232,67,79,0.12)'
+                    : leader
+                      ? `${teamColor(leader)}10`
+                      : 'rgba(26,28,32,0.6)',
                 }}
               >
                 {justPlaced && (
@@ -364,6 +468,60 @@ export default function SplitLinePlay({ players, onResolve }: GameProps) {
           })}
         </div>
       </MinigamePanel>
+
+      {/* One-time Strike grant — deliberately loud so the table can't miss it. */}
+      <AnimatePresence>
+        {strikeReveal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-void/85 backdrop-blur-sm"
+            onClick={() => setStrikeReveal(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.6, rotate: -8, opacity: 0 }}
+              animate={{ scale: 1, rotate: 0, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 18 }}
+              className="mx-4 flex max-w-[380px] flex-col items-center gap-3 rounded-2xl border-2 px-6 py-8 text-center"
+              style={{
+                borderColor: '#E8434F',
+                background: 'radial-gradient(circle at 50% 25%, rgba(232,67,79,0.28), #131417 72%)',
+                boxShadow: '0 0 50px -10px #E8434F',
+              }}
+            >
+              <motion.span
+                className="text-5xl"
+                animate={{ scale: [1, 1.18, 1], rotate: [0, -6, 6, 0] }}
+                transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+                aria-hidden="true"
+              >
+                💥
+              </motion.span>
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#FF8A92]">
+                Team {strikeReveal}
+              </p>
+              <h2 className="font-display text-[26px] font-extrabold leading-tight text-text-hi">
+                Strike unlocked
+              </h2>
+              <p className="font-body text-[13px] leading-snug text-text-mid">
+                Once this battle, instead of placing a token you can wipe one of Team{' '}
+                {strikeReveal === 'A' ? 'B' : 'A'}&rsquo;s tokens off a zone. Spend it whenever
+                &mdash; it costs you the turn.
+              </p>
+              <button
+                type="button"
+                onClick={() => setStrikeReveal(null)}
+                className="mt-1 rounded-xl border-none px-6 py-2.5 font-display text-sm font-extrabold text-void"
+                style={{ background: 'linear-gradient(180deg, #FF8A92, #E8434F 60%, #8E1F27)' }}
+              >
+                Got it
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <MinigamePanel>
         <div className="flex items-center justify-between font-mono text-[11px]">

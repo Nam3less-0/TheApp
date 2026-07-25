@@ -6,6 +6,27 @@ import PlayerAvatar from '../../components/PlayerAvatar';
 import { shuffle } from '../../utils';
 
 const HAND = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+/** Sentinel value for the Joker — outranks every numbered card. */
+const JOKER = 99;
+/** The Joker only unlocks once your highest remaining numbered card is this or lower. */
+const JOKER_UNLOCK_MAX = 5;
+
+/** A Joker sits in every hand from the start but stays locked until late. */
+function startingHand(): number[] {
+  return [...HAND, JOKER];
+}
+
+/** Highest numbered (non-Joker) card still in hand; 0 when only a Joker is left. */
+function highestNumbered(hand: number[]): number {
+  const numbered = hand.filter((c) => c !== JOKER);
+  return numbered.length > 0 ? Math.max(...numbered) : 0;
+}
+
+/** The Joker is playable only once every card above 5 has been spent. */
+function jokerUnlocked(hand: number[]): boolean {
+  if (!hand.includes(JOKER)) return false;
+  return highestNumbered(hand) <= JOKER_UNLOCK_MAX;
+}
 /** Ten prizes, balanced spread, order shuffled each game. */
 const PRIZE_POOL = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5];
 const ROUNDS = 10;
@@ -22,7 +43,7 @@ interface RoundResult {
 export default function LadderPlay({ players, onResolve }: GameProps) {
   const prizes = useMemo(() => shuffle(PRIZE_POOL), []);
   const [hands, setHands] = useState<Record<string, number[]>>(() =>
-    Object.fromEntries(players.map((p) => [p.id, [...HAND]])),
+    Object.fromEntries(players.map((p) => [p.id, startingHand()])),
   );
   const [points, setPoints] = useState<Record<string, number>>(() =>
     Object.fromEntries(players.map((p) => [p.id, 0])),
@@ -188,17 +209,53 @@ export default function LadderPlay({ players, onResolve }: GameProps) {
             {currentSeat.name} &mdash; play a card
           </p>
           <div className="grid grid-cols-5 gap-2">
-            {hand.map((card) => (
-              <button
-                key={card}
-                type="button"
-                onClick={() => playCard(card)}
-                className="flex aspect-[3/4] items-center justify-center rounded-xl border-2 border-line bg-surface font-display text-xl font-extrabold text-text-hi transition-colors hover:border-[#C9A44A]"
-              >
-                {card}
-              </button>
-            ))}
+            {hand
+              .filter((card) => card !== JOKER)
+              .map((card) => (
+                <button
+                  key={card}
+                  type="button"
+                  onClick={() => playCard(card)}
+                  className="flex aspect-[3/4] items-center justify-center rounded-xl border-2 border-line bg-surface font-display text-xl font-extrabold text-text-hi transition-colors hover:border-[#C9A44A]"
+                >
+                  {card}
+                </button>
+              ))}
           </div>
+
+          {hand.includes(JOKER) && (
+            <div className="mt-3">
+              {jokerUnlocked(hand) ? (
+                <motion.button
+                  type="button"
+                  onClick={() => playCard(JOKER)}
+                  animate={{ boxShadow: ['0 0 0 0 rgba(201,164,74,0)', '0 0 22px -4px #C9A44A', '0 0 0 0 rgba(201,164,74,0)'] }}
+                  transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                  className="flex w-full items-center justify-center gap-2.5 rounded-xl border-2 px-4 py-3.5"
+                  style={{ borderColor: '#C9A44A', background: 'linear-gradient(150deg, rgba(201,164,74,0.22), rgba(19,20,23,0.9))' }}
+                >
+                  <span className="text-xl" aria-hidden="true">🃏</span>
+                  <span className="font-display text-base font-extrabold text-[#EAC870]">
+                    Play the Joker
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-text-low">
+                    beats 10
+                  </span>
+                </motion.button>
+              ) : (
+                <div className="flex w-full items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-line px-4 py-3.5 opacity-50">
+                  <span className="text-lg grayscale" aria-hidden="true">🃏</span>
+                  <span className="font-body text-[13px] font-semibold text-text-low">
+                    Joker locked
+                  </span>
+                  <span className="font-mono text-[10px] text-text-low">
+                    spend everything above {JOKER_UNLOCK_MAX}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+
           <p className="mt-3 text-center font-body text-[11.5px] text-text-low">
             {hand.length} card{hand.length === 1 ? '' : 's'} left in your hand
           </p>
@@ -236,7 +293,7 @@ export default function LadderPlay({ players, onResolve }: GameProps) {
                     className="font-display text-2xl font-extrabold"
                     style={{ color: won ? '#EAC870' : '#DCE0E8' }}
                   >
-                    {card}
+                    {card === JOKER ? '🃏' : card}
                   </span>
                   <span className="max-w-full truncate font-body text-[11px] text-text-mid">
                     {p.name}
@@ -256,7 +313,9 @@ export default function LadderPlay({ players, onResolve }: GameProps) {
             >
               {latest.winnerId
                 ? `${playerById.get(latest.winnerId)?.name} takes ${prize} point${prize === 1 ? '' : 's'}`
-                : 'Tied at the top — prize discarded'}
+                : latest.plays && Object.values(latest.plays).filter((v) => v === JOKER).length > 1
+                  ? 'Jokers cancel out — prize discarded'
+                  : 'Tied at the top — prize discarded'}
             </motion.h2>
           </AnimatePresence>
 
@@ -344,7 +403,7 @@ function SpentTable({
             <span className="w-16 shrink-0 truncate font-body text-[12px] font-semibold text-text-hi">
               {p.name}
             </span>
-            <span className="flex flex-1 flex-wrap gap-1">
+            <span className="flex flex-1 flex-wrap items-center gap-1">
               {HAND.map((card) => {
                 const has = hands[p.id].includes(card);
                 return (
@@ -361,6 +420,25 @@ function SpentTable({
                   </span>
                 );
               })}
+              {/* Joker state is public too — everyone can see who has it armed. */}
+              <span
+                className="flex h-5 items-center justify-center rounded px-1 text-[10px]"
+                title={
+                  !hands[p.id].includes(JOKER)
+                    ? 'Joker spent'
+                    : jokerUnlocked(hands[p.id])
+                      ? 'Joker armed'
+                      : 'Joker locked'
+                }
+                style={{
+                  background: jokerUnlocked(hands[p.id]) ? 'rgba(201,164,74,0.22)' : 'transparent',
+                  opacity: hands[p.id].includes(JOKER) ? (jokerUnlocked(hands[p.id]) ? 1 : 0.4) : 0.2,
+                  filter: jokerUnlocked(hands[p.id]) ? 'none' : 'grayscale(1)',
+                  textDecoration: hands[p.id].includes(JOKER) ? 'none' : 'line-through',
+                }}
+              >
+                🃏
+              </span>
             </span>
             <span className="w-10 shrink-0 text-right font-display text-sm font-bold text-[#EAC870]">
               {points[p.id]}

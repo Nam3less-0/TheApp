@@ -14,7 +14,7 @@ export const cratesEngine: MinigameEngine = {
       'Roles are dealt privately: Saboteur (knows the rigged crate), Birdseye (knows TWO safe crates), Surveyor (knows ONE safe crate), Influencer (knows nothing, holds a secret swap).',
       'Each player gets 10 uninterrupted seconds to say whatever they want, then 3 minutes of open discussion.',
       'Everyone secretly votes for the rigged crate AND names who they think the Saboteur is.',
-      'The Influencer privately sees the group\u2019s choice and may secretly swap it for a different crate.',
+      'A swap window then opens for the whole table \u2014 it names nobody. If the Influencer wants to swap the chosen crate they take the iPad and pick; if not they say nothing and anyone can tap "let it stand", so staying quiet keeps them hidden.',
       'Guess right and it ends. Guess wrong, that crate is proven safe and removed, and you get a second round on the remaining four \u2014 with only a fresh Surveyor reading to help.',
     ],
     scoring: [

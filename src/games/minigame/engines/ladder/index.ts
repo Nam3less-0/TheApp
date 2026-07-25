@@ -9,14 +9,16 @@ export const ladderEngine: MinigameEngine = {
   glyph: '🪜',
   manual: {
     premise:
-      'Everyone holds the same hand: cards 1 through 10. Ten prizes come out one at a time, worth between 1 and 5 points. Each round everyone secretly plays one card and the highest takes the prize.',
+      'Everyone holds the same hand: cards 1 through 10, plus a Joker. Ten prizes come out one at a time, worth between 1 and 5 points. Each round everyone secretly plays one card and the highest takes the prize.',
     howToPlay: [
       'Free-for-all \u2014 no teams, everyone plays for themselves.',
       'Each round, one prize is revealed. You can also see the next two prizes coming.',
       'Everyone plays one card in secret (pass the iPad round), then all four flip at once.',
       'Highest card takes the prize. Spent cards are gone permanently.',
       'If two or more players tie on the highest card, nobody wins it \u2014 and those cards are still spent.',
-      'Every player\u2019s remaining cards are public, so you always know exactly what everyone has left.',
+      'The Joker beats every numbered card, but it stays LOCKED until every card above 5 is gone from your hand \u2014 so it\u2019s a comeback tool, not an opener.',
+      'Two Jokers played in the same round cancel out and the prize is discarded.',
+      'Every player\u2019s remaining cards are public \u2014 including whether their Joker is locked, armed, or spent.',
     ],
     scoring: [
       'Most prize points after 10 rounds: +5 (or +3 each if tied for first).',

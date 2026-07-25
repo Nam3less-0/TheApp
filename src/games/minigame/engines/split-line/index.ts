@@ -16,6 +16,7 @@ export const splitLineEngine: MinigameEngine = {
       'Each team has 12 tokens; the team going first gets 13 to offset losing the last word.',
       'A zone goes to whoever has more tokens on it. Equal tokens = nobody scores it.',
       'Overflow is wasted \u2014 you only need one more token than the other side, so stacking the 3-point zone is usually a trap.',
+      'At a random point each battle your team unlocks a STRIKE (announced loudly). Instead of placing a token you may spend it to delete one enemy token from a zone \u2014 once per team, per battle. Costs you the turn.',
       'Best of three battles. Zone values reshuffle every battle and the starting team alternates.',
     ],
     scoring: [
