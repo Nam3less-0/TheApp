@@ -4,11 +4,10 @@ import PlayerAvatar from './PlayerAvatar';
 interface ScoreboardProps {
   players: Player[];
   deltas?: Record<string, number>;
-  saboteurId?: string;
   className?: string;
 }
 
-export default function Scoreboard({ players, deltas, saboteurId, className = '' }: ScoreboardProps) {
+export default function Scoreboard({ players, deltas, className = '' }: ScoreboardProps) {
   const ranked = [...players].sort((a, b) => b.score - a.score);
   const topScore = ranked[0]?.score ?? 0;
 
@@ -23,7 +22,6 @@ export default function Scoreboard({ players, deltas, saboteurId, className = ''
           const isLeader = index === 0 && topScore > 0;
           const pct = topScore > 0 ? (player.score / topScore) * 100 : 0;
           const delta = deltas?.[player.id] ?? 0;
-          const wasSaboteur = saboteurId === player.id;
           return (
             <li
               key={player.id}
@@ -46,11 +44,6 @@ export default function Scoreboard({ players, deltas, saboteurId, className = ''
               <PlayerAvatar name={player.name} size="sm" />
               <span className="relative min-w-0 flex-1 truncate font-body text-sm font-semibold text-text-hi">
                 {player.name}
-                {wasSaboteur && (
-                  <span className="ml-1.5 rounded-full bg-[#E8A33D]/15 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-[#E8A33D]">
-                    Saboteur
-                  </span>
-                )}
               </span>
               {delta > 0 && (
                 <span className="relative rounded-full bg-good/15 px-2 py-0.5 font-mono text-[10px] font-bold text-good">

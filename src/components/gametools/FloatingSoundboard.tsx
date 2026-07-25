@@ -2,12 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BrainrotBurst from './BrainrotBurst';
 
-const ACCENT_A = '#FF6FB0';
-const ACCENT_B = '#FF9142';
 const SIZE = 68;
 const DRAG_THRESHOLD = 6;
 
-const CLIPS = [
+export const DEFAULT_CLIPS = [
   '/sounds/clip-2.mp3',
   '/sounds/clip-3.mp3',
   '/sounds/clip-4.mp3',
@@ -15,13 +13,33 @@ const CLIPS = [
   '/sounds/clip-6.mp3',
 ];
 
-function pickRandomClip(excludeIndex: number | null): number {
-  if (CLIPS.length <= 1) return 0;
-  let next = Math.floor(Math.random() * CLIPS.length);
+export const MEME_CLIPS = [
+  '/sounds/memes/meme-1.mp3',
+  '/sounds/memes/meme-2.mp3',
+  '/sounds/memes/meme-3.mp3',
+  '/sounds/memes/meme-4.mp3',
+];
+
+function pickRandomClip(clips: string[], excludeIndex: number | null): number {
+  if (clips.length <= 1) return 0;
+  let next = Math.floor(Math.random() * clips.length);
   while (next === excludeIndex) {
-    next = Math.floor(Math.random() * CLIPS.length);
+    next = Math.floor(Math.random() * clips.length);
   }
   return next;
+}
+
+interface FloatingSoundboardProps {
+  onClose: () => void;
+  /** Audio files this button cycles through. */
+  clips?: string[];
+  accentA?: string;
+  accentB?: string;
+  /** Pixels to shift the default spawn position up by, so two boards don't stack. */
+  offsetY?: number;
+  label?: string;
+  /** Whether tapping fires the full-screen brainrot overlay. */
+  burst?: boolean;
 }
 
 function EqualizerIcon({ active }: { active: boolean }) {
@@ -52,10 +70,18 @@ function EqualizerIcon({ active }: { active: boolean }) {
   );
 }
 
-export default function FloatingSoundboard({ onClose }: { onClose: () => void }) {
+export default function FloatingSoundboard({
+  onClose,
+  clips = DEFAULT_CLIPS,
+  accentA = '#FF6FB0',
+  accentB = '#FF9142',
+  offsetY = 0,
+  label = 'Play a random sound clip',
+  burst = true,
+}: FloatingSoundboardProps) {
   const [pos, setPos] = useState(() => ({
     x: Math.max(8, window.innerWidth - 96),
-    y: Math.max(8, window.innerHeight - 200),
+    y: Math.max(8, window.innerHeight - 200 - offsetY),
   }));
   const [playing, setPlaying] = useState(false);
   const [pulse, setPulse] = useState(0);
@@ -76,17 +102,27 @@ export default function FloatingSoundboard({ onClose }: { onClose: () => void })
     };
   }, []);
 
-  const playRandomClip = useCallback(() => {
+  /**
+   * Tapping while a clip is running stops it instead of stacking another —
+   * these can be 20s long, so there has to be a way to kill one mid-play.
+   */
+  const toggleClip = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    const index = pickRandomClip(lastIndexRef.current);
+    if (!audio.paused && !audio.ended) {
+      audio.pause();
+      audio.currentTime = 0;
+      setPlaying(false);
+      return;
+    }
+    const index = pickRandomClip(clips, lastIndexRef.current);
     lastIndexRef.current = index;
-    audio.src = CLIPS[index];
+    audio.src = clips[index];
     audio.currentTime = 0;
     void audio.play();
     setPlaying(true);
     setPulse((p) => p + 1);
-  }, []);
+  }, [clips]);
 
   function handlePointerDown(e: React.PointerEvent) {
     dragState.current = { startX: e.clientX, startY: e.clientY, moved: false };
@@ -116,7 +152,7 @@ export default function FloatingSoundboard({ onClose }: { onClose: () => void })
     const d = dragState.current;
     dragState.current = null;
     if (d && !d.moved) {
-      playRandomClip();
+      toggleClip();
     }
   }
 
@@ -125,7 +161,7 @@ export default function FloatingSoundboard({ onClose }: { onClose: () => void })
       className="fixed z-[55] touch-none select-none"
       style={{ left: pos.x, top: pos.y, width: SIZE, height: SIZE }}
     >
-      <BrainrotBurst triggerKey={pulse} />
+      {burst && <BrainrotBurst triggerKey={pulse} />}
       <button
         type="button"
         onClick={(e) => {
@@ -141,7 +177,7 @@ export default function FloatingSoundboard({ onClose }: { onClose: () => void })
       {/* Breathing / playing glow */}
       <motion.div
         className="pointer-events-none absolute inset-0 rounded-full"
-        style={{ background: `radial-gradient(circle, ${ACCENT_A}55, transparent 70%)` }}
+        style={{ background: `radial-gradient(circle, ${accentA}55, transparent 70%)` }}
         animate={
           playing
             ? { scale: [1, 1.55, 1], opacity: [0.7, 0.15, 0.7] }
@@ -155,7 +191,7 @@ export default function FloatingSoundboard({ onClose }: { onClose: () => void })
         <motion.span
           key={pulse}
           className="pointer-events-none absolute inset-0 rounded-full border-2"
-          style={{ borderColor: ACCENT_B }}
+          style={{ borderColor: accentB }}
           initial={{ scale: 0.85, opacity: 0.6 }}
           animate={{ scale: 1.5, opacity: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -165,7 +201,7 @@ export default function FloatingSoundboard({ onClose }: { onClose: () => void })
       <motion.div
         role="button"
         tabIndex={0}
-        aria-label="Play a random sound clip"
+        aria-label={label}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -175,16 +211,17 @@ export default function FloatingSoundboard({ onClose }: { onClose: () => void })
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            playRandomClip();
+            toggleClip();
           }
         }}
         animate={playing ? { rotate: [0, -4, 4, -3, 3, 0] } : { rotate: 0 }}
         transition={{ duration: 0.5 }}
         whileTap={{ scale: 0.92 }}
-        className="relative flex h-full w-full cursor-pointer items-center justify-center rounded-full border shadow-[0_10px_26px_-6px_rgba(255,111,176,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+        className="relative flex h-full w-full cursor-pointer items-center justify-center rounded-full border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
         style={{
-          background: `linear-gradient(155deg, ${ACCENT_A}, ${ACCENT_B} 70%)`,
+          background: `linear-gradient(155deg, ${accentA}, ${accentB} 70%)`,
           borderColor: 'rgba(255,255,255,0.35)',
+          boxShadow: `0 10px 26px -6px ${accentA}8C`,
         }}
       >
         {playing ? (

@@ -48,3 +48,29 @@ export function PrimaryButton({
     </button>
   );
 }
+
+export function GhostButton({
+  children,
+  onClick,
+  disabled,
+  active,
+}: {
+  children: ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  active?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={`rounded-xl border px-3.5 py-2.5 font-body text-sm font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-30 ${
+        active ? 'border-[#8B6FD9] text-[#B39DFF]' : 'border-line text-text-mid hover:border-line-bright'
+      }`}
+      style={active ? { background: 'rgba(139,111,217,0.12)' } : undefined}
+    >
+      {children}
+    </button>
+  );
+}

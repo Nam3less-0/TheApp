@@ -98,6 +98,7 @@ export interface FinalClue {
 
 export type JeopardyPhase =
   | 'setup'
+  | 'topic-ban'
   | 'topic-preview'
   | 'board'
   | 'wager'
@@ -124,6 +125,8 @@ export interface JeopardySession {
   previewCells: BoardCell[];
   /** Topic ids excluded from preview rerolls for this game setup. */
   blacklistedTopicIds: string[];
+  /** Whose turn it is during the per-player topic ban phase. */
+  banPickerIndex: number;
   /** Per-slot lock flags for the topic preview (length = board columns). */
   lockedPreviewSlots: boolean[];
   /** Topic ids already surfaced in preview this setup (lowers reroll weight). */
@@ -168,6 +171,8 @@ export interface JeopardySession {
 
 export type JeopardyAction =
   | { type: 'PLAYERS_READY'; players: Player[]; settings: GameSettings }
+  | { type: 'BAN_TOPIC'; topicId: string }
+  | { type: 'CONFIRM_TOPIC_BAN' }
   | { type: 'BACK_TO_SETUP' }
   | { type: 'REROLL_TOPICS' }
   | { type: 'RESHUFFLE_PREVIEW_QUESTIONS' }

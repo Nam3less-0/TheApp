@@ -38,6 +38,7 @@ export const initialJeopardyState: JeopardySession = {
   pendingPlayers: [],
   previewColumns: [],
   blacklistedTopicIds: [],
+  banPickerIndex: 0,
   lockedPreviewSlots: Array.from({ length: BOARD_COLUMNS }, () => false),
   previewSessionTopicIds: [],
   previewCells: [],
@@ -160,10 +161,45 @@ export function jeopardyReducer(
   action: JeopardyAction,
 ): JeopardySession {
   switch (action.type) {
+    // Players are locked in; each one now bans a topic before any are drawn.
     case 'PLAYERS_READY': {
       return {
         ...state,
-        ...beginTopicPreview(action.players, action.settings),
+        pendingPlayers: action.players,
+        settings: action.settings,
+        blacklistedTopicIds: [],
+        banPickerIndex: 0,
+        phase: 'topic-ban',
+      };
+    }
+
+    case 'BAN_TOPIC': {
+      if (state.phase !== 'topic-ban') return state;
+      const already = state.blacklistedTopicIds.includes(action.topicId);
+      if (already) {
+        return {
+          ...state,
+          blacklistedTopicIds: state.blacklistedTopicIds.filter((id) => id !== action.topicId),
+        };
+      }
+      // One ban each, so never let a player pick past their own slot.
+      if (state.blacklistedTopicIds.length > state.banPickerIndex) return state;
+      return {
+        ...state,
+        blacklistedTopicIds: [...state.blacklistedTopicIds, action.topicId],
+      };
+    }
+
+    case 'CONFIRM_TOPIC_BAN': {
+      if (state.phase !== 'topic-ban') return state;
+      // Require this player to have actually banned something.
+      if (state.blacklistedTopicIds.length <= state.banPickerIndex) return state;
+      if (state.banPickerIndex + 1 < state.pendingPlayers.length) {
+        return { ...state, banPickerIndex: state.banPickerIndex + 1 };
+      }
+      return {
+        ...state,
+        ...beginTopicPreview(state.pendingPlayers, state.settings, state.blacklistedTopicIds),
       };
     }
 
@@ -174,6 +210,7 @@ export function jeopardyReducer(
         previewColumns: [],
         previewCells: [],
         blacklistedTopicIds: [],
+        banPickerIndex: 0,
         lockedPreviewSlots: emptyLockedSlots(),
         previewSessionTopicIds: [],
       };
@@ -249,6 +286,8 @@ export function jeopardyReducer(
       ) {
         return state;
       }
+      // Never let a manual pick smuggle a banned topic onto the board.
+      if (state.blacklistedTopicIds.includes(topicId)) return state;
       const summary = getAllTopicSummaries().find((topic) => topic.id === topicId);
       if (!summary) return state;
 

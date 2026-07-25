@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useMinigame } from './context';
 import LobbyScreen from './screens/LobbyScreen';
 import ManualScreen from './screens/ManualScreen';
-import RevealScreen from './screens/RevealScreen';
 import PlayHost from './screens/PlayHost';
 import ResultScreen from './screens/ResultScreen';
 import FinalResultsScreen from './screens/FinalResultsScreen';
@@ -38,9 +37,6 @@ export default function MinigameGame() {
       break;
     case 'manual':
       screen = <ManualScreen />;
-      break;
-    case 'reveal':
-      screen = <RevealScreen />;
       break;
     case 'play':
       screen = <PlayHost />;

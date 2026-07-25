@@ -3,6 +3,10 @@ import type { Player } from './types';
 
 export const TOTAL_ROUNDS = 10;
 export const PLAYER_COUNT = 4;
+/** Each player removes this many categories before the game starts. */
+export const BANS_PER_PLAYER = 2;
+/** Seconds the next player gets to steal a failed prompt. */
+export const STEAL_SECONDS = 8;
 
 const DEFAULT_PLAYER_NAMES = ['Belford', 'Joshua', 'Matthew', 'Kai Jie'];
 
@@ -33,15 +37,24 @@ export function shuffle<T>(input: T[]): T[] {
   return arr;
 }
 
-export function buildQuestionPool(): BlitzQuestion[] {
-  return shuffle(BLITZ_QUESTIONS);
+/** Question ids are `${seedId}-${variantIndex}` — strip the variant suffix. */
+export function categoryIdOf(question: BlitzQuestion): string {
+  return question.id.replace(/-\d+$/, '');
 }
 
-/** Draw the next question, reshuffling the full pool once it's exhausted. */
+export function buildQuestionPool(bannedCategoryIds: string[] = []): BlitzQuestion[] {
+  const banned = new Set(bannedCategoryIds);
+  const allowed = BLITZ_QUESTIONS.filter((q) => !banned.has(categoryIdOf(q)));
+  // Never hand back an empty pool, even if somehow everything got banned.
+  return shuffle(allowed.length > 0 ? allowed : BLITZ_QUESTIONS);
+}
+
+/** Draw the next question, reshuffling the filtered pool once it's exhausted. */
 export function drawQuestion(
   remaining: BlitzQuestion[],
+  bannedCategoryIds: string[] = [],
 ): { question: BlitzQuestion; remaining: BlitzQuestion[] } {
-  const pool = remaining.length > 0 ? remaining : buildQuestionPool();
+  const pool = remaining.length > 0 ? remaining : buildQuestionPool(bannedCategoryIds);
   const [question, ...rest] = pool;
   return { question, remaining: rest };
 }
@@ -49,6 +62,13 @@ export function drawQuestion(
 /** Pure random pick each round — any player can go, repeats allowed. */
 export function pickRandomPlayer(players: Player[]): string {
   return players[Math.floor(Math.random() * players.length)].id;
+}
+
+/** The player seated after the given one, used for steal attempts. */
+export function nextPlayerAfter(players: Player[], id: string): string {
+  const i = players.findIndex((p) => p.id === id);
+  if (i === -1) return players[0].id;
+  return players[(i + 1) % players.length].id;
 }
 
 export function getPlayerById(players: Player[], id: string | null): Player | undefined {

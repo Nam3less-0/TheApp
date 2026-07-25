@@ -88,7 +88,7 @@ export const games: GameEntry[] = [
   {
     id: 'minigame',
     title: 'Minigame',
-    description: '10 rounds, 1 hidden Saboteur each time — build, vote, bluff.',
+    description: 'Three games, one winner — deduction, silent teamwork, and card nerve.',
     metal: 'violet',
     status: 'playable',
     icon: MinigameIcon,

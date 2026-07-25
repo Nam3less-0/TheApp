@@ -1,73 +1,33 @@
 import type { MinigameAction, MinigameSession } from './types';
-import { ROUND_ENGINES, TOTAL_ROUNDS } from './engines';
-import { createFixedPlayers, pickRandom, shuffle } from './utils';
+import { MINIGAMES, TOTAL_GAMES } from './engines';
+import { createFixedPlayers } from './utils';
 
 export const initialMinigameState: MinigameSession = {
   phase: 'lobby',
   players: createFixedPlayers(),
-  roundIndex: -1,
-  saboteurId: '',
-  roundState: null,
-  revealOrder: [],
-  revealIndex: 0,
+  gameIndex: -1,
   lastOutcome: null,
   history: [],
 };
 
-function startRound(state: MinigameSession, roundIndex: number): MinigameSession {
-  const engine = ROUND_ENGINES[roundIndex];
-  const saboteurId = pickRandom(state.players).id;
-  const roundState = engine.createRound(state.players, saboteurId);
-  return {
-    ...state,
-    phase: 'manual',
-    roundIndex,
-    saboteurId,
-    roundState,
-    revealOrder: [],
-    revealIndex: 0,
-    lastOutcome: null,
-  };
-}
-
 export function minigameReducer(state: MinigameSession, action: MinigameAction): MinigameSession {
   switch (action.type) {
     case 'START': {
-      return startRound(state, 0);
+      return { ...state, phase: 'manual', gameIndex: 0, lastOutcome: null };
     }
 
-    case 'BEGIN_ROUND': {
+    case 'BEGIN_GAME': {
       if (state.phase !== 'manual') return state;
-      return {
-        ...state,
-        phase: 'reveal',
-        revealOrder: shuffle(state.players.map((p) => p.id)),
-        revealIndex: 0,
-      };
-    }
-
-    case 'ADVANCE_REVEAL': {
-      if (state.phase !== 'reveal') return state;
-      const next = state.revealIndex + 1;
-      if (next < state.revealOrder.length) {
-        return { ...state, revealIndex: next };
-      }
       return { ...state, phase: 'play' };
     }
 
-    case 'RESOLVE_ROUND': {
+    case 'RESOLVE_GAME': {
       if (state.phase !== 'play') return state;
-      const engine = ROUND_ENGINES[state.roundIndex];
-      const { buildersWon } = action.outcome;
-      const deltas: Record<string, number> = {};
-      if (buildersWon) {
-        for (const p of state.players) {
-          if (p.id !== state.saboteurId) deltas[p.id] = 1;
-        }
-      } else {
-        deltas[state.saboteurId] = 2;
-      }
-      const players = state.players.map((p) => (deltas[p.id] ? { ...p, score: p.score + deltas[p.id] } : p));
+      const engine = MINIGAMES[state.gameIndex];
+      const { deltas } = action.outcome;
+      const players = state.players.map((p) =>
+        deltas[p.id] ? { ...p, score: p.score + deltas[p.id] } : p,
+      );
       return {
         ...state,
         players,
@@ -76,11 +36,10 @@ export function minigameReducer(state: MinigameSession, action: MinigameAction):
         history: [
           ...state.history,
           {
-            roundId: engine.id,
-            roundTitle: engine.title,
+            gameId: engine.id,
+            gameTitle: engine.title,
             glyph: engine.glyph,
-            saboteurId: state.saboteurId,
-            buildersWon,
+            headline: action.outcome.headline,
             summary: action.outcome.summary,
             deltas,
           },
@@ -88,13 +47,13 @@ export function minigameReducer(state: MinigameSession, action: MinigameAction):
       };
     }
 
-    case 'NEXT_ROUND': {
+    case 'NEXT_GAME': {
       if (state.phase !== 'result') return state;
-      const nextIndex = state.roundIndex + 1;
-      if (nextIndex >= TOTAL_ROUNDS) {
+      const nextIndex = state.gameIndex + 1;
+      if (nextIndex >= TOTAL_GAMES) {
         return { ...state, phase: 'final' };
       }
-      return startRound(state, nextIndex);
+      return { ...state, phase: 'manual', gameIndex: nextIndex, lastOutcome: null };
     }
 
     case 'RESTART': {

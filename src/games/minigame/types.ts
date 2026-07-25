@@ -6,56 +6,48 @@ export interface Player {
   score: number;
 }
 
-export type Role = 'SABOTEUR' | 'BUILDER';
-
-export interface Briefing {
-  role: Role;
+/** Result of one complete mini-game, expressed as per-player point deltas. */
+export interface GameOutcome {
+  /** Points earned this game, keyed by player id. Missing = 0. */
+  deltas: Record<string, number>;
+  /** Big line on the result screen, e.g. "The Saboteur got away with it". */
   headline: string;
-  detail?: string;
-}
-
-export interface RoundOutcome {
-  buildersWon: boolean;
-  /** Short human-readable line describing what happened, shown on the result screen. */
+  /** One-sentence explanation of what happened. */
   summary: string;
+  /** Optional extra detail rows shown under the summary. */
+  details?: string[];
 }
 
-export interface PlayProps<TRoundState> {
-  roundState: TRoundState;
+export interface GameProps {
   players: Player[];
-  saboteurId: string;
-  onResolve: (outcome: RoundOutcome) => void;
+  onResolve: (outcome: GameOutcome) => void;
 }
 
-export interface RoundManual {
+export interface GameManual {
   premise: string;
-  builderGoal: string;
-  saboteurGoal: string;
+  /** Bullet rules. */
   howToPlay: string[];
+  /** How points are awarded. */
+  scoring: string[];
 }
 
-export interface RoundEngine<TRoundState = unknown> {
+export interface MinigameEngine {
   id: string;
   title: string;
   tagline: string;
-  /** Hex accent used for this round's chrome. */
   accent: string;
-  /** Small glyph shown in recap chips / manual header. */
   glyph: string;
-  manual: RoundManual;
-  createRound: (players: Player[], saboteurId: string) => TRoundState;
-  briefing: (playerId: string, roundState: TRoundState, saboteurId: string) => Briefing;
-  Play: ComponentType<PlayProps<TRoundState>>;
+  manual: GameManual;
+  Play: ComponentType<GameProps>;
 }
 
-export type MinigamePhase = 'lobby' | 'manual' | 'reveal' | 'play' | 'result' | 'final';
+export type MinigamePhase = 'lobby' | 'manual' | 'play' | 'result' | 'final';
 
-export interface RoundHistoryEntry {
-  roundId: string;
-  roundTitle: string;
+export interface GameHistoryEntry {
+  gameId: string;
+  gameTitle: string;
   glyph: string;
-  saboteurId: string;
-  buildersWon: boolean;
+  headline: string;
   summary: string;
   deltas: Record<string, number>;
 }
@@ -63,19 +55,14 @@ export interface RoundHistoryEntry {
 export interface MinigameSession {
   phase: MinigamePhase;
   players: Player[];
-  roundIndex: number;
-  saboteurId: string;
-  roundState: unknown;
-  revealOrder: string[];
-  revealIndex: number;
-  lastOutcome: RoundOutcome | null;
-  history: RoundHistoryEntry[];
+  gameIndex: number;
+  lastOutcome: GameOutcome | null;
+  history: GameHistoryEntry[];
 }
 
 export type MinigameAction =
   | { type: 'START' }
-  | { type: 'BEGIN_ROUND' }
-  | { type: 'ADVANCE_REVEAL' }
-  | { type: 'RESOLVE_ROUND'; outcome: RoundOutcome }
-  | { type: 'NEXT_ROUND' }
+  | { type: 'BEGIN_GAME' }
+  | { type: 'RESOLVE_GAME'; outcome: GameOutcome }
+  | { type: 'NEXT_GAME' }
   | { type: 'RESTART' };

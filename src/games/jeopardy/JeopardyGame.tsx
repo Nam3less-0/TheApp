@@ -3,6 +3,7 @@ import { useJeopardy } from './context';
 import GameControls from './components/GameControls';
 import SetupScreen from './components/SetupScreen';
 import TopicPreviewScreen from './components/TopicPreviewScreen';
+import TopicBanScreen from './components/TopicBanScreen';
 import BoardScreen from './components/BoardScreen';
 import QuestionScreen from './components/QuestionScreen';
 import WagerScreen from './components/WagerScreen';
@@ -36,6 +37,9 @@ export default function JeopardyGame() {
   switch (state.phase) {
     case 'setup':
       screen = <SetupScreen />;
+      break;
+    case 'topic-ban':
+      screen = <TopicBanScreen />;
       break;
     case 'topic-preview':
       screen = <TopicPreviewScreen />;

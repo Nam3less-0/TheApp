@@ -59,6 +59,8 @@ import languages from './topics/languages';
 import exploration from './topics/exploration';
 import worldLeaders from './topics/world-leaders';
 import traditions from './topics/traditions';
+import starWars from './topics/star-wars';
+import finance from './topics/finance';
 
 /** 60 topics × 100 questions (20 per difficulty) = 6,000 total clues. */
 export const JEOPARDY_TOPICS: TopicData[] = [
@@ -122,6 +124,8 @@ export const JEOPARDY_TOPICS: TopicData[] = [
   exploration,
   worldLeaders,
   traditions,
+  starWars,
+  finance,
 ];
 
 export type { Difficulty, RawQuestion, TopicData } from './types';

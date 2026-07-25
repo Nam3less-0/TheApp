@@ -18,6 +18,9 @@ export default function TopicPreviewScreen() {
   const [isReshuffling, setIsReshuffling] = useState(false);
   const [justReshuffled, setJustReshuffled] = useState(false);
   const [isRerolling, setIsRerolling] = useState(false);
+  /** Slot index currently being manually chosen, or null when the picker is shut. */
+  const [pickingSlot, setPickingSlot] = useState<number | null>(null);
+  const [pickQuery, setPickQuery] = useState('');
   const shuffleTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const rerollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -189,9 +192,26 @@ export default function TopicPreviewScreen() {
                         className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em]"
                         style={{ color: locked ? COLORS.gold : 'rgba(255,255,255,0.35)' }}
                       >
-                        {locked ? 'Locked in' : 'Open to reroll'}
+                        {locked ? 'Locked in' : 'Open to reroll · tap list to choose'}
                       </p>
                     </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPickingSlot(index);
+                        setPickQuery('');
+                      }}
+                      aria-label={`Choose a topic for slot ${index + 1}`}
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-[background-color,border-color,color,transform] duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue active:scale-95"
+                      style={{
+                        borderColor: 'rgba(255,255,255,0.12)',
+                        color: 'rgba(255,255,255,0.55)',
+                        background: 'rgba(0,0,0,0.25)',
+                      }}
+                    >
+                      <ListIcon />
+                    </button>
 
                     <button
                       type="button"
@@ -354,7 +374,165 @@ export default function TopicPreviewScreen() {
           Build the board
         </button>
       </JeopardyPanel>
+
+      {pickingSlot !== null && (
+        <TopicPickerModal
+          slotIndex={pickingSlot}
+          query={pickQuery}
+          onQueryChange={setPickQuery}
+          topics={allTopics}
+          blacklisted={blacklisted}
+          currentIds={state.previewColumns.map((col) => col.id)}
+          onPick={(topicId) => {
+            dispatch({ type: 'SET_PREVIEW_TOPIC', slotIndex: pickingSlot, topicId });
+            setPickingSlot(null);
+            setPickQuery('');
+          }}
+          onClose={() => {
+            setPickingSlot(null);
+            setPickQuery('');
+          }}
+        />
+      )}
     </JeopardyPageWrap>
+  );
+}
+
+interface TopicPickerModalProps {
+  slotIndex: number;
+  query: string;
+  onQueryChange: (q: string) => void;
+  topics: { id: string; name: string }[];
+  blacklisted: Set<string>;
+  currentIds: string[];
+  onPick: (topicId: string) => void;
+  onClose: () => void;
+}
+
+/**
+ * Full-screen topic list for a single board slot. Banned topics and topics
+ * already on the board are shown but locked out, so it's obvious why they
+ * can't be picked rather than them silently missing.
+ */
+function TopicPickerModal({
+  slotIndex,
+  query,
+  onQueryChange,
+  topics,
+  blacklisted,
+  currentIds,
+  onPick,
+  onClose,
+}: TopicPickerModalProps) {
+  const q = query.trim().toLowerCase();
+  const filtered = q ? topics.filter((t) => t.name.toLowerCase().includes(q)) : topics;
+  const available = filtered.filter(
+    (t) => !blacklisted.has(t.id) && !currentIds.includes(t.id),
+  ).length;
+
+  return (
+    <div
+      className="fixed inset-0 z-[80] flex items-end justify-center bg-void/80 backdrop-blur-sm sm:items-center"
+      onClick={onClose}
+    >
+      <div
+        className="flex max-h-[85svh] w-full max-w-[520px] flex-col rounded-t-2xl border border-line bg-surface p-4 sm:rounded-2xl sm:p-5"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-low">
+              Slot {slotIndex + 1}
+            </p>
+            <h2 className="font-display text-lg font-extrabold text-text-hi">Choose a topic</h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close topic picker"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line text-text-mid transition-colors hover:border-line-bright hover:text-text-hi"
+          >
+            ✕
+          </button>
+        </div>
+
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => onQueryChange(e.target.value)}
+          placeholder="Search topics…"
+          autoFocus
+          className="mb-3 w-full rounded-xl border border-line bg-void px-3.5 py-2.5 font-body text-sm text-text-hi placeholder:text-text-low focus:border-steel-blue focus:outline-none"
+        />
+
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-wider text-text-low">
+          {available} available{filtered.length !== available ? ` · ${filtered.length - available} unavailable` : ''}
+        </p>
+
+        <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+          <ul className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+            {filtered.map((topic) => {
+              const isBanned = blacklisted.has(topic.id);
+              const onBoard = currentIds.includes(topic.id);
+              const isThisSlot = currentIds[slotIndex] === topic.id;
+              const disabled = isBanned || (onBoard && !isThisSlot);
+              return (
+                <li key={topic.id}>
+                  <button
+                    type="button"
+                    disabled={disabled}
+                    onClick={() => onPick(topic.id)}
+                    className={`flex w-full items-center gap-2 rounded-lg border px-3 py-2.5 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-35 ${
+                      isThisSlot
+                        ? 'border-steel-blue text-steel-blue'
+                        : 'border-line text-text-mid hover:border-line-bright hover:text-text-hi'
+                    }`}
+                    style={isThisSlot ? { background: 'rgba(111,168,220,0.12)' } : undefined}
+                  >
+                    <span className="min-w-0 flex-1 truncate font-body text-[13px]">
+                      {topic.name}
+                    </span>
+                    {isBanned && (
+                      <span className="shrink-0 font-mono text-[9px] uppercase tracking-wider text-bad">
+                        banned
+                      </span>
+                    )}
+                    {onBoard && !isThisSlot && (
+                      <span className="shrink-0 font-mono text-[9px] uppercase tracking-wider text-text-low">
+                        in use
+                      </span>
+                    )}
+                    {isThisSlot && (
+                      <span className="shrink-0 font-mono text-[9px] uppercase tracking-wider">
+                        current
+                      </span>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          {filtered.length === 0 && (
+            <p className="py-8 text-center font-body text-[13px] text-text-low">
+              Nothing matches “{query}”.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ListIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }
 

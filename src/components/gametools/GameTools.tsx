@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import FloatingTimer from './FloatingTimer';
 import FloatingDice from './FloatingDice';
-import FloatingSoundboard from './FloatingSoundboard';
+import FloatingSoundboard, { MEME_CLIPS } from './FloatingSoundboard';
 
 function MenuRow({
   icon,
@@ -44,6 +44,7 @@ export default function GameTools() {
   const [showTimer, setShowTimer] = useState(false);
   const [showDice, setShowDice] = useState(false);
   const [showSoundboard, setShowSoundboard] = useState(false);
+  const [showMemeboard, setShowMemeboard] = useState(false);
 
   return (
     <>
@@ -112,6 +113,15 @@ export default function GameTools() {
                   setMenuOpen(false);
                 }}
               />
+              <MenuRow
+                icon="🗣️"
+                label="Meme sounds"
+                active={showMemeboard}
+                onClick={() => {
+                  setShowMemeboard((v) => !v);
+                  setMenuOpen(false);
+                }}
+              />
             </div>
           </div>
         </>
@@ -120,6 +130,17 @@ export default function GameTools() {
       {showTimer && <FloatingTimer onClose={() => setShowTimer(false)} />}
       {showDice && <FloatingDice onClose={() => setShowDice(false)} />}
       {showSoundboard && <FloatingSoundboard onClose={() => setShowSoundboard(false)} />}
+      {showMemeboard && (
+        <FloatingSoundboard
+          onClose={() => setShowMemeboard(false)}
+          clips={MEME_CLIPS}
+          accentA="#5FD1C4"
+          accentB="#4A9CE0"
+          offsetY={92}
+          label="Play a random meme sound"
+          burst={false}
+        />
+      )}
     </>
   );
 }

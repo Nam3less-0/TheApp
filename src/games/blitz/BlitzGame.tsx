@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useBlitz } from './context';
 import BlitzSetupScreen from './components/BlitzSetupScreen';
+import BanPhaseScreen from './components/BanPhaseScreen';
+import StealScreen from './components/StealScreen';
 import PromptScreen from './components/PromptScreen';
 import ResultScreen from './components/ResultScreen';
 import FinalResultsScreen from './components/FinalResultsScreen';
@@ -33,8 +35,14 @@ export default function BlitzGame() {
     case 'setup':
       screen = <BlitzSetupScreen />;
       break;
+    case 'ban':
+      screen = <BanPhaseScreen />;
+      break;
     case 'prompt':
       screen = <PromptScreen />;
+      break;
+    case 'steal':
+      screen = <StealScreen />;
       break;
     case 'result':
       screen = <ResultScreen />;
