@@ -134,8 +134,8 @@ export default function SetupScreen() {
         New game
       </h1>
       <p className="mb-8 font-body text-sm text-text-mid">
-        Set up your players, tweak the house rules, then preview tonight&apos;s
-        categories before the board is built.
+        Set up your players, tweak the house rules, then ban topics or skip
+        straight to tonight&apos;s categories.
       </p>
 
       <JeopardyPanel>
@@ -310,7 +310,7 @@ export default function SetupScreen() {
         </section>
 
         <p className="mt-5 font-mono text-[11px] leading-relaxed text-text-low">
-          Step 1 of 3 · players &amp; rules · then topic preview · then the board
+          Step 1 of 3 · players &amp; rules · then optional bans · then categories
         </p>
 
         <button
@@ -320,7 +320,7 @@ export default function SetupScreen() {
           className="mt-6 w-full rounded-xl border-none px-4 py-4 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue focus-visible:ring-offset-2 focus-visible:ring-offset-void disabled:cursor-not-allowed disabled:opacity-40"
           style={{ background: SILVER_BUTTON }}
         >
-          Ready — pick topics
+          Ready — continue
         </button>
       </JeopardyPanel>
     </JeopardyPageWrap>

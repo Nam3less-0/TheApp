@@ -127,6 +127,8 @@ export interface JeopardySession {
   blacklistedTopicIds: string[];
   /** Whose turn it is during the per-player topic ban phase. */
   banPickerIndex: number;
+  /** Choice menu vs per-player picking on the ban screen. */
+  banStage: 'choice' | 'picking';
   /** Per-slot lock flags for the topic preview (length = board columns). */
   lockedPreviewSlots: boolean[];
   /** Topic ids already surfaced in preview this setup (lowers reroll weight). */
@@ -171,6 +173,9 @@ export interface JeopardySession {
 
 export type JeopardyAction =
   | { type: 'PLAYERS_READY'; players: Player[]; settings: GameSettings }
+  | { type: 'SKIP_TOPIC_BAN' }
+  | { type: 'KEEP_TOPIC_BANS' }
+  | { type: 'START_TOPIC_BAN' }
   | { type: 'BAN_TOPIC'; topicId: string }
   | { type: 'CONFIRM_TOPIC_BAN' }
   | { type: 'BACK_TO_SETUP' }

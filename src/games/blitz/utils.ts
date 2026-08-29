@@ -1,7 +1,8 @@
 import { BLITZ_QUESTIONS, type BlitzQuestion } from '../../data/blitz-questions';
 import type { Player } from './types';
 
-export const TOTAL_ROUNDS = 10;
+/** First player to this many points ends the game. */
+export const POINTS_TO_WIN = 10;
 export const PLAYER_COUNT = 4;
 /** Each player removes this many categories before the game starts. */
 export const BANS_PER_PLAYER = 2;
@@ -74,6 +75,10 @@ export function nextPlayerAfter(players: Player[], id: string): string {
 export function getPlayerById(players: Player[], id: string | null): Player | undefined {
   if (!id) return undefined;
   return players.find((p) => p.id === id);
+}
+
+export function hasReachedWinScore(players: Player[]): boolean {
+  return players.some((p) => p.score >= POINTS_TO_WIN);
 }
 
 export function capitalize(text: string): string {

@@ -21,7 +21,7 @@ export default function BanPhaseScreen() {
     const list = q
       ? BLITZ_CATEGORIES.filter((c) => c.label.toLowerCase().includes(q))
       : BLITZ_CATEGORIES;
-    return list.slice(0, 80);
+    return list;
   }, [query]);
 
   if (!picker) return null;

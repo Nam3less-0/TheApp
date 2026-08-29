@@ -2,23 +2,110 @@ import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useJeopardy } from '../context';
 import { JEOPARDY_TOPICS } from '../../../data/jeopardy';
+import { getTopicSummariesForTheme } from '../utils';
 import JeopardyPanel, { JeopardyPageWrap } from './JeopardyPanel';
 import PlayerAvatar from './PlayerAvatar';
 
-export default function TopicBanScreen() {
+const GOLD_BUTTON = 'linear-gradient(180deg, #EAC870, #C9A44A 55%, #8A6F2A)';
+
+function topicName(id: string): string {
+  return JEOPARDY_TOPICS.find((t) => t.id === id)?.name ?? id;
+}
+
+function BanChoiceView() {
+  const { state, dispatch } = useJeopardy();
+  const previousBans = state.blacklistedTopicIds;
+  const hasPrevious = previousBans.length > 0;
+
+  return (
+    <JeopardyPageWrap>
+      <p className="mb-1 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-gold">
+        Ban phase
+      </p>
+      <h1 className="mb-2 text-center font-display text-2xl font-extrabold text-text-hi sm:text-[30px]">
+        Topic bans
+      </h1>
+      <p className="mx-auto mb-6 max-w-[360px] text-center font-body text-sm text-text-mid">
+        {hasPrevious
+          ? 'Keep last game\u2019s bans, pick a new list, or skip straight to categories.'
+          : 'Each player can ban one topic they don\u2019t want on the board \u2014 or skip this and pick categories now.'}
+      </p>
+
+      {hasPrevious && (
+        <div className="mb-5 flex flex-wrap justify-center gap-2">
+          {previousBans.map((id) => (
+            <span
+              key={id}
+              className="rounded-full border border-bad/40 bg-bad/10 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-bad"
+            >
+              {topicName(id)}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <JeopardyPanel>
+        <div className="flex flex-col gap-2.5">
+          {hasPrevious && (
+            <button
+              type="button"
+              onClick={() => dispatch({ type: 'KEEP_TOPIC_BANS' })}
+              className="w-full rounded-xl border-none px-4 py-3.5 font-display text-base font-extrabold text-void"
+              style={{ background: GOLD_BUTTON }}
+            >
+              Keep these bans
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => dispatch({ type: 'START_TOPIC_BAN' })}
+            className={`w-full rounded-xl px-4 py-3.5 font-display text-base font-extrabold ${
+              hasPrevious
+                ? 'border border-line text-text-hi transition-colors hover:border-line-bright'
+                : 'border-none text-void'
+            }`}
+            style={hasPrevious ? undefined : { background: GOLD_BUTTON }}
+          >
+            {hasPrevious ? 'Reselect bans' : 'Start banning'}
+          </button>
+          <button
+            type="button"
+            onClick={() => dispatch({ type: 'SKIP_TOPIC_BAN' })}
+            className="w-full rounded-xl border border-line px-4 py-3.5 font-body text-[15px] font-semibold text-text-hi transition-colors hover:border-line-bright"
+          >
+            Skip to categories
+          </button>
+        </div>
+      </JeopardyPanel>
+
+      <button
+        type="button"
+        onClick={() => dispatch({ type: 'BACK_TO_SETUP' })}
+        className="mt-3 w-full rounded-xl border border-line px-4 py-2.5 font-body text-sm font-semibold text-text-mid transition-colors hover:border-line-bright"
+      >
+        Back to setup
+      </button>
+    </JeopardyPageWrap>
+  );
+}
+
+function BanPickingView() {
   const { state, dispatch } = useJeopardy();
   const [query, setQuery] = useState('');
 
   const picker = state.pendingPlayers[state.banPickerIndex];
-  /** Bans locked in by players who already had their turn. */
   const lockedBans = state.blacklistedTopicIds.slice(0, state.banPickerIndex);
   const myBan = state.blacklistedTopicIds[state.banPickerIndex] ?? null;
+  const topics = useMemo(
+    () => getTopicSummariesForTheme(state.settings.themeId),
+    [state.settings.themeId],
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return JEOPARDY_TOPICS;
-    return JEOPARDY_TOPICS.filter((t) => t.name.toLowerCase().includes(q));
-  }, [query]);
+    if (!q) return topics;
+    return topics.filter((t) => t.name.toLowerCase().includes(q));
+  }, [query, topics]);
 
   if (!picker) return null;
 
@@ -57,17 +144,14 @@ export default function TopicBanScreen() {
 
       {lockedBans.length > 0 && (
         <div className="mb-3 flex flex-wrap justify-center gap-2">
-          {lockedBans.map((id) => {
-            const topic = JEOPARDY_TOPICS.find((t) => t.id === id);
-            return (
-              <span
-                key={id}
-                className="rounded-full border border-line bg-surface px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-text-low"
-              >
-                {topic?.name ?? id} banned
-              </span>
-            );
-          })}
+          {lockedBans.map((id) => (
+            <span
+              key={id}
+              className="rounded-full border border-line bg-surface px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-text-low"
+            >
+              {topicName(id)} banned
+            </span>
+          ))}
         </div>
       )}
 
@@ -85,7 +169,7 @@ export default function TopicBanScreen() {
             {myBan ? '1 / 1 chosen' : '0 / 1 chosen'}
           </span>
           <span className="font-mono text-[10px] text-text-low">
-            {filtered.length} of {JEOPARDY_TOPICS.length}
+            {filtered.length} of {topics.length}
           </span>
         </div>
 
@@ -129,10 +213,7 @@ export default function TopicBanScreen() {
           className="mb-3 rounded-xl border border-bad/40 bg-bad/10 px-3.5 py-2.5 text-center"
         >
           <p className="font-body text-[13px] text-text-hi">
-            Banning{' '}
-            <span className="font-bold text-bad">
-              {JEOPARDY_TOPICS.find((t) => t.id === myBan)?.name}
-            </span>
+            Banning <span className="font-bold text-bad">{topicName(myBan)}</span>
           </p>
         </motion.div>
       )}
@@ -145,7 +226,7 @@ export default function TopicBanScreen() {
           setQuery('');
         }}
         className="w-full rounded-xl border-none px-4 py-3.5 font-display text-base font-extrabold text-void transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
-        style={{ background: 'linear-gradient(180deg, #EAC870, #C9A44A 55%, #8A6F2A)' }}
+        style={{ background: GOLD_BUTTON }}
       >
         {state.banPickerIndex + 1 < state.pendingPlayers.length
           ? 'Lock in — pass to next player'
@@ -154,11 +235,27 @@ export default function TopicBanScreen() {
 
       <button
         type="button"
+        onClick={() => dispatch({ type: 'SKIP_TOPIC_BAN' })}
+        className="mt-2.5 w-full rounded-xl border border-line px-4 py-2.5 font-body text-sm font-semibold text-text-mid transition-colors hover:border-line-bright"
+      >
+        {state.blacklistedTopicIds.length > 0
+          ? 'Skip remaining bans'
+          : 'Skip to categories'}
+      </button>
+
+      <button
+        type="button"
         onClick={() => dispatch({ type: 'BACK_TO_SETUP' })}
-        className="mt-3 w-full rounded-xl border border-line px-4 py-2.5 font-body text-sm font-semibold text-text-mid transition-colors hover:border-line-bright"
+        className="mt-2 w-full rounded-xl border border-line px-4 py-2.5 font-body text-sm font-semibold text-text-mid transition-colors hover:border-line-bright"
       >
         Back to setup
       </button>
     </JeopardyPageWrap>
   );
+}
+
+export default function TopicBanScreen() {
+  const { state } = useJeopardy();
+  if (state.banStage !== 'picking') return <BanChoiceView />;
+  return <BanPickingView />;
 }

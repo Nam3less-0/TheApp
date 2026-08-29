@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useBlitz } from '../context';
 import type { Player } from '../types';
-import { PLAYER_COUNT, TOTAL_ROUNDS, createDefaultPlayers } from '../utils';
+import { PLAYER_COUNT, POINTS_TO_WIN, createDefaultPlayers } from '../utils';
 import BlitzPanel, { BlitzPageWrap } from './BlitzPanel';
 import PlayerAvatar from './PlayerAvatar';
 
@@ -28,11 +28,12 @@ export default function BlitzSetupScreen() {
         New game
       </h1>
       <p className="mb-8 font-body text-sm text-text-mid">
-        10 rounds. Every prompt asks for at most 5 things, with the clock scaled
-        to the ask. First, each of you bans 2 categories you&rsquo;d rather never
-        see. In game: beat the clock to score. Miss it and the next player gets 8
-        seconds to steal your point. One free skip per round, and you can pause
-        the clock to argue about a category.
+        First to {POINTS_TO_WIN} points wins. Every prompt asks for 3 to 5 things —
+        the clock stays 12, 15, or 18 seconds depending on the count. First, each
+        of you bans 2 categories you&rsquo;d rather never see. In game: beat the
+        clock to score. Miss it and the next player gets 8 seconds to steal your
+        point. One free skip per round, and you can pause the clock to argue about
+        a category.
       </p>
 
       <BlitzPanel>
@@ -71,17 +72,17 @@ export default function BlitzSetupScreen() {
           <p className="font-body text-[13px] leading-snug text-text-mid">
             Each round a random player gets a category (like{' '}
             <span className="font-semibold text-text-hi">
-              &ldquo;Name 3 tea leaves in 12 seconds&rdquo;
+              &ldquo;Name 3 Star Wars characters in 12 seconds&rdquo;
             </span>
             ) and answers out loud. Hit{' '}
             <span className="font-semibold text-text-hi">NEXT</span> in time for{' '}
             <span className="font-semibold text-text-hi">+1 point</span>. Miss it and
             the next player gets{' '}
             <span className="font-semibold text-text-hi">8 seconds to steal</span> it
-            instead &mdash; so stay sharp even when it isn&rsquo;t your turn. The game
-            runs for{' '}
-            <span className="font-semibold text-text-hi">{TOTAL_ROUNDS} rounds</span>{' '}
-            &mdash; highest score wins.
+            instead &mdash; so stay sharp even when it isn&rsquo;t your turn. First
+            player to{' '}
+            <span className="font-semibold text-text-hi">{POINTS_TO_WIN} points</span>{' '}
+            wins.
           </p>
         </section>
 

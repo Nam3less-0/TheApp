@@ -99,7 +99,7 @@ export default function FinalResultsScreen() {
   return (
     <BlitzPageWrap>
       <p className="mb-1 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-silver">
-        Game over &middot; {state.totalRounds} rounds played
+        Game over &middot; {state.round} {state.round === 1 ? 'round' : 'rounds'} played
       </p>
       <h1 className="mb-2 text-center font-display text-[26px] font-extrabold tracking-[-0.5px] text-text-hi sm:text-[30px]">
         Final standings
@@ -113,7 +113,7 @@ export default function FinalResultsScreen() {
           ) : (
             <>
               <span className="font-bold text-silver-bright">{ranked[0].name}</span> led with{' '}
-              {topScore} points after {state.totalRounds} rounds
+              {topScore} points after {state.round} {state.round === 1 ? 'round' : 'rounds'}
             </>
           )}
         </p>

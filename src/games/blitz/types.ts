@@ -22,7 +22,6 @@ export type BlitzPhase = 'setup' | 'ban' | 'prompt' | 'steal' | 'result' | 'fina
 
 export interface BlitzSession {
   players: Player[];
-  totalRounds: number;
   round: number;
   remainingQuestions: BlitzQuestion[];
   currentPlayerId: string;

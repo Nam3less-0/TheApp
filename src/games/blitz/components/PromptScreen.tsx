@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useBlitz } from '../context';
-import { getPlayerById, capitalize } from '../utils';
+import { POINTS_TO_WIN, getPlayerById, capitalize } from '../utils';
 import { playTimerAlarm } from '../../the-bet/playTimerAlarm';
 import TimerRing from '../../the-bet/components/TimerRing';
 import BlitzPanel, { BlitzPageWrap } from './BlitzPanel';
@@ -48,7 +48,7 @@ export default function PromptScreen() {
   return (
     <BlitzPageWrap>
       <p className="mb-2 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-silver">
-        Round {state.round} of {state.totalRounds}
+        Round {state.round} &middot; first to {POINTS_TO_WIN}
       </p>
 
       <ScoreStrip

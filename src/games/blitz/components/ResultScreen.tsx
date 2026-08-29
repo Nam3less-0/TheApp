@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useBlitz } from '../context';
-import { getPlayerById, capitalize } from '../utils';
+import { POINTS_TO_WIN, getPlayerById, capitalize, hasReachedWinScore } from '../utils';
 import BlitzPanel, { BlitzPageWrap } from './BlitzPanel';
 import PlayerAvatar from './PlayerAvatar';
 import ScoreStrip from './ScoreStrip';
@@ -13,12 +13,12 @@ export default function ResultScreen() {
 
   if (!record || !player) return null;
 
-  const isLastRound = state.round >= state.totalRounds;
+  const gameOver = hasReachedWinScore(state.players);
 
   return (
     <BlitzPageWrap>
       <p className="mb-2 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-silver">
-        Round {record.round} of {state.totalRounds}
+        Round {record.round} &middot; first to {POINTS_TO_WIN}
       </p>
 
       <ScoreStrip players={state.players} className="mb-5" />
@@ -72,7 +72,7 @@ export default function ResultScreen() {
           className="w-full rounded-xl border-none px-4 py-3.5 font-body text-[15px] font-bold text-void transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-silver"
           style={{ background: 'linear-gradient(180deg, #F2F4F8, #C9CDD6 55%, #8B8F99)' }}
         >
-          {isLastRound ? 'See final standings' : 'Next round'}
+          {gameOver ? 'See final standings' : 'Next round'}
         </button>
       </BlitzPanel>
     </BlitzPageWrap>

@@ -1,16 +1,15 @@
 import type { BlitzAction, BlitzSession, RoundRecord } from './types';
 import {
-  TOTAL_ROUNDS,
   BANS_PER_PLAYER,
   buildQuestionPool,
   drawQuestion,
+  hasReachedWinScore,
   nextPlayerAfter,
   pickRandomPlayer,
 } from './utils';
 
 export const initialBlitzState: BlitzSession = {
   players: [],
-  totalRounds: TOTAL_ROUNDS,
   round: 0,
   remainingQuestions: [],
   currentPlayerId: '',
@@ -37,9 +36,9 @@ function recordFor(state: BlitzSession, success: boolean, stolenBy?: string): Ro
   };
 }
 
-/** Advance to the next round, or finish if we've hit the round cap. */
+/** Advance to the next round, or finish if anyone has reached the win score. */
 function advance(state: BlitzSession, history: RoundRecord[]): BlitzSession {
-  if (state.round >= state.totalRounds) {
+  if (hasReachedWinScore(state.players)) {
     return { ...state, phase: 'final', history, stealPlayerId: null };
   }
   const draw = drawQuestion(state.remainingQuestions, state.bannedCategoryIds);
