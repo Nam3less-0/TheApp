@@ -358,8 +358,17 @@ export default function TopicPreviewScreen() {
         <div className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-5">
           <p className="font-mono text-[11px] leading-relaxed text-text-low">
             {BOARD_COLUMNS} topics · {shape.difficulties.length} clues each ·{' '}
-            {shape.doubleCount} double-trouble ·{' '}
+            {shape.doubleCount} double-trouble
+            {state.settings.tripleTrouble ? ' (3×)' : ''} ·{' '}
             {BOARD_COLUMNS * shape.difficulties.length} clues
+            {state.settings.misdirectChance > 0 ? ' · misdirects on' : ''}
+            {state.settings.jackpotTile ? ' · jackpot' : ''}
+            {state.settings.missPot ? ' · pot' : ''}
+            {state.settings.boardInflation ? ' · inflation' : ''}
+            {state.settings.invertedValues ? ' · inverted' : ''}
+            {state.settings.hiddenValues ? ' · mystery $' : ''}
+            {state.settings.hiddenCategories ? ' · mystery cats' : ''}
+            {state.settings.lightningFinish ? ' · lightning' : ''}
             {state.settings.finalJeopardy ? ' · + Final' : ''}
           </p>
         </div>

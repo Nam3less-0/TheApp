@@ -24,10 +24,38 @@ export function boardShapeFor(settings: GameSettings): {
   difficulties: Difficulty[];
   doubleCount: number;
 } {
-  return settings.quickGame
-    ? { difficulties: QUICK_DIFFICULTIES, doubleCount: QUICK_DOUBLE_TROUBLE_COUNT }
-    : { difficulties: DIFFICULTIES, doubleCount: DOUBLE_TROUBLE_COUNT };
+  const difficulties = settings.quickGame ? QUICK_DIFFICULTIES : DIFFICULTIES;
+  const fallback = settings.quickGame ? QUICK_DOUBLE_TROUBLE_COUNT : DOUBLE_TROUBLE_COUNT;
+  const requested =
+    typeof settings.doubleTroubleCount === 'number' ? settings.doubleTroubleCount : fallback;
+  const maxDoubles = difficulties.length * BOARD_COLUMNS;
+  return {
+    difficulties,
+    doubleCount: Math.max(0, Math.min(Math.round(requested), maxDoubles)),
+  };
 }
+
+export const PHONE_A_FRIEND_MAX_USES = 2;
+export const WHAT_CHOICES_MAX_USES = 2;
+export const LIFELINE_USES_CAP = 5;
+export const DOUBLE_TROUBLE_COUNT_MAX = BOARD_COLUMNS * DIFFICULTIES.length;
+export const STREAK_BONUS = 100;
+export const JACKPOT_BONUS = 500;
+export const LIFELINE_TAX = 100;
+export const LIGHTNING_REMAINING = 6;
+export const LIGHTNING_SECONDS = 15;
+export const UNDERDOG_MULT = 1.5;
+export const LEADER_TAX_MULT = 0.5;
+export const SWEEP_BONUS = 500;
+export const INFLATION_MID = 1.5;
+export const INFLATION_LATE = 2;
+
+export const MISDIRECT_CHANCE_PRESETS: { label: string; value: number; hint: string }[] = [
+  { label: 'Off', value: 0, hint: 'Every tile stays in its column' },
+  { label: 'Rare', value: 0.15, hint: 'About 1 in 7 tiles swaps category' },
+  { label: 'Spicy', value: 0.3, hint: 'About 1 in 3 tiles swaps category' },
+  { label: 'Chaos', value: 0.5, hint: 'Half the board might be a fake-out' },
+];
 
 /** Default house rules — everything classic/off unless the host opts in. */
 export function defaultSettings(): GameSettings {
@@ -40,6 +68,32 @@ export function defaultSettings(): GameSettings {
     selfScore: false,
     soundEnabled: true,
     themeId: null,
+    phoneAFriendUses: PHONE_A_FRIEND_MAX_USES,
+    whatChoicesUses: WHAT_CHOICES_MAX_USES,
+    snipeUses: 1,
+    doubleTroubleCount: DOUBLE_TROUBLE_COUNT,
+    misdirectChance: 0,
+    tripleTrouble: false,
+    hotStreak: false,
+    strictRotation: false,
+    secondWind: false,
+    freeLowTiles: false,
+    jackpotTile: false,
+    underdogBoost: false,
+    lightningFinish: false,
+    lowestPicksOnMiss: false,
+    lifelineTax: false,
+    topRowWager: false,
+    openPicking: false,
+    hiddenCategories: false,
+    hiddenValues: false,
+    invertedValues: false,
+    boardInflation: false,
+    missPot: false,
+    categorySweep: false,
+    leaderTax: false,
+    scoreFloor: false,
+    trueDailyDouble: false,
   };
 }
 
@@ -126,6 +180,147 @@ export function isWhatChoicesAllowed(topicId: string | undefined): boolean {
   return topicId !== undefined && !WHAT_CHOICES_BLOCKED_TOPIC_IDS.has(topicId);
 }
 
+/** Topic the clue was actually drawn from (misdirect source, else the column). */
+export function cellSourceTopicId(
+  columns: BoardColumn[],
+  cell: BoardCell,
+): string | undefined {
+  return cell.misdirectFrom?.topicId ?? columns[cell.columnIndex]?.id;
+}
+
+export function cellSourceTopicName(
+  columns: BoardColumn[],
+  cell: BoardCell,
+): string {
+  return cell.misdirectFrom?.topicName ?? columns[cell.columnIndex]?.name ?? '';
+}
+
+export function isMisdirectCell(cell: BoardCell): boolean {
+  return Boolean(cell.misdirectFrom?.topicId);
+}
+
+/** 2× on Double Trouble, 3× when Triple Trouble is on. */
+export function doubleMultiplier(settings: GameSettings): number {
+  return settings.tripleTrouble ? 3 : 2;
+}
+
+export function inflationFactor(
+  settings: GameSettings,
+  cells: BoardCell[],
+): number {
+  if (!settings.boardInflation || cells.length === 0) return 1;
+  const remaining = countRemainingCells(cells);
+  if (remaining <= LIGHTNING_REMAINING) return INFLATION_LATE;
+  if (remaining * 2 <= cells.length) return INFLATION_MID;
+  return 1;
+}
+
+/** Face value shown on the board (inflation only; doubles stay hidden). */
+export function boardTileValue(
+  cell: BoardCell,
+  settings: GameSettings,
+  cells: BoardCell[],
+): number {
+  return Math.round(cell.value * inflationFactor(settings, cells));
+}
+
+export function tilePoints(
+  cell: BoardCell,
+  settings: GameSettings,
+  wager: number | null,
+  cells: BoardCell[] = [],
+): number {
+  if (wager !== null) return wager;
+  const base = cell.value * (cell.isDouble ? doubleMultiplier(settings) : 1);
+  return Math.round(base * inflationFactor(settings, cells));
+}
+
+/** Extra payout for hitting the hidden jackpot tile; 0 when it is not one. */
+export function jackpotBonus(cell: BoardCell): number {
+  return cell.isJackpot ? JACKPOT_BONUS : 0;
+}
+
+export function isTrailingPlayer(players: Player[], playerId: string): boolean {
+  if (players.length === 0) return false;
+  const max = Math.max(...players.map((p) => p.score));
+  const me = players.find((p) => p.id === playerId);
+  return Boolean(me && me.score < max);
+}
+
+export function isLeadingPlayer(players: Player[], playerId: string): boolean {
+  if (players.length === 0) return false;
+  const max = Math.max(...players.map((p) => p.score));
+  const me = players.find((p) => p.id === playerId);
+  if (!me || me.score < max) return false;
+  return players.some((p) => p.score < max);
+}
+
+export function boostedCluePoints(
+  points: number,
+  settings: GameSettings,
+  players: Player[],
+  playerId: string,
+): number {
+  let next = points;
+  if (settings.underdogBoost && isTrailingPlayer(players, playerId)) {
+    next = Math.round(next * UNDERDOG_MULT);
+  }
+  if (settings.leaderTax && isLeadingPlayer(players, playerId)) {
+    next = Math.round(next * LEADER_TAX_MULT);
+  }
+  return next;
+}
+
+export function applyScoreDelta(
+  score: number,
+  delta: number,
+  floor: boolean,
+): number {
+  const next = score + delta;
+  return floor ? Math.max(0, next) : next;
+}
+
+export function invertBoardValues(cells: BoardCell[]): void {
+  if (cells.length === 0) return;
+  const min = Math.min(...cells.map((cell) => cell.value));
+  const max = Math.max(...cells.map((cell) => cell.value));
+  for (const cell of cells) {
+    cell.value = min + max - cell.value;
+  }
+}
+
+export function isLastTileInColumn(cells: BoardCell[], cell: BoardCell): boolean {
+  return cells
+    .filter((entry) => entry.columnIndex === cell.columnIndex)
+    .every((entry) => entry.used || entry.id === cell.id);
+}
+
+/** Seat index of the lowest score; ties go to the next seat after `fromIndex`. */
+export function lowestScoreIndex(players: Player[], fromIndex: number): number {
+  if (players.length === 0) return 0;
+  const low = Math.min(...players.map((p) => p.score));
+  for (let step = 1; step <= players.length; step += 1) {
+    const idx = (fromIndex + step) % players.length;
+    if (players[idx].score === low) return idx;
+  }
+  return fromIndex;
+}
+
+export function effectiveClueTimer(
+  settings: GameSettings,
+  remainingCells: number,
+): number {
+  if (settings.lightningFinish && remainingCells <= LIGHTNING_REMAINING) {
+    if (settings.clueTimerSeconds <= 0) return LIGHTNING_SECONDS;
+    return Math.min(settings.clueTimerSeconds, LIGHTNING_SECONDS);
+  }
+  return settings.clueTimerSeconds;
+}
+
+export function maxCellValue(cells: BoardCell[]): number {
+  return cells.reduce((max, cell) => Math.max(max, cell.value), 0);
+}
+
 export function getInitials(name: string): string {
   const trimmed = name.trim();
   if (!trimmed) return '?';
@@ -136,25 +331,26 @@ export function getInitials(name: string): string {
   return trimmed.slice(0, 2).toUpperCase();
 }
 
-export const PHONE_A_FRIEND_MAX_USES = 2;
-export const WHAT_CHOICES_MAX_USES = 2;
 export const SNIPE_CORRECT_POINTS = 200;
 /** Clue values a player may pick at most once per turn. */
 export const TURN_LIMITED_VALUES = [200, 400] as const;
 
-/** Fresh set of lifelines for a new game. */
-export function freshLifelines(): Lifelines {
+/** Fresh set of lifelines for a new game, honoring house-rule counts. */
+export function freshLifelines(settings?: GameSettings): Lifelines {
+  const rules = settings ?? defaultSettings();
   return {
-    phoneAFriend: PHONE_A_FRIEND_MAX_USES,
-    whatChoices: WHAT_CHOICES_MAX_USES,
-    snipe: true,
+    phoneAFriend: Math.max(0, Math.round(rules.phoneAFriendUses)),
+    whatChoices: Math.max(0, Math.round(rules.whatChoicesUses)),
+    snipe: Math.max(0, Math.round(rules.snipeUses)),
   };
 }
 
 export function isCellBlockedThisTurn(
   value: number,
   turnPickedValues: number[],
+  freeLowTiles = false,
 ): boolean {
+  if (freeLowTiles) return false;
   return (
     (TURN_LIMITED_VALUES as readonly number[]).includes(value) &&
     turnPickedValues.includes(value)
@@ -184,6 +380,8 @@ export function createDefaultPlayers(count = 4): Player[] {
     correct: 0,
     missed: 0,
     doublesHit: 0,
+    streak: 0,
+    secondWind: false,
     lifelines: freshLifelines(),
   }));
 }
@@ -590,6 +788,110 @@ export function buildChoices(
     | [string, string, string, string];
 }
 
+function tryDrawClue(
+  topic: TopicData,
+  difficulty: Difficulty,
+  usedQuestionKeys: Set<string>,
+  recentKeys: Set<string>,
+) {
+  const candidates = topic.questions.filter(
+    (question) => question.difficulty === difficulty,
+  );
+  if (candidates.length === 0) return null;
+  try {
+    return drawQuestion(
+      candidates,
+      (question) => questionKey(topic.id, difficulty, question.question),
+      slotKey(topic.id, difficulty),
+      loadQuestionDeck(slotKey(topic.id, difficulty)),
+      usedQuestionKeys,
+      recentKeys,
+    );
+  } catch {
+    return null;
+  }
+}
+
+function plantMisdirects(
+  columns: BoardColumn[],
+  cells: BoardCell[],
+  topics: TopicData[],
+  chance: number,
+  usedQuestionKeys: Set<string>,
+  recentKeys: Set<string>,
+) {
+  const target = Math.round(cells.length * Math.max(0, chance));
+  if (target <= 0 || topics.length < 2) return;
+
+  let planted = 0;
+  for (const cell of shuffleDeep(cells)) {
+    if (planted >= target) break;
+    const column = columns[cell.columnIndex];
+    const others = shuffle(
+      topics.filter((_, index) => index !== cell.columnIndex),
+    );
+    for (const other of others) {
+      const attempt = tryDrawClue(
+        other,
+        cell.difficulty,
+        usedQuestionKeys,
+        recentKeys,
+      );
+      if (!attempt) continue;
+
+      if (column) {
+        usedQuestionKeys.delete(
+          questionKey(column.id, cell.difficulty, cell.question),
+        );
+      }
+      usedQuestionKeys.add(attempt.pickedKey);
+
+      const rebuilt = cellFromDraw(
+        other,
+        cell.columnIndex,
+        cell.difficulty,
+        attempt.picked,
+        { topicId: other.id, topicName: other.name },
+      );
+      cell.question = rebuilt.question;
+      cell.answer = rebuilt.answer;
+      cell.choices = rebuilt.choices;
+      cell.misdirectFrom = rebuilt.misdirectFrom;
+      planted += 1;
+      break;
+    }
+  }
+}
+
+function cellFromDraw(
+  topic: TopicData,
+  columnIndex: number,
+  difficulty: Difficulty,
+  picked: { question: string; answer: string; choices?: BoardCell['choices'] },
+  misdirectFrom: BoardCell['misdirectFrom'],
+): BoardCell {
+  const candidates = topic.questions.filter(
+    (question) => question.difficulty === difficulty,
+  );
+  const choiceCount = topic.id === 'riddles' ? 3 : 4;
+  const topicAnswers = topic.questions.map((question) => question.answer);
+  const sameDiff = candidates.map((question) => question.answer);
+  const pool = sameDiff.length >= choiceCount ? sameDiff : topicAnswers;
+  return {
+    id: `${columnIndex}-${difficulty}`,
+    columnIndex,
+    difficulty,
+    value: DIFFICULTY_VALUES[difficulty],
+    question: picked.question,
+    answer: picked.answer,
+    choices: buildChoices(picked.answer, picked.choices, pool, choiceCount),
+    isDouble: false,
+    isJackpot: false,
+    used: false,
+    misdirectFrom,
+  };
+}
+
 /**
  * Draft a board from preview topics without committing anything to storage.
  *
@@ -603,6 +905,8 @@ export function draftBoardFromTopics(
   topicIds: string[],
   difficulties: Difficulty[] = DIFFICULTIES,
   doubleCount: number = DOUBLE_TROUBLE_COUNT,
+  misdirectChance = 0,
+  plantJackpot = false,
 ): BuiltBoard {
   const topics = topicIds
     .map((id) => JEOPARDY_TOPICS.find((topic) => topic.id === id))
@@ -622,40 +926,37 @@ export function draftBoardFromTopics(
   const cells: BoardCell[] = [];
 
   topics.forEach((topic, columnIndex) => {
-    const topicAnswers = topic.questions.map((question) => question.answer);
-
     difficulties.forEach((difficulty) => {
-      const candidates = topic.questions.filter(
-        (question) => question.difficulty === difficulty,
-      );
-      const slot = slotKey(topic.id, difficulty);
-      const { picked, pickedKey } = drawQuestion(
-        candidates,
-        (question) => questionKey(topic.id, difficulty, question.question),
-        slot,
-        loadQuestionDeck(slot),
-        usedQuestionKeys,
-        recentKeys,
-      );
-      usedQuestionKeys.add(pickedKey);
+      let draw = tryDrawClue(topic, difficulty, usedQuestionKeys, recentKeys);
 
-      const choiceCount = topic.id === 'riddles' ? 3 : 4;
-      const sameDiff = candidates.map((question) => question.answer);
-      const pool = sameDiff.length >= choiceCount ? sameDiff : topicAnswers;
+      if (!draw) {
+        const candidates = topic.questions.filter(
+          (question) => question.difficulty === difficulty,
+        );
+        const slot = slotKey(topic.id, difficulty);
+        draw = drawQuestion(
+          candidates,
+          (question) => questionKey(topic.id, difficulty, question.question),
+          slot,
+          loadQuestionDeck(slot),
+          usedQuestionKeys,
+          recentKeys,
+        );
+      }
 
-      cells.push({
-        id: `${columnIndex}-${difficulty}`,
-        columnIndex,
-        difficulty,
-        value: DIFFICULTY_VALUES[difficulty],
-        question: picked.question,
-        answer: picked.answer,
-        choices: buildChoices(picked.answer, picked.choices, pool, choiceCount),
-        isDouble: false,
-        used: false,
-      });
+      usedQuestionKeys.add(draw.pickedKey);
+      cells.push(cellFromDraw(topic, columnIndex, difficulty, draw.picked, null));
     });
   });
+
+  plantMisdirects(
+    columns,
+    cells,
+    topics,
+    misdirectChance,
+    usedQuestionKeys,
+    recentKeys,
+  );
 
   const doubleIds = new Set(
     shuffleDeep(cells.map((cell) => cell.id)).slice(0, Math.max(0, doubleCount)),
@@ -664,7 +965,30 @@ export function draftBoardFromTopics(
     if (doubleIds.has(cell.id)) cell.isDouble = true;
   }
 
+  if (plantJackpot) {
+    const pool = cells.filter((cell) => !cell.isDouble);
+    const jackpot = shuffleDeep(pool.length > 0 ? pool : cells)[0];
+    if (jackpot) jackpot.isJackpot = true;
+  }
+
   return { columns, cells };
+}
+
+/** Draft using the active house rules for rows, doubles, and misdirects. */
+export function draftBoardForSettings(
+  topicIds: string[],
+  settings: GameSettings,
+): BuiltBoard {
+  const shape = boardShapeFor(settings);
+  const built = draftBoardFromTopics(
+    topicIds,
+    shape.difficulties,
+    shape.doubleCount,
+    settings.misdirectChance,
+    settings.jackpotTile,
+  );
+  if (settings.invertedValues) invertBoardValues(built.cells);
+  return built;
 }
 
 /**
@@ -715,7 +1039,7 @@ export function commitBoardDraw(columns: BoardColumn[], cells: BoardCell[]): voi
   const drawnQuestionKeys: string[] = [];
 
   for (const cell of cells) {
-    const topicId = columns[cell.columnIndex]?.id;
+    const topicId = cellSourceTopicId(columns, cell);
     if (!topicId) continue;
     const topic = JEOPARDY_TOPICS.find((entry) => entry.id === topicId);
     if (!topic) continue;
@@ -744,7 +1068,7 @@ export function commitBoardDraw(columns: BoardColumn[], cells: BoardCell[]): voi
 function boardQuestionKeys(columns: BoardColumn[], cells: BoardCell[]): Set<string> {
   const keys = new Set<string>();
   for (const cell of cells) {
-    const topicId = columns[cell.columnIndex]?.id;
+    const topicId = cellSourceTopicId(columns, cell);
     if (!topicId) continue;
     keys.add(makeQuestionKey(topicId, cell.difficulty, cell.question));
   }
@@ -758,7 +1082,7 @@ export function isPreviouslySeenQuestion(
   priorRecentQuestionKeys: string[],
   history: AnswerRecord[],
 ): boolean {
-  const topicId = columns[cell.columnIndex]?.id;
+  const topicId = cellSourceTopicId(columns, cell);
   if (!topicId) return false;
   const key = makeQuestionKey(topicId, cell.difficulty, cell.question);
   if (priorRecentQuestionKeys.includes(key)) return true;
@@ -782,7 +1106,7 @@ export function rerollCellQuestion(
   const cell = cells.find((c) => c.id === cellId);
   if (!cell) return null;
 
-  const topicId = columns[cell.columnIndex]?.id;
+  const topicId = cellSourceTopicId(columns, cell);
   if (!topicId) return null;
 
   const topic = JEOPARDY_TOPICS.find((entry) => entry.id === topicId);
@@ -835,7 +1159,7 @@ export function commitRerolledQuestion(
   cell: BoardCell,
   pickedKey: string,
 ): void {
-  const topicId = columns[cell.columnIndex]?.id;
+  const topicId = cellSourceTopicId(columns, cell);
   if (!topicId) return;
   const topic = JEOPARDY_TOPICS.find((entry) => entry.id === topicId);
   if (!topic) return;

@@ -4,20 +4,34 @@ import { COLORS, formatScore, getInitials } from '../utils';
 interface ScoreChipsProps {
   players: Player[];
   activePlayerId: string | null;
+  onSelectPlayer?: (playerId: string) => void;
 }
 
-export default function ScoreChips({ players, activePlayerId }: ScoreChipsProps) {
+export default function ScoreChips({
+  players,
+  activePlayerId,
+  onSelectPlayer,
+}: ScoreChipsProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {players.map((player) => {
         const active = player.id === activePlayerId;
+        const selectable = Boolean(onSelectPlayer) && !active;
         return (
-          <div
+          <button
             key={player.id}
+            type="button"
+            onClick={
+              selectable && onSelectPlayer
+                ? () => onSelectPlayer(player.id)
+                : undefined
+            }
+            title={selectable ? 'Hand them the next pick' : undefined}
             className="flex items-center gap-[7px] rounded-full border bg-surface py-1.5 pl-2 pr-3 text-[13px]"
             style={{
               borderColor: active ? COLORS.sapphireBright : 'rgba(220,224,232,0.10)',
               boxShadow: active ? `inset 0 0 0 1px ${COLORS.sapphireBright}` : 'none',
+              cursor: selectable ? 'pointer' : 'default',
             }}
           >
             <span
@@ -62,14 +76,32 @@ export default function ScoreChips({ players, activePlayerId }: ScoreChipsProps)
                 title="Snipe"
                 className="text-[11px] leading-none"
                 style={{
-                  color: player.lifelines.snipe ? COLORS.bad : '#5E3A34',
-                  opacity: player.lifelines.snipe ? 1 : 0.4,
+                  color: player.lifelines.snipe > 0 ? COLORS.bad : '#5E3A34',
+                  opacity: player.lifelines.snipe > 0 ? 1 : 0.4,
                 }}
               >
-                ⊕
+                ⊕{player.lifelines.snipe > 1 ? player.lifelines.snipe : ''}
               </span>
+              {player.streak >= 2 && (
+                <span
+                  title={`${player.streak} in a row`}
+                  className="text-[11px] leading-none"
+                  style={{ color: COLORS.goldBright }}
+                >
+                  🔥{player.streak}
+                </span>
+              )}
+              {player.secondWind && (
+                <span
+                  title="Second wind still available"
+                  className="text-[11px] leading-none"
+                  style={{ color: COLORS.sapphireBright }}
+                >
+                  ↺
+                </span>
+              )}
             </span>
-          </div>
+          </button>
         );
       })}
     </div>

@@ -2,9 +2,13 @@ import { motion } from 'framer-motion';
 import { useJeopardy } from '../context';
 import {
   COLORS,
+  LIGHTNING_REMAINING,
   boardShapeFor,
+  boardTileValue,
   countRemainingCells,
+  formatScore,
   getCellByColumnAndDifficulty,
+  inflationFactor,
   isCellBlockedThisTurn,
   playSound,
 } from '../utils';
@@ -16,6 +20,8 @@ export default function BoardScreen() {
   const activePlayer = state.players[state.currentPlayerIndex];
   const remaining = countRemainingCells(state.cells);
   const difficulties = boardShapeFor(state.settings).difficulties;
+  const inflate = inflationFactor(state.settings, state.cells);
+  const hideValues = state.settings.hiddenValues;
 
   function handleSelect(cellId: string) {
     // Always the neutral pick sound — a double must stay a surprise.
@@ -40,12 +46,47 @@ export default function BoardScreen() {
               {activePlayer?.name}&rsquo;s turn
             </div>
             <div className="mt-0.5 font-mono text-[11px] uppercase tracking-wider text-text-low">
-              {remaining} clue{remaining === 1 ? '' : 's'} left · get it right to pick again · one
-              $200 &amp; $400 per turn
+              {remaining} clue{remaining === 1 ? '' : 's'} left
+              {state.settings.strictRotation
+                ? ' · pick always passes'
+                : ' · get it right to pick again'}
+              {state.settings.freeLowTiles
+                ? ''
+                : ' · one $200 & $400 per turn'}
+              {state.settings.openPicking ? ' · tap a name to hand off' : ''}
+              {state.settings.lightningFinish && remaining <= LIGHTNING_REMAINING
+                ? ' · lightning'
+                : ''}
+              {inflate > 1 ? ` · ${inflate}× values` : ''}
+              {state.settings.invertedValues ? ' · inverted' : ''}
+              {state.settings.hiddenValues ? ' · mystery $' : ''}
             </div>
           </div>
         </div>
-        <ScoreChips players={state.players} activePlayerId={activePlayer?.id ?? null} />
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          {state.settings.missPot && (
+            <div
+              className="rounded-full border px-3 py-1.5 font-mono text-[11px]"
+              style={{
+                borderColor: `color-mix(in srgb, ${COLORS.goldBright} 40%, transparent)`,
+                color: COLORS.goldBright,
+                background: `color-mix(in srgb, ${COLORS.gold} 12%, #1A1C20)`,
+              }}
+              title="Taken by the next correct answer"
+            >
+              Pot {formatScore(state.scorePot)}
+            </div>
+          )}
+        <ScoreChips
+          players={state.players}
+          activePlayerId={activePlayer?.id ?? null}
+          onSelectPlayer={
+            state.settings.openPicking
+              ? (playerId) => dispatch({ type: 'SET_PICKER', playerId })
+              : undefined
+          }
+        />
+        </div>
       </div>
 
       {state.undoSnapshot && (
@@ -73,7 +114,10 @@ export default function BoardScreen() {
               color: '#F2F4F8',
             }}
           >
-            {column.name}
+            {state.settings.hiddenCategories &&
+            !state.revealedColumnIds.includes(column.id)
+              ? '???'
+              : column.name}
           </div>
         ))}
 
@@ -102,7 +146,14 @@ export default function BoardScreen() {
             const blockedThisTurn = isCellBlockedThisTurn(
               cell.value,
               state.turnPickedValues,
+              state.settings.freeLowTiles,
             );
+            const shownValue = hideValues
+              ? '???'
+              : boardTileValue(cell, state.settings, state.cells);
+            const valueLabel = hideValues
+              ? `${column.name}, hidden value`
+              : `${column.name} for ${shownValue} points`;
 
             if (blockedThisTurn) {
               return (
@@ -110,10 +161,14 @@ export default function BoardScreen() {
                   key={cell.id}
                   className="flex aspect-[5/4] flex-col items-center justify-center rounded-lg border border-line font-display text-sm font-extrabold tracking-[0.5px] text-text-low opacity-45"
                   style={{ background: 'rgba(255,255,255,0.04)' }}
-                  title={`Already picked a $${cell.value} clue this turn`}
-                  aria-label={`${column.name} for ${cell.value} points — already picked this turn`}
+                  title={
+                    hideValues
+                      ? 'Already picked this value this turn'
+                      : `Already picked a $${cell.value} clue this turn`
+                  }
+                  aria-label={`${valueLabel} — already picked this turn`}
                 >
-                  {cell.value}
+                  {shownValue}
                 </div>
               );
             }
@@ -135,9 +190,9 @@ export default function BoardScreen() {
                   boxShadow:
                     '0 4px 12px -6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)',
                 }}
-                aria-label={`${column.name} for ${cell.value} points`}
+                aria-label={valueLabel}
               >
-                {cell.value}
+                {shownValue}
               </motion.button>
             );
           }),

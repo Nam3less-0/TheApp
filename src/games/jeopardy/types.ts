@@ -4,12 +4,12 @@ export type { Difficulty };
 
 /** Per-player lifelines for a game. */
 export interface Lifelines {
-  /** Remaining Phone a Friend uses (starts at 2). */
+  /** Remaining Phone a Friend uses. */
   phoneAFriend: number;
-  /** Remaining What Choices uses (starts at 2). */
+  /** Remaining What Choices uses. */
   whatChoices: number;
-  /** Snipe — one use per game; `true` means still available. */
-  snipe: boolean;
+  /** Remaining Snipe uses. */
+  snipe: number;
 }
 
 export interface Player {
@@ -20,6 +20,10 @@ export interface Player {
   missed: number;
   /** Number of double-trouble cards answered correctly. */
   doublesHit: number;
+  /** Consecutive correct answers; used by the hot-streak house rule. */
+  streak: number;
+  /** True while this player still has a second-wind miss that keeps the turn. */
+  secondWind: boolean;
   lifelines: Lifelines;
 }
 
@@ -40,7 +44,14 @@ export interface BoardCell {
   /** Multiple-choice options; index 0 is the correct one (3 for riddles, 4 otherwise). */
   choices: [string, string, string] | [string, string, string, string];
   isDouble: boolean;
+  /** Hidden bonus tile; correct answers add a jackpot payout on top of the clue. */
+  isJackpot: boolean;
   used: boolean;
+  /**
+   * When set, this tile's clue was drawn from another category at the same
+   * dollar value (a misdirect). Rerolls stay in that new category.
+   */
+  misdirectFrom: { topicId: string; topicName: string } | null;
 }
 
 export interface AnswerRecord {
@@ -80,6 +91,61 @@ export interface GameSettings {
   soundEnabled: boolean;
   /** Restrict the topic pool to a themed bundle; null = all topics. */
   themeId: string | null;
+  /** Phone a Friend uses granted to each player at game start. */
+  phoneAFriendUses: number;
+  /** What Choices uses granted to each player at game start. */
+  whatChoicesUses: number;
+  /** Snipe uses granted to each player at game start. */
+  snipeUses: number;
+  /** How many Double Trouble tiles to plant on the board. */
+  doubleTroubleCount: number;
+  /**
+   * Chance each tile is drawn from another board category at the same
+   * dollar value (0 = off).
+   */
+  misdirectChance: number;
+  /** Double Trouble tiles pay 3× instead of 2×. */
+  tripleTrouble: boolean;
+  /** Consecutive correct answers after the first award a flat bonus. */
+  hotStreak: boolean;
+  /** Pass the pick after every clue, even on a correct answer. */
+  strictRotation: boolean;
+  /** Each player may miss once without losing the turn. */
+  secondWind: boolean;
+  /** Allow more than one $200 and $400 pick in the same turn. */
+  freeLowTiles: boolean;
+  /** Plant one hidden jackpot tile that pays a bonus on a correct answer. */
+  jackpotTile: boolean;
+  /** Trailing players score extra on correct, non-wager clues. */
+  underdogBoost: boolean;
+  /** Force a short timer once only a handful of tiles remain. */
+  lightningFinish: boolean;
+  /** After a miss, the lowest score picks next instead of the next seat. */
+  lowestPicksOnMiss: boolean;
+  /** Using Phone a Friend or What Choices costs points. */
+  lifelineTax: boolean;
+  /** Highest-value row always pauses for a wager, like a Daily Double. */
+  topRowWager: boolean;
+  /** On the board, tap a player to hand them the next pick. */
+  openPicking: boolean;
+  /** Column names stay hidden until a tile in that category is finished. */
+  hiddenCategories: boolean;
+  /** Hide dollar amounts on the board until a tile is opened. */
+  hiddenValues: boolean;
+  /** Flip the value ladder so easy tiles pay the most. */
+  invertedValues: boolean;
+  /** Remaining tiles pay more as the board empties. */
+  boardInflation: boolean;
+  /** Missed tile values pile into a pot; the next hit takes it. */
+  missPot: boolean;
+  /** Correctly finishing a category awards a bonus. */
+  categorySweep: boolean;
+  /** The player in first scores half on regular hits. */
+  leaderTax: boolean;
+  /** Scores cannot drop below zero. */
+  scoreFloor: boolean;
+  /** Wagered tiles are automatically all-in. */
+  trueDailyDouble: boolean;
 }
 
 /** A single player's Final Jeopardy wager + outcome. */
@@ -169,6 +235,15 @@ export interface JeopardySession {
   priorRecentQuestionKeys: string[];
   /** Question keys already tried on the active clue via in-game reroll. */
   activeCellRerollKeys: string[];
+  /**
+   * Self-score result waiting for confirm/contest after reveal; null when the
+   * host is marking the clue, or no pick has been made yet.
+   */
+  pendingSelfResult: boolean | null;
+  /** Column ids that have had a finished clue (used by hidden-categories). */
+  revealedColumnIds: string[];
+  /** Running pot fed by misses when the miss-pot house rule is on. */
+  scorePot: number;
 }
 
 export type JeopardyAction =
@@ -187,9 +262,11 @@ export type JeopardyAction =
   | { type: 'SET_PREVIEW_TOPIC'; slotIndex: number; topicId: string }
   | { type: 'CONFIRM_TOPICS' }
   | { type: 'SELECT_CELL'; cellId: string }
+  | { type: 'SET_PICKER'; playerId: string }
   | { type: 'SET_WAGER'; amount: number }
-  | { type: 'REVEAL_ANSWER' }
+  | { type: 'REVEAL_ANSWER'; selfCorrect?: boolean }
   | { type: 'REROLL_QUESTION' }
+  | { type: 'CONTEST_QUESTION' }
   | { type: 'RESOLVE'; correct: boolean }
   | { type: 'UNDO_RESOLVE' }
   | { type: 'USE_WHAT_CHOICES' }

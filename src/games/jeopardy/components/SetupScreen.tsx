@@ -2,69 +2,16 @@ import { useEffect, useState } from 'react';
 import { useJeopardy } from '../context';
 import type { GameSettings, Player } from '../types';
 import {
-  COLORS,
   MAX_PLAYERS,
   MIN_PLAYERS,
   SILVER_BUTTON,
-  THEME_BUNDLES,
   createDefaultPlayers,
   defaultSettings,
   freshLifelines,
 } from '../utils';
+import GameSettingsPanel, { settingsSummary } from './GameSettingsPanel';
 import JeopardyPanel, { JeopardyPageWrap } from './JeopardyPanel';
 import PlayerAvatar from './PlayerAvatar';
-
-const TIMER_OPTIONS = [
-  { label: 'Off', value: 0 },
-  { label: '15s', value: 15 },
-  { label: '30s', value: 30 },
-  { label: '45s', value: 45 },
-];
-
-function Toggle({
-  label,
-  description,
-  checked,
-  onChange,
-}: {
-  label: string;
-  description: string;
-  checked: boolean;
-  onChange: (next: boolean) => void;
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      onClick={() => onChange(!checked)}
-      className="flex w-full items-center gap-3 rounded-xl border border-line bg-surface px-3.5 py-3 text-left transition-colors hover:border-line-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
-    >
-      <span className="min-w-0 flex-1">
-        <span className="block font-body text-[13.5px] font-bold text-text-hi">
-          {label}
-        </span>
-        <span className="mt-0.5 block font-body text-[11.5px] leading-snug text-text-mid">
-          {description}
-        </span>
-      </span>
-      <span
-        className="relative h-6 w-11 shrink-0 rounded-full transition-colors"
-        style={{
-          background: checked
-            ? COLORS.sapphireBright
-            : 'rgba(220,224,232,0.14)',
-        }}
-        aria-hidden="true"
-      >
-        <span
-          className="absolute top-0.5 h-5 w-5 rounded-full bg-white transition-[left]"
-          style={{ left: checked ? '22px' : '2px' }}
-        />
-      </span>
-    </button>
-  );
-}
 
 export default function SetupScreen() {
   const { state, dispatch } = useJeopardy();
@@ -74,7 +21,7 @@ export default function SetupScreen() {
     return createDefaultPlayers(4);
   });
   const [settings, setSettings] = useState<GameSettings>(
-    () => state.settings ?? defaultSettings(),
+    () => ({ ...defaultSettings(), ...state.settings }),
   );
   const [showRules, setShowRules] = useState(false);
 
@@ -111,7 +58,9 @@ export default function SetupScreen() {
           correct: 0,
           missed: 0,
           doublesHit: 0,
-          lifelines: freshLifelines(),
+          streak: 0,
+          secondWind: settings.secondWind,
+          lifelines: freshLifelines(settings),
         },
       ];
     });
@@ -190,121 +139,25 @@ export default function SetupScreen() {
             type="button"
             onClick={() => setShowRules((o) => !o)}
             aria-expanded={showRules}
-            className="flex w-full items-center justify-between gap-2 focus-visible:outline-none"
+            className="flex w-full items-start justify-between gap-3 rounded-xl border border-line bg-surface px-3.5 py-3 text-left transition-colors hover:border-line-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
           >
-            <span className="font-body text-sm font-bold text-text-hi">
-              House rules
+            <span>
+              <span className="flex items-center gap-2 font-body text-sm font-bold text-text-hi">
+                <span aria-hidden="true">⚙</span>
+                Game settings
+              </span>
+              <span className="mt-1 block font-mono text-[11px] leading-relaxed text-text-low">
+                {settingsSummary(settings)}
+              </span>
             </span>
-            <span className="font-mono text-[11px] text-text-low">
-              {showRules ? 'Hide ▲' : 'Customize ▼'}
+            <span className="shrink-0 pt-0.5 font-mono text-[11px] text-text-low">
+              {showRules ? 'Hide ▲' : 'Open ▼'}
             </span>
           </button>
 
           {showRules && (
-            <div className="mt-4 flex flex-col gap-2.5">
-              <Toggle
-                label="Quick game"
-                description="3 rows instead of 5 — a faster board."
-                checked={settings.quickGame}
-                onChange={(v) => patchSettings({ quickGame: v })}
-              />
-              <Toggle
-                label="Wrong-answer penalty"
-                description="Miss a clue and lose its value (hard mode)."
-                checked={settings.wrongAnswerPenalty}
-                onChange={(v) => patchSettings({ wrongAnswerPenalty: v })}
-              />
-              <Toggle
-                label="Daily Double wagers"
-                description="Bet any amount on Double Trouble tiles."
-                checked={settings.dailyDoubleWager}
-                onChange={(v) => patchSettings({ dailyDoubleWager: v })}
-              />
-              <Toggle
-                label="Final Jeopardy"
-                description="A last secret-wager clue after the board clears."
-                checked={settings.finalJeopardy}
-                onChange={(v) => patchSettings({ finalJeopardy: v })}
-              />
-              <Toggle
-                label="Self-score"
-                description="Players tap their answer; the app judges it."
-                checked={settings.selfScore}
-                onChange={(v) => patchSettings({ selfScore: v })}
-              />
-              <Toggle
-                label="Sound effects"
-                description="Play short cues for picks, reveals and results."
-                checked={settings.soundEnabled}
-                onChange={(v) => patchSettings({ soundEnabled: v })}
-              />
-
-              <div className="mt-1 rounded-xl border border-line bg-surface px-3.5 py-3">
-                <p className="mb-2 font-body text-[13.5px] font-bold text-text-hi">
-                  Clue timer
-                </p>
-                <div className="flex gap-2">
-                  {TIMER_OPTIONS.map((opt) => {
-                    const active = settings.clueTimerSeconds === opt.value;
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => patchSettings({ clueTimerSeconds: opt.value })}
-                        className="flex-1 rounded-lg border px-2 py-2 font-mono text-[12px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
-                        style={{
-                          borderColor: active
-                            ? COLORS.sapphireBright
-                            : 'rgba(220,224,232,0.12)',
-                          color: active ? COLORS.sapphireBright : '#9CA0AA',
-                          background: active
-                            ? `color-mix(in srgb, ${COLORS.sapphireBright} 12%, transparent)`
-                            : 'transparent',
-                        }}
-                      >
-                        {opt.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="mt-1 rounded-xl border border-line bg-surface px-3.5 py-3">
-                <p className="mb-2 font-body text-[13.5px] font-bold text-text-hi">
-                  Theme
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => patchSettings({ themeId: null })}
-                    className="rounded-full border px-3 py-1.5 font-mono text-[11px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
-                    style={{
-                      borderColor: settings.themeId === null ? COLORS.gold : 'rgba(220,224,232,0.12)',
-                      color: settings.themeId === null ? COLORS.goldBright : '#9CA0AA',
-                    }}
-                  >
-                    All topics
-                  </button>
-                  {THEME_BUNDLES.map((theme) => {
-                    const active = settings.themeId === theme.id;
-                    return (
-                      <button
-                        key={theme.id}
-                        type="button"
-                        onClick={() => patchSettings({ themeId: active ? null : theme.id })}
-                        title={theme.description}
-                        className="rounded-full border px-3 py-1.5 font-mono text-[11px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
-                        style={{
-                          borderColor: active ? COLORS.gold : 'rgba(220,224,232,0.12)',
-                          color: active ? COLORS.goldBright : '#9CA0AA',
-                        }}
-                      >
-                        {theme.name}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+            <div className="mt-3">
+              <GameSettingsPanel settings={settings} onChange={patchSettings} />
             </div>
           )}
         </section>

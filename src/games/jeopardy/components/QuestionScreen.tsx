@@ -2,15 +2,31 @@ import { useEffect, useMemo, useState } from 'react';
 import { useJeopardy } from '../context';
 import {
   COLORS,
+  JACKPOT_BONUS,
+  LIFELINE_TAX,
+  LIGHTNING_REMAINING,
   SILVER_BUTTON,
+  STREAK_BONUS,
+  SWEEP_BONUS,
+  boostedCluePoints,
+  inflationFactor,
+  isLastTileInColumn,
+  isLeadingPlayer,
+  cellSourceTopicId,
+  cellSourceTopicName,
+  countRemainingCells,
+  effectiveClueTimer,
   formatScore,
+  isMisdirectCell,
   isPreviouslySeenQuestion,
   isSnipeWindowOpen,
+  isTrailingPlayer,
   isWhatChoicesAllowed,
   makeQuestionKey,
   playSound,
   rerollCellQuestion,
   shuffle,
+  tilePoints,
   SNIPE_CORRECT_POINTS,
 } from '../utils';
 import { JeopardyPageWrap } from './JeopardyPanel';
@@ -128,7 +144,10 @@ export default function QuestionScreen() {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [snipeOpen, setSnipeOpen] = useState(false);
 
-  const timerSeconds = state.settings.clueTimerSeconds;
+  const timerSeconds = effectiveClueTimer(
+    state.settings,
+    countRemainingCells(state.cells),
+  );
   const soundOn = state.settings.soundEnabled;
   const selfScore = state.settings.selfScore;
   const [remaining, setRemaining] = useState(timerSeconds);
@@ -157,10 +176,9 @@ export default function QuestionScreen() {
     dispatch({ type: 'RESOLVE', correct });
   }
 
-  function selfResolve(correct: boolean) {
+  function selfReveal(correct: boolean) {
     playSound('reveal', soundOn);
-    dispatch({ type: 'REVEAL_ANSWER' });
-    resolve(correct);
+    dispatch({ type: 'REVEAL_ANSWER', selfCorrect: correct });
   }
 
   // Clue countdown timer.
@@ -168,7 +186,7 @@ export default function QuestionScreen() {
     if (timerSeconds <= 0 || state.phase !== 'question') return;
     if (remaining <= 0) {
       if (selfScore) {
-        selfResolve(false);
+        selfReveal(false);
       } else {
         playSound('reveal', soundOn);
         dispatch({ type: 'REVEAL_ANSWER' });
@@ -191,10 +209,45 @@ export default function QuestionScreen() {
 
   if (!cell) return null;
 
-  const topicName = state.columns[cell.columnIndex]?.name ?? '';
-  const topicId = state.columns[cell.columnIndex]?.id;
+  const column = state.columns[cell.columnIndex];
+  const columnName =
+    state.settings.hiddenCategories &&
+    column &&
+    !state.revealedColumnIds.includes(column.id)
+      ? '???'
+      : (column?.name ?? '');
+  const topicName = cellSourceTopicName(state.columns, cell);
+  const topicId = cellSourceTopicId(state.columns, cell);
+  const misdirect = isMisdirectCell(cell);
   const whatChoicesAllowed = isWhatChoicesAllowed(topicId) && !selfScore;
-  const points = wager !== null ? wager : cell.value * (cell.isDouble ? 2 : 1);
+  const rawPoints = tilePoints(cell, state.settings, wager, state.cells);
+  const correctStake = rawPoints + (cell.isJackpot ? JACKPOT_BONUS : 0);
+  const points =
+    !state.sniped && wager === null && player
+      ? boostedCluePoints(
+          correctStake,
+          state.settings,
+          state.players,
+          player.id,
+        )
+      : correctStake;
+  const trailing =
+    Boolean(player) && isTrailingPlayer(state.players, player.id);
+  const leading =
+    Boolean(player) && isLeadingPlayer(state.players, player.id);
+  const lightning =
+    state.settings.lightningFinish &&
+    countRemainingCells(state.cells) <= LIGHTNING_REMAINING;
+  const inflate = inflationFactor(state.settings, state.cells);
+  const sittingPot = state.settings.missPot ? state.scorePot : 0;
+  const sweepReady =
+    state.settings.categorySweep && isLastTileInColumn(state.cells, cell);
+  const streakArmed =
+    state.settings.hotStreak &&
+    (player?.streak ?? 0) >= 1 &&
+    !state.sniped &&
+    wager === null;
+  const streakTag = streakArmed ? ` · 🔥 +${formatScore(STREAK_BONUS)}` : '';
 
   const correctChoice = cell.choices[0];
   const choices = state.revealedChoices;
@@ -202,16 +255,16 @@ export default function QuestionScreen() {
   const others = state.players.filter((p) => p.id !== player?.id);
   const snipeWindowOpen = isSnipeWindowOpen(state) && wager === null;
   const snipeCandidates = state.players.filter(
-    (p) => p.id !== player?.id && p.lifelines.snipe,
+    (p) => p.id !== player?.id && p.lifelines.snipe > 0,
   );
 
   const lifelines = player?.lifelines ?? {
     phoneAFriend: 0,
     whatChoices: 0,
-    snipe: false,
+    snipe: 0,
   };
   const splitShare = Math.round(points / 2);
-  const snipePenalty = Math.round(points / 2);
+  const snipePenalty = Math.round(rawPoints / 2);
   const timerActive = timerSeconds > 0 && !revealed;
   const timerLow = timerActive && remaining <= 5;
   const previouslySeen =
@@ -223,25 +276,36 @@ export default function QuestionScreen() {
       state.history,
     );
   const inRerollChain = state.activeCellRerollKeys.length > 0;
-  const canReroll =
-    !revealed &&
+  const hasReplacement =
     cell !== undefined &&
     (() => {
-      const topicId = state.columns[cell.columnIndex]?.id;
-      if (!topicId) return false;
+      const replacementTopicId = cellSourceTopicId(state.columns, cell);
+      if (!replacementTopicId) return false;
       return (
         rerollCellQuestion(state.columns, state.cells, cell.id, [
           ...state.activeCellRerollKeys,
-          makeQuestionKey(topicId, cell.difficulty, cell.question),
+          makeQuestionKey(replacementTopicId, cell.difficulty, cell.question),
         ]) !== null
       );
     })();
+  const canReroll = !revealed && hasReplacement;
+  const canContest = revealed && hasReplacement;
+  const pendingSelf = state.pendingSelfResult;
 
   function handleRerollQuestion() {
     setPickerOpen(false);
     setSnipeOpen(false);
+    setRemaining(timerSeconds);
     playSound('select', soundOn);
     dispatch({ type: 'REROLL_QUESTION' });
+  }
+
+  function handleContestQuestion() {
+    setPickerOpen(false);
+    setSnipeOpen(false);
+    setRemaining(timerSeconds);
+    playSound('select', soundOn);
+    dispatch({ type: 'CONTEST_QUESTION' });
   }
 
   return (
@@ -259,9 +323,43 @@ export default function QuestionScreen() {
             background: `linear-gradient(135deg, ${COLORS.sapphire}, ${COLORS.sapphireDim})`,
           }}
         >
-          <div className="min-w-0 truncate font-mono text-[11px] uppercase tracking-[1.5px] text-white/60">
-            {topicName}
+          <div className="min-w-0">
+            <div className="truncate font-mono text-[11px] uppercase tracking-[1.5px] text-white/80">
+              {columnName}
+            </div>
+            {misdirect && (
+              <div
+                className="mt-0.5 truncate font-mono text-[10px] uppercase tracking-[1.2px]"
+                style={{ color: COLORS.goldBright }}
+              >
+                Misdirect · this is {topicName}
+              </div>
+            )}
           </div>
+          {misdirect && (
+            <div
+              className="rounded-[5px] border px-2 py-[3px] font-mono text-[10px]"
+              style={{
+                background: `color-mix(in srgb, ${COLORS.gold} 28%, #1A1C20)`,
+                borderColor: COLORS.goldBright,
+                color: COLORS.goldBright,
+              }}
+            >
+              ↺ MISDIRECT
+            </div>
+          )}
+          {cell.isJackpot && (
+            <div
+              className="rounded-[5px] border px-2 py-[3px] font-mono text-[10px]"
+              style={{
+                background: `color-mix(in srgb, ${COLORS.gold} 28%, #1A1C20)`,
+                borderColor: COLORS.goldBright,
+                color: COLORS.goldBright,
+              }}
+            >
+              🎰 JACKPOT
+            </div>
+          )}
           {cell.isDouble && (
             <div
               className="rounded-[5px] border px-2 py-[3px] font-mono text-[10px]"
@@ -271,7 +369,12 @@ export default function QuestionScreen() {
                 color: COLORS.doubleBright,
               }}
             >
-              ⚡ {wager !== null ? 'DAILY DOUBLE' : 'DOUBLE TROUBLE'}
+              ⚡{' '}
+              {wager !== null
+                ? 'DAILY DOUBLE'
+                : state.settings.tripleTrouble
+                  ? 'TRIPLE TROUBLE'
+                  : 'DOUBLE TROUBLE'}
             </div>
           )}
           <div className="flex items-center gap-3">
@@ -303,11 +406,77 @@ export default function QuestionScreen() {
           style={{ background: 'linear-gradient(180deg, #222428, #1A1C20)' }}
         >
           {!revealed && (
-            <div className="mb-6 flex items-center justify-center gap-2.5">
-              <PlayerAvatar name={player?.name ?? ''} size="sm" />
-              <span className="font-mono text-xs text-text-mid">
-                {player?.name} is answering
-              </span>
+            <div className="mb-6 flex flex-col items-center gap-2">
+              <div className="flex items-center justify-center gap-2.5">
+                <PlayerAvatar name={player?.name ?? ''} size="sm" />
+                <span className="font-mono text-xs text-text-mid">
+                  {player?.name} is answering
+                </span>
+              </div>
+              {lightning && (
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[1.2px]"
+                  style={{ color: COLORS.bad }}
+                >
+                  Lightning finish
+                </span>
+              )}
+              {state.settings.underdogBoost && trailing && wager === null && (
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[1.2px]"
+                  style={{ color: COLORS.goldBright }}
+                >
+                  Underdog · +50% if correct
+                </span>
+              )}
+              {state.settings.secondWind && player?.secondWind && (
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[1.2px]"
+                  style={{ color: COLORS.sapphireBright }}
+                >
+                  Second wind still in play
+                </span>
+              )}
+              {state.settings.trueDailyDouble && wager !== null && (
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[1.2px]"
+                  style={{ color: COLORS.doubleBright }}
+                >
+                  All in · {formatScore(wager)}
+                </span>
+              )}
+              {inflate > 1 && wager === null && (
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[1.2px]"
+                  style={{ color: COLORS.goldBright }}
+                >
+                  Inflation · {inflate}×
+                </span>
+              )}
+              {state.settings.leaderTax && leading && wager === null && !state.sniped && (
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[1.2px]"
+                  style={{ color: COLORS.bad }}
+                >
+                  Leader tax · half if correct
+                </span>
+              )}
+              {sittingPot > 0 && (
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[1.2px]"
+                  style={{ color: COLORS.goldBright }}
+                >
+                  Pot · +{formatScore(sittingPot)} if correct
+                </span>
+              )}
+              {sweepReady && (
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[1.2px]"
+                  style={{ color: COLORS.goldBright }}
+                >
+                  Sweep · +{formatScore(SWEEP_BONUS)} if correct
+                </span>
+              )}
             </div>
           )}
 
@@ -407,7 +576,7 @@ export default function QuestionScreen() {
                 <button
                   key={`${option}-${i}`}
                   type="button"
-                  onClick={() => selfResolve(option === correctChoice)}
+                  onClick={() => selfReveal(option === correctChoice)}
                   className="flex items-start gap-2 rounded-xl border px-3 py-3 text-left font-body text-[13px] font-medium transition-colors hover:border-steel-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
                   style={{
                     background: 'rgba(255,255,255,0.03)',
@@ -543,6 +712,9 @@ export default function QuestionScreen() {
                       ) : (
                         <span className="font-mono text-[10px] opacity-70">
                           · {lifelines.whatChoices} left
+                          {state.settings.lifelineTax
+                            ? ` · −${formatScore(LIFELINE_TAX)}`
+                            : ''}
                         </span>
                       )}
                     </button>
@@ -575,6 +747,9 @@ export default function QuestionScreen() {
                     ) : (
                       <span className="font-mono text-[10px] opacity-70">
                         · {lifelines.phoneAFriend} left
+                        {state.settings.lifelineTax
+                          ? ` · −${formatScore(LIFELINE_TAX)}`
+                          : ''}
                       </span>
                     )}
                   </button>
@@ -634,49 +809,128 @@ export default function QuestionScreen() {
               Answer
             </div>
             <div
-              className="mb-[18px] font-display text-lg font-bold"
+              className="mb-3 font-display text-lg font-bold"
               style={{ color: COLORS.goldBright }}
             >
               {cell.answer}
             </div>
-            <div className="flex flex-col gap-2.5 sm:flex-row">
-              <button
-                type="button"
-                onClick={() => resolve(true)}
-                className="flex flex-1 items-center justify-center gap-[7px] rounded-[11px] border px-3 py-3 text-center font-body text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-good"
+
+            {pendingSelf !== null && (
+              <div
+                className="mb-3.5 rounded-xl border px-3 py-2.5 text-center font-body text-[13px] font-semibold"
                 style={{
-                  background: `color-mix(in srgb, ${COLORS.good} 14%, #1A1C20)`,
-                  borderColor: COLORS.good,
-                  color: COLORS.good,
+                  background: pendingSelf
+                    ? `color-mix(in srgb, ${COLORS.good} 12%, #1A1C20)`
+                    : `color-mix(in srgb, ${COLORS.bad} 12%, #1A1C20)`,
+                  borderColor: pendingSelf ? COLORS.good : COLORS.bad,
+                  color: pendingSelf ? COLORS.good : COLORS.bad,
                 }}
               >
-                <CheckIcon />
-                {helper
-                  ? `Correct · split +${formatScore(splitShare)} each`
+                {pendingSelf
+                  ? `${player?.name} picked the right answer`
+                  : `${player?.name} missed it`}
+              </div>
+            )}
+
+            {pendingSelf !== null ? (
+              <button
+                type="button"
+                onClick={() => resolve(pendingSelf)}
+                className="mb-2.5 flex w-full items-center justify-center gap-[7px] rounded-[11px] border px-3 py-3 text-center font-body text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                style={
+                  pendingSelf
+                    ? {
+                        background: `color-mix(in srgb, ${COLORS.good} 14%, #1A1C20)`,
+                        borderColor: COLORS.good,
+                        color: COLORS.good,
+                      }
+                    : {
+                        background: `color-mix(in srgb, ${COLORS.bad} 14%, #1A1C20)`,
+                        borderColor: COLORS.bad,
+                        color: COLORS.bad,
+                      }
+                }
+              >
+                {pendingSelf ? <CheckIcon /> : <CrossIcon />}
+                {pendingSelf
+                  ? helper
+                    ? `Keep it · split +${formatScore(splitShare)} each`
+                    : state.sniped
+                      ? `Keep it · sniped +${formatScore(SNIPE_CORRECT_POINTS)}`
+                      : `Keep it · +${formatScore(points)}${streakTag}`
                   : state.sniped
-                    ? `${player?.name} sniped it +${formatScore(SNIPE_CORRECT_POINTS)}`
-                    : `${player?.name} got it +${formatScore(points)}`}
+                    ? `Keep the miss · −${formatScore(snipePenalty)}`
+                    : wager !== null
+                      ? `Keep the miss · −${formatScore(wager)}`
+                      : state.settings.wrongAnswerPenalty
+                        ? `Keep the miss · −${formatScore(rawPoints)}`
+                        : 'Keep the miss'}
               </button>
-              <button
-                type="button"
-                onClick={() => resolve(false)}
-                className="flex flex-1 items-center justify-center gap-[7px] rounded-[11px] border px-3 py-3 font-body text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bad"
-                style={{
-                  background: `color-mix(in srgb, ${COLORS.bad} 14%, #1A1C20)`,
-                  borderColor: COLORS.bad,
-                  color: COLORS.bad,
-                }}
-              >
-                <CrossIcon />
-                {state.sniped
-                  ? `Missed · −${formatScore(snipePenalty)}`
-                  : wager !== null
-                    ? `Missed · −${formatScore(wager)}`
-                    : state.settings.wrongAnswerPenalty
-                      ? `Missed · −${formatScore(points)}`
-                      : 'Missed'}
-              </button>
-            </div>
+            ) : (
+              <div className="mb-2.5 flex flex-col gap-2.5 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={() => resolve(true)}
+                  className="flex flex-1 items-center justify-center gap-[7px] rounded-[11px] border px-3 py-3 text-center font-body text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-good"
+                  style={{
+                    background: `color-mix(in srgb, ${COLORS.good} 14%, #1A1C20)`,
+                    borderColor: COLORS.good,
+                    color: COLORS.good,
+                  }}
+                >
+                  <CheckIcon />
+                  {helper
+                    ? `Correct · split +${formatScore(splitShare)} each`
+                    : state.sniped
+                      ? `${player?.name} sniped it +${formatScore(SNIPE_CORRECT_POINTS)}`
+                      : `${player?.name} got it +${formatScore(points)}${streakTag}`}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => resolve(false)}
+                  className="flex flex-1 items-center justify-center gap-[7px] rounded-[11px] border px-3 py-3 font-body text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bad"
+                  style={{
+                    background: `color-mix(in srgb, ${COLORS.bad} 14%, #1A1C20)`,
+                    borderColor: COLORS.bad,
+                    color: COLORS.bad,
+                  }}
+                >
+                  <CrossIcon />
+                  {state.sniped
+                    ? `Missed · −${formatScore(snipePenalty)}`
+                    : wager !== null
+                      ? `Missed · −${formatScore(wager)}`
+                      : state.settings.wrongAnswerPenalty
+                        ? `Missed · −${formatScore(rawPoints)}`
+                        : 'Missed'}
+                </button>
+              </div>
+            )}
+
+            <button
+              type="button"
+              disabled={!canContest}
+              onClick={handleContestQuestion}
+              title={
+                canContest
+                  ? 'Throw out this clue and give them a replacement'
+                  : 'No alternatives left for this tile'
+              }
+              className="flex w-full items-center justify-center gap-1.5 rounded-[11px] border px-3 py-2.5 font-body text-[13px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue disabled:cursor-not-allowed disabled:opacity-35"
+              style={{
+                background: `color-mix(in srgb, ${COLORS.gold} 10%, #1A1C20)`,
+                borderColor: `color-mix(in srgb, ${COLORS.goldBright} 38%, transparent)`,
+                color: COLORS.goldBright,
+              }}
+            >
+              <RerollIcon />
+              Bad question — swap clue
+            </button>
+            <p className="mt-2 text-center font-mono text-[10px] uppercase tracking-[1.2px] text-text-low">
+              {canContest
+                ? `${player?.name} answers the replacement · no score yet`
+                : 'No swap available for this tile'}
+            </p>
           </div>
         )}
       </div>

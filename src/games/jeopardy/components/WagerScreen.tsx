@@ -10,8 +10,15 @@ export default function WagerScreen() {
   const player = state.players[state.currentPlayerIndex];
   if (!cell || !player) return null;
 
-  const topicName = state.columns[cell.columnIndex]?.name ?? '';
+  const column = state.columns[cell.columnIndex];
+  const topicName =
+    state.settings.hiddenCategories &&
+    column &&
+    !state.revealedColumnIds.includes(column.id)
+      ? '???'
+      : (column?.name ?? '');
   const max = maxDailyDoubleWager(player.score);
+  const wagerLabel = cell.isDouble ? 'DAILY DOUBLE' : 'HIGH STAKES';
 
   return (
     <JeopardyPageWrap>
@@ -32,7 +39,7 @@ export default function WagerScreen() {
               color: COLORS.doubleBright,
             }}
           >
-            ⚡ DAILY DOUBLE
+            ⚡ {wagerLabel}
           </div>
           <div className="font-mono text-[11px] uppercase tracking-[1.5px] text-text-low">
             {topicName}
@@ -51,7 +58,11 @@ export default function WagerScreen() {
           max={max}
           initial={Math.min(cell.value, max)}
           confirmLabel="Lock in wager"
-          hint={`Score ${formatScore(player.score)} · wager up to ${formatScore(max)}`}
+          hint={
+            cell.isDouble
+              ? `Score ${formatScore(player.score)} · wager up to ${formatScore(max)}`
+              : `Top-row wager · score ${formatScore(player.score)} · up to ${formatScore(max)}`
+          }
           onConfirm={(amount) => {
             playSound('double', state.settings.soundEnabled);
             dispatch({ type: 'SET_WAGER', amount });
